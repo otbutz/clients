@@ -5,7 +5,6 @@
   "scripts": {
     "build": "napi build --release --platform --js false",
     "build:debug": "napi build --platform --js false",
-    "build:cross-platform": "node build.js",
     "test": "cargo test"
   },
   "author": "",

@@ -1,27 +1,27 @@
 import { existsSync, promises as fs } from "fs";
-import { Socket } from "net";
 import { homedir, userInfo } from "os";
 import * as path from "path";
 import * as util from "util";
 
 import { ipcMain } from "electron";
-import * as ipc from "node-ipc";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { ipc } from "@bitwarden/desktop-napi";
 
-import { getIpcSocketRoot } from "../proxy/ipc";
+import { isDev } from "../utils";
 
 import { WindowMain } from "./window.main";
 
 export class NativeMessagingMain {
-  private connected: Socket[] = [];
-  private socket: any;
+  private ipcServer: ipc.IpcServer | null;
+  private connected: number[] = [];
 
   constructor(
     private logService: LogService,
     private windowMain: WindowMain,
     private userPath: string,
     private exePath: string,
+    private appPath: string,
   ) {
     ipcMain.handle(
       "nativeMessaging.manifests",
@@ -73,55 +73,46 @@ export class NativeMessagingMain {
   }
 
   listen() {
-    ipc.config.id = "bitwarden";
-    ipc.config.retry = 1500;
-    const ipcSocketRoot = getIpcSocketRoot();
-    if (ipcSocketRoot != null) {
-      ipc.config.socketRoot = ipcSocketRoot;
+    if (this.ipcServer) {
+      this.ipcServer.stop();
     }
 
-    ipc.serve(() => {
-      ipc.server.on("message", (data: any, socket: any) => {
-        this.socket = socket;
-        this.windowMain.win.webContents.send("nativeMessaging", data);
-      });
+    this.ipcServer = ipc.IpcServer.listen("bitwarden", (error, msg) => {
+      switch (msg.kind) {
+        case ipc.IpcMessageType.Connected:
+          this.connected.push(msg.clientId);
+          break;
+        case ipc.IpcMessageType.Disconnected: {
+          const index = this.connected.indexOf(msg.clientId);
+          if (index > -1) {
+            this.connected.splice(index, 1);
+          }
 
-      ipcMain.on("nativeMessagingReply", (event, msg) => {
-        if (this.socket != null && msg != null) {
-          this.send(msg, this.socket);
+          this.logService.info("client " + index + " has disconnected!");
+          break;
         }
-      });
-
-      ipc.server.on("connect", (socket: Socket) => {
-        this.connected.push(socket);
-      });
-
-      ipc.server.on("socket.disconnected", (socket, destroyedSocketID) => {
-        const index = this.connected.indexOf(socket);
-        if (index > -1) {
-          this.connected.splice(index, 1);
-        }
-
-        this.socket = null;
-        ipc.log("client " + destroyedSocketID + " has disconnected!");
-      });
+        case ipc.IpcMessageType.Message:
+          this.logService.debug("received nativeMessaging message: " + msg.message);
+          this.windowMain.win.webContents.send("nativeMessaging", JSON.parse(msg.message));
+          break;
+      }
     });
 
-    ipc.server.start();
-  }
-
-  stop() {
-    ipc.server.stop();
-    // Kill all existing connections
-    this.connected.forEach((socket) => {
-      if (!socket.destroyed) {
-        socket.destroy();
+    ipcMain.on("nativeMessagingReply", (event, msg) => {
+      if (msg != null) {
+        this.send(msg);
       }
     });
   }
 
-  send(message: object, socket: any) {
-    ipc.server.emit(socket, "message", message);
+  stop() {
+    this.ipcServer?.stop();
+  }
+
+  send(message: object) {
+    const msg = JSON.stringify(message);
+    this.logService.debug("sent nativeMessaging message of length", msg.length, message);
+    this.ipcServer?.send(msg);
   }
 
   async generateManifests() {
@@ -331,6 +322,10 @@ export class NativeMessagingMain {
   }
 
   private binaryPath() {
+    if (isDev()) {
+      return path.join(this.appPath, "..", "desktop_native", "target", "release", "desktop_proxy");
+    }
+
     if (process.platform === "win32") {
       return path.join(path.dirname(this.exePath), "resources", "native-messaging.bat");
     }

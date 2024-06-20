@@ -214,6 +214,7 @@ export class Main {
       this.windowMain,
       app.getPath("userData"),
       app.getPath("exe"),
+      app.getAppPath(),
     );
 
     this.desktopAutofillSettingsService = new DesktopAutofillSettingsService(stateProvider);
