@@ -22,6 +22,9 @@ if (!crossPlatform) {
     return;
 }
 
+// Note that targets contains pairs of [rust target, node arch]
+// We do this to move the output binaries to a location that can
+// be easily accessed from electron-builder using ${os} and ${arch}
 let targets = [];
 switch (process.platform) {
     case "win32":
