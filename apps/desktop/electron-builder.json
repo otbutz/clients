@@ -11,7 +11,6 @@
     "output": "dist",
     "app": "build"
   },
-  "afterSign": "scripts/after-sign.js",
   "asarUnpack": ["**/*.node"],
   "files": [
     "**/*",
@@ -72,6 +71,12 @@
       "CFBundleDevelopmentRegion": "en"
     },
     "singleArchFiles": "node_modules/@bitwarden/desktop-napi/desktop_napi.darwin-*.node",
+    "extraFiles": [
+      {
+        "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}",
+        "to": "desktop_proxy"
+      }
+    ],
     "target": ["dmg", "zip"]
   },
   "win": {
@@ -83,16 +88,24 @@
         "from": "../../node_modules/regedit/vbs",
         "to": "regedit/vbs",
         "filter": ["**/*"]
-      },
+      }
+    ],
+    "extraFiles": [
       {
-        "from": "desktop_native/target/release/desktop_proxy",
-        "to": "desktop_proxy"
+        "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}.exe",
+        "to": "desktop_proxy.exe"
       }
     ]
   },
   "linux": {
     "category": "Utility",
     "synopsis": "A secure and free password manager for all of your devices.",
+    "extraFiles": [
+      {
+        "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}",
+        "to": "desktop_proxy"
+      }
+    ],
     "target": ["deb", "freebsd", "rpm", "AppImage", "snap"],
     "desktop": {
       "Name": "Bitwarden",

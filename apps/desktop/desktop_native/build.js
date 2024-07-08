@@ -25,32 +25,36 @@ if (!crossPlatform) {
 let targets = [];
 switch (process.platform) {
     case "win32":
-        targets = ["i686-pc-windows-msvc", "x86_64-pc-windows-msvc", "aarch64-pc-windows-msvc"];
+        targets = [
+            ["i686-pc-windows-msvc", 'ia32'],
+            ["x86_64-pc-windows-msvc", 'x64'],
+            ["aarch64-pc-windows-msvc", 'arm64']
+        ];
     break;
 
     case "darwin":
-        targets = ["x86_64-apple-darwin", "aarch64-apple-darwin"];
+        targets = [
+            ["x86_64-apple-darwin", 'x64'],
+            ["aarch64-apple-darwin", 'arm64']
+        ];
     break;
 
     default:
-        targets = ['x86_64-unknown-linux-musl'];
+        targets = [
+            ['x86_64-unknown-linux-musl', 'x64']
+        ];
+
         process.env["PKG_CONFIG_ALLOW_CROSS"] = "1";
         process.env["PKG_CONFIG_ALL_STATIC"] = "1";
     break;
 }
 
-targets.forEach(target => {
+fs.mkdirSync(path.join(__dirname, "dist"), { recursive: true });
+
+targets.forEach(([target, nodeArch]) => {
     buildNapiModule(target);
     buildProxyBin(target);
+
+    const ext = process.platform === "win32" ? ".exe" : "";
+    fs.copyFileSync(path.join(__dirname, "target", target, "release", `desktop_proxy${ext}`), path.join(__dirname, "dist", `desktop_proxy.${process.platform}-${nodeArch}${ext}`));
 });
-
-if (process.platform === "darwin") {
-    fs.mkdirSync(path.join(__dirname, "target", "darwin-universal"), { recursive: true });
-
-    let command = `lipo -create -output ${path.join(__dirname, "target", "darwin-universal", "desktop_proxy")} `;
-    targets.forEach(target => {
-        command += `${path.join(__dirname, "target", target, "release", "desktop_proxy")} `;
-    });
-    child_process.execSync(command, { stdio: 'inherit', cwd: __dirname});
-
-}
