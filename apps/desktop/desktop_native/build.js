@@ -13,7 +13,7 @@ function buildNapiModule(target) {
 
 function buildProxyBin(target) {
     const targetArg = target ? `--target ${target}` : "";
-    return child_process.execSync(`cargo build --release ${targetArg}`, {stdio: 'inherit', cwd: path.join(__dirname, "proxy")});
+    return child_process.execSync(`cargo build --bin desktop_proxy --release ${targetArg}`, {stdio: 'inherit', cwd: path.join(__dirname, "proxy")});
 }
 
 if (!crossPlatform) {
