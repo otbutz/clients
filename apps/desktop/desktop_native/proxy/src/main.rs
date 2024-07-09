@@ -1,24 +1,36 @@
-use std::fs::File;
-
 use futures::{SinkExt, StreamExt};
 use log::*;
 use tokio_util::codec::LengthDelimitedCodec;
 
 fn init_logging() {
-    use simplelog::{ColorChoice, CombinedLogger, Config, TermLogger, TerminalMode, WriteLogger};
-
-    let exe = std::env::current_exe().unwrap();
-    let parent = exe.parent().unwrap();
+    use simplelog::{ColorChoice, CombinedLogger, Config, SharedLogger, TermLogger, TerminalMode};
 
     let level = LevelFilter::Info;
     let config = Config::default();
-    let log_file = File::create(parent.join("proxy.log")).expect("Can't create file");
 
-    CombinedLogger::init(vec![
-        WriteLogger::new(level, config.clone(), log_file),
-        TermLogger::new(level, config, TerminalMode::Stderr, ColorChoice::Auto),
-    ])
-    .unwrap();
+    let mut loggers: Vec<Box<dyn SharedLogger>> = Vec::new();
+    loggers.push(TermLogger::new(
+        level,
+        config.clone(),
+        TerminalMode::Stderr,
+        ColorChoice::Auto,
+    ));
+
+    #[cfg(debug_assertions)]
+    {
+        match std::fs::File::create(std::env::temp_dir().join("bitwarden_desktop_proxy.log")) {
+            Ok(file) => {
+                loggers.push(simplelog::WriteLogger::new(level, config, file));
+            }
+            Err(e) => {
+                eprintln!("Can't create file: {}", e);
+            }
+        }
+    }
+
+    if let Err(e) = CombinedLogger::init(loggers) {
+        eprintln!("Failed to initialize logger: {}", e);
+    }
 }
 
 /// Bitwarden IPC Proxy.
