@@ -596,7 +596,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -607,7 +607,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build application (dev)
         run: npm run build
@@ -774,7 +774,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -785,7 +785,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -997,7 +997,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -1008,7 +1008,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -1206,7 +1206,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -1217,7 +1217,7 @@ jobs:
         working-directory: apps/desktop/desktop_native
         run: |
           ls -lah napi/*.node || true
-          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
+          ls -lah apps/desktop/desktop_native/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
