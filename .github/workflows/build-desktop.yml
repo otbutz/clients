@@ -174,10 +174,10 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
+            apps/desktop/desktop_native/dist/*
             ${{ env.RUNNER_TEMP }}/.cargo/registry
             ${{ env.RUNNER_TEMP }}/.cargo/git
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -304,8 +304,8 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+            apps/desktop/desktop_native/dist/*
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -589,8 +589,8 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+            apps/desktop/desktop_native/dist/*
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
@@ -767,8 +767,8 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+            apps/desktop/desktop_native/dist/*
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
@@ -990,8 +990,8 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+            apps/desktop/desktop_native/dist/*
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
@@ -1199,8 +1199,8 @@ jobs:
         with:
           path: |
             apps/desktop/desktop_native/napi/*.node
-            apps/desktop/desktop_native/proxy/dist/*
-          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+            apps/desktop/desktop_native/dist/*
+          key: rust-3-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native

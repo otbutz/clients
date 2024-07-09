@@ -17,6 +17,7 @@ function buildProxyBin(target) {
 }
 
 if (!crossPlatform) {
+    console.log("Building native modules for the native architecture");
     buildNapiModule();
     buildProxyBin();
     return;
@@ -51,6 +52,8 @@ switch (process.platform) {
         process.env["PKG_CONFIG_ALL_STATIC"] = "1";
     break;
 }
+
+console.log("Cross building native modules for the targets: ", targets.map(([target, _]) => target).join(", "));
 
 fs.mkdirSync(path.join(__dirname, "dist"), { recursive: true });
 
