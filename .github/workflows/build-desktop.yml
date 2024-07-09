@@ -177,7 +177,7 @@ jobs:
             apps/desktop/desktop_native/proxy/dist/*
             ${{ env.RUNNER_TEMP }}/.cargo/registry
             ${{ env.RUNNER_TEMP }}/.cargo/git
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -305,7 +305,7 @@ jobs:
           path: |
             apps/desktop/desktop_native/napi/*.node
             apps/desktop/desktop_native/proxy/dist/*
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -590,13 +590,13 @@ jobs:
           path: |
             apps/desktop/desktop_native/napi/*.node
             apps/desktop/desktop_native/proxy/dist/*
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -606,8 +606,8 @@ jobs:
       - name: Check built contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build application (dev)
         run: npm run build
@@ -768,13 +768,13 @@ jobs:
           path: |
             apps/desktop/desktop_native/napi/*.node
             apps/desktop/desktop_native/proxy/dist/*
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -784,8 +784,8 @@ jobs:
       - name: Check built contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -991,13 +991,13 @@ jobs:
           path: |
             apps/desktop/desktop_native/napi/*.node
             apps/desktop/desktop_native/proxy/dist/*
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -1007,8 +1007,8 @@ jobs:
       - name: Check built contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -1200,13 +1200,13 @@ jobs:
           path: |
             apps/desktop/desktop_native/napi/*.node
             apps/desktop/desktop_native/proxy/dist/*
-          key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
+          key: rust-2-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
       - name: Check cache contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
@@ -1216,8 +1216,8 @@ jobs:
       - name: Check built contents
         working-directory: apps/desktop/desktop_native
         run: |
-          ls -lah napi/*.node
-          ls -lah apps/desktop/desktop_native/proxy/dist/*
+          ls -lah napi/*.node || true
+          ls -lah apps/desktop/desktop_native/proxy/dist/* || true
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
