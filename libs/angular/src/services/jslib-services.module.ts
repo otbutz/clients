@@ -2,6 +2,10 @@ import { ErrorHandler, LOCALE_ID, NgModule } from "@angular/core";
 import { Subject } from "rxjs";
 
 import {
+  RegistrationFinishService as RegistrationFinishServiceAbstraction,
+  DefaultRegistrationFinishService,
+} from "@bitwarden/auth/angular";
+import {
   AuthRequestServiceAbstraction,
   AuthRequestService,
   PinServiceAbstraction,
@@ -14,6 +18,7 @@ import {
   UserDecryptionOptionsService,
   UserDecryptionOptionsServiceAbstraction,
   LogoutReason,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { ApiService as ApiServiceAbstraction } from "@bitwarden/common/abstractions/api.service";
 import { AuditService as AuditServiceAbstraction } from "@bitwarden/common/abstractions/audit.service";
@@ -724,6 +729,10 @@ const safeProviders: SafeProvider[] = [
     deps: [StateProvider],
   }),
   safeProvider({
+    provide: STATE_FACTORY,
+    useValue: new StateFactory(GlobalState, Account),
+  }),
+  safeProvider({
     provide: StateServiceAbstraction,
     useClass: StateService,
     deps: [
@@ -970,7 +979,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: LoginEmailServiceAbstraction,
     useClass: LoginEmailService,
-    deps: [StateProvider],
+    deps: [AccountServiceAbstraction, AuthServiceAbstraction, StateProvider],
   }),
   safeProvider({
     provide: OrgDomainInternalServiceAbstraction,
@@ -1220,6 +1229,16 @@ const safeProviders: SafeProvider[] = [
     provide: StripeServiceAbstraction,
     useClass: StripeService,
     deps: [LogService],
+  }),
+  safeProvider({
+    provide: RegisterRouteService,
+    useClass: RegisterRouteService,
+    deps: [ConfigService],
+  }),
+  safeProvider({
+    provide: RegistrationFinishServiceAbstraction,
+    useClass: DefaultRegistrationFinishService,
+    deps: [CryptoServiceAbstraction, AccountApiServiceAbstraction],
   }),
 ];
 

@@ -1106,7 +1106,7 @@
     "message": "Overovacia aplikácia"
   },
   "authenticatorAppDescV2": {
-    "message": "Zadajte kód vygenerovaný overovacou aplikáciou akou je Bitwarden Authenticator.",
+    "message": "Zadajte kód vygenerovaný overovacou aplikáciou akou je napríklad Bitwarden Authenticator.",
     "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
   "yubiKeyTitleV2": {
@@ -3492,8 +3492,30 @@
   "itemsWithNoFolder": {
     "message": "Položky bez priečinka"
   },
+  "itemDetails": {
+    "message": "Podrobnosti o položke"
+  },
+  "itemName": {
+    "message": "Názov položky"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Zbierky, ktoré môžete len zobraziť nemôžete odstrániť: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "organizationIsDeactivated": {
     "message": "Organizácia je vypnutá"
+  },
+  "owner": {
+    "message": "Vlastník"
+  },
+  "selfOwnershipLabel": {
+    "message": "Vy",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
@@ -3536,5 +3558,17 @@
   },
   "filters": {
     "message": "Filtre"
+  },
+  "cardDetails": {
+    "message": "Podrobnosti o karte"
+  },
+  "cardBrandDetails": {
+    "message": "Podrobnosti o $BRAND$",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
   }
 }

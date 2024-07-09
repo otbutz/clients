@@ -3492,8 +3492,30 @@
   "itemsWithNoFolder": {
     "message": "Items with no folder"
   },
+  "itemDetails": {
+    "message": "Elem részletek"
+  },
+  "itemName": {
+    "message": "Elem neve"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Nem távolíthatók el a csak megtekintési engedéllyel bíró gyűjtemények: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "organizationIsDeactivated": {
     "message": "Organization is deactivated"
+  },
+  "owner": {
+    "message": "Tulajdonos"
+  },
+  "selfOwnershipLabel": {
+    "message": "Saját magam",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
@@ -3536,5 +3558,17 @@
   },
   "filters": {
     "message": "Szűrők"
+  },
+  "cardDetails": {
+    "message": "Kártyaadatok"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$ adatok",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
   }
 }

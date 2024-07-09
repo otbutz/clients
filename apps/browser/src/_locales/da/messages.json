@@ -3492,8 +3492,30 @@
   "itemsWithNoFolder": {
     "message": "Emner uden mappe"
   },
+  "itemDetails": {
+    "message": "Emnedetaljer"
+  },
+  "itemName": {
+    "message": "Emnenavn"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Samlinger med kun tilladelsen Vis kan ikke fjernes: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "organizationIsDeactivated": {
     "message": "Organisation er deaktiveret"
+  },
+  "owner": {
+    "message": "Ejer"
+  },
+  "selfOwnershipLabel": {
+    "message": "Dig",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Emner i deaktiverede organisationer kan ikke tilgås. Kontakt organisationsejeren for assistance."
@@ -3536,5 +3558,17 @@
   },
   "filters": {
     "message": "Filtre"
+  },
+  "cardDetails": {
+    "message": "Kortoplysninger"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$ oplysninger",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
   }
 }

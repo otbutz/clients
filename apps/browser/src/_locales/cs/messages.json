@@ -3492,8 +3492,30 @@
   "itemsWithNoFolder": {
     "message": "Položky bez složky"
   },
+  "itemDetails": {
+    "message": "Detaily položky"
+  },
+  "itemName": {
+    "message": "Název položky"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Nemůžete odebrat kolekce s oprávněními jen pro zobrazení: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "organizationIsDeactivated": {
     "message": "Organizace je deaktivována"
+  },
+  "owner": {
+    "message": "Vlastník"
+  },
+  "selfOwnershipLabel": {
+    "message": "Vy",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "K položkám v deaktivované organizaci nemáte přístup. Požádejte o pomoc vlastníka organizace."
@@ -3536,5 +3558,17 @@
   },
   "filters": {
     "message": "Filtry"
+  },
+  "cardDetails": {
+    "message": "Card details"
+  },
+  "cardBrandDetails": {
+    "message": "$BRAND$ details",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
   }
 }

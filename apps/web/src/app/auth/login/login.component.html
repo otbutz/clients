@@ -57,7 +57,7 @@
       -->
       <a
         bitLink
-        [routerLink]="registerRoute"
+        [routerLink]="registerRoute$ | async"
         [queryParams]="emailFormControl.valid ? { email: emailFormControl.value } : {}"
         (mousedown)="goToRegister()"
         >{{ "createAccount" | i18n }}</a
