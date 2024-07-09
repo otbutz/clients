@@ -592,10 +592,22 @@ jobs:
             apps/desktop/desktop_native/proxy/dist/*
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
+      - name: Check cache contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
+
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: apps/desktop/desktop_native
         run: node build.js cross-platform
+      
+      - name: Check built contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
 
       - name: Build application (dev)
         run: npm run build
@@ -758,10 +770,22 @@ jobs:
             apps/desktop/desktop_native/proxy/dist/*
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
+      - name: Check cache contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
+
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: apps/desktop/desktop_native
         run: node build.js cross-platform
+      
+      - name: Check built contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -969,10 +993,22 @@ jobs:
             apps/desktop/desktop_native/proxy/dist/*
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
+      - name: Check cache contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
+
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: apps/desktop/desktop_native
         run: node build.js cross-platform
+      
+      - name: Check built contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
@@ -1166,10 +1202,22 @@ jobs:
             apps/desktop/desktop_native/proxy/dist/*
           key: rust-${{ runner.os }}-${{ hashFiles('apps/desktop/desktop_native/**/*') }}
 
+      - name: Check cache contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
+
       - name: Build Native Module
         if: steps.cache.outputs.cache-hit != 'true'
         working-directory: apps/desktop/desktop_native
         run: node build.js cross-platform
+      
+      - name: Check built contents
+        working-directory: apps/desktop/desktop_native
+        run: |
+          ls -lah napi/*.node
+          ls -lah apps/desktop/desktop_native/proxy/dist/*
 
       - name: Build
         if: steps.build-cache.outputs.cache-hit != 'true'
