@@ -75,9 +75,10 @@
     "extraFiles": [
       {
         "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}",
-        "to": "desktop_proxy"
+        "to": "Resources/desktop_proxy"
       }
     ],
+    "binaries": ["Contents/Resources/desktop_proxy"],
     "target": ["dmg", "zip"]
   },
   "win": {
