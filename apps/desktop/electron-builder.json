@@ -163,7 +163,7 @@
     "backgroundColor": "#175DDC",
     "applicationId": "bitwardendesktop",
     "identityName": "8bitSolutionsLLC.bitwardendesktop",
-    "publisher": "CN=14D52771-DE3C-4886-B8BF-825BA7690418",
+    "publisher": "CN=14D52771-DE3C-4886-B8BF-825BA7690418, OID.2.25.311729368913984317654407730594956997722=1",
     "publisherDisplayName": "8bit Solutions LLC",
     "languages": [
       "en-US",
