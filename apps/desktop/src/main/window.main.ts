@@ -2,7 +2,7 @@ import { once } from "node:events";
 import * as path from "path";
 import * as url from "url";
 
-import { app, BrowserWindow, ipcMain, nativeTheme, screen, session } from "electron";
+import { app, BrowserWindow, ipcMain, nativeTheme, net, protocol, screen, session } from "electron";
 import { firstValueFrom } from "rxjs";
 
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -20,6 +20,16 @@ import {
   isSnapStore,
   isWindows,
 } from "../utils";
+
+protocol.registerSchemesAsPrivileged([
+  {
+    scheme: "app",
+    privileges: {
+      standard: true,
+      secure: true,
+    },
+  },
+]);
 
 const mainWindowSizeKey = "mainWindowSize";
 const WindowEventHandlingDelay = 100;
@@ -44,6 +54,26 @@ export class WindowMain {
     private argvCallback: (argv: string[]) => void = null,
     private createWindowCallback: (win: BrowserWindow) => void,
   ) {}
+
+  registerBundleProtocol(ses: Electron.Session) {
+    ses.protocol.handle("app", (req) => {
+      const addr = new URL(req.url);
+      if (addr.host !== "bitwarden") {
+        return new Response("Invalid custom protocol host", { status: 400 });
+      }
+
+      // Trim the leading slash from the pathname
+      const pathname = addr.pathname.charAt(0) === "/" ? addr.pathname.substring(1) : addr.pathname;
+
+      // Normalize the path and check for path traversal attacks
+      const pathToFile = path.normalize(path.resolve(__dirname, pathname));
+      if (!pathToFile.startsWith(__dirname) || pathToFile.includes("..")) {
+        return new Response("Invalid custom protocol path", { status: 400 });
+      }
+
+      return net.fetch(url.pathToFileURL(pathToFile).toString());
+    });
+  }
 
   init(): Promise<any> {
     // Perform a hard reload of the render process by crashing it. This is suboptimal but ensures that all memory gets
@@ -108,6 +138,11 @@ export class WindowMain {
           if (this.argvCallback != null) {
             this.argvCallback(process.argv);
           }
+        });
+
+        // Register the custom protocol for the app bundle
+        app.on("session-created", (ses) => {
+          this.registerBundleProtocol(ses);
         });
 
         // Quit when all windows are closed.
@@ -185,16 +220,9 @@ export class WindowMain {
     // and load the index.html of the app.
     // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.win.loadURL(
-      url.format({
-        protocol: "file:",
-        pathname: path.join(__dirname, "/index.html"),
-        slashes: true,
-      }),
-      {
-        userAgent: cleanUserAgent(this.win.webContents.userAgent),
-      },
-    );
+    this.win.loadURL("app://bitwarden/index.html", {
+      userAgent: cleanUserAgent(this.win.webContents.userAgent),
+    });
 
     // Open the DevTools.
     if (isDev()) {
