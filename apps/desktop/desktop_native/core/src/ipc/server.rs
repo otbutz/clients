@@ -39,7 +39,7 @@ impl Server {
         let path = super::path(name);
 
         // If the unix socket file already exists, we get an error when trying to bind to it. So we remove it first.
-        // Any processes that were using the old socket will remain connected but any new connections will use the new socket.
+        // Any processes that were using the old socket should remain connected to it but any new connections will use the new socket.
         if !cfg!(windows) {
             let _ = std::fs::remove_file(&path);
         }
