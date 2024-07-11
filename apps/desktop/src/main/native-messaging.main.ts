@@ -92,7 +92,6 @@ export class NativeMessagingMain {
           break;
         }
         case ipc.IpcMessageType.Message:
-          this.logService.debug("received nativeMessaging message: " + msg.message);
           this.windowMain.win.webContents.send("nativeMessaging", JSON.parse(msg.message));
           break;
       }
@@ -110,9 +109,7 @@ export class NativeMessagingMain {
   }
 
   send(message: object) {
-    const msg = JSON.stringify(message);
-    this.logService.debug("sent nativeMessaging message of length", msg.length, message);
-    this.ipcServer?.send(msg);
+    this.ipcServer?.send(JSON.stringify(message));
   }
 
   async generateManifests() {
