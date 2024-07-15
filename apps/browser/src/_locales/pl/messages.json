@@ -556,6 +556,18 @@
   "security": {
     "message": "Zabezpieczenia"
   },
+  "confirmMasterPassword": {
+    "message": "Potwierdź hasło główne"
+  },
+  "masterPassword": {
+    "message": "Hasło główne"
+  },
+  "masterPassImportant": {
+    "message": "Twoje hasło główne nie może zostać odzyskane, jeśli je zapomnisz!"
+  },
+  "masterPassHintLabel": {
+    "message": "Podpowiedź do hasła głównego"
+  },
   "errorOccurred": {
     "message": "Wystąpił błąd"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "Zobacz $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Historia hasła"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "Weryfikacja adresu e-mail jest wymagana"
+  },
+  "emailVerifiedV2": {
+    "message": "E-mail zweryfikowany"
   },
   "emailVerificationRequiredDesc": {
     "message": "Musisz zweryfikować adres e-mail, aby korzystać z tej funkcji. Adres możesz zweryfikować w sejfie internetowym."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Passkey został usunięty"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Uwaga: Nieprzypisane elementy organizacji nie są już widoczne w widoku Wszystkie sejfy i są teraz dostępne tylko przez Konsolę Administracyjną."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Uwaga: 16 maja 2024 r. nieprzypisana elementy w organizacji nie będą już widoczne w widoku Wszystkie sejfy i będą dostępne tylko przez Konsolę Administracyjną."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Przypisz te elementy do kolekcji z",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": ", aby były widoczne.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Sugestie autouzupełnienia"
   },
@@ -3520,6 +3530,24 @@
   "contactYourOrgAdmin": {
     "message": "Nie można uzyskać dostępu do elementów w wyłączonych organizacjach. Skontaktuj się z właścicielem organizacji, aby uzyskać pomoc."
   },
+  "additionalInformation": {
+    "message": "Dodatkowe informacje"
+  },
+  "itemHistory": {
+    "message": "Historia elementu"
+  },
+  "lastEdited": {
+    "message": "Ostatnio edytowany"
+  },
+  "ownerYou": {
+    "message": "Właściciel: Ty"
+  },
+  "linked": {
+    "message": "Powiązane"
+  },
+  "copySuccessful": {
+    "message": "Kopiowanie zakończone sukcesem"
+  },
   "upload": {
     "message": "Wyślij"
   },
@@ -3559,6 +3587,24 @@
   "filters": {
     "message": "Filtry"
   },
+  "personalDetails": {
+    "message": "Dane osobowe"
+  },
+  "identification": {
+    "message": "Tożsamość"
+  },
+  "contactInfo": {
+    "message": "Daje kontaktowe"
+  },
+  "downloadAttachment": {
+    "message": "Pobierz - $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
     "message": "Szczegóły karty"
   },
@@ -3570,5 +3616,8 @@
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }

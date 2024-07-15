@@ -154,15 +154,18 @@ import { StateFactory } from "@bitwarden/common/platform/factories/state-factory
 import { Message, MessageListener, MessageSender } from "@bitwarden/common/platform/messaging";
 // eslint-disable-next-line no-restricted-imports -- Used for dependency injection
 import { SubjectMessageSender } from "@bitwarden/common/platform/messaging/internal";
-import { devFlagEnabled, flagEnabled } from "@bitwarden/common/platform/misc/flags";
+import { devFlagEnabled } from "@bitwarden/common/platform/misc/flags";
 import { Account } from "@bitwarden/common/platform/models/domain/account";
 import { GlobalState } from "@bitwarden/common/platform/models/domain/global-state";
+import {
+  TaskSchedulerService,
+  DefaultTaskSchedulerService,
+} from "@bitwarden/common/platform/scheduling";
 import { AppIdService } from "@bitwarden/common/platform/services/app-id.service";
 import { ConfigApiService } from "@bitwarden/common/platform/services/config/config-api.service";
 import { DefaultConfigService } from "@bitwarden/common/platform/services/config/default-config.service";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
 import { CryptoService } from "@bitwarden/common/platform/services/crypto.service";
-import { EncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/encrypt.service.implementation";
 import { MultithreadEncryptServiceImplementation } from "@bitwarden/common/platform/services/cryptography/multithread-encrypt.service.implementation";
 import { DefaultBroadcasterService } from "@bitwarden/common/platform/services/default-broadcaster.service";
 import { DefaultEnvironmentService } from "@bitwarden/common/platform/services/default-environment.service";
@@ -410,6 +413,7 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       VaultTimeoutSettingsServiceAbstraction,
       KdfConfigServiceAbstraction,
+      TaskSchedulerService,
     ],
   }),
   safeProvider({
@@ -715,6 +719,8 @@ const safeProviders: SafeProvider[] = [
       AuthServiceAbstraction,
       VaultTimeoutSettingsServiceAbstraction,
       StateEventRunnerService,
+      TaskSchedulerService,
+      LogService,
       LOCKED_CALLBACK,
       LOGOUT_CALLBACK,
     ],
@@ -813,6 +819,7 @@ const safeProviders: SafeProvider[] = [
       StateServiceAbstraction,
       AuthServiceAbstraction,
       MessagingServiceAbstraction,
+      TaskSchedulerService,
     ],
   }),
   safeProvider({
@@ -822,13 +829,19 @@ const safeProviders: SafeProvider[] = [
   }),
   safeProvider({
     provide: EncryptService,
-    useFactory: encryptServiceFactory,
+    useClass: MultithreadEncryptServiceImplementation,
     deps: [CryptoFunctionServiceAbstraction, LogService, LOG_MAC_FAILURES],
   }),
   safeProvider({
     provide: EventUploadServiceAbstraction,
     useClass: EventUploadService,
-    deps: [ApiServiceAbstraction, StateProvider, LogService, AuthServiceAbstraction],
+    deps: [
+      ApiServiceAbstraction,
+      StateProvider,
+      LogService,
+      AuthServiceAbstraction,
+      TaskSchedulerService,
+    ],
   }),
   safeProvider({
     provide: EventCollectionServiceAbstraction,
@@ -955,7 +968,13 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: DefaultConfigService,
     useClass: DefaultConfigService,
-    deps: [ConfigApiServiceAbstraction, EnvironmentService, LogService, StateProvider],
+    deps: [
+      ConfigApiServiceAbstraction,
+      EnvironmentService,
+      LogService,
+      StateProvider,
+      AuthServiceAbstraction,
+    ],
   }),
   safeProvider({
     provide: ConfigService,
@@ -1211,6 +1230,11 @@ const safeProviders: SafeProvider[] = [
     deps: [INTRAPROCESS_MESSAGING_SUBJECT],
   }),
   safeProvider({
+    provide: TaskSchedulerService,
+    useClass: DefaultTaskSchedulerService,
+    deps: [LogService],
+  }),
+  safeProvider({
     provide: ProviderApiServiceAbstraction,
     useClass: ProviderApiService,
     deps: [ApiServiceAbstraction],
@@ -1241,16 +1265,6 @@ const safeProviders: SafeProvider[] = [
     deps: [CryptoServiceAbstraction, AccountApiServiceAbstraction],
   }),
 ];
-
-function encryptServiceFactory(
-  cryptoFunctionservice: CryptoFunctionServiceAbstraction,
-  logService: LogService,
-  logMacFailures: boolean,
-): EncryptService {
-  return flagEnabled("multithreadDecryption")
-    ? new MultithreadEncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures)
-    : new EncryptServiceImplementation(cryptoFunctionservice, logService, logMacFailures);
-}
 
 @NgModule({
   declarations: [],

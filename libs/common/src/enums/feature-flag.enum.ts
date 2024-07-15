@@ -11,7 +11,6 @@ export enum FeatureFlag {
   ShowPaymentMethodWarningBanners = "show-payment-method-warning-banners",
   EnableConsolidatedBilling = "enable-consolidated-billing",
   AC1795_UpdatedSubscriptionStatusSection = "AC-1795_updated-subscription-status-section",
-  UnassignedItemsBanner = "unassigned-items-banner",
   EnableDeleteProvider = "AC-1218-delete-provider",
   ExtensionRefresh = "extension-refresh",
   RestrictProviderAccess = "restrict-provider-access",
@@ -23,6 +22,8 @@ export enum FeatureFlag {
   EnableTimeThreshold = "PM-5864-dollar-threshold",
   GroupsComponentRefactor = "groups-component-refactor",
   ProviderClientVaultPrivacyBanner = "ac-2833-provider-client-vault-privacy-banner",
+  VaultBulkManagementAction = "vault-bulk-management-action",
+  AC2828_ProviderPortalMembersPage = "AC-2828_provider-portal-members-page",
 }
 
 export type AllowedFeatureFlagTypes = boolean | number | string;
@@ -44,7 +45,6 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.ShowPaymentMethodWarningBanners]: FALSE,
   [FeatureFlag.EnableConsolidatedBilling]: FALSE,
   [FeatureFlag.AC1795_UpdatedSubscriptionStatusSection]: FALSE,
-  [FeatureFlag.UnassignedItemsBanner]: FALSE,
   [FeatureFlag.EnableDeleteProvider]: FALSE,
   [FeatureFlag.ExtensionRefresh]: FALSE,
   [FeatureFlag.RestrictProviderAccess]: FALSE,
@@ -56,6 +56,8 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.EnableTimeThreshold]: FALSE,
   [FeatureFlag.GroupsComponentRefactor]: FALSE,
   [FeatureFlag.ProviderClientVaultPrivacyBanner]: FALSE,
+  [FeatureFlag.VaultBulkManagementAction]: FALSE,
+  [FeatureFlag.AC2828_ProviderPortalMembersPage]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
 
 export type DefaultFeatureFlagValueType = typeof DefaultFeatureFlagValue;

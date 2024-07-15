@@ -556,6 +556,18 @@
   "security": {
     "message": "Drošība"
   },
+  "confirmMasterPassword": {
+    "message": "Apstiprināt galveno paroli"
+  },
+  "masterPassword": {
+    "message": "Galvenā parole"
+  },
+  "masterPassImportant": {
+    "message": "Galveno paroli nevar atgūt, ja tā tiek aizmirsta."
+  },
+  "masterPassHintLabel": {
+    "message": "Galvenās paroles norāde"
+  },
   "errorOccurred": {
     "message": "Atgadījās kļūda"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "Apskatīt $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Paroļu vēsture"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "Nepieciešama e-pasta adreses apstiprināšana"
+  },
+  "emailVerifiedV2": {
+    "message": "E-pasta adrese ir apliecināta"
   },
   "emailVerificationRequiredDesc": {
     "message": "Ir nepieciešams apstiprināt e-pasta adresi, lai būtu iespējams izmantot šo iespēju. To var izdarīt tīmekļa glabātavā."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Piekļuves atslēga noņemta"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Jāņem vērā: nepiešķirti apvienības vienumi vairs nav redzami skatā \"Visas glabātavas\" un ir pieejami tikai pārvaldības konsolē."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Jāņem vērā: no 2024. gada 16. maija nepiešķirti apvienības vienumi vairs nebūs redzami skatā \"Visas glabātavas\" un būs pieejami tikai pārvaldības konsolē."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Piešķirt šos vienumus krājumam",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "lai padarītu tos redzamus.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Ieteikumi automātiskajai aizpildei"
   },
@@ -3493,13 +3503,13 @@
     "message": "Vienumi bez mapes"
   },
   "itemDetails": {
-    "message": "Item details"
+    "message": "Vienuma dati"
   },
   "itemName": {
-    "message": "Item name"
+    "message": "Vienuma nosaukums"
   },
   "cannotRemoveViewOnlyCollections": {
-    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "message": "Nevar noņemt krājumus ar tiesībām \"Tikai skatīt\": $COLLECTIONS$",
     "placeholders": {
       "collections": {
         "content": "$1",
@@ -3511,14 +3521,32 @@
     "message": "Apvienība ir atspējota"
   },
   "owner": {
-    "message": "Owner"
+    "message": "Īpašnieks"
   },
   "selfOwnershipLabel": {
-    "message": "You",
+    "message": "Tu",
     "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Atspējotu apvienību vienumiem nevar piekļūt. Jāsazinās ar apvienības īpašnieku, lai iegūtu palīdzību."
+  },
+  "additionalInformation": {
+    "message": "Papildu informācija"
+  },
+  "itemHistory": {
+    "message": "Vienuma vēsture"
+  },
+  "lastEdited": {
+    "message": "Pēdējo reizi labots"
+  },
+  "ownerYou": {
+    "message": "Īpašnieks: Tu"
+  },
+  "linked": {
+    "message": "Saistīts"
+  },
+  "copySuccessful": {
+    "message": "Ievietošana starpliktuvē veiksmīga"
   },
   "upload": {
     "message": "Augšupielādēt"
@@ -3559,16 +3587,37 @@
   "filters": {
     "message": "Atlases"
   },
+  "personalDetails": {
+    "message": "Personiskā informācija"
+  },
+  "identification": {
+    "message": "Identifikācija"
+  },
+  "contactInfo": {
+    "message": "Saziņas informācija"
+  },
+  "downloadAttachment": {
+    "message": "Lejupielādēt $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
-    "message": "Card details"
+    "message": "Kartes dati"
   },
   "cardBrandDetails": {
-    "message": "$BRAND$ details",
+    "message": "$BRAND$ dati",
     "placeholders": {
       "brand": {
         "content": "$1",
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }

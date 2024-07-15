@@ -556,6 +556,18 @@
   "security": {
     "message": "Beveiliging"
   },
+  "confirmMasterPassword": {
+    "message": "Hoofdwachtwoord bevestigen"
+  },
+  "masterPassword": {
+    "message": "Hoofdwachtwoord"
+  },
+  "masterPassImportant": {
+    "message": "Je kunt je hoofdwachtwoord niet herstellen als je het vergeet!"
+  },
+  "masterPassHintLabel": {
+    "message": "Hoofdwachtwoordhint"
+  },
   "errorOccurred": {
     "message": "Er is een fout opgetreden"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "$TYPE$ weergeven",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Geschiedenis"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "E-mailverificatie vereist"
+  },
+  "emailVerifiedV2": {
+    "message": "E-mailadres geverifieerd"
   },
   "emailVerificationRequiredDesc": {
     "message": "Je moet je e-mailadres verifiëren om deze functie te gebruiken. Je kunt je e-mailadres verifiëren in de kluis."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Passkey verwijderd"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Notice: Unassigned organization items are no longer visible in the All Vaults view and only accessible via the Admin Console."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Notice: On May 16, 2024, unassigned organization items will no longer be visible in the All Vaults view and will only be accessible via the Admin Console."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Assign these items to a collection from the",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "to make them visible.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Suggesties voor automatisch invullen"
   },
@@ -3520,6 +3530,24 @@
   "contactYourOrgAdmin": {
     "message": "Items in een gedeactiveerde organisatie zijn niet toegankelijk. Neem contact op met de eigenaar van je organisatie voor hulp."
   },
+  "additionalInformation": {
+    "message": "Aanvullende informatie"
+  },
+  "itemHistory": {
+    "message": "Itemgeschiedenis"
+  },
+  "lastEdited": {
+    "message": "Laatst gewijzigd"
+  },
+  "ownerYou": {
+    "message": "Eigenaar: Jij"
+  },
+  "linked": {
+    "message": "Gekoppeld"
+  },
+  "copySuccessful": {
+    "message": "Kopiëren gelukt"
+  },
   "upload": {
     "message": "Uploaden"
   },
@@ -3559,6 +3587,24 @@
   "filters": {
     "message": "Filters"
   },
+  "personalDetails": {
+    "message": "Persoonlijke gegevens"
+  },
+  "identification": {
+    "message": "Identificatie"
+  },
+  "contactInfo": {
+    "message": "Contactgegevens"
+  },
+  "downloadAttachment": {
+    "message": "$ITEMNAME$ downloaden",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
     "message": "Kaartgegevens"
   },
@@ -3570,5 +3616,8 @@
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }
