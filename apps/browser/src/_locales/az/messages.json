@@ -556,6 +556,18 @@
   "security": {
     "message": "Güvənlik"
   },
+  "confirmMasterPassword": {
+    "message": "Ana parolu təsdiqlə"
+  },
+  "masterPassword": {
+    "message": "Ana parol"
+  },
+  "masterPassImportant": {
+    "message": "Unutsanız, ana parolunuz geri qaytarıla bilməz!"
+  },
+  "masterPassHintLabel": {
+    "message": "Ana parol ipucusu"
+  },
   "errorOccurred": {
     "message": "Bir xəta baş verdi"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "$TYPE$ - bax",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Parol tarixçəsi"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "E-poçt doğrulaması tələb olunur"
+  },
+  "emailVerifiedV2": {
+    "message": "E-poçt doğrulandı"
   },
   "emailVerificationRequiredDesc": {
     "message": "Bu özəlliyi istifadə etmək üçün e-poçtunuzu doğrulamalısınız. E-poçtunuzu veb anbarında doğrulaya bilərsiniz."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Parol silindi"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Bildiriş: Təyin edilməyən təşkilat elementləri artıq Bütün Anbarlar görünüşündə görünən olmayacaq və yalnız Admin Konsolu vasitəsilə əlçatan olacaq."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Bildiriş: 16 May 2024-cü il tarixindən etibarən, təyin edilməyən təşkilat elementləri Bütün Anbarlar görünüşündə görünən olmayacaq və yalnız Admin Konsolu vasitəsilə əlçatan olacaq."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Bu elementləri görünən etmək üçün",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "bir kolleksiyaya təyin edin.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Avto-doldurma təklifləri"
   },
@@ -3493,13 +3503,13 @@
     "message": "Qovluğu olmayan elementlər"
   },
   "itemDetails": {
-    "message": "Item details"
+    "message": "Element detalları"
   },
   "itemName": {
-    "message": "Item name"
+    "message": "Element adı"
   },
   "cannotRemoveViewOnlyCollections": {
-    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "message": "\"Yalnız baxma\" icazələrinə sahib kolleksiyaları silə bilməzsiniz: $COLLECTIONS$",
     "placeholders": {
       "collections": {
         "content": "$1",
@@ -3511,14 +3521,32 @@
     "message": "Təşkilat deaktiv edildi"
   },
   "owner": {
-    "message": "Owner"
+    "message": "Sahiblik"
   },
   "selfOwnershipLabel": {
-    "message": "You",
+    "message": "Siz",
     "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Deaktiv edilmiş təşkilatlardakı elementlərə müraciət edilə bilməz. Kömək üçün təşkilatınızın sahibi ilə əlaqə saxlayın."
+  },
+  "additionalInformation": {
+    "message": "Əlavə məlumat"
+  },
+  "itemHistory": {
+    "message": "Element tarixçəsi"
+  },
+  "lastEdited": {
+    "message": "Son düzəliş"
+  },
+  "ownerYou": {
+    "message": "Sahiblik: Siz"
+  },
+  "linked": {
+    "message": "Əlaqələndirildi"
+  },
+  "copySuccessful": {
+    "message": "Uğurla kopyalandı"
   },
   "upload": {
     "message": "Yüklə"
@@ -3559,16 +3587,37 @@
   "filters": {
     "message": "Filtrlər"
   },
+  "personalDetails": {
+    "message": "Şəxsi detallar"
+  },
+  "identification": {
+    "message": "İdentifikasiya"
+  },
+  "contactInfo": {
+    "message": "Əlaqə məlumatı"
+  },
+  "downloadAttachment": {
+    "message": "$ITEMNAME$ - endir",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
-    "message": "Card details"
+    "message": "Kart detalları"
   },
   "cardBrandDetails": {
-    "message": "$BRAND$ details",
+    "message": "$BRAND$ detalları",
     "placeholders": {
       "brand": {
         "content": "$1",
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }
