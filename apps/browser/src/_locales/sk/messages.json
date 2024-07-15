@@ -556,6 +556,18 @@
   "security": {
     "message": "Zabezpečenie"
   },
+  "confirmMasterPassword": {
+    "message": "Potvrdiť hlavné heslo"
+  },
+  "masterPassword": {
+    "message": "Hlavné heslo"
+  },
+  "masterPassImportant": {
+    "message": "Vaše hlavné heslo sa nebude dať obnoviť, ak ho zabudnete!"
+  },
+  "masterPassHintLabel": {
+    "message": "Nápoveda pre hlavné heslo"
+  },
   "errorOccurred": {
     "message": "Vyskytla sa chyba"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "Zobraziť $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "História hesla"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "Vyžaduje sa overenie e-mailu"
+  },
+  "emailVerifiedV2": {
+    "message": "Overený e-mail"
   },
   "emailVerificationRequiredDesc": {
     "message": "Na použitie tejto funkcie musíte overiť svoj e-mail. Svoj e-mail môžete overiť vo webovom trezore."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Prístupový kľúč bol odstránený"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Upozornenie: Nepriradené položky organizácie už nie sú viditeľné v zobrazení Všetky trezory a sú prístupné iba cez Správcovskú konzolu."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Upozornenie: 16. mája 2024 nepriradené položky organizácie už nebudú viditeľné v zobrazení Všetky trezory a budú prístupné iba cez Správcovskú konzolu."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Priradiť tieto položky do zbierky zo",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": ", aby boli viditeľné.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Návrhy automatického vypĺňania"
   },
@@ -3520,6 +3530,24 @@
   "contactYourOrgAdmin": {
     "message": "K položkám vo vypnutej organizácii nie je možné pristupovať. Požiadajte o pomoc vlastníka organizácie."
   },
+  "additionalInformation": {
+    "message": "Ďalšie informácie"
+  },
+  "itemHistory": {
+    "message": "História položky"
+  },
+  "lastEdited": {
+    "message": "Posledná úprava"
+  },
+  "ownerYou": {
+    "message": "Vlastník: Vy"
+  },
+  "linked": {
+    "message": "Prepojené"
+  },
+  "copySuccessful": {
+    "message": "Úspešne skopírované"
+  },
   "upload": {
     "message": "Nahrať"
   },
@@ -3559,6 +3587,24 @@
   "filters": {
     "message": "Filtre"
   },
+  "personalDetails": {
+    "message": "Osobné údaje"
+  },
+  "identification": {
+    "message": "Identifikácia"
+  },
+  "contactInfo": {
+    "message": "Kontaktné informácie"
+  },
+  "downloadAttachment": {
+    "message": "Stiahnuť – $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
     "message": "Podrobnosti o karte"
   },
@@ -3570,5 +3616,8 @@
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }

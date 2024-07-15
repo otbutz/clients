@@ -556,6 +556,18 @@
   "security": {
     "message": "Biztonság"
   },
+  "confirmMasterPassword": {
+    "message": "Mesterjelszó megerősítése"
+  },
+  "masterPassword": {
+    "message": "Mesterjelszó"
+  },
+  "masterPassImportant": {
+    "message": "A mesterjelszó nem állítható helyre, ha elfelejtik!"
+  },
+  "masterPassHintLabel": {
+    "message": "Mesterjelszó emlékeztető"
+  },
   "errorOccurred": {
     "message": "Hiba történt."
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "$TYPE$ megtekintése",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Jelszó előzmények"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "Email hitelesítés szükséges"
+  },
+  "emailVerifiedV2": {
+    "message": "Az email cím ellenőrzésre került."
   },
   "emailVerificationRequiredDesc": {
     "message": "A funkció használatához igazolni kell email címet. Az email cím a webtárban ellenőrizhető."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "A jelszó eltávolításra került."
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Megjegyzés: A nem hozzárendelt szervezeti elemek már nem láthatók az Összes széf nézetben a különböző eszközökön és csak az Adminisztrátori konzolon keresztül érhetők el."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Megjegyzés: 2024. május 16-tól a nem hozzárendelt szervezeti elemek többé nem lesznek láthatók az Összes széf nézetben a különböző eszközökön és csak az Adminisztrátori konzolon keresztül lesznek elérhetők."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Rendeljük hozzá ezeket az elemeket a gyűjteményhez",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "a láthatósághoz.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Automatikus kitöltés javaslatok"
   },
@@ -3520,6 +3530,24 @@
   "contactYourOrgAdmin": {
     "message": "Items in deactivated organizations cannot be accessed. Contact your organization owner for assistance."
   },
+  "additionalInformation": {
+    "message": "További információ"
+  },
+  "itemHistory": {
+    "message": "Elem előzmény"
+  },
+  "lastEdited": {
+    "message": "Utoljára szerkesztve"
+  },
+  "ownerYou": {
+    "message": "Tulajdonos: Én"
+  },
+  "linked": {
+    "message": "Csatolva"
+  },
+  "copySuccessful": {
+    "message": "A másolás sikeres volt."
+  },
   "upload": {
     "message": "Feltöltés"
   },
@@ -3559,6 +3587,24 @@
   "filters": {
     "message": "Szűrők"
   },
+  "personalDetails": {
+    "message": "Személyes adatok"
+  },
+  "identification": {
+    "message": "Azonosítás"
+  },
+  "contactInfo": {
+    "message": "Kapcsolat infó"
+  },
+  "downloadAttachment": {
+    "message": "Letöltés - $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
     "message": "Kártyaadatok"
   },
@@ -3570,5 +3616,8 @@
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }

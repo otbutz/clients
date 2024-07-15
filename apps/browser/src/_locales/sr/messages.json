@@ -556,6 +556,18 @@
   "security": {
     "message": "Сигурност"
   },
+  "confirmMasterPassword": {
+    "message": "Потрдити главну лозинку"
+  },
+  "masterPassword": {
+    "message": "Главна Лозинка"
+  },
+  "masterPassImportant": {
+    "message": "Ваша главна лозинка се не може повратити ако је заборавите!"
+  },
+  "masterPassHintLabel": {
+    "message": "Савет главне лозинке"
+  },
   "errorOccurred": {
     "message": "Дошло је до грешке!"
   },
@@ -1471,6 +1483,15 @@
       }
     }
   },
+  "viewItemHeader": {
+    "message": "Видети $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
   "passwordHistory": {
     "message": "Историја Лозинке"
   },
@@ -2163,6 +2184,9 @@
   },
   "emailVerificationRequired": {
     "message": "Потребна је верификација е-поште"
+  },
+  "emailVerifiedV2": {
+    "message": "Имејл верификован"
   },
   "emailVerificationRequiredDesc": {
     "message": "Морате да потврдите е-пошту да бисте користили ову функцију. Можете да потврдите е-пошту у веб сефу."
@@ -3334,20 +3358,6 @@
   "passkeyRemoved": {
     "message": "Приступачни кључ је уклоњен"
   },
-  "unassignedItemsBannerNotice": {
-    "message": "Напомена: Недодељене ставке организације више нису видљиве у приказу Сви сефови и доступне су само преко Админ конзоле."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Напомена: од 16 Маја 2024м недодељене ставке организације више нису видљиве у приказу Сви сефови и доступне су само преко Админ конзоле."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Assign these items to a collection from the",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "to make them visible.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "autofillSuggestions": {
     "message": "Предлози за ауто-попуњавање"
   },
@@ -3493,13 +3503,13 @@
     "message": "Ставке без фасцикле"
   },
   "itemDetails": {
-    "message": "Item details"
+    "message": "Детаљи ставке"
   },
   "itemName": {
-    "message": "Item name"
+    "message": "Име ставке"
   },
   "cannotRemoveViewOnlyCollections": {
-    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "message": "Не можете уклонити колекције са дозволама само за приказ: $COLLECTIONS$",
     "placeholders": {
       "collections": {
         "content": "$1",
@@ -3511,14 +3521,32 @@
     "message": "Организација је деактивирана"
   },
   "owner": {
-    "message": "Owner"
+    "message": "Власник"
   },
   "selfOwnershipLabel": {
-    "message": "You",
+    "message": "Ти",
     "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "contactYourOrgAdmin": {
     "message": "Није могуће приступити ставкама у деактивираним организацијама. Обратите се власнику ваше организације за помоћ."
+  },
+  "additionalInformation": {
+    "message": "Додатне информације"
+  },
+  "itemHistory": {
+    "message": "Историја предмета"
+  },
+  "lastEdited": {
+    "message": "Последња измена"
+  },
+  "ownerYou": {
+    "message": "Власник: Ви"
+  },
+  "linked": {
+    "message": "Повезано"
+  },
+  "copySuccessful": {
+    "message": "Копија успешна"
   },
   "upload": {
     "message": "Отпреми"
@@ -3559,16 +3587,37 @@
   "filters": {
     "message": "Филтери"
   },
+  "personalDetails": {
+    "message": "Личне информације"
+  },
+  "identification": {
+    "message": "Идентификација"
+  },
+  "contactInfo": {
+    "message": "Контакт инфо"
+  },
+  "downloadAttachment": {
+    "message": "Преузми - $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
   "cardDetails": {
-    "message": "Card details"
+    "message": "Детаљи картице"
   },
   "cardBrandDetails": {
-    "message": "$BRAND$ details",
+    "message": "$BRAND$ детаљи",
     "placeholders": {
       "brand": {
         "content": "$1",
         "example": "Visa"
       }
     }
+  },
+  "addAccount": {
+    "message": "Add account"
   }
 }
