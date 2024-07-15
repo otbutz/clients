@@ -320,7 +320,7 @@ export class NativeMessagingMain {
 
   private binaryPath() {
     if (isDev()) {
-      return path.join(this.appPath, "..", "desktop_native", "target", "release", "desktop_proxy");
+      return path.join(this.appPath, "..", "desktop_native", "target", "debug", "desktop_proxy");
     }
 
     switch (process.platform) {

@@ -6,20 +6,22 @@ const process = require("process");
 
 let crossPlatform = process.argv.length > 2 && process.argv[2] === "cross-platform";
 
-function buildNapiModule(target) {
+function buildNapiModule(target, release = true) {
     const targetArg = target ? `--target ${target}` : "";
-    return child_process.execSync(`npm run build --release -- ${targetArg}`, { stdio: 'inherit', cwd: path.join(__dirname, "napi") });
+    const releaseArg = release ? "--release" : "";
+    return child_process.execSync(`npm run build -- ${releaseArg} ${targetArg}`, { stdio: 'inherit', cwd: path.join(__dirname, "napi") });
 }
 
-function buildProxyBin(target) {
+function buildProxyBin(target, release = true) {
     const targetArg = target ? `--target ${target}` : "";
-    return child_process.execSync(`cargo build --bin desktop_proxy --release ${targetArg}`, {stdio: 'inherit', cwd: path.join(__dirname, "proxy")});
+    const releaseArg = release ? "--release" : "";
+    return child_process.execSync(`cargo build --bin desktop_proxy ${releaseArg} ${targetArg}`, {stdio: 'inherit', cwd: path.join(__dirname, "proxy")});
 }
 
 if (!crossPlatform) {
-    console.log("Building native modules for the native architecture");
-    buildNapiModule();
-    buildProxyBin();
+    console.log("Building native modules in debug mode for the native architecture");
+    buildNapiModule(false, false);
+    buildProxyBin(false, false);
     return;
 }
 
