@@ -53,11 +53,15 @@ export namespace ipc {
     message: string
   }
   export class IpcServer {
-    /** Create and start the IPC server. */
+    /**
+     * Create and start the IPC server without blocking.
+     * @param name The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
+     * @param callback This function will be called whenever a message is received from a client.
+     */
     static listen(name: string, callback: (error: null | Error, message: IpcMessage) => void): IpcServer
     /** Stop the IPC server. */
     stop(): void
-    /** Send a message over the IPC server. */
+    /** Send a message over the IPC server to all the connected clients */
     send(message: string): void
   }
 }

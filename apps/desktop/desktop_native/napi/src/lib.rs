@@ -192,7 +192,9 @@ pub mod ipc {
 
     #[napi]
     impl IpcServer {
-        /// Create and start the IPC server.
+        /// Create and start the IPC server without blocking.
+        /// @param name The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
+        /// @param callback This function will be called whenever a message is received from a client.
         #[napi(factory)]
         pub fn listen(
             name: String,
@@ -219,7 +221,7 @@ pub mod ipc {
             Ok(())
         }
 
-        /// Send a message over the IPC server.
+        /// Send a message over the IPC server to all the connected clients
         #[napi]
         pub fn send(&self, message: String) -> napi::Result<()> {
             self.server

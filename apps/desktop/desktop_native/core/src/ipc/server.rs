@@ -31,6 +31,10 @@ pub struct Server {
 }
 
 impl Server {
+    /// Create and start the IPC server without blocking.
+    /// # Parameters
+    /// - `name`: The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
+    /// - `tx`: The sink that will receive all the messages sent by the clients.
     pub fn start<T>(name: &str, tx: T) -> Result<Self, Box<dyn Error>>
     where
         T: Sink<Message> + Unpin + Send + Clone + 'static,
