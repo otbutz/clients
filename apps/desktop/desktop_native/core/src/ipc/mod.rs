@@ -3,7 +3,7 @@ pub mod server;
 
 /// Resolve the path to the IPC socket.
 pub fn path(name: &str) -> std::path::PathBuf {
-    #[cfg(windows)]
+    #[cfg(target_os = "windows")]
     {
         // Use a unique IPC pipe //./pipe/xxxxxxxxxxxxxxxxx.app.bitwarden per user.
         // Hashing prevents problems with reserved characters and file length limitations.
@@ -16,19 +16,25 @@ pub fn path(name: &str) -> std::path::PathBuf {
         format!(r"\\.\pipe\{hash_b64}.app.{name}").into()
     }
 
-    #[cfg(all(target_os = "macos", not(debug_assertions)))]
+    #[cfg(target_os = "macos")]
     {
-        // On MacOS release builds, we use the Application Support directory.
-        // This should ensure that the socket is only accessible to the app bundle.
+        // On MacOS builds, we use the Application Support directory.
+        // This directory should already exist as it's also used for
+        // the application data and other electron caches.
+        // On sandboxed App Store builds, this should ensure that
+        // the socket is only accessible to the app bundle.
         let config = dirs::config_dir().unwrap();
         config.join("Bitwarden").join(format!("app.{name}"))
     }
 
-    #[cfg(any(target_os = "linux", all(target_os = "macos", debug_assertions)))]
+    #[cfg(target_os = "linux")]
     {
-        // On other platforms, we use the user's tmp directory.
-        // This is currently the case for Linux and debug MacOS builds.
-        let home = dirs::home_dir().unwrap();
-        home.join("tmp").join(format!("app.{name}"))
+        // On Linux, we use the user's cache directory.
+        let home = dirs::cache_dir().unwrap();
+        let path_dir = home.join("com.bitwarden.desktop");
+
+        // The chache directory might not exist, so create it
+        let _ = std::fs::create_dir_all(&path_dir);
+        path_dir.join(format!("app.{name}"))
     }
 }
