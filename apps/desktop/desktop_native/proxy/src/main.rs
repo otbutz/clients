@@ -50,7 +50,7 @@ async fn main() {
     init_logging();
     info!("Starting Bitwarden IPC Proxy.");
 
-    // Setup two channels, one for sending messages to the desktop application and one for receiving messages
+    // Setup two channels, one for sending messages to the desktop application (`out`) and one for receiving messages from the desktop application (`in`)
     let (in_tx, in_rx) = tokio::sync::mpsc::channel(32);
     let (out_tx, mut out_rx) = tokio::sync::mpsc::channel(32);
 
