@@ -1,14 +1,11 @@
 import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 
 import { SendFormConfig } from "./abstractions/send-form-config.service";
-import { AdditionalOptionsSectionComponent } from "./components/options/options-section.component";
 /**
  * The complete form for a send. Includes all the sub-forms from their respective section components.
  * TODO: Add additional form sections as they are implemented.
  */
-export type SendForm = {
-  additionalOptions?: AdditionalOptionsSectionComponent["additionalOptionsForm"];
-};
+export type SendForm = object;
 
 /**
  * A container for the {@link SendForm} that allows for registration of child form groups and patching of the send
