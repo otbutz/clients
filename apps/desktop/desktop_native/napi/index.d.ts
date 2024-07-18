@@ -58,7 +58,7 @@ export namespace ipc {
      * @param name The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
      * @param callback This function will be called whenever a message is received from a client.
      */
-    static listen(name: string, callback: (error: null | Error, message: IpcMessage) => void): IpcServer
+    static listen(name: string, callback: (error: null | Error, message: IpcMessage) => void): Promise<IpcServer>
     /** Stop the IPC server. */
     stop(): void
     /**

@@ -196,7 +196,7 @@ pub mod ipc {
         /// @param name The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
         /// @param callback This function will be called whenever a message is received from a client.
         #[napi(factory)]
-        pub fn listen(
+        pub async fn listen(
             name: String,
             #[napi(ts_arg_type = "(error: null | Error, message: IpcMessage) => void")]
             callback: ThreadsafeFunction<IpcMessage, ErrorStrategy::CalleeHandled>,
