@@ -173,6 +173,10 @@
     "message": "Без фасцикле",
     "description": "This is the folder for uncategorized items"
   },
+  "selfOwnershipLabel": {
+    "message": "Ти",
+    "description": "Used as a label to indicate that the user is the owner of an item."
+  },
   "addFolder": {
     "message": "Додај фасциклу"
   },
@@ -400,6 +404,21 @@
   },
   "item": {
     "message": "Ставка"
+  },
+  "itemDetails": {
+    "message": "Детаљи ставке"
+  },
+  "itemName": {
+    "message": "Име ставке"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Не можете уклонити колекције са дозволама само за приказ: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
   },
   "ex": {
     "message": "нпр.",
@@ -835,8 +854,8 @@
   "emailAddress": {
     "message": "Имејл"
   },
-  "yourVaultIsLocked": {
-    "message": "Сеф је блокиран. Унесите главну лозинку за наставак."
+  "yourVaultIsLockedV2": {
+    "message": "Your vault is locked"
   },
   "uuid": {
     "message": "UUID"
@@ -1041,7 +1060,7 @@
     "message": "Желите ли заиста да наставите?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Изаберите фасциклу у коју желите да преместите одабране $COUNT$ ставке.",
+    "message": "Choose a folder that you would like to add the $COUNT$ selected item(s) to.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1671,6 +1690,9 @@
   },
   "twoStepAuthenticatorScanCodeV2": {
     "message": "Скенирајте КР кôд у наставку помоћу апликације за аутентификацију или унесите кључ."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "Could not load QR code. Try again or use the key below."
   },
   "key": {
     "message": "Кључ"
@@ -2795,9 +2817,6 @@
   "invited": {
     "message": "Позвано"
   },
-  "accepted": {
-    "message": "Прихваћено"
-  },
   "confirmed": {
     "message": "Потврђено"
   },
@@ -3383,6 +3402,9 @@
   "emailVerified": {
     "message": "Ваш имејл је потврђен."
   },
+  "emailVerifiedV2": {
+    "message": "Имејл верификован"
+  },
   "emailVerifiedFailed": {
     "message": "Није могуће верификовати ваш имејл. Покушајте да пошаљете нову поруку за верификацију."
   },
@@ -3682,6 +3704,15 @@
   },
   "subscriptionMaxReached": {
     "message": "Подешавање ваше претплате резултираће прорисаним променама у вашим новчаним вредностима. Не можете позвати више од $COUNT$ корисника без повећања лиценца за претплату.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "subscriptionSeatMaxReached": {
+    "message": "Не можете позвати више од $COUNT$ чланова без надоградње смештаја претплате.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -7852,7 +7883,7 @@
     "message": "Додели овим колекцијама"
   },
   "bulkCollectionAssignmentDialogDescription": {
-    "message": "Изаберите колекције са којима ће се ставке делити. Када се ставка ажурира у једној колекцији, она ће се одразити на све колекције. Само чланови организације са приступом овим колекцијама ће моћи да виде ставке."
+    "message": "Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
     "message": "Изаберите колекције за доделу"
@@ -8414,6 +8445,9 @@
   "memberAccessReportDesc": {
     "message": "Уверите се да чланови имају приступ правим акредитивима и да су њихови налози сигурни. Користите овај извештај да бисте добили ЦСВ приступ чланова и конфигурације налога."
   },
+  "memberAccessReportPageDesc": {
+    "message": "Audit organization member access across groups, collections, and collection items. The CSV export provides a detailed breakdown per member, including information on collection permissions and account configurations."
+  },
   "higherKDFIterations": {
     "message": "Веће KDF итерације може помоћи у заштити ваше главне лозинке од грубе присиле од стране нападача."
   },
@@ -8486,8 +8520,60 @@
   "downloadCSV": {
     "message": "Преузми ЦСВ"
   },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Прилагођавања ваше претплате ће резултирати пропорционалним трошковима у односу на укупне износе рачуна у вашем следећем обрачунском периоду. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Прилагођавања ваше претплате ће резултирати пропорционалним трошковима за месечни обрачунски циклус. "
+  },
   "billingHistoryDescription": {
     "message": "Преузмите ЦСВ да бисте добили детаље о клијенту за сваки датум обрачуна. Пропорционални трошкови нису укључени у ЦСВ и могу се разликовати од повезане фактуре. За најтачније податке о обрачуну погледајте своје месечне фактуре.",
     "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "Нема фактура за попис",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Обавештење: Касније овог месеца, приватност сефа клијента ће бити побољшана и чланови провајдера више неће имати директан приступ ставкама клијентског сефа. За питања,",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "контактирајте подршку Bitwarden-а.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsored"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "After making updates in the Bitwarden cloud server, upload your license file to apply the most recent changes."
+  },
+  "addToFolder": {
+    "message": "Add to folder"
+  },
+  "selectFolder": {
+    "message": "Select folder"
+  },
+  "personalItemsTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to the selected organization. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarning": {
+    "message": "$PERSONAL_ITEMS_COUNT$ will be permanently transferred to $ORG$. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2 items"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
   }
 }

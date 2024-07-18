@@ -239,10 +239,10 @@
     "message": "Bitwarden para Empresas"
   },
   "bitwardenAuthenticator": {
-    "message": "Autenticador Bitwarden"
+    "message": "Bitwarden Authenticator"
   },
   "continueToAuthenticatorPageDesc": {
-    "message": "O Autenticador Bitwarden permite-lhe armazenar chaves de autenticação e gerar códigos TOTP para fluxos de verificação de 2 passos. Saiba mais no site bitwarden.com"
+    "message": "O Bitwarden Authenticator permite-lhe armazenar chaves de autenticação e gerar códigos TOTP para fluxos de verificação de 2 passos. Saiba mais no site bitwarden.com"
   },
   "bitwardenSecretsManager": {
     "message": "Gestor de Segredos Bitwarden"
@@ -555,6 +555,18 @@
   },
   "security": {
     "message": "Segurança"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirmar a palavra-passe mestra"
+  },
+  "masterPassword": {
+    "message": "Palavra-passe mestra"
+  },
+  "masterPassImportant": {
+    "message": "A sua palavra-passe mestra não pode ser recuperada se a esquecer!"
+  },
+  "masterPassHintLabel": {
+    "message": "Dica da palavra-passe mestra"
   },
   "errorOccurred": {
     "message": "Ocorreu um erro"
@@ -1082,7 +1094,7 @@
     "message": "Abrir novo separador"
   },
   "webAuthnAuthenticate": {
-    "message": "Autenticar WebAuthn"
+    "message": "Autenticar o WebAuthn"
   },
   "loginUnavailable": {
     "message": "Início de sessão indisponível"
@@ -1391,7 +1403,7 @@
     "message": "Nome completo"
   },
   "identityName": {
-    "message": "Nome de identidade"
+    "message": "Nome da identidade"
   },
   "company": {
     "message": "Empresa"
@@ -1464,6 +1476,15 @@
   },
   "editItemHeader": {
     "message": "Editar $TYPE$",
+    "placeholders": {
+      "type": {
+        "content": "$1",
+        "example": "Login"
+      }
+    }
+  },
+  "viewItemHeader": {
+    "message": "Ver $TYPE$",
     "placeholders": {
       "type": {
         "content": "$1",
@@ -1642,7 +1663,7 @@
     "message": "Desbloquear com PIN"
   },
   "setYourPinCode": {
-    "message": "Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redefinidas se alguma vez terminar sessão completamente da aplicação."
+    "message": "Defina o seu código PIN para desbloquear o Bitwarden. As suas definições de PIN serão redefinidas se alguma vez terminar sessão por completo da aplicação."
   },
   "pinRequired": {
     "message": "É necessário o código PIN."
@@ -2164,6 +2185,9 @@
   "emailVerificationRequired": {
     "message": "Verificação de e-mail necessária"
   },
+  "emailVerifiedV2": {
+    "message": "E-mail verificado"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Tem de verificar o seu e-mail para utilizar esta funcionalidade. Pode verificar o seu e-mail no cofre Web."
   },
@@ -2274,7 +2298,7 @@
     }
   },
   "leaveOrganization": {
-    "message": "Deixar a organização"
+    "message": "Sair da organização"
   },
   "removeMasterPassword": {
     "message": "Remover palavra-passe mestra"
@@ -2283,7 +2307,7 @@
     "message": "Palavra-passe mestra removida"
   },
   "leaveOrganizationConfirmation": {
-    "message": "Tem a certeza de que pretende deixar esta organização?"
+    "message": "Tem a certeza de que pretende sair desta organização?"
   },
   "leftOrganization": {
     "message": "Saiu da organização."
@@ -3492,11 +3516,51 @@
   "itemsWithNoFolder": {
     "message": "Itens sem pasta"
   },
+  "itemDetails": {
+    "message": "Detalhes do item"
+  },
+  "itemName": {
+    "message": "Nome do item"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Não é possível remover coleções com permissões de Apenas visualização: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "organizationIsDeactivated": {
     "message": "A organização está desativada"
   },
+  "owner": {
+    "message": "Proprietário"
+  },
+  "selfOwnershipLabel": {
+    "message": "Eu",
+    "description": "Used as a label to indicate that the user is the owner of an item."
+  },
   "contactYourOrgAdmin": {
     "message": "Não é possível aceder aos itens de organizações desativadas. Contacte o proprietário da organização para obter assistência."
+  },
+  "additionalInformation": {
+    "message": "Informações adicionais"
+  },
+  "itemHistory": {
+    "message": "Histórico do item"
+  },
+  "lastEdited": {
+    "message": "Última edição"
+  },
+  "ownerYou": {
+    "message": "Proprietário: Eu"
+  },
+  "linked": {
+    "message": "Associado"
+  },
+  "copySuccessful": {
+    "message": "Cópia bem-sucedida"
   },
   "upload": {
     "message": "Carregar"
@@ -3536,5 +3600,35 @@
   },
   "filters": {
     "message": "Filtros"
+  },
+  "personalDetails": {
+    "message": "Dados pessoais"
+  },
+  "identification": {
+    "message": "Identificação"
+  },
+  "contactInfo": {
+    "message": "Informações de contacto"
+  },
+  "downloadAttachment": {
+    "message": "Transferir - $ITEMNAME$",
+    "placeholders": {
+      "itemname": {
+        "content": "$1",
+        "example": "Your File"
+      }
+    }
+  },
+  "cardDetails": {
+    "message": "Detalhes do cartão"
+  },
+  "cardBrandDetails": {
+    "message": "Detalhes do $BRAND$",
+    "placeholders": {
+      "brand": {
+        "content": "$1",
+        "example": "Visa"
+      }
+    }
   }
 }

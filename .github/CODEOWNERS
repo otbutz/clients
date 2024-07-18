@@ -29,6 +29,7 @@ libs/common/src/models/export @bitwarden/team-tools-dev
 libs/common/src/tools @bitwarden/team-tools-dev
 libs/importer @bitwarden/team-tools-dev
 libs/tools @bitwarden/team-tools-dev
+bitwarden_license/bit-web/src/app/tools @bitwarden/team-tools-dev
 
 ## Localization/Crowdin (Tools team)
 apps/browser/src/_locales @bitwarden/team-tools-dev
@@ -94,9 +95,10 @@ apps/desktop/src/services/native-message-handler.service.ts @bitwarden/team-auto
 apps/desktop/src/services/native-messaging.service.ts @bitwarden/team-autofill-dev
 
 ## Component Library ##
-.storybook @bitwarden/team-component-library
-libs/components @bitwarden/team-component-library
-apps/web/src/app/layouts/header
+.storybook @bitwarden/team-design-system
+libs/components @bitwarden/team-design-system
+apps/browser/src/platform/popup/layout @bitwarden/team-design-system 
+apps/web/src/app/layouts @bitwarden/team-design-system 
 
 ## Desktop native module ##
 apps/desktop/desktop_native @bitwarden/team-platform-dev
