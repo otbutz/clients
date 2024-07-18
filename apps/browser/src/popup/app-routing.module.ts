@@ -48,6 +48,7 @@ import { PasswordGeneratorHistoryComponent } from "../tools/popup/generator/pass
 import { SendAddEditComponent } from "../tools/popup/send/send-add-edit.component";
 import { SendGroupingsComponent } from "../tools/popup/send/send-groupings.component";
 import { SendTypeComponent } from "../tools/popup/send/send-type.component";
+import { SendV2Component } from "../tools/popup/send/send-v2.component";
 import { AboutPageV2Component } from "../tools/popup/settings/about-page/about-page-v2.component";
 import { AboutPageComponent } from "../tools/popup/settings/about-page/about-page.component";
 import { MoreFromBitwardenPageV2Component } from "../tools/popup/settings/about-page/more-from-bitwarden-page-v2.component";
@@ -70,6 +71,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 import { AddEditV2Component } from "../vault/popup/components/vault-v2/add-edit/add-edit-v2.component";
+import { AssignCollections } from "../vault/popup/components/vault-v2/assign-collections/assign-collections.component";
 import { AttachmentsV2Component } from "../vault/popup/components/vault-v2/attachments/attachments-v2.component";
 import { ViewV2Component } from "../vault/popup/components/vault-v2/view-v2/view-v2.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
@@ -407,6 +409,12 @@ const routes: Routes = [
       },
     ],
   },
+  {
+    path: "assign-collections",
+    component: AssignCollections,
+    canActivate: [canAccessFeature(FeatureFlag.ExtensionRefresh, true, "/")],
+    data: { state: "assign-collections" },
+  },
   ...extensionRefreshSwap(AboutPageComponent, AboutPageV2Component, {
     path: "about",
     canActivate: [AuthGuard],
@@ -450,12 +458,11 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: { state: "tabs_settings" },
       }),
-      {
+      ...extensionRefreshSwap(SendGroupingsComponent, SendV2Component, {
         path: "send",
-        component: SendGroupingsComponent,
         canActivate: [AuthGuard],
         data: { state: "tabs_send" },
-      },
+      }),
     ],
   }),
   {
