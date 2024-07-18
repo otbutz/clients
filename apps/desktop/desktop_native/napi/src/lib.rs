@@ -201,14 +201,14 @@ pub mod ipc {
             #[napi(ts_arg_type = "(error: null | Error, message: IpcMessage) => void")]
             callback: ThreadsafeFunction<IpcMessage, ErrorStrategy::CalleeHandled>,
         ) -> napi::Result<Self> {
-            let (tx, mut rx) = tokio::sync::mpsc::channel::<Message>(32);
+            let (send, mut recv) = tokio::sync::mpsc::channel::<Message>(32);
             tokio::spawn(async move {
-                while let Some(message) = rx.recv().await {
+                while let Some(message) = recv.recv().await {
                     callback.call(Ok(message.into()), ThreadsafeFunctionCallMode::NonBlocking);
                 }
             });
 
-            let server = desktop_core::ipc::server::Server::start(&name, PollSender::new(tx))
+            let server = desktop_core::ipc::server::Server::start(&name, PollSender::new(send))
                 .map_err(|e| napi::Error::from_reason(e.to_string()))?;
 
             Ok(IpcServer { server })
