@@ -222,11 +222,15 @@ pub mod ipc {
         }
 
         /// Send a message over the IPC server to all the connected clients
+        /// @return The number of clients that the message was sent to. Note that the number of messages
+        /// actually received may be less, as some clients could disconnect before receiving the message.
         #[napi]
-        pub fn send(&self, message: String) -> napi::Result<()> {
+        pub fn send(&self, message: String) -> napi::Result<u32> {
             self.server
                 .send(message)
                 .map_err(|e| napi::Error::from_reason(e.to_string()))
+                // NAPI doesn't support u64 or usize, so we need to convert to u32
+                .and_then(|u| u32::try_from(u).map_err(|e| napi::Error::from_reason(e.to_string())))
         }
     }
 }

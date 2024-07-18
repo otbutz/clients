@@ -61,7 +61,11 @@ export namespace ipc {
     static listen(name: string, callback: (error: null | Error, message: IpcMessage) => void): IpcServer
     /** Stop the IPC server. */
     stop(): void
-    /** Send a message over the IPC server to all the connected clients */
-    send(message: string): void
+    /**
+     * Send a message over the IPC server to all the connected clients
+     * @return The number of clients that the message was sent to. Note that the number of messages
+     * actually received may be less, as some clients could disconnect before receiving the message.
+     */
+    send(message: string): number
   }
 }

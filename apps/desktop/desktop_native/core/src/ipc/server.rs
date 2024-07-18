@@ -77,11 +77,17 @@ impl Server {
         Ok(server)
     }
 
-    pub fn send(&self, message: String) -> Result<()> {
-        self.server_to_client_send.send(message)?;
-        Ok(())
+    /// Send a message over the IPC server to all the connected clients
+    /// # Returns
+    /// The number of clients that the message was sent to. Note that the number of messages
+    /// sent may be less than the number of connected clients if some clients disconnect while
+    /// the message is being sent.
+    pub fn send(&self, message: String) -> Result<usize> {
+        let sent = self.server_to_client_send.send(message)?;
+        Ok(sent)
     }
 
+    /// Stop the IPC server.
     pub fn stop(&self) {
         self.cancel_token.cancel();
     }
