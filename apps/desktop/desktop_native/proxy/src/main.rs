@@ -50,11 +50,11 @@ async fn main() {
     init_logging();
     info!("Starting Bitwarden IPC Proxy.");
 
-    // Setup two channels, one for sending messages to the desktop application and one for receiving messages
-    let (in_tx, in_rx) = tokio::sync::mpsc::channel(32);
-    let (out_tx, mut out_rx) = tokio::sync::mpsc::channel(32);
+    // Setup two channels, one for sending messages to the desktop application (`out`) and one for receiving messages from the desktop application (`in`)
+    let (in_send, in_recv) = tokio::sync::mpsc::channel(32);
+    let (out_send, mut out_recv) = tokio::sync::mpsc::channel(32);
 
-    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(out_tx, in_rx));
+    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(out_send, in_recv));
 
     // Create a new codec for reading and writing messages from stdin/stdout.
     let mut stdin = LengthDelimitedCodec::builder()
@@ -74,7 +74,7 @@ async fn main() {
             }
 
             // Receive messages from IPC and print to STDOUT.
-            msg = out_rx.recv() => {
+            msg = out_recv.recv() => {
                 match msg {
                     Some(msg) => {
                         debug!("OUT: {}", msg);
@@ -93,7 +93,7 @@ async fn main() {
                     Some(Ok(msg)) => {
                         let m = String::from_utf8(msg.to_vec()).unwrap();
                         debug!("IN: {}", m);
-                        in_tx.send(m).await.unwrap();
+                        in_send.send(m).await.unwrap();
                     }
                     Some(Err(e)) => {
                         // Unexpected error, exit.

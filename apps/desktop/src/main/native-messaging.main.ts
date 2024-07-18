@@ -27,8 +27,8 @@ export class NativeMessagingMain {
       "nativeMessaging.manifests",
       async (_event: any, options: { create: boolean }) => {
         if (options.create) {
-          this.listen();
           try {
+            await this.listen();
             await this.generateManifests();
           } catch (e) {
             this.logService.error("Error generating manifests: " + e);
@@ -51,8 +51,8 @@ export class NativeMessagingMain {
       "nativeMessaging.ddgManifests",
       async (_event: any, options: { create: boolean }) => {
         if (options.create) {
-          this.listen();
           try {
+            await this.listen();
             await this.generateDdgManifests();
           } catch (e) {
             this.logService.error("Error generating duckduckgo manifests: " + e);
@@ -72,23 +72,25 @@ export class NativeMessagingMain {
     );
   }
 
-  listen() {
+  async listen() {
     if (this.ipcServer) {
       this.ipcServer.stop();
     }
 
-    this.ipcServer = ipc.IpcServer.listen("bitwarden", (error, msg) => {
+    this.ipcServer = await ipc.IpcServer.listen("bitwarden", (error, msg) => {
       switch (msg.kind) {
-        case ipc.IpcMessageType.Connected:
+        case ipc.IpcMessageType.Connected: {
           this.connected.push(msg.clientId);
+          this.logService.info("Native messaging client " + msg.clientId + " has connected");
           break;
+        }
         case ipc.IpcMessageType.Disconnected: {
           const index = this.connected.indexOf(msg.clientId);
           if (index > -1) {
             this.connected.splice(index, 1);
           }
 
-          this.logService.info("client " + index + " has disconnected!");
+          this.logService.info("Native messaging client " + msg.clientId + " has disconnected");
           break;
         }
         case ipc.IpcMessageType.Message:
