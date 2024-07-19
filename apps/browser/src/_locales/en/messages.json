@@ -3497,8 +3497,8 @@
   "noValuesToCopy": {
     "message": "No values to copy"
   },
-  "assignCollections": {
-    "message": "Assign collections"
+  "assignToCollections": {
+    "message": "Assign to collections"
   },
   "copyEmail": {
     "message": "Copy email"
