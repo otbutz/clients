@@ -411,7 +411,7 @@ export class AssignCollectionsComponent implements OnInit {
       variant: "success",
       title: null,
       message: this.i18nService.t(
-        "movedItemsToOrg",
+        shareableCiphers.length === 1 ? "itemMovedToOrg" : "itemsMovedToOrg",
         this.orgName ?? this.i18nService.t("organization"),
       ),
     });
