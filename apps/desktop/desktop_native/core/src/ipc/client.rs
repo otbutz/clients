@@ -61,7 +61,10 @@ async fn connect_inner(
                     Some(msg) => {
                         conn.write_all(msg.as_bytes()).await?;
                     }
-                    None => break,
+                    None => {
+                        info!("Client channel closed");
+                        break;
+                    },
                 }
             },
 
