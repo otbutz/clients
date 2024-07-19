@@ -32,7 +32,7 @@ class QueryParams {
   }
 
   /**
-   * The ID of the send to edit
+   * The ID of the send to edit, empty when it's a new Send
    */
   sendId?: SendId;
 
@@ -44,6 +44,9 @@ class QueryParams {
 
 export type AddEditQueryParams = Partial<Record<keyof QueryParams, string>>;
 
+/**
+ * Component for adding or editing a send item.
+ */
 @Component({
   selector: "tools-send-add-edit",
   templateUrl: "send-add-edit.component.html",
@@ -63,13 +66,28 @@ export type AddEditQueryParams = Partial<Record<keyof QueryParams, string>>;
   ],
 })
 export class SendAddEditComponent {
+  /**
+   * The header text for the component.
+   */
   headerText: string;
+
+  /**
+   * The configuration for the send form.
+   */
   config: SendFormConfig;
 
+  /**
+   * Represent the components loading state
+   * @returns True if the component is loading, false otherwise.
+   */
   get loading() {
     return this.config == null;
   }
 
+  /**
+   * Gets the original send ID.
+   * @returns The original send ID, or null if it's a new Send.
+   */
   get originalSendId(): SendId | null {
     return this.config?.originalSend?.id as SendId;
   }
@@ -83,10 +101,16 @@ export class SendAddEditComponent {
     this.subscribeToParams();
   }
 
+  /**
+   * Handles the event when the send is saved.
+   */
   onSendSaved() {
     this.location.back();
   }
 
+  /**
+   * Subscribes to the route query parameters and builds the configuration based on the parameters.
+   */
   subscribeToParams(): void {
     this.route.queryParams
       .pipe(
