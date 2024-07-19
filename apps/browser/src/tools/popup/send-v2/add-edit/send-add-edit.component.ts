@@ -109,11 +109,17 @@ export class SendAddEditComponent {
       )
       .subscribe((config) => {
         this.config = config;
-        this.headerText = this.setHeader(config.mode, config.sendType);
+        this.headerText = this.getHeaderText(config.mode, config.sendType);
       });
   }
 
-  setHeader(mode: SendFormMode, type: SendType) {
+  /**
+   * Gets the header text based on the mode and type.
+   * @param mode The mode of the send form.
+   * @param type The type of the send form.
+   * @returns The header text.
+   */
+  private getHeaderText(mode: SendFormMode, type: SendType) {
     const partOne = mode === "edit" || mode === "partial-edit" ? "editItemHeader" : "newItemHeader";
 
     switch (type) {
