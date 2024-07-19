@@ -61,9 +61,23 @@
       <td bitCell>
         <div class="tw-flex tw-items-center tw-gap-4 tw-break-all">
           <i class="bwi bwi-collection tw-text-muted" aria-hidden="true"></i>
-          <a bitLink [routerLink]="['/sm', project.organizationId, 'projects', project.id]">{{
-            project.name
-          }}</a>
+          <div>
+            <a bitLink [routerLink]="['/sm', project.organizationId, 'projects', project.id]">{{
+              project.name
+            }}</a>
+            <div class="tw-text-sm tw-text-muted tw-block">
+              {{ project.id }}
+              <button
+                type="button"
+                bitIconButton="bwi-clone"
+                buttonType="main"
+                size="small"
+                [title]="'copyUuid' | i18n"
+                [attr.aria-label]="'copyUuid' | i18n"
+                (click)="copiedProjectUUIdEvent.emit(project.id)"
+              ></button>
+            </div>
+          </div>
         </div>
       </td>
       <td bitCell class="tw-whitespace-nowrap">{{ project.revisionDate | date: "medium" }}</td>
@@ -91,7 +105,12 @@
           <i class="bwi bwi-fw bwi-pencil" aria-hidden="true"></i>
           {{ "editProject" | i18n }}
         </button>
-        <button *ngIf="project.write" type="button" bitMenuItem (click)="deleteProject(project.id)">
+        <button
+          *ngIf="project.write && showDelete"
+          type="button"
+          bitMenuItem
+          (click)="deleteProject(project.id)"
+        >
           <i class="bwi bwi-fw bwi-trash tw-text-danger" aria-hidden="true"></i>
           <span class="tw-text-danger">{{ "deleteProject" | i18n }}</span>
         </button>

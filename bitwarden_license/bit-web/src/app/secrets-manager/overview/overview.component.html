@@ -51,6 +51,7 @@
         (newProjectEvent)="openNewProjectDialog()"
         (editProjectEvent)="openEditProject($event)"
         (deleteProjectEvent)="openDeleteProjectDialog($event)"
+        (copiedProjectUUIdEvent)="copyProjectUuid($event)"
         [projects]="view.latestProjects"
       ></sm-projects-list>
       <div *ngIf="view.allProjects.length > 0" class="tw-ml-auto tw-mt-4 tw-max-w-max">

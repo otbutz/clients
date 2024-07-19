@@ -24,6 +24,8 @@ export class ProjectsListComponent {
   }
   private _projects: ProjectListView[];
 
+  @Input() showDelete?: boolean = true;
+
   @Input()
   set search(search: string) {
     this.selection.clear();
@@ -33,6 +35,7 @@ export class ProjectsListComponent {
   @Output() editProjectEvent = new EventEmitter<string>();
   @Output() deleteProjectEvent = new EventEmitter<ProjectListView[]>();
   @Output() newProjectEvent = new EventEmitter();
+  @Output() copiedProjectUUIdEvent = new EventEmitter<string>();
 
   selection = new SelectionModel<string>(true, []);
   protected dataSource = new TableDataSource<ProjectListView>();
@@ -88,5 +91,18 @@ export class ProjectsListComponent {
       return true;
     }
     return false;
+  }
+
+  static copyProjectUuid(
+    id: string,
+    platformUtilsService: PlatformUtilsService,
+    i18nService: I18nService,
+  ) {
+    platformUtilsService.copyToClipboard(id);
+    platformUtilsService.showToast(
+      "success",
+      null,
+      i18nService.t("valueCopied", i18nService.t("uuid")),
+    );
   }
 }
