@@ -28,7 +28,7 @@ import { PopupPageComponent } from "../../../../platform/popup/layout/popup-page
 class QueryParams {
   constructor(params: Params) {
     this.sendId = params.sendId;
-    this.type = parseInt(params.type, null);
+    this.type = parseInt(params.type, 10);
   }
 
   /**
