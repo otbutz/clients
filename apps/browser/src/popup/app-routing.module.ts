@@ -39,7 +39,9 @@ import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.comp
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
+import { ExcludedDomainsV1Component } from "../autofill/popup/settings/excluded-domains-v1.component";
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
+import { NotificationsSettingsV1Component } from "../autofill/popup/settings/notifications-v1.component";
 import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import BrowserPopupUtils from "../platform/popup/browser-popup-utils";
@@ -72,6 +74,7 @@ import { VaultItemsComponent } from "../vault/popup/components/vault/vault-items
 import { VaultV2Component } from "../vault/popup/components/vault/vault-v2.component";
 import { ViewComponent } from "../vault/popup/components/vault/view.component";
 import { AddEditV2Component } from "../vault/popup/components/vault-v2/add-edit/add-edit-v2.component";
+import { AssignCollections } from "../vault/popup/components/vault-v2/assign-collections/assign-collections.component";
 import { AttachmentsV2Component } from "../vault/popup/components/vault-v2/attachments/attachments-v2.component";
 import { ViewV2Component } from "../vault/popup/components/vault-v2/view-v2/view-v2.component";
 import { AppearanceComponent } from "../vault/popup/settings/appearance.component";
@@ -288,12 +291,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "account-security" },
   },
-  {
+  ...extensionRefreshSwap(NotificationsSettingsV1Component, NotificationsSettingsComponent, {
     path: "notifications",
-    component: NotificationsSettingsComponent,
+    component: NotificationsSettingsV1Component,
     canActivate: [AuthGuard],
     data: { state: "notifications" },
-  },
+  }),
   ...extensionRefreshSwap(VaultSettingsComponent, VaultSettingsV2Component, {
     path: "vault-settings",
     canActivate: [AuthGuard],
@@ -323,12 +326,12 @@ const routes: Routes = [
     canActivate: [AuthGuard],
     data: { state: "sync" },
   },
-  {
+  ...extensionRefreshSwap(ExcludedDomainsV1Component, ExcludedDomainsComponent, {
     path: "excluded-domains",
-    component: ExcludedDomainsComponent,
+    component: ExcludedDomainsV1Component,
     canActivate: [AuthGuard],
     data: { state: "excluded-domains" },
-  },
+  }),
   {
     path: "premium",
     component: PremiumComponent,
@@ -407,6 +410,12 @@ const routes: Routes = [
         ],
       },
     ],
+  },
+  {
+    path: "assign-collections",
+    component: AssignCollections,
+    canActivate: [canAccessFeature(FeatureFlag.ExtensionRefresh, true, "/")],
+    data: { state: "assign-collections" },
   },
   ...extensionRefreshSwap(AboutPageComponent, AboutPageV2Component, {
     path: "about",
