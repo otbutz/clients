@@ -3,6 +3,8 @@ import { ActivatedRoute } from "@angular/router";
 import { combineLatest, lastValueFrom, Observable, startWith, switchMap } from "rxjs";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
@@ -12,6 +14,7 @@ import {
   BulkConfirmationResult,
   BulkConfirmationStatus,
 } from "../../shared/dialogs/bulk-confirmation-dialog.component";
+import { ProjectsListComponent } from "../../shared/projects-list.component";
 import {
   ProjectDeleteDialogComponent,
   ProjectDeleteOperation,
@@ -39,6 +42,8 @@ export class ProjectsComponent implements OnInit {
     private projectService: ProjectService,
     private dialogService: DialogService,
     private organizationService: OrganizationService,
+    private platformUtilsService: PlatformUtilsService,
+    private i18nService: I18nService,
   ) {}
 
   ngOnInit() {
@@ -121,5 +126,9 @@ export class ProjectsComponent implements OnInit {
         description: "smProjectDeleteAccessRestricted",
       };
     });
+  }
+
+  copyProjectUuid(id: string) {
+    ProjectsListComponent.copyProjectUuid(id, this.platformUtilsService, this.i18nService);
   }
 }

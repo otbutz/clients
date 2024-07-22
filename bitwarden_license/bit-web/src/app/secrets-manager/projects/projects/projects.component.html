@@ -10,6 +10,7 @@
   (newProjectEvent)="openNewProjectDialog()"
   (editProjectEvent)="openEditProject($event)"
   (deleteProjectEvent)="openDeleteProjectDialog($event)"
+  (copiedProjectUUIdEvent)="copyProjectUuid($event)"
   [projects]="projects$ | async"
   [search]="search"
 >
