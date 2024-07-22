@@ -1,0 +1,19 @@
+<bit-section *ngIf="hasPersonalDetails()">
+  <bit-section-header>
+    <h2 bitTypography="h6">{{ "personalDetails" | i18n }}</h2>
+  </bit-section-header>
+  <bit-card>
+    <bit-form-field *ngIf="cipher.identity.fullName">
+      <bit-label>{{ "name" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.fullName" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="cipher.identity.username">
+      <bit-label>{{ "username" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.username" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="cipher.identity.company">
+      <bit-label>{{ "company" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.company" disabled />
+    </bit-form-field>
+  </bit-card>
+</bit-section>
