@@ -66,4 +66,47 @@ describe("ViewIdentitySectionsComponent", () => {
       expect(fields[2].nativeElement.value).toBe("Channel 4 News");
     });
   });
+
+  describe("identification details", () => {
+    it("dynamically shows the section", () => {
+      let identificationDetailSection = fixture.debugElement.query(
+        By.directive(SectionHeaderComponent),
+      );
+
+      expect(identificationDetailSection).toBeNull();
+
+      component.cipher = {
+        identity: {
+          ssn: "123-45-6789",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      identificationDetailSection = fixture.debugElement.query(
+        By.directive(SectionHeaderComponent),
+      );
+
+      expect(identificationDetailSection).not.toBeNull();
+      expect(identificationDetailSection.nativeElement.textContent).toBe("identification");
+    });
+
+    it("populates identification detail fields", () => {
+      component.cipher = {
+        identity: {
+          ssn: "123-45-6789",
+          passportNumber: "998-765-4321",
+          licenseNumber: "404-HTTP",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      const fields = fixture.debugElement.queryAll(By.directive(BitInputDirective));
+
+      expect(fields[0].nativeElement.value).toBe("123-45-6789");
+      expect(fields[1].nativeElement.value).toBe("998-765-4321");
+      expect(fields[2].nativeElement.value).toBe("404-HTTP");
+    });
+  });
 });

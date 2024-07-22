@@ -2,6 +2,7 @@
   <bit-section-header>
     <h2 bitTypography="h6">{{ "personalDetails" | i18n }}</h2>
   </bit-section-header>
+
   <bit-card>
     <bit-form-field *ngIf="cipher.identity.fullName">
       <bit-label>{{ "name" | i18n }}</bit-label>
@@ -14,6 +15,27 @@
     <bit-form-field *ngIf="cipher.identity.company">
       <bit-label>{{ "company" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.company" disabled />
+    </bit-form-field>
+  </bit-card>
+</bit-section>
+
+<bit-section *ngIf="hasIdentificationDetails()">
+  <bit-section-header>
+    <h2 bitTypography="h6">{{ "identification" | i18n }}</h2>
+  </bit-section-header>
+
+  <bit-card>
+    <bit-form-field *ngIf="cipher.identity.ssn">
+      <bit-label>{{ "ssn" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.ssn" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="cipher.identity.passportNumber">
+      <bit-label>{{ "passportNumber" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.passportNumber" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="cipher.identity.licenseNumber">
+      <bit-label>{{ "licenseNumber" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.licenseNumber" disabled />
     </bit-form-field>
   </bit-card>
 </bit-section>

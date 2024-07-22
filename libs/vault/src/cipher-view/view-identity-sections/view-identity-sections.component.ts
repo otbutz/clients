@@ -28,11 +28,15 @@ import {
 export class ViewIdentitySectionsComponent {
   @Input() cipher: CipherView;
 
-  constructor() {}
-
   /** Returns true when any of the "personal detail" attributes are populated */
   hasPersonalDetails(): boolean {
     const { username, company, fullName } = this.cipher.identity;
     return Boolean(fullName || username || company);
+  }
+
+  /** Returns true when any of the "identification detail" attributes are populated */
+  hasIdentificationDetails(): boolean {
+    const { ssn, passportNumber, licenseNumber } = this.cipher.identity;
+    return Boolean(ssn || passportNumber || licenseNumber);
   }
 }
