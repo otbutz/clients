@@ -109,4 +109,80 @@ describe("ViewIdentitySectionsComponent", () => {
       expect(fields[2].nativeElement.value).toBe("404-HTTP");
     });
   });
+
+  describe("contact details", () => {
+    it("dynamically shows the section", () => {
+      let contactDetailSection = fixture.debugElement.query(By.directive(SectionHeaderComponent));
+
+      expect(contactDetailSection).toBeNull();
+
+      component.cipher = {
+        identity: {
+          email: "jack@gnn.com",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      contactDetailSection = fixture.debugElement.query(By.directive(SectionHeaderComponent));
+
+      expect(contactDetailSection).not.toBeNull();
+      expect(contactDetailSection.nativeElement.textContent).toBe("contactInfo");
+    });
+
+    it("populates contact detail fields", () => {
+      component.cipher = {
+        identity: {
+          email: "jack@gnn.com",
+          phone: "608-867-5309",
+          address1: "2920 Zoo Dr",
+          address2: "Exhibit 200",
+          address3: "Tree 7",
+          fullAddressPart2: "San Diego, CA 92101",
+          country: "USA",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      const fields = fixture.debugElement.queryAll(By.directive(BitInputDirective));
+
+      expect(fields[0].nativeElement.value).toBe("jack@gnn.com");
+      expect(fields[1].nativeElement.value).toBe("608-867-5309");
+      expect(fields[2].nativeElement.value).toBe(
+        "2920 Zoo Dr\nExhibit 200\nTree 7\nSan Diego, CA 92101\nUSA",
+      );
+    });
+
+    it('returns the number of "rows" that should be assigned to the address textarea', () => {
+      component.cipher = {
+        identity: {
+          address1: "2920 Zoo Dr",
+          address2: "Exhibit 200",
+          address3: "Tree 7",
+          fullAddressPart2: "San Diego, CA 92101",
+          country: "USA",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      let textarea = fixture.debugElement.query(By.css("textarea"));
+
+      expect(textarea.nativeElement.rows).toBe(5);
+
+      component.cipher = {
+        identity: {
+          address1: "2920 Zoo Dr",
+          country: "USA",
+        },
+      } as CipherView;
+
+      fixture.detectChanges();
+
+      textarea = fixture.debugElement.query(By.css("textarea"));
+
+      expect(textarea.nativeElement.rows).toBe(2);
+    });
+  });
 });

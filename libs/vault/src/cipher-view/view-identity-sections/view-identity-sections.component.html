@@ -39,3 +39,30 @@
     </bit-form-field>
   </bit-card>
 </bit-section>
+
+<bit-section *ngIf="hasContactDetails()">
+  <bit-section-header>
+    <h2 bitTypography="h6">{{ "contactInfo" | i18n }}</h2>
+  </bit-section-header>
+
+  <bit-card>
+    <bit-form-field *ngIf="cipher.identity.email">
+      <bit-label>{{ "email" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.email" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="cipher.identity.phone">
+      <bit-label>{{ "phone" | i18n }}</bit-label>
+      <input bitInput [value]="cipher.identity.phone" disabled />
+    </bit-form-field>
+    <bit-form-field *ngIf="addressFields">
+      <bit-label>{{ "address" | i18n }}</bit-label>
+      <textarea
+        bitInput
+        class="tw-resize-none"
+        [value]="addressFields"
+        [rows]="addressRows"
+        disabled
+      ></textarea>
+    </bit-form-field>
+  </bit-card>
+</bit-section>

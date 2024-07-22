@@ -39,4 +39,22 @@ export class ViewIdentitySectionsComponent {
     const { ssn, passportNumber, licenseNumber } = this.cipher.identity;
     return Boolean(ssn || passportNumber || licenseNumber);
   }
+
+  /** Returns true when any of the "contact detail" attributes are populated */
+  hasContactDetails(): boolean {
+    const { email, phone } = this.cipher.identity;
+
+    return Boolean(email || phone || this.addressFields);
+  }
+
+  /** Returns all populated address fields */
+  get addressFields(): string {
+    const { address1, address2, address3, fullAddressPart2, country } = this.cipher.identity;
+    return [address1, address2, address3, fullAddressPart2, country].filter(Boolean).join("\n");
+  }
+
+  /** Returns the number of "rows" that should be assigned to the address textarea */
+  get addressRows(): number {
+    return this.addressFields.split("\n").length;
+  }
 }
