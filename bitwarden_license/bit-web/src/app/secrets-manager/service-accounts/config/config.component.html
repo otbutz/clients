@@ -31,16 +31,13 @@
     </bit-form-field>
   </div>
   <div class="tw-pt-12">
-    <h2 slot="summary" class="tw-mb-0" bitTypography="h2" noMargin>{{ "projects" | i18n }}</h2>
-    <p *ngIf="!hasProjects" class="tw-mt-8">{{ "projectsNoItemsTitle" | i18n }}</p>
-    <p *ngIf="hasProjects" class="tw-mt-8">{{ "machineAccountProjects" | i18n }}</p>
+    <h2 slot="summary" class="tw-mb-0" bitTypography="h2" noMargin>{{ "projectIds" | i18n }}</h2>
+    <p *ngIf="!hasProjects" class="tw-mt-6">{{ "projectsNoItemsTitle" | i18n }}</p>
+    <p *ngIf="hasProjects" class="tw-mt-4">{{ "machineAccountProjects" | i18n }}</p>
     <sm-projects-list
+      class="tw-mt-8"
       *ngIf="hasProjects"
-      (newProjectEvent)="openNewProjectDialog()"
-      (editProjectEvent)="openEditProject($event)"
-      (deleteProjectEvent)="openDeleteProjectDialog($event)"
-      (copiedProjectUUIdEvent)="copyProjectUuid($event)"
-      [showDelete]="false"
+      [showMenus]="false"
       [projects]="projects"
     ></sm-projects-list>
   </div>

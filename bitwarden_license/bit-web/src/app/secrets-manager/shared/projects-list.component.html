@@ -20,7 +20,7 @@
 <bit-table *ngIf="projects?.length >= 1" [dataSource]="dataSource">
   <ng-container header>
     <tr>
-      <th bitCell class="tw-w-0">
+      <th bitCell class="tw-w-0" *ngIf="showMenus">
         <label class="!tw-mb-0 tw-flex tw-w-fit tw-gap-2 !tw-font-bold !tw-text-muted">
           <input
             type="checkbox"
@@ -45,13 +45,14 @@
           [bitMenuTriggerFor]="tableMenu"
           [title]="'options' | i18n"
           [attr.aria-label]="'options' | i18n"
+          *ngIf="showMenus"
         ></button>
       </th>
     </tr>
   </ng-container>
   <ng-template body let-rows$>
     <tr bitRow *ngFor="let project of rows$ | async">
-      <td bitCell>
+      <td bitCell *ngIf="showMenus">
         <input
           type="checkbox"
           (change)="$event ? selection.toggle(project.id) : null"
@@ -89,6 +90,7 @@
           [bitMenuTriggerFor]="projectMenu"
           [title]="'options' | i18n"
           [attr.aria-label]="'options' | i18n"
+          *ngIf="showMenus"
         ></button>
       </td>
       <bit-menu #projectMenu>
@@ -105,12 +107,7 @@
           <i class="bwi bwi-fw bwi-pencil" aria-hidden="true"></i>
           {{ "editProject" | i18n }}
         </button>
-        <button
-          *ngIf="project.write && showDelete"
-          type="button"
-          bitMenuItem
-          (click)="deleteProject(project.id)"
-        >
+        <button *ngIf="project.write" type="button" bitMenuItem (click)="deleteProject(project.id)">
           <i class="bwi bwi-fw bwi-trash tw-text-danger" aria-hidden="true"></i>
           <span class="tw-text-danger">{{ "deleteProject" | i18n }}</span>
         </button>

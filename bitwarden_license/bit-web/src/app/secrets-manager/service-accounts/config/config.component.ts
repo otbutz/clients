@@ -8,22 +8,9 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { DialogService, ToastService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
-import {
-  ProjectDeleteOperation,
-  ProjectDeleteDialogComponent,
-} from "../../projects/dialog/project-delete-dialog.component";
-import {
-  ProjectOperation,
-  ProjectDialogComponent,
-} from "../../projects/dialog/project-dialog.component";
 import { ProjectService } from "../../projects/project.service";
 import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
 import { ProjectsListComponent } from "../../shared/projects-list.component";
-import {
-  OperationType,
-  ServiceAccountOperation,
-  ServiceAccountDialogComponent,
-} from "../dialog/service-account-dialog.component";
 
 @Component({
   selector: "sm-config",
@@ -103,47 +90,6 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
       message: this.i18nService.t("valueCopied", this.i18nService.t("organizationId")),
     });
   };
-
-  // Projects ---
-
-  openEditProject(projectId: string) {
-    this.dialogService.open<unknown, ProjectOperation>(ProjectDialogComponent, {
-      data: {
-        organizationId: this.organizationId,
-        operation: OperationType.Edit,
-        organizationEnabled: true, //this.organizationEnabled,
-        projectId: projectId,
-      },
-    });
-  }
-
-  openNewProjectDialog() {
-    this.dialogService.open<unknown, ProjectOperation>(ProjectDialogComponent, {
-      data: {
-        organizationId: this.organizationId,
-        operation: OperationType.Add,
-        organizationEnabled: true, //this.organizationEnabled,
-      },
-    });
-  }
-
-  openServiceAccountDialog() {
-    this.dialogService.open<unknown, ServiceAccountOperation>(ServiceAccountDialogComponent, {
-      data: {
-        organizationId: this.organizationId,
-        operation: OperationType.Add,
-        organizationEnabled: true, //this.organizationEnabled,
-      },
-    });
-  }
-
-  openDeleteProjectDialog(event: ProjectListView[]) {
-    this.dialogService.open<unknown, ProjectDeleteOperation>(ProjectDeleteDialogComponent, {
-      data: {
-        projects: event,
-      },
-    });
-  }
 
   copyProjectUuid(id: string) {
     ProjectsListComponent.copyProjectUuid(id, this.platformUtilsService, this.i18nService);

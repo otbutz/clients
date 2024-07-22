@@ -24,7 +24,7 @@ export class ProjectsListComponent {
   }
   private _projects: ProjectListView[];
 
-  @Input() showDelete?: boolean = true;
+  @Input() showMenus?: boolean = true;
 
   @Input()
   set search(search: string) {
