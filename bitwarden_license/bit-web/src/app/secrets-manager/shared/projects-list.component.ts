@@ -93,7 +93,7 @@ export class ProjectsListComponent {
     return false;
   }
 
-  static copyProjectUuid(
+  static copyProjectUuidToClipboard(
     id: string,
     platformUtilsService: PlatformUtilsService,
     i18nService: I18nService,
