@@ -76,14 +76,6 @@ export class SendAddEditComponent {
    */
   config: SendFormConfig;
 
-  /**
-   * Gets the original send ID.
-   * @returns The original send ID, or null if it's a new Send.
-   */
-  get originalSendId(): SendId | null {
-    return this.config?.originalSend?.id as SendId;
-  }
-
   constructor(
     private route: ActivatedRoute,
     private location: Location,
