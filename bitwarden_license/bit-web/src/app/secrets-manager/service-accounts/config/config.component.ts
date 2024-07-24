@@ -13,7 +13,7 @@ import { AccessPolicyService } from "../../shared/access-policies/access-policy.
 import { ProjectsListComponent } from "../../shared/projects-list.component";
 
 @Component({
-  selector: "sm-config",
+  selector: "sm-service-account-config",
   templateUrl: "./config.component.html",
 })
 export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
