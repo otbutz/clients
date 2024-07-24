@@ -51,7 +51,6 @@ import {
   ServiceAccountOperation,
 } from "../service-accounts/dialog/service-account-dialog.component";
 import { ServiceAccountService } from "../service-accounts/service-account.service";
-import { ProjectsListComponent } from "../shared/projects-list.component";
 import { SecretsListComponent } from "../shared/secrets-list.component";
 
 import { SMOnboardingTasks, SMOnboardingTasksService } from "./sm-onboarding-tasks.service";
@@ -257,14 +256,6 @@ export class OverviewComponent implements OnInit, OnDestroy {
         projects: event,
       },
     });
-  }
-
-  copyProjectUuid(id: string) {
-    ProjectsListComponent.copyProjectUuidToClipboard(
-      id,
-      this.platformUtilsService,
-      this.i18nService,
-    );
   }
 
   // Secrets ---

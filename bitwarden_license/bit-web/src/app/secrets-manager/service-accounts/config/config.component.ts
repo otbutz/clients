@@ -10,7 +10,6 @@ import { ToastService } from "@bitwarden/components";
 import { ProjectListView } from "../../models/view/project-list.view";
 import { ProjectService } from "../../projects/project.service";
 import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
-import { ProjectsListComponent } from "../../shared/projects-list.component";
 
 @Component({
   selector: "sm-service-account-config",
@@ -97,14 +96,6 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
       message: this.i18nService.t("valueCopied", this.i18nService.t("organizationId")),
     });
   };
-
-  copyProjectUuid(id: string) {
-    ProjectsListComponent.copyProjectUuidToClipboard(
-      id,
-      this.platformUtilsService,
-      this.i18nService,
-    );
-  }
 
   ngOnDestroy(): void {
     this.destroy$.next();

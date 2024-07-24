@@ -75,7 +75,7 @@
                 size="small"
                 [title]="'copyUuid' | i18n"
                 [attr.aria-label]="'copyUuid' | i18n"
-                (click)="copiedProjectUUIdEvent.emit(project.id)"
+                (click)="copyProjectUuidToClipboard(project.id)"
               ></button>
             </div>
           </div>

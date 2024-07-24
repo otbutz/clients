@@ -93,16 +93,12 @@ export class ProjectsListComponent {
     return false;
   }
 
-  static copyProjectUuidToClipboard(
-    id: string,
-    platformUtilsService: PlatformUtilsService,
-    i18nService: I18nService,
-  ) {
-    platformUtilsService.copyToClipboard(id);
-    platformUtilsService.showToast(
+  copyProjectUuidToClipboard(id: string) {
+    this.platformUtilsService.copyToClipboard(id);
+    this.platformUtilsService.showToast(
       "success",
       null,
-      i18nService.t("valueCopied", i18nService.t("uuid")),
+      this.i18nService.t("valueCopied", this.i18nService.t("uuid")),
     );
   }
 }
