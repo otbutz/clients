@@ -129,6 +129,10 @@ export class ProjectsComponent implements OnInit {
   }
 
   copyProjectUuid(id: string) {
-    ProjectsListComponent.copyProjectUuid(id, this.platformUtilsService, this.i18nService);
+    ProjectsListComponent.copyProjectUuidToClipboard(
+      id,
+      this.platformUtilsService,
+      this.i18nService,
+    );
   }
 }

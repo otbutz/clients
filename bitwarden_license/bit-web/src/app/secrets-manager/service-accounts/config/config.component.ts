@@ -92,7 +92,11 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
   };
 
   copyProjectUuid(id: string) {
-    ProjectsListComponent.copyProjectUuid(id, this.platformUtilsService, this.i18nService);
+    ProjectsListComponent.copyProjectUuidToClipboard(
+      id,
+      this.platformUtilsService,
+      this.i18nService,
+    );
   }
 
   ngOnDestroy(): void {
