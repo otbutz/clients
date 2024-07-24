@@ -8604,7 +8604,7 @@
   "projectIds": {
     "message": "Project IDs"
   },
-  "machineAccountProjects": {
+  "projectsAccessedByMachineAccount": {
     "message": "The following projects can be accessed by this machine account."
   }
 }
