@@ -77,14 +77,6 @@ export class SendAddEditComponent {
   config: SendFormConfig;
 
   /**
-   * Represent the components loading state
-   * @returns True if the component is loading, false otherwise.
-   */
-  get loading() {
-    return this.config == null;
-  }
-
-  /**
    * Gets the original send ID.
    * @returns The original send ID, or null if it's a new Send.
    */

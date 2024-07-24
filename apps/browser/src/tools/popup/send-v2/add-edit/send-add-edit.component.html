@@ -2,7 +2,6 @@
   <popup-header slot="header" [pageTitle]="headerText" showBackButton></popup-header>
 
   <tools-send-form
-    *ngIf="!loading"
     formId="sendForm"
     [config]="config"
     (sendSaved)="onSendSaved()"
