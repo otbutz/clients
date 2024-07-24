@@ -144,13 +144,14 @@ export class SendAddEditComponent {
    * @returns The header text.
    */
   private getHeaderText(mode: SendFormMode, type: SendType) {
-    const partOne = mode === "edit" || mode === "partial-edit" ? "editItemHeader" : "newItemHeader";
+    const headerKey =
+      mode === "edit" || mode === "partial-edit" ? "editItemHeader" : "newItemHeader";
 
     switch (type) {
       case SendType.Text:
-        return this.i18nService.t(partOne, this.i18nService.t("sendTypeText"));
+        return this.i18nService.t(headerKey, this.i18nService.t("sendTypeText"));
       case SendType.File:
-        return this.i18nService.t(partOne, this.i18nService.t("sendTypeFile"));
+        return this.i18nService.t(headerKey, this.i18nService.t("sendTypeFile"));
     }
   }
 }
