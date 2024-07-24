@@ -13,7 +13,6 @@ import {
 } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { PluralizePipe } from "@bitwarden/angular/pipes/pluralize.pipe";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
@@ -123,23 +122,36 @@ export class AssignCollectionsComponent implements OnInit {
           setTimeout(() => {
             this.formGroup.patchValue({ selectedOrg: orgs[0].id });
             this.setFormValidators();
+
+            // Disable the org selector if there is only one organization
+            if (orgs.length === 1) {
+              this.formGroup.controls.selectedOrg.disable();
+            }
           });
         }
       }),
     );
 
   protected transferWarningText = (orgName: string, itemsCount: number) => {
-    const pluralizedItems = this.pluralizePipe.transform(itemsCount, "item", "items");
-    return orgName
-      ? this.i18nService.t("personalItemsWithOrgTransferWarning", pluralizedItems, orgName)
-      : this.i18nService.t("personalItemsTransferWarning", pluralizedItems);
+    const haveOrgName = !!orgName;
+
+    if (itemsCount > 1 && haveOrgName) {
+      return this.i18nService.t("personalItemsWithOrgTransferWarningPlural", itemsCount, orgName);
+    }
+    if (itemsCount > 1 && !haveOrgName) {
+      return this.i18nService.t("personalItemsTransferWarningPlural", itemsCount);
+    }
+    if (itemsCount === 1 && haveOrgName) {
+      return this.i18nService.t("personalItemWithOrgTransferWarningSingular", orgName);
+    }
+    return this.i18nService.t("personalItemTransferWarningSingular");
   };
 
   private editableItems: CipherView[] = [];
   // Get the selected organization ID. If the user has not selected an organization from the form,
   // fallback to use the organization ID from the params.
   private get selectedOrgId(): OrganizationId {
-    return this.formGroup.value.selectedOrg || this.params.organizationId;
+    return this.formGroup.getRawValue().selectedOrg || this.params.organizationId;
   }
   private destroy$ = new Subject<void>();
 
@@ -150,7 +162,6 @@ export class AssignCollectionsComponent implements OnInit {
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private formBuilder: FormBuilder,
-    private pluralizePipe: PluralizePipe,
     private toastService: ToastService,
   ) {}
 
@@ -411,7 +422,7 @@ export class AssignCollectionsComponent implements OnInit {
       variant: "success",
       title: null,
       message: this.i18nService.t(
-        "movedItemsToOrg",
+        shareableCiphers.length === 1 ? "itemMovedToOrg" : "itemsMovedToOrg",
         this.orgName ?? this.i18nService.t("organization"),
       ),
     });
