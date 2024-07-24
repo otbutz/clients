@@ -7,14 +7,38 @@
     <bit-form-field *ngIf="cipher.identity.fullName">
       <bit-label>{{ "name" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.fullName" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyName' | i18n"
+        [appCopyClick]="cipher.identity.fullName"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="cipher.identity.username">
       <bit-label>{{ "username" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.username" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyUsername' | i18n"
+        [appCopyClick]="cipher.identity.username"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="cipher.identity.company">
       <bit-label>{{ "company" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.company" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyCompany' | i18n"
+        [appCopyClick]="cipher.identity.company"
+        showToast
+      ></button>
     </bit-form-field>
   </bit-card>
 </bit-section>
@@ -28,14 +52,38 @@
     <bit-form-field *ngIf="cipher.identity.ssn">
       <bit-label>{{ "ssn" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.ssn" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copySSN' | i18n"
+        [appCopyClick]="cipher.identity.ssn"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="cipher.identity.passportNumber">
       <bit-label>{{ "passportNumber" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.passportNumber" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyPassportNumber' | i18n"
+        [appCopyClick]="cipher.identity.passportNumber"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="cipher.identity.licenseNumber">
       <bit-label>{{ "licenseNumber" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.licenseNumber" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyLicenseNumber' | i18n"
+        [appCopyClick]="cipher.identity.licenseNumber"
+        showToast
+      ></button>
     </bit-form-field>
   </bit-card>
 </bit-section>
@@ -49,10 +97,26 @@
     <bit-form-field *ngIf="cipher.identity.email">
       <bit-label>{{ "email" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.email" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyEmail' | i18n"
+        [appCopyClick]="cipher.identity.email"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="cipher.identity.phone">
       <bit-label>{{ "phone" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.phone" disabled />
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyPhone' | i18n"
+        [appCopyClick]="cipher.identity.phone"
+        showToast
+      ></button>
     </bit-form-field>
     <bit-form-field *ngIf="addressFields">
       <bit-label>{{ "address" | i18n }}</bit-label>
@@ -63,6 +127,14 @@
         [rows]="addressRows"
         disabled
       ></textarea>
+      <button
+        type="button"
+        bitIconButton="bwi-clone"
+        bitSuffix
+        [appA11yTitle]="'copyAddress' | i18n"
+        [appCopyClick]="addressFields"
+        showToast
+      ></button>
     </bit-form-field>
   </bit-card>
 </bit-section>

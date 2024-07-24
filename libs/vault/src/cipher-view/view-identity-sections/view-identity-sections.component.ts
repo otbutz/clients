@@ -6,6 +6,7 @@ import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   CardComponent,
   FormFieldModule,
+  IconButtonModule,
   SectionComponent,
   SectionHeaderComponent,
   TypographyModule,
@@ -23,6 +24,7 @@ import {
     SectionHeaderComponent,
     TypographyModule,
     FormFieldModule,
+    IconButtonModule,
   ],
 })
 export class ViewIdentitySectionsComponent {
