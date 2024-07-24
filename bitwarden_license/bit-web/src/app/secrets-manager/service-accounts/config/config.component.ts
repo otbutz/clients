@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from "@angular/core";
-import { ActivatedRoute } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { ActivatedRoute, Params } from "@angular/router";
+import { Subject, concatMap, takeUntil } from "rxjs";
 
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService, ToastService } from "@bitwarden/components";
+import { ToastService } from "@bitwarden/components";
 
 import { ProjectListView } from "../../models/view/project-list.view";
 import { ProjectService } from "../../projects/project.service";
@@ -33,17 +33,24 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private toastService: ToastService,
     private i18nService: I18nService,
-    private dialogService: DialogService,
     private projectService: ProjectService,
     private accessPolicyService: AccessPolicyService,
   ) {}
 
   async ngOnInit() {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
-      this.organizationId = params.organizationId;
-      this.serviceAccountId = params.serviceAccountId;
-    });
+    this.route.params
+      .pipe(
+        concatMap(async (params: Params) => {
+          this.organizationId = params.organizationId;
+          this.serviceAccountId = params.serviceAccountId;
+          await this.load();
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
+  }
 
+  async load() {
     const environment = await this.environmentService.getEnvironment();
     this.identityUrl = environment.getIdentityUrl();
     this.apiUrl = environment.getApiUrl();
