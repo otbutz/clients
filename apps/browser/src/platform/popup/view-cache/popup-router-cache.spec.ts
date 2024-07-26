@@ -50,7 +50,7 @@ describe("Popup router cache guard", () => {
     testBed.inject(PopupRouterCacheService);
   });
 
-  it("returns true if empty", async () => {
+  it("returns true if the history stack is empty", async () => {
     const response = await testBed.runInInjectionContext(() => popupRouterCacheGuard());
 
     expect(response).toBe(true);

@@ -69,6 +69,8 @@ export class PopupRouterCacheService {
 
   /**
    * If in browser popup, push new route onto history stack
+   *
+   * @returns a boolean that indicates if the route was successfully saved
    */
   private async push(url: string): Promise<boolean> {
     if (!BrowserPopupUtils.inPopup(window) || url === (await this.last())) {
@@ -80,6 +82,8 @@ export class PopupRouterCacheService {
 
   /**
    * Navigate back to the prior URL in the history stack
+   *
+   * @returns a boolean that indicates success
    */
   async back(): Promise<boolean> {
     if (!(await this.configService.getFeatureFlag(FeatureFlag.PersistPopupView))) {
@@ -100,7 +104,7 @@ export class PopupRouterCacheService {
   }
 
   /** Retrieve history from popout URL search param `routeHistory` */
-  private async initPopoutHistory() {
+  private async initPopoutHistory(): Promise<void> {
     if (BrowserPopupUtils.inPopout(window)) {
       const searchParams = new URL(window.location.href).searchParams;
       const history = JSON.parse(decodeURIComponent(searchParams.get("routeHistory")));
