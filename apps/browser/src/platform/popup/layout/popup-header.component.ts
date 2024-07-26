@@ -1,6 +1,6 @@
 import { BooleanInput, coerceBooleanProperty } from "@angular/cdk/coercion";
 import { CommonModule } from "@angular/common";
-import { Component, Input, inject } from "@angular/core";
+import { Component, Input, Signal, inject } from "@angular/core";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
@@ -12,6 +12,8 @@ import {
 
 import { PopupRouterCacheService } from "../view-cache/popup-router-cache.service";
 
+import { PopupPageComponent } from "./popup-page.component";
+
 @Component({
   selector: "popup-header",
   templateUrl: "popup-header.component.html",
@@ -20,6 +22,11 @@ import { PopupRouterCacheService } from "../view-cache/popup-router-cache.servic
 })
 export class PopupHeaderComponent {
   private popupRouterCacheService = inject(PopupRouterCacheService);
+  protected pageContentScrolled: Signal<boolean> = inject(PopupPageComponent).isScrolled;
+
+  /** Background color */
+  @Input()
+  background: "default" | "alt" = "default";
 
   /** Display the back button, which uses Location.back() to go back one page in history */
   @Input()

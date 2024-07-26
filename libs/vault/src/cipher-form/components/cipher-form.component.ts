@@ -16,7 +16,7 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormBuilder, ReactiveFormsModule } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { CipherType } from "@bitwarden/common/vault/enums";
+import { CipherType, SecureNoteType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   AsyncActionsModule,
@@ -39,6 +39,7 @@ import { AdditionalOptionsSectionComponent } from "./additional-options/addition
 import { CardDetailsSectionComponent } from "./card-details-section/card-details-section.component";
 import { IdentitySectionComponent } from "./identity/identity.component";
 import { ItemDetailsSectionComponent } from "./item-details/item-details-section.component";
+import { LoginDetailsSectionComponent } from "./login-details-section/login-details-section.component";
 
 @Component({
   selector: "vault-cipher-form",
@@ -64,6 +65,7 @@ import { ItemDetailsSectionComponent } from "./item-details/item-details-section
     IdentitySectionComponent,
     NgIf,
     AdditionalOptionsSectionComponent,
+    LoginDetailsSectionComponent,
   ],
 })
 export class CipherFormComponent implements AfterViewInit, OnInit, OnChanges, CipherFormContainer {
@@ -110,6 +112,7 @@ export class CipherFormComponent implements AfterViewInit, OnInit, OnChanges, Ci
    * @protected
    */
   protected updatedCipherView: CipherView | null;
+
   protected loading: boolean = true;
 
   CipherType = CipherType;
@@ -140,12 +143,11 @@ export class CipherFormComponent implements AfterViewInit, OnInit, OnChanges, Ci
   }
 
   /**
-   * Patches the updated cipher with the provided partial cipher. Used by child components to update the cipher
-   * as their form values change.
-   * @param cipher
+   * Method to update the cipherView with the new values. This method should be called by the child form components
+   * @param updateFn - A function that takes the current cipherView and returns the updated cipherView
    */
-  patchCipher(cipher: Partial<CipherView>): void {
-    this.updatedCipherView = Object.assign(this.updatedCipherView, cipher);
+  patchCipher(updateFn: (current: CipherView) => CipherView): void {
+    this.updatedCipherView = updateFn(this.updatedCipherView);
   }
 
   /**
@@ -183,8 +185,16 @@ export class CipherFormComponent implements AfterViewInit, OnInit, OnChanges, Ci
       );
 
       this.updatedCipherView = Object.assign(this.updatedCipherView, this.originalCipherView);
+
+      if (this.config.mode === "clone") {
+        this.updatedCipherView.id = null;
+      }
     } else {
       this.updatedCipherView.type = this.config.cipherType;
+
+      if (this.config.cipherType === CipherType.SecureNote) {
+        this.updatedCipherView.secureNote.type = SecureNoteType.Generic;
+      }
     }
 
     this.loading = false;
