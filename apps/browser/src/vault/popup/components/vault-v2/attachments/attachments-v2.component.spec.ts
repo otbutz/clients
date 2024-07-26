@@ -26,7 +26,6 @@ import { AttachmentsV2Component } from "./attachments-v2.component";
 })
 class MockPopupHeaderComponent {
   @Input() pageTitle: string;
-  @Input() backAction: () => void;
 }
 
 @Component({

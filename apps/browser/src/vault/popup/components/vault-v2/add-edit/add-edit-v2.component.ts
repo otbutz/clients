@@ -2,7 +2,7 @@ import { CommonModule, Location } from "@angular/common";
 import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
-import { ActivatedRoute, Params, Router } from "@angular/router";
+import { ActivatedRoute, Params } from "@angular/router";
 import { map, switchMap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
@@ -116,26 +116,8 @@ export class AddEditV2Component {
     private location: Location,
     private i18nService: I18nService,
     private addEditFormConfigService: CipherFormConfigService,
-    private router: Router,
   ) {
     this.subscribeToParams();
-  }
-
-  /**
-   * Navigates to previous view or view-cipher path
-   * depending on the history length.
-   *
-   * This can happen when history is lost due to the extension being
-   * forced into a popout window.
-   */
-  async handleBackButton() {
-    if (history.length === 1) {
-      await this.router.navigate(["/view-cipher"], {
-        queryParams: { cipherId: this.originalCipherId },
-      });
-    } else {
-      this.location.back();
-    }
   }
 
   onCipherSaved() {

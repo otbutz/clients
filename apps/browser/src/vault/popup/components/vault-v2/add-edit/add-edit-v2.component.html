@@ -1,10 +1,5 @@
 <popup-page>
-  <popup-header
-    slot="header"
-    [pageTitle]="headerText"
-    [backAction]="handleBackButton.bind(this)"
-    showBackButton
-  ></popup-header>
+  <popup-header slot="header" [pageTitle]="headerText" showBackButton></popup-header>
 
   <vault-cipher-form
     *ngIf="!loading"
