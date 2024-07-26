@@ -1245,8 +1245,8 @@ export default class MainBackground {
           }),
         ),
       );
-      await this.popupViewCacheBackgroundService.clearState(),
-        await this.accountService.switchAccount(userId);
+      await this.popupViewCacheBackgroundService.clearState();
+      await this.accountService.switchAccount(userId);
       await switchPromise;
       // Clear sequentialized caches
       clearCaches();
