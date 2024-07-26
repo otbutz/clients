@@ -1,4 +1,4 @@
-import { CommonModule, Location } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
@@ -22,6 +22,7 @@ import {
 import { PopupFooterComponent } from "../../../../../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "../../../../../platform/popup/layout/popup-header.component";
 import { PopupPageComponent } from "../../../../../platform/popup/layout/popup-page.component";
+import { PopupRouterCacheService } from "../../../../../platform/popup/view-cache/popup-router-cache.service";
 import { BrowserTotpCaptureService } from "../../../services/browser-totp-capture.service";
 import { OpenAttachmentsComponent } from "../attachments/open-attachments/open-attachments.component";
 
@@ -113,15 +114,15 @@ export class AddEditV2Component {
 
   constructor(
     private route: ActivatedRoute,
-    private location: Location,
     private i18nService: I18nService,
     private addEditFormConfigService: CipherFormConfigService,
+    private popoutRouterCacheService: PopupRouterCacheService,
   ) {
     this.subscribeToParams();
   }
 
-  onCipherSaved() {
-    this.location.back();
+  async onCipherSaved() {
+    await this.popoutRouterCacheService.back();
   }
 
   subscribeToParams(): void {
