@@ -78,8 +78,6 @@ export class PopupViewCacheBackgroundService {
     )
       .pipe(switchMap(() => this.clearState()))
       .subscribe();
-
-    await this.clearState();
   }
 
   async clearState() {
