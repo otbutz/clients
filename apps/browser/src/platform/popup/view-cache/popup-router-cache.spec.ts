@@ -10,6 +10,8 @@ import { FakeGlobalStateProvider } from "@bitwarden/common/spec";
 
 import { PopupRouterCacheService, popupRouterCacheGuard } from "./popup-router-cache.service";
 
+const flushPromises = async () => await new Promise(process.nextTick);
+
 @Component({ template: "" })
 export class EmptyComponent {}
 
@@ -20,6 +22,8 @@ describe("Popup router cache guard", () => {
   let testBed: TestBed;
   let serializer: UrlSerializer;
   let router: Router;
+
+  let service: PopupRouterCacheService;
 
   beforeEach(async () => {
     jest.spyOn(configServiceMock, "getFeatureFlag").mockResolvedValue(true);
@@ -47,7 +51,9 @@ describe("Popup router cache guard", () => {
     router = testBed.inject(Router);
     serializer = testBed.inject(UrlSerializer);
 
-    testBed.inject(PopupRouterCacheService);
+    service = testBed.inject(PopupRouterCacheService);
+
+    await service.setHistory([]);
   });
 
   it("returns true if the history stack is empty", async () => {
@@ -65,6 +71,20 @@ describe("Popup router cache guard", () => {
     )) as UrlTree;
 
     expect(serializer.serialize(response)).toBe("/b");
+  });
+
+  it("back method redirects to the previous route", async () => {
+    await router.navigate(["a"]);
+    await router.navigate(["b"]);
+
+    // wait for router events subscription
+    await flushPromises();
+
+    expect(await service.getHistory()).toEqual(["/a", "/b"]);
+
+    await service.back();
+
+    expect(await service.getHistory()).toEqual(["/a"]);
   });
 
   it("does not save ignored routes", async () => {
