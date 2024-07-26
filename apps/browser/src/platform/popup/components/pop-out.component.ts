@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, inject } from "@angular/core";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
@@ -8,6 +8,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { IconButtonModule } from "@bitwarden/components";
 
 import BrowserPopupUtils from "../browser-popup-utils";
+import { PopupRouterCacheService } from "../view-cache/popup-router-cache.service";
 
 @Component({
   selector: "app-pop-out",
@@ -16,6 +17,8 @@ import BrowserPopupUtils from "../browser-popup-utils";
   imports: [CommonModule, JslibModule, IconButtonModule],
 })
 export class PopOutComponent implements OnInit {
+  private popupRouterCacheService = inject(PopupRouterCacheService);
+
   @Input() show = true;
   useRefreshVariant = false;
 
@@ -38,6 +41,10 @@ export class PopOutComponent implements OnInit {
   }
 
   async expand() {
-    await BrowserPopupUtils.openCurrentPagePopout(window);
+    await BrowserPopupUtils.openCurrentPagePopout(
+      window,
+      null,
+      await this.popupRouterCacheService.getHistory(),
+    );
   }
 }

@@ -7,13 +7,14 @@ import {
   Router,
   UrlSerializer,
 } from "@angular/router";
-import { filter, firstValueFrom } from "rxjs";
+import { filter, firstValueFrom, from, switchMap } from "rxjs";
 
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
 import { POPUP_ROUTE_HISTORY_KEY } from "../../services/popup-view-cache-background.service";
+import BrowserPopupUtils from "../browser-popup-utils";
 
 /**
  * Preserves route history when opening and closing the popup
@@ -30,8 +31,11 @@ export class PopupRouterCacheService {
   private location = inject(Location);
 
   constructor() {
-    this.router.events
-      .pipe(filter((e) => e instanceof NavigationEnd))
+    from(this.initPopoutHistory())
+      .pipe(
+        switchMap(() => this.router.events),
+        filter((e) => e instanceof NavigationEnd),
+      )
       .subscribe((event: NavigationEnd) => {
         const state: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
 
@@ -48,8 +52,12 @@ export class PopupRouterCacheService {
       });
   }
 
-  private async getHistory(): Promise<string[]> {
+  async getHistory(): Promise<string[]> {
     return firstValueFrom(this.state.state$);
+  }
+
+  async setHistory(state: string[]): Promise<string[]> {
+    return this.state.update(() => state);
   }
 
   /** Get the last item from the history stack */
@@ -62,10 +70,10 @@ export class PopupRouterCacheService {
   }
 
   /**
-   * Push new route onto history stack
+   * If in browser popup, push new route onto history stack
    */
   private async push(url: string): Promise<boolean> {
-    if (url === (await this.last())) {
+    if (!BrowserPopupUtils.inPopup(window) || url === (await this.last())) {
       return false;
     }
     await this.state.update((prevState) => (prevState === null ? [url] : prevState.concat(url)));
@@ -91,6 +99,18 @@ export class PopupRouterCacheService {
     });
 
     return this.router.navigateByUrl(newState[newState.length - 1]);
+  }
+
+  /** Retrieve history from popout URL search param `routeHistory` */
+  private async initPopoutHistory() {
+    if (BrowserPopupUtils.inPopout(window)) {
+      const searchParams = new URL(window.location.href).searchParams;
+      const history = JSON.parse(decodeURIComponent(searchParams.get("routeHistory")));
+      searchParams.delete("routeHistory");
+      if (Array.isArray(history)) {
+        await this.setHistory(history);
+      }
+    }
   }
 }
 
