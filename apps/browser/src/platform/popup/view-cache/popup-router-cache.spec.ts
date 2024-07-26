@@ -65,7 +65,6 @@ describe("Popup router cache guard", () => {
     )) as UrlTree;
 
     expect(serializer.serialize(response)).toBe("/b");
-    // expect(await service.last()).toBe("/a");
   });
 
   it("does not save ignored routes", async () => {

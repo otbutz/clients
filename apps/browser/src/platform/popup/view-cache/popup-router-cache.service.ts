@@ -34,22 +34,20 @@ export class PopupRouterCacheService {
     from(this.initPopoutHistory())
       .pipe(
         switchMap(() => this.router.events),
-        filter((e) => e instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
+        filter((_event: NavigationEnd) => {
+          const state: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
+
+          let child = state.firstChild;
+          while (child.firstChild) {
+            child = child.firstChild;
+          }
+
+          return !child?.data?.doNotSaveUrl ?? true;
+        }),
+        switchMap((event) => this.push(event.url)),
       )
-      .subscribe((event: NavigationEnd) => {
-        const state: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
-
-        let child = state.firstChild;
-        while (child.firstChild) {
-          child = child.firstChild;
-        }
-
-        const updateUrl = !child?.data?.doNotSaveUrl ?? true;
-
-        if (updateUrl) {
-          void this.push(event.url);
-        }
-      });
+      .subscribe();
   }
 
   async getHistory(): Promise<string[]> {
