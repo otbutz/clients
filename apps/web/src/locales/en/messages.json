@@ -8639,5 +8639,8 @@
   },
   "projectsAccessedByMachineAccount": {
     "message": "The following projects can be accessed by this machine account."
+  },
+  "config": {
+    "message": "Config"
   }
 }
