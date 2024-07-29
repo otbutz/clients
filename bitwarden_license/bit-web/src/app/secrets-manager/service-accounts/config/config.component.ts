@@ -92,7 +92,7 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
     return smConfig;
   }
 
-  copyIdentityUrl = async () => {
+  copyIdentityUrl = () => {
     this.platformUtilsService.copyToClipboard(this.identityUrl);
     this.toastService.showToast({
       variant: "success",
@@ -101,7 +101,7 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
     });
   };
 
-  copyApiUrl = async () => {
+  copyApiUrl = () => {
     this.platformUtilsService.copyToClipboard(this.apiUrl);
     this.toastService.showToast({
       variant: "success",
@@ -110,7 +110,7 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
     });
   };
 
-  copyOrganizationId = async () => {
+  copyOrganizationId = () => {
     this.platformUtilsService.copyToClipboard(this.organizationId);
     this.toastService.showToast({
       variant: "success",
