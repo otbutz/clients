@@ -40,13 +40,18 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
     this.route.params
       .pipe(
         concatMap(async (params: Params) => {
-          this.organizationId = params.organizationId;
-          this.serviceAccountId = params.serviceAccountId;
-          await this.load();
+          return await this.load(params.organizationId, params.serviceAccountId);
         }),
         takeUntil(this.destroy$),
       )
-      .subscribe();
+      .subscribe((smConfig) => {
+        this.identityUrl = smConfig.identityUrl;
+        this.apiUrl = smConfig.apiUrl;
+        this.organizationId = smConfig.organizationId;
+        this.serviceAccountId = smConfig.serviceAccountId;
+        this.projects = smConfig.projects;
+        this.hasProjects = smConfig.hasProjects;
+      });
   }
 
   async load() {
