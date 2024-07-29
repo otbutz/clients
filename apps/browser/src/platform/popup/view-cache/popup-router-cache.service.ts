@@ -73,9 +73,10 @@ export class PopupRouterCacheService {
    * @returns a boolean that indicates if the route was successfully saved
    */
   private async push(url: string): Promise<boolean> {
-    if (!BrowserPopupUtils.inPopup(window) || url === (await this.last())) {
+    if (url === (await this.last())) {
       return false;
     }
+
     await this.state.update((prevState) => (prevState === null ? [url] : prevState.concat(url)));
     return true;
   }
