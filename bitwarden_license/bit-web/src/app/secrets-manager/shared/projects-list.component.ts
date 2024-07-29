@@ -98,7 +98,7 @@ export class ProjectsListComponent {
     this.platformUtilsService.showToast(
       "success",
       null,
-      this.i18nService.t("valueCopied", this.i18nService.t("uuid")),
+      this.i18nService.t("valueCopied", this.i18nService.t("projectId")),
     );
   }
 }
