@@ -11,6 +11,14 @@ import { ProjectListView } from "../../models/view/project-list.view";
 import { ProjectService } from "../../projects/project.service";
 import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
 
+class serviceAccountConfig {
+  organizationId: string;
+  serviceAccountId: string;
+  identityUrl: string;
+  apiUrl: string;
+  projects: ProjectListView[];
+}
+
 @Component({
   selector: "sm-service-account-config",
   templateUrl: "./config.component.html",
@@ -50,29 +58,38 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
         this.organizationId = smConfig.organizationId;
         this.serviceAccountId = smConfig.serviceAccountId;
         this.projects = smConfig.projects;
-        this.hasProjects = smConfig.hasProjects;
+
+        this.hasProjects = smConfig.projects.length > 0;
+        this.loading = false;
       });
   }
 
-  async load() {
-    const environment = await this.environmentService.getEnvironment();
-    this.identityUrl = environment.getIdentityUrl();
-    this.apiUrl = environment.getApiUrl();
+  async load(organizationId: string, serviceAccountId: string): Promise<serviceAccountConfig> {
+    const smConfig: serviceAccountConfig = {
+      organizationId: organizationId,
+      serviceAccountId: serviceAccountId,
+      identityUrl: "",
+      apiUrl: "",
+      projects: [],
+    };
 
-    const allProjects = await this.projectService.getProjects(this.organizationId);
+    const environment = await this.environmentService.getEnvironment();
+
+    smConfig.identityUrl = environment.getIdentityUrl();
+    smConfig.apiUrl = environment.getApiUrl();
+
+    const allProjects = await this.projectService.getProjects(organizationId);
     await this.accessPolicyService
-      .getServiceAccountGrantedPolicies(this.organizationId, this.serviceAccountId)
+      .getServiceAccountGrantedPolicies(organizationId, serviceAccountId)
       .then((policies) => {
         const ids = policies.grantedProjectPolicies.map(
           (policy) => policy.accessPolicy.grantedProjectId,
         );
-        this.projects = allProjects.filter((project) =>
+        smConfig.projects = allProjects.filter((project) =>
           ids.some((projectId) => projectId === project.id),
         );
       });
-
-    this.hasProjects = this.projects.length > 0;
-    this.loading = false;
+    return smConfig;
   }
 
   copyIdentityUrl = async () => {
