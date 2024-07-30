@@ -11,7 +11,7 @@ import { ProjectListView } from "../../models/view/project-list.view";
 import { ProjectService } from "../../projects/project.service";
 import { AccessPolicyService } from "../../shared/access-policies/access-policy.service";
 
-class serviceAccountConfig {
+class ServiceAccountConfig {
   organizationId: string;
   serviceAccountId: string;
   identityUrl: string;
