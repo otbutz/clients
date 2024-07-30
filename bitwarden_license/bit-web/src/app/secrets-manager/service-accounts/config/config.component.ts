@@ -64,32 +64,30 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
       });
   }
 
-  async load(organizationId: string, serviceAccountId: string): Promise<serviceAccountConfig> {
-    const smConfig: serviceAccountConfig = {
-      organizationId: organizationId,
-      serviceAccountId: serviceAccountId,
-      identityUrl: "",
-      apiUrl: "",
-      projects: [],
-    };
-
+  async load(organizationId: string, serviceAccountId: string): Promise<ServiceAccountConfig> {
     const environment = await this.environmentService.getEnvironment();
 
-    smConfig.identityUrl = environment.getIdentityUrl();
-    smConfig.apiUrl = environment.getApiUrl();
+    let projects: ProjectListView[] = [];
 
     const allProjects = await this.projectService.getProjects(organizationId);
-    await this.accessPolicyService
-      .getServiceAccountGrantedPolicies(organizationId, serviceAccountId)
-      .then((policies) => {
-        const ids = policies.grantedProjectPolicies.map(
-          (policy) => policy.accessPolicy.grantedProjectId,
-        );
-        smConfig.projects = allProjects.filter((project) =>
-          ids.some((projectId) => projectId === project.id),
-        );
-      });
-    return smConfig;
+    const policies = await this.accessPolicyService.getServiceAccountGrantedPolicies(
+      organizationId,
+      serviceAccountId,
+    );
+
+    const ids = policies.grantedProjectPolicies.map(
+      (policy) => policy.accessPolicy.grantedProjectId,
+    );
+
+    projects = allProjects.filter((project) => ids.some((projectId) => projectId === project.id));
+
+    return {
+      organizationId: organizationId,
+      serviceAccountId: serviceAccountId,
+      identityUrl: environment.getIdentityUrl(),
+      apiUrl: environment.getApiUrl(),
+      projects: projects,
+    } as ServiceAccountConfig;
   }
 
   copyIdentityUrl = () => {
