@@ -67,8 +67,6 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
   async load(organizationId: string, serviceAccountId: string): Promise<ServiceAccountConfig> {
     const environment = await this.environmentService.getEnvironment();
 
-    let projects: ProjectListView[] = [];
-
     const allProjects = await this.projectService.getProjects(organizationId);
     const policies = await this.accessPolicyService.getServiceAccountGrantedPolicies(
       organizationId,
@@ -79,7 +77,9 @@ export class ServiceAccountConfigComponent implements OnInit, OnDestroy {
       (policy) => policy.accessPolicy.grantedProjectId,
     );
 
-    projects = allProjects.filter((project) => ids.some((projectId) => projectId === project.id));
+    const projects = allProjects.filter((project) =>
+      ids.some((projectId) => projectId === project.id),
+    );
 
     return {
       organizationId: organizationId,
