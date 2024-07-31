@@ -94,7 +94,6 @@ export class AccountSwitcherComponent {
         if (active == null) {
           return null;
         }
-
         if (!active.name && !active.email) {
           // We need to have this information at minimum to display them.
           return null;
@@ -149,6 +148,17 @@ export class AccountSwitcherComponent {
         showSwitcher,
       })),
     );
+  }
+
+  async ngOnInit() {
+    const active = await firstValueFrom(this.accountService.activeAccount$);
+    const authStatus = await firstValueFrom(
+      this.authService.authStatuses$.pipe(map((statuses) => statuses[active.id])),
+    );
+    if (authStatus === AuthenticationStatus.LoggedOut) {
+      const nextUpAccount = await firstValueFrom(this.accountService.nextUpAccount$);
+      await this.switch(nextUpAccount.id);
+    }
   }
 
   toggle() {
