@@ -94,6 +94,7 @@ export class AccountSwitcherComponent {
         if (active == null) {
           return null;
         }
+
         if (!active.name && !active.email) {
           // We need to have this information at minimum to display them.
           return null;
