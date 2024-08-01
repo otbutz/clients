@@ -22,7 +22,7 @@ import {
   SAVE_VIEW_CACHE_COMMAND,
 } from "../../services/popup-view-cache-background.service";
 
-type TDeserializer<T> = {
+type Deserializer<T> = {
   /**
    * A function to use to safely convert your type from json to your expected type.
    *
@@ -32,15 +32,15 @@ type TDeserializer<T> = {
   readonly deserializer?: (jsonValue: Jsonify<T>) => T;
 };
 
-type TBaseCacheOptions<T> = {
+type BaseCacheOptions<T> = {
   /** A unique key for saving the cached value to state */
   key: string;
 
   /** An optional injector. Required if the method is called outside of an injection context. */
   injector?: Injector;
-} & (T extends JsonValue ? TDeserializer<T> : Required<TDeserializer<T>>);
+} & (T extends JsonValue ? Deserializer<T> : Required<Deserializer<T>>);
 
-export type TSignalCacheOptions<T> = TBaseCacheOptions<T> & {
+export type SignalCacheOptions<T> = BaseCacheOptions<T> & {
   /** The initial value for the signal. */
   initialValue: T;
 };
@@ -48,7 +48,7 @@ export type TSignalCacheOptions<T> = TBaseCacheOptions<T> & {
 /** Extract the value type from a FormGroup */
 type TFormValue<TFormGroup extends FormGroup> = TFormGroup["value"];
 
-export type TFormCacheOptions<TFormGroup extends FormGroup> = TBaseCacheOptions<
+export type FormCacheOptions<TFormGroup extends FormGroup> = BaseCacheOptions<
   TFormValue<TFormGroup>
 > & {
   control: TFormGroup;
@@ -112,7 +112,7 @@ export class PopupViewCacheService {
  * })
  * ```
  */
-export const cacheSignal = <T>(options: TSignalCacheOptions<T>): WritableSignal<T> => {
+export const cacheSignal = <T>(options: SignalCacheOptions<T>): WritableSignal<T> => {
   const {
     deserializer = (v: Jsonify<T>): T => v as T,
     key,
@@ -141,7 +141,7 @@ export const cacheSignal = <T>(options: TSignalCacheOptions<T>): WritableSignal<
  * The form is marked dirty if a cached value is restored.
  **/
 export const cacheFormGroup = <TFormGroup extends FormGroup>(
-  options: TFormCacheOptions<TFormGroup>,
+  options: FormCacheOptions<TFormGroup>,
 ) => {
   const { control, injector } = options;
 
