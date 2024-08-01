@@ -7,3 +7,5 @@ pub mod error;
 pub mod ipc;
 #[cfg(feature = "sys")]
 pub mod password;
+#[cfg(feature = "sys")]
+pub mod powermonitor;

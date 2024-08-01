@@ -17,6 +17,7 @@ sys = [
   "dep:security-framework-sys",
   "dep:gio",
   "dep:libsecret",
+  "dep:zbus",
 ]
 
 [dependencies]
@@ -65,3 +66,4 @@ security-framework-sys = { version = "=2.11.0", optional = true }
 [target.'cfg(target_os = "linux")'.dependencies]
 gio = { version = "=0.19.5", optional = true }
 libsecret = { version = "=0.5.0", optional = true }
+zbus = { version = "4.3.1", optional = true }

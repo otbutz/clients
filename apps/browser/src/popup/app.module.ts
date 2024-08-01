@@ -17,7 +17,6 @@ import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe"
 import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
 import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
 
-import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
 import { AccountComponent } from "../auth/popup/account-switching/account.component";
 import { CurrentAccountComponent } from "../auth/popup/account-switching/current-account.component";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
@@ -36,8 +35,11 @@ import { SsoComponent } from "../auth/popup/sso.component";
 import { TwoFactorOptionsComponent } from "../auth/popup/two-factor-options.component";
 import { TwoFactorComponent } from "../auth/popup/two-factor.component";
 import { UpdateTempPasswordComponent } from "../auth/popup/update-temp-password.component";
+import { AutofillV1Component } from "../autofill/popup/settings/autofill-v1.component";
 import { AutofillComponent } from "../autofill/popup/settings/autofill.component";
+import { ExcludedDomainsV1Component } from "../autofill/popup/settings/excluded-domains-v1.component";
 import { ExcludedDomainsComponent } from "../autofill/popup/settings/excluded-domains.component";
+import { NotificationsSettingsV1Component } from "../autofill/popup/settings/notifications-v1.component";
 import { NotificationsSettingsComponent } from "../autofill/popup/settings/notifications.component";
 import { PremiumComponent } from "../billing/popup/settings/premium.component";
 import { PopOutComponent } from "../platform/popup/components/pop-out.component";
@@ -91,6 +93,7 @@ import "../platform/popup/locales";
   imports: [
     A11yModule,
     AppRoutingModule,
+    AutofillComponent,
     ToastModule.forRoot({
       maxOpened: 2,
       autoDismiss: true,
@@ -108,15 +111,18 @@ import "../platform/popup/locales";
     ScrollingModule,
     ServicesModule,
     DialogModule,
+    ExcludedDomainsComponent,
     FilePopoutCalloutComponent,
     AvatarModule,
     AccountComponent,
     ButtonModule,
+    NotificationsSettingsComponent,
     PopOutComponent,
     PopupPageComponent,
     PopupTabNavigationComponent,
     PopupFooterComponent,
     PopupHeaderComponent,
+    HeaderComponent,
     UserVerificationDialogComponent,
     CurrentAccountComponent,
   ],
@@ -133,20 +139,19 @@ import "../platform/popup/locales";
     ColorPasswordCountPipe,
     CurrentTabComponent,
     EnvironmentComponent,
-    ExcludedDomainsComponent,
+    ExcludedDomainsV1Component,
     Fido2CipherRowComponent,
     Fido2UseBrowserLinkComponent,
     FolderAddEditComponent,
     FoldersComponent,
     VaultFilterComponent,
-    HeaderComponent,
     HintComponent,
     HomeComponent,
     LockComponent,
     LoginComponent,
     LoginViaAuthRequestComponent,
     LoginDecryptionOptionsComponent,
-    NotificationsSettingsComponent,
+    NotificationsSettingsV1Component,
     AppearanceComponent,
     GeneratorComponent,
     PasswordGeneratorHistoryComponent,
@@ -176,10 +181,10 @@ import "../platform/popup/locales";
     RemovePasswordComponent,
     VaultSelectComponent,
     Fido2Component,
-    AutofillComponent,
+    AutofillV1Component,
     EnvironmentSelectorComponent,
-    AccountSwitcherComponent,
   ],
+  exports: [],
   providers: [CurrencyPipe, DatePipe],
   bootstrap: [AppComponent],
 })
