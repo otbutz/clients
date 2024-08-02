@@ -15,21 +15,21 @@ import {
   SAVE_VIEW_CACHE_COMMAND,
 } from "../../../platform/services/popup-view-cache-background.service";
 
-import { PopupViewCacheService, cacheFormGroup, cacheSignal } from "./popup-view-cache.service";
+import { DirtyViewCacheService, dirtyFormCache, dirtyViewCache } from "./popup-view-cache.service";
 
 @Component({ template: "" })
 export class EmptyComponent {}
 
 @Component({ template: "" })
 export class TestComponent {
-  formGroup = cacheFormGroup({
+  formGroup = dirtyFormCache({
     key: "test-form-cache",
     control: new FormGroup({
       name: new FormControl("initial name"),
     }),
   });
 
-  signal = cacheSignal({
+  signal = dirtyViewCache({
     key: "test-signal",
     initialValue: "initial signal",
   });
@@ -37,7 +37,7 @@ export class TestComponent {
 
 describe("popup view cache", () => {
   let testBed: TestBed;
-  let service: PopupViewCacheService;
+  let service: DirtyViewCacheService;
   let fakeGlobalState: FakeGlobalState<Record<string, string>>;
   let messageSenderMock: MockProxy<MessageSender>;
   let router: Router;
@@ -69,14 +69,14 @@ describe("popup view cache", () => {
     await testBed.compileComponents();
 
     router = testBed.inject(Router);
-    service = testBed.inject(PopupViewCacheService);
+    service = testBed.inject(DirtyViewCacheService);
   });
 
   it("should initialize signal when ran within an injection context", async () => {
     await initServiceWithState({});
 
     const signal = TestBed.runInInjectionContext(() =>
-      cacheSignal({
+      dirtyViewCache({
         key: "foo-123",
         initialValue: "foo",
       }),
@@ -90,7 +90,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = cacheSignal({
+    const signal = dirtyViewCache({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -104,7 +104,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = cacheSignal({
+    const signal = dirtyViewCache({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -136,7 +136,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = cacheSignal({
+    const signal = dirtyViewCache({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -151,7 +151,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = cacheSignal({
+    const signal = dirtyViewCache({
       key: "foo-123",
       initialValue: "foo",
       injector,

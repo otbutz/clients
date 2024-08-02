@@ -46,10 +46,10 @@ export type SignalCacheOptions<T> = BaseCacheOptions<T> & {
 };
 
 /** Extract the value type from a FormGroup */
-type TFormValue<TFormGroup extends FormGroup> = TFormGroup["value"];
+type FormValue<TFormGroup extends FormGroup> = TFormGroup["value"];
 
 export type FormCacheOptions<TFormGroup extends FormGroup> = BaseCacheOptions<
-  TFormValue<TFormGroup>
+  FormValue<TFormGroup>
 > & {
   control: TFormGroup;
 };
@@ -60,7 +60,7 @@ export type FormCacheOptions<TFormGroup extends FormGroup> = BaseCacheOptions<
 @Injectable({
   providedIn: "root",
 })
-export class PopupViewCacheService {
+export class DirtyViewCacheService {
   private globalStateProvider = inject(GlobalStateProvider);
   private messageSender = inject(MessageSender);
   private router = inject(Router);
@@ -68,11 +68,14 @@ export class PopupViewCacheService {
   private _cache: Record<string, string>;
   get cache(): Record<string, string> {
     if (!this._cache) {
-      throw new Error("View cache not initialized");
+      throw new Error("Dirty View Cache not initialized");
     }
     return this._cache;
   }
 
+  /**
+   * Initialize the service. This should only be called once.
+   */
   async init() {
     const initialState = await firstValueFrom(
       this.globalStateProvider.get(POPUP_VIEW_CACHE_KEY).state$,
@@ -106,20 +109,20 @@ export class PopupViewCacheService {
  *
  * @example
  * ```ts
- * const mySignal = cachedSignal({
+ * const mySignal = dirtyViewCache({
  *   key: "popup-search-text"
  *   initialValue: ""
  * })
  * ```
  */
-export const cacheSignal = <T>(options: SignalCacheOptions<T>): WritableSignal<T> => {
+export const dirtyViewCache = <T>(options: SignalCacheOptions<T>): WritableSignal<T> => {
   const {
     deserializer = (v: Jsonify<T>): T => v as T,
     key,
     injector = inject(Injector),
     initialValue,
   } = options;
-  const service = injector.get(PopupViewCacheService);
+  const service = injector.get(DirtyViewCacheService);
   const cachedValue = service.cache[key]
     ? deserializer(JSON.parse(service.cache[key]))
     : initialValue;
@@ -140,14 +143,14 @@ export const cacheSignal = <T>(options: SignalCacheOptions<T>): WritableSignal<T
  *
  * The form is marked dirty if a cached value is restored.
  **/
-export const cacheFormGroup = <TFormGroup extends FormGroup>(
+export const dirtyFormCache = <TFormGroup extends FormGroup>(
   options: FormCacheOptions<TFormGroup>,
 ) => {
   const { control, injector } = options;
 
-  const _signal = cacheSignal({
+  const _signal = dirtyViewCache({
     ...options,
-    initialValue: control.getRawValue() as TFormValue<TFormGroup>,
+    initialValue: control.getRawValue() as FormValue<TFormGroup>,
   });
 
   const value = _signal();

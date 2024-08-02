@@ -20,7 +20,7 @@ import {
 } from "@bitwarden/components";
 
 import { BrowserApi } from "../platform/browser/browser-api";
-import { PopupViewCacheService } from "../platform/popup/view-cache/popup-view-cache.service";
+import { DirtyViewCacheService } from "../platform/popup/view-cache/popup-view-cache.service";
 import { initPopupClosedListener } from "../platform/services/popup-view-cache-background.service";
 import { BrowserSendStateService } from "../tools/popup/services/browser-send-state.service";
 import { VaultBrowserStateService } from "../vault/services/vault-browser-state.service";
@@ -37,7 +37,7 @@ import { DesktopSyncVerificationDialogComponent } from "./components/desktop-syn
   </div>`,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private popupViewCacheService = inject(PopupViewCacheService);
+  private popupViewCacheService = inject(DirtyViewCacheService);
 
   private lastActivity: Date;
   private activeUserId: UserId;
