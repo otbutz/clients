@@ -317,7 +317,7 @@ export default class AutofillService implements AutofillServiceInterface {
   async doAutoFill(options: AutoFillOptions): Promise<string | null> {
     const tab = options.tab;
     if (!tab || !options.cipher || !options.pageDetails || !options.pageDetails.length) {
-      throw new Error("Nothing to auto-fill.");
+      throw new Error("Nothing to autofill.");
     }
 
     let totp: string | null = null;
@@ -359,7 +359,7 @@ export default class AutofillService implements AutofillServiceInterface {
           options.allowUntrustedIframe != undefined &&
           !options.allowUntrustedIframe
         ) {
-          this.logService.info("Auto-fill on page load was blocked due to an untrusted iframe.");
+          this.logService.info("Autofill on page load was blocked due to an untrusted iframe.");
           return;
         }
 
@@ -414,7 +414,7 @@ export default class AutofillService implements AutofillServiceInterface {
         return null;
       }
     } else {
-      throw new Error("Did not auto-fill.");
+      throw new Error("Did not autofill.");
     }
   }
 
@@ -520,16 +520,30 @@ export default class AutofillService implements AutofillServiceInterface {
       return await this.doAutoFillOnTab(pageDetails, tab, fromCommand);
     }
 
-    // Cipher is a non-login type
-    const cipher: CipherView = (
-      (await this.cipherService.getAllDecryptedForUrl(tab.url, [cipherType])) || []
-    ).find(({ type }) => type === cipherType);
+    let cipher: CipherView;
+    let cacheKey = "";
 
-    if (!cipher || cipher.reprompt !== CipherRepromptType.None) {
+    if (cipherType === CipherType.Card) {
+      cacheKey = "cardCiphers";
+      cipher = await this.cipherService.getNextCardCipher();
+    } else {
+      cacheKey = "identityCiphers";
+      cipher = await this.cipherService.getNextIdentityCipher();
+    }
+
+    if (!cipher || !cacheKey || (cipher.reprompt === CipherRepromptType.Password && !fromCommand)) {
       return null;
     }
 
-    return await this.doAutoFill({
+    if (await this.isPasswordRepromptRequired(cipher, tab)) {
+      if (fromCommand) {
+        this.cipherService.updateLastUsedIndexForUrl(cacheKey);
+      }
+
+      return null;
+    }
+
+    const totpCode = await this.doAutoFill({
       tab: tab,
       cipher: cipher,
       pageDetails: pageDetails,
@@ -541,6 +555,12 @@ export default class AutofillService implements AutofillServiceInterface {
       allowUntrustedIframe: fromCommand,
       allowTotpAutofill: false,
     });
+
+    if (fromCommand) {
+      this.cipherService.updateLastUsedIndexForUrl(cacheKey);
+    }
+
+    return totpCode;
   }
 
   /**
@@ -1167,7 +1187,7 @@ export default class AutofillService implements AutofillServiceInterface {
     options: GenerateFillScriptOptions,
   ): Promise<boolean> {
     // If the pageUrl (from the content script) matches the tabUrl (from the sender tab), we are not in an iframe
-    // This also avoids a false positive if no URI is saved and the user triggers auto-fill anyway
+    // This also avoids a false positive if no URI is saved and the user triggers autofill anyway
     if (pageUrl === options.tabUrl) {
       return false;
     }

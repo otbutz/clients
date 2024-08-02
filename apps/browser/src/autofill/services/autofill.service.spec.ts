@@ -580,8 +580,8 @@ describe("AutofillService", () => {
 
   describe("doAutoFill", () => {
     let autofillOptions: AutoFillOptions;
-    const nothingToAutofillError = "Nothing to auto-fill.";
-    const didNotAutofillError = "Did not auto-fill.";
+    const nothingToAutofillError = "Nothing to autofill.";
+    const didNotAutofillError = "Did not autofill.";
 
     beforeEach(() => {
       autofillOptions = {
@@ -805,7 +805,7 @@ describe("AutofillService", () => {
         triggerTestFailure();
       } catch (error) {
         expect(logService.info).toHaveBeenCalledWith(
-          "Auto-fill on page load was blocked due to an untrusted iframe.",
+          "Autofill on page load was blocked due to an untrusted iframe.",
         );
         expect(error.message).toBe(didNotAutofillError);
       }
@@ -819,7 +819,7 @@ describe("AutofillService", () => {
       await autofillService.doAutoFill(autofillOptions);
 
       expect(logService.info).not.toHaveBeenCalledWith(
-        "Auto-fill on page load was blocked due to an untrusted iframe.",
+        "Autofill on page load was blocked due to an untrusted iframe.",
       );
     });
 
@@ -1204,7 +1204,7 @@ describe("AutofillService", () => {
       expect(result).toBe(totp);
     });
 
-    it("auto-fills card cipher types", async () => {
+    it("autofills card cipher types", async () => {
       const cardFormPageDetails = [
         {
           frameId: 1,
@@ -1232,27 +1232,26 @@ describe("AutofillService", () => {
       jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(tab);
       jest.spyOn(autofillService, "doAutoFill").mockImplementation();
       jest
-        .spyOn(autofillService["cipherService"], "getAllDecryptedForUrl")
-        .mockResolvedValueOnce([cardCipher]);
+        .spyOn(autofillService["cipherService"], "getNextCardCipher")
+        .mockResolvedValueOnce(cardCipher);
 
-      await autofillService.doAutoFillActiveTab(cardFormPageDetails, false, CipherType.Card);
+      await autofillService.doAutoFillActiveTab(cardFormPageDetails, true, CipherType.Card);
 
-      expect(autofillService["cipherService"].getAllDecryptedForUrl).toHaveBeenCalled();
       expect(autofillService.doAutoFill).toHaveBeenCalledWith({
         tab: tab,
         cipher: cardCipher,
         pageDetails: cardFormPageDetails,
-        skipLastUsed: true,
-        skipUsernameOnlyFill: true,
-        onlyEmptyFields: true,
-        onlyVisibleFields: true,
+        skipLastUsed: false,
+        skipUsernameOnlyFill: false,
+        onlyEmptyFields: false,
+        onlyVisibleFields: false,
         fillNewPassword: false,
-        allowUntrustedIframe: false,
+        allowUntrustedIframe: true,
         allowTotpAutofill: false,
       });
     });
 
-    it("auto-fills identity cipher types", async () => {
+    it("autofills identity cipher types", async () => {
       const identityFormPageDetails = [
         {
           frameId: 1,
@@ -1280,26 +1279,21 @@ describe("AutofillService", () => {
       jest.spyOn(autofillService as any, "getActiveTab").mockResolvedValueOnce(tab);
       jest.spyOn(autofillService, "doAutoFill").mockImplementation();
       jest
-        .spyOn(autofillService["cipherService"], "getAllDecryptedForUrl")
-        .mockResolvedValueOnce([identityCipher]);
+        .spyOn(autofillService["cipherService"], "getNextIdentityCipher")
+        .mockResolvedValueOnce(identityCipher);
 
-      await autofillService.doAutoFillActiveTab(
-        identityFormPageDetails,
-        false,
-        CipherType.Identity,
-      );
+      await autofillService.doAutoFillActiveTab(identityFormPageDetails, true, CipherType.Identity);
 
-      expect(autofillService["cipherService"].getAllDecryptedForUrl).toHaveBeenCalled();
       expect(autofillService.doAutoFill).toHaveBeenCalledWith({
         tab: tab,
         cipher: identityCipher,
         pageDetails: identityFormPageDetails,
-        skipLastUsed: true,
-        skipUsernameOnlyFill: true,
-        onlyEmptyFields: true,
-        onlyVisibleFields: true,
+        skipLastUsed: false,
+        skipUsernameOnlyFill: false,
+        onlyEmptyFields: false,
+        onlyVisibleFields: false,
         fillNewPassword: false,
-        allowUntrustedIframe: false,
+        allowUntrustedIframe: true,
         allowTotpAutofill: false,
       });
     });
