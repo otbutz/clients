@@ -20,7 +20,7 @@ import {
 } from "@bitwarden/components";
 
 import { BrowserApi } from "../platform/browser/browser-api";
-import { DirtyViewCacheService } from "../platform/popup/view-cache/popup-view-cache.service";
+import { DirtyViewCacheService } from "../platform/popup/view-cache/dirty-view-cache.service";
 import { initPopupClosedListener } from "../platform/services/popup-view-cache-background.service";
 import { BrowserSendStateService } from "../tools/popup/services/browser-send-state.service";
 import { VaultBrowserStateService } from "../vault/services/vault-browser-state.service";
@@ -37,7 +37,7 @@ import { DesktopSyncVerificationDialogComponent } from "./components/desktop-syn
   </div>`,
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private popupViewCacheService = inject(DirtyViewCacheService);
+  private dirtyViewCacheService = inject(DirtyViewCacheService);
 
   private lastActivity: Date;
   private activeUserId: UserId;
@@ -64,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     initPopupClosedListener();
-    await this.popupViewCacheService.init();
+    await this.dirtyViewCacheService.init();
 
     // Component states must not persist between closing and reopening the popup, otherwise they become dead objects
     // Clear them aggressively to make sure this doesn't occur

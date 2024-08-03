@@ -13,9 +13,9 @@ import {
   ClEAR_VIEW_CACHE_COMMAND,
   POPUP_VIEW_CACHE_KEY,
   SAVE_VIEW_CACHE_COMMAND,
-} from "../../../platform/services/popup-view-cache-background.service";
+} from "../../services/popup-view-cache-background.service";
 
-import { DirtyViewCacheService, dirtyFormCache, dirtyViewCache } from "./popup-view-cache.service";
+import { DirtyViewCacheService, dirtyFormCache, dirtyViewCache } from "./dirty-view-cache.service";
 
 @Component({ template: "" })
 export class EmptyComponent {}
