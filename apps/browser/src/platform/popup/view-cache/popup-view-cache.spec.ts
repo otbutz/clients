@@ -15,7 +15,7 @@ import {
   SAVE_VIEW_CACHE_COMMAND,
 } from "../../services/popup-view-cache-background.service";
 
-import { PopupViewCacheService } from "./dirty-view-cache.service";
+import { PopupViewCacheService } from "./popup-view-cache.service";
 
 @Component({ template: "" })
 export class EmptyComponent {}
