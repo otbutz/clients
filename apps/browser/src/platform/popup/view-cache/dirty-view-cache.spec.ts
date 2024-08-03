@@ -1,4 +1,4 @@
-import { Component, Injector } from "@angular/core";
+import { Component, inject, Injector } from "@angular/core";
 import { TestBed } from "@angular/core/testing";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
@@ -15,21 +15,23 @@ import {
   SAVE_VIEW_CACHE_COMMAND,
 } from "../../services/popup-view-cache-background.service";
 
-import { DirtyViewCacheService, dirtyFormCache, dirtyViewCache } from "./dirty-view-cache.service";
+import { PopupViewCacheService } from "./dirty-view-cache.service";
 
 @Component({ template: "" })
 export class EmptyComponent {}
 
 @Component({ template: "" })
 export class TestComponent {
-  formGroup = dirtyFormCache({
+  private dirtyViewCacheService = inject(PopupViewCacheService);
+
+  formGroup = this.dirtyViewCacheService.formGroup({
     key: "test-form-cache",
     control: new FormGroup({
       name: new FormControl("initial name"),
     }),
   });
 
-  signal = dirtyViewCache({
+  signal = this.dirtyViewCacheService.signal({
     key: "test-signal",
     initialValue: "initial signal",
   });
@@ -37,7 +39,7 @@ export class TestComponent {
 
 describe("popup view cache", () => {
   let testBed: TestBed;
-  let service: DirtyViewCacheService;
+  let service: PopupViewCacheService;
   let fakeGlobalState: FakeGlobalState<Record<string, string>>;
   let messageSenderMock: MockProxy<MessageSender>;
   let router: Router;
@@ -69,14 +71,14 @@ describe("popup view cache", () => {
     await testBed.compileComponents();
 
     router = testBed.inject(Router);
-    service = testBed.inject(DirtyViewCacheService);
+    service = testBed.inject(PopupViewCacheService);
   });
 
   it("should initialize signal when ran within an injection context", async () => {
     await initServiceWithState({});
 
     const signal = TestBed.runInInjectionContext(() =>
-      dirtyViewCache({
+      service.signal({
         key: "foo-123",
         initialValue: "foo",
       }),
@@ -90,7 +92,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = dirtyViewCache({
+    const signal = service.signal({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -104,7 +106,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = dirtyViewCache({
+    const signal = service.signal({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -136,7 +138,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = dirtyViewCache({
+    const signal = service.signal({
       key: "foo-123",
       initialValue: "foo",
       injector,
@@ -151,7 +153,7 @@ describe("popup view cache", () => {
 
     const injector = TestBed.inject(Injector);
 
-    const signal = dirtyViewCache({
+    const signal = service.signal({
       key: "foo-123",
       initialValue: "foo",
       injector,

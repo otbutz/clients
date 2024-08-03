@@ -13,7 +13,7 @@ import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
-import { POPUP_ROUTE_HISTORY_KEY } from "../../services/popup-view-cache-background.service";
+import { POPUP_ROUTE_HISTORY_KEY } from "../../../platform/services/popup-view-cache-background.service";
 import BrowserPopupUtils from "../browser-popup-utils";
 
 /**

@@ -11,8 +11,13 @@ import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormGroup } from "@angular/forms";
 import { NavigationEnd, Router } from "@angular/router";
 import { filter, firstValueFrom, skip } from "rxjs";
-import { Jsonify, JsonValue } from "type-fest";
+import { Jsonify } from "type-fest";
 
+import {
+  ViewCacheService,
+  FormCacheOptions,
+  SignalCacheOptions,
+} from "@bitwarden/angular/platform/services/dirty-view-cache/dirty-view-cache.service";
 import { MessageSender } from "@bitwarden/common/platform/messaging";
 import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
@@ -22,51 +27,21 @@ import {
   SAVE_VIEW_CACHE_COMMAND,
 } from "../../services/popup-view-cache-background.service";
 
-type Deserializer<T> = {
-  /**
-   * A function to use to safely convert your type from json to your expected type.
-   *
-   * @param jsonValue The JSON object representation of your state.
-   * @returns The fully typed version of your state.
-   */
-  readonly deserializer?: (jsonValue: Jsonify<T>) => T;
-};
-
-type BaseCacheOptions<T> = {
-  /** A unique key for saving the cached value to state */
-  key: string;
-
-  /** An optional injector. Required if the method is called outside of an injection context. */
-  injector?: Injector;
-} & (T extends JsonValue ? Deserializer<T> : Required<Deserializer<T>>);
-
-export type SignalCacheOptions<T> = BaseCacheOptions<T> & {
-  /** The initial value for the signal. */
-  initialValue: T;
-};
-
-/** Extract the value type from a FormGroup */
-type FormValue<TFormGroup extends FormGroup> = TFormGroup["value"];
-
-export type FormCacheOptions<TFormGroup extends FormGroup> = BaseCacheOptions<
-  FormValue<TFormGroup>
-> & {
-  control: TFormGroup;
-};
-
 /**
- * Persist state when opening/closing the extension popup
+ * Popup implementation of {@link ViewCacheService}.
+ *
+ * Persists user changes between popup open and close
  */
 @Injectable({
   providedIn: "root",
 })
-export class DirtyViewCacheService {
+export class PopupViewCacheService implements ViewCacheService {
   private globalStateProvider = inject(GlobalStateProvider);
   private messageSender = inject(MessageSender);
   private router = inject(Router);
 
   private _cache: Record<string, string>;
-  get cache(): Record<string, string> {
+  private get cache(): Record<string, string> {
     if (!this._cache) {
       throw new Error("Dirty View Cache not initialized");
     }
@@ -91,77 +66,61 @@ export class DirtyViewCacheService {
       .subscribe(() => this.clearState());
   }
 
-  updateState(key: string, value: string) {
+  /**
+   * @see {@link ViewCacheService.signal}
+   */
+  signal<T>(options: SignalCacheOptions<T>): WritableSignal<T> {
+    const {
+      deserializer = (v: Jsonify<T>): T => v as T,
+      key,
+      injector = inject(Injector),
+      initialValue,
+    } = options;
+    const cachedValue = this.cache[key] ? deserializer(JSON.parse(this.cache[key])) : initialValue;
+    const _signal = signal(cachedValue);
+
+    effect(
+      () => {
+        this.updateState(key, JSON.stringify(_signal()));
+      },
+      { injector },
+    );
+
+    return _signal;
+  }
+
+  /**
+   * @see {@link ViewCacheService.formGroup}
+   */
+  formGroup<TFormGroup extends FormGroup>(options: FormCacheOptions<TFormGroup>): TFormGroup {
+    const { control, injector } = options;
+
+    const _signal = this.signal({
+      ...options,
+      initialValue: control.getRawValue(),
+    });
+
+    const value = _signal();
+    if (value !== undefined && JSON.stringify(value) !== JSON.stringify(control.getRawValue())) {
+      control.setValue(value);
+      control.markAsDirty();
+    }
+
+    control.valueChanges.pipe(takeUntilDestroyed(injector?.get(DestroyRef))).subscribe(() => {
+      _signal.set(control.getRawValue());
+    });
+
+    return control;
+  }
+
+  private updateState(key: string, value: string) {
     this.messageSender.send(SAVE_VIEW_CACHE_COMMAND, {
       key,
       value,
     });
   }
 
-  clearState() {
+  private clearState() {
     this.messageSender.send(ClEAR_VIEW_CACHE_COMMAND, {});
   }
 }
-/**
- * Create a signal from a previously cached value. Whenever the signal is updated, the new value is saved to the cache.
- *
- * @returns the created signal
- *
- * @example
- * ```ts
- * const mySignal = dirtyViewCache({
- *   key: "popup-search-text"
- *   initialValue: ""
- * })
- * ```
- */
-export const dirtyViewCache = <T>(options: SignalCacheOptions<T>): WritableSignal<T> => {
-  const {
-    deserializer = (v: Jsonify<T>): T => v as T,
-    key,
-    injector = inject(Injector),
-    initialValue,
-  } = options;
-  const service = injector.get(DirtyViewCacheService);
-  const cachedValue = service.cache[key]
-    ? deserializer(JSON.parse(service.cache[key]))
-    : initialValue;
-  const _signal = signal(cachedValue);
-
-  effect(
-    () => {
-      service.updateState(key, JSON.stringify(_signal()));
-    },
-    { injector },
-  );
-
-  return _signal;
-};
-
-/**
- * Initialize a form from cached value changes.
- *
- * The form is marked dirty if a cached value is restored.
- **/
-export const dirtyFormCache = <TFormGroup extends FormGroup>(
-  options: FormCacheOptions<TFormGroup>,
-) => {
-  const { control, injector } = options;
-
-  const _signal = dirtyViewCache({
-    ...options,
-    initialValue: control.getRawValue() as FormValue<TFormGroup>,
-  });
-
-  const value = _signal();
-  if (value !== undefined && JSON.stringify(value) !== JSON.stringify(control.getRawValue())) {
-    control.setValue(value);
-    control.markAsDirty();
-  }
-
-  control.valueChanges.pipe(takeUntilDestroyed(injector?.get(DestroyRef))).subscribe(() => {
-    _signal.set(control.getRawValue());
-  });
-
-  return control;
-};
