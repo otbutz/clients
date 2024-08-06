@@ -51,7 +51,9 @@ export class MemberAccessReportComponent implements OnInit {
   async ngOnInit() {
     const params = await firstValueFrom(this.route.params);
     this.organizationId = params.organizationId;
-    this.dataSource.data = this.reportService.generateMemberAccessReportView();
+    this.dataSource.data = await this.reportService.generateMemberAccessReportView(
+      this.organizationId,
+    );
   }
 
   exportReportAction = async (): Promise<void> => {
