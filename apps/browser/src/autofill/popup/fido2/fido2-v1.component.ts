@@ -36,6 +36,7 @@ import { Fido2UserVerificationService } from "../../../vault/services/fido2-user
 import {
   BrowserFido2Message,
   BrowserFido2UserInterfaceSession,
+  BrowserFido2MessageTypes,
 } from "../../fido2/services/browser-fido2-user-interface.service";
 
 interface ViewData {
@@ -66,6 +67,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
   protected loading = false;
   protected subtitleText: string;
   protected credentialText: string;
+  protected BrowserFido2MessageTypes = BrowserFido2MessageTypes;
 
   private message$ = new BehaviorSubject<BrowserFido2Message>(null);
 
@@ -107,7 +109,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
           this.url = queryParams.senderUrl;
           // For a 'NewSessionCreatedRequest', abort if it doesn't belong to the current session.
           if (
-            message.type === "NewSessionCreatedRequest" &&
+            message.type === BrowserFido2MessageTypes.NewSessionCreatedRequest &&
             message.sessionId !== queryParams.sessionId
           ) {
             this.abort(false);
@@ -119,7 +121,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
             return;
           }
 
-          if (message.type === "AbortRequest") {
+          if (message.type === BrowserFido2MessageTypes.AbortRequest) {
             this.abort(false);
             return;
           }
@@ -137,7 +139,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
       filter((message) => message != undefined),
       concatMap(async (message) => {
         switch (message.type) {
-          case "ConfirmNewCredentialRequest": {
+          case BrowserFido2MessageTypes.ConfirmNewCredentialRequest: {
             const equivalentDomains = await firstValueFrom(
               this.domainSettingsService.getUrlEquivalentDomains(this.url),
             );
@@ -157,7 +159,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
             break;
           }
 
-          case "PickCredentialRequest": {
+          case BrowserFido2MessageTypes.PickCredentialRequest: {
             const activeUserId = await firstValueFrom(
               this.accountService.activeAccount$.pipe(map((a) => a?.id)),
             );
@@ -177,7 +179,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
             break;
           }
 
-          case "InformExcludedCredentialRequest": {
+          case BrowserFido2MessageTypes.InformExcludedCredentialRequest: {
             const activeUserId = await firstValueFrom(
               this.accountService.activeAccount$.pipe(map((a) => a?.id)),
             );
@@ -216,14 +218,14 @@ export class Fido2V1Component implements OnInit, OnDestroy {
     queryParams$.pipe(takeUntil(this.destroy$)).subscribe((queryParams) => {
       this.send({
         sessionId: queryParams.sessionId,
-        type: "ConnectResponse",
+        type: BrowserFido2MessageTypes.ConnectResponse,
       });
     });
   }
 
   protected async submit() {
     const data = this.message$.value;
-    if (data?.type === "PickCredentialRequest") {
+    if (data?.type === BrowserFido2MessageTypes.PickCredentialRequest) {
       // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
       // PM-4577 - https://github.com/bitwarden/clients/pull/8746
       const userVerified = await this.handleUserVerification(data.userVerification, this.cipher);
@@ -231,10 +233,10 @@ export class Fido2V1Component implements OnInit, OnDestroy {
       this.send({
         sessionId: this.sessionId,
         cipherId: this.cipher.id,
-        type: "PickCredentialResponse",
+        type: BrowserFido2MessageTypes.PickCredentialResponse,
         userVerified,
       });
-    } else if (data?.type === "ConfirmNewCredentialRequest") {
+    } else if (data?.type === BrowserFido2MessageTypes.ConfirmNewCredentialRequest) {
       if (this.cipher.login.hasFido2Credentials) {
         const confirmed = await this.dialogService.openSimpleDialog({
           title: { key: "overwritePasskey" },
@@ -254,7 +256,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
       this.send({
         sessionId: this.sessionId,
         cipherId: this.cipher.id,
-        type: "ConfirmNewCredentialResponse",
+        type: BrowserFido2MessageTypes.ConfirmNewCredentialResponse,
         userVerified,
       });
     }
@@ -264,7 +266,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
 
   protected async saveNewLogin() {
     const data = this.message$.value;
-    if (data?.type === "ConfirmNewCredentialRequest") {
+    if (data?.type === BrowserFido2MessageTypes.ConfirmNewCredentialRequest) {
       const name = data.credentialName || data.rpId;
       // TODO: Revert to check for user verification once user verification for passkeys is approved for production.
       // PM-4577 - https://github.com/bitwarden/clients/pull/8746
@@ -274,7 +276,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
       this.send({
         sessionId: this.sessionId,
         cipherId: this.cipher?.id,
-        type: "ConfirmNewCredentialResponse",
+        type: BrowserFido2MessageTypes.ConfirmNewCredentialResponse,
         userVerified: data.userVerification,
       });
     }
@@ -283,11 +285,15 @@ export class Fido2V1Component implements OnInit, OnDestroy {
   }
 
   getCredentialSubTitleText(messageType: string): string {
-    return messageType == "ConfirmNewCredentialRequest" ? "choosePasskey" : "logInWithPasskey";
+    return messageType == BrowserFido2MessageTypes.ConfirmNewCredentialRequest
+      ? "chooseCipherForPasskeySave"
+      : "logInWithPasskeyQuestion";
   }
 
   getCredentialButtonText(messageType: string): string {
-    return messageType == "ConfirmNewCredentialRequest" ? "savePasskey" : "confirm";
+    return messageType == BrowserFido2MessageTypes.ConfirmNewCredentialRequest
+      ? "savePasskey"
+      : "confirm";
   }
 
   selectedPasskey(item: CipherView) {
@@ -311,7 +317,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
   addCipher() {
     const data = this.message$.value;
 
-    if (data?.type !== "ConfirmNewCredentialRequest") {
+    if (data?.type !== BrowserFido2MessageTypes.ConfirmNewCredentialRequest) {
       return;
     }
 
@@ -361,7 +367,7 @@ export class Fido2V1Component implements OnInit, OnDestroy {
   unload(fallback = false) {
     this.send({
       sessionId: this.sessionId,
-      type: "AbortResponse",
+      type: BrowserFido2MessageTypes.AbortResponse,
       fallbackRequested: fallback,
     });
   }
