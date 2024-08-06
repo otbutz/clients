@@ -456,7 +456,13 @@ export class GetCommand extends DownloadCommand {
           : response.groups.map(
               (g) => new SelectionReadOnly(g.id, g.readOnly, g.hidePasswords, g.manage),
             );
-      const res = new OrganizationCollectionResponse(decCollection, groups);
+      const users =
+        response.users == null
+          ? null
+          : response.users.map(
+              (g) => new SelectionReadOnly(g.id, g.readOnly, g.hidePasswords, g.manage),
+            );
+      const res = new OrganizationCollectionResponse(decCollection, groups, users);
       return Response.success(res);
     } catch (e) {
       return Response.error(e);
@@ -468,7 +474,7 @@ export class GetCommand extends DownloadCommand {
     if (Utils.isGuid(id)) {
       org = await this.organizationService.getFromState(id);
     } else if (id.trim() !== "") {
-      let orgs = await this.organizationService.getAll();
+      let orgs = await firstValueFrom(this.organizationService.organizations$);
       orgs = CliUtils.searchOrganizations(orgs, id);
       if (orgs.length > 1) {
         return Response.multipleResults(orgs.map((c) => c.id));

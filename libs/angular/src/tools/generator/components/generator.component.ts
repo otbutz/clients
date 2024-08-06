@@ -8,17 +8,23 @@ import { AccountService } from "@bitwarden/common/auth/abstractions/account.serv
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { GeneratorType } from "@bitwarden/common/tools/generator/generator-type";
+import { ToastService } from "@bitwarden/components";
+import {
+  GeneratorType,
+  DefaultPasswordBoundaries as DefaultBoundaries,
+} from "@bitwarden/generator-core";
 import {
   PasswordGenerationServiceAbstraction,
-  PasswordGeneratorOptions,
-} from "@bitwarden/common/tools/generator/password";
-import { DefaultBoundaries } from "@bitwarden/common/tools/generator/password/password-generator-options-evaluator";
-import {
   UsernameGenerationServiceAbstraction,
   UsernameGeneratorOptions,
-} from "@bitwarden/common/tools/generator/username";
-import { EmailForwarderOptions } from "@bitwarden/common/tools/models/domain/email-forwarder-options";
+  PasswordGeneratorOptions,
+} from "@bitwarden/generator-legacy";
+
+export class EmailForwarderOptions {
+  name: string;
+  value: string;
+  validForSelfHosted: boolean;
+}
 
 @Directive()
 export class GeneratorComponent implements OnInit, OnDestroy {
@@ -67,6 +73,7 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     protected route: ActivatedRoute,
     protected ngZone: NgZone,
     private win: Window,
+    protected toastService: ToastService,
   ) {
     this.typeOptions = [
       { name: i18nService.t("password"), value: "password" },
@@ -144,9 +151,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       this.usernameOptions.subaddressType = this.usernameOptions.catchallType = "random";
     } else {
       this.usernameOptions.website = this.usernameWebsite;
-      const websiteOption = { name: this.i18nService.t("websiteName"), value: "website-name" };
-      this.subaddressOptions.push(websiteOption);
-      this.catchallOptions.push(websiteOption);
     }
   }
 
@@ -194,6 +198,12 @@ export class GeneratorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       ),
     );
+
+    if (this.usernameWebsite !== null) {
+      const websiteOption = { name: this.i18nService.t("websiteName"), value: "website-name" };
+      this.subaddressOptions.push(websiteOption);
+      this.catchallOptions.push(websiteOption);
+    }
   }
 
   ngOnDestroy() {
@@ -317,11 +327,14 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       password ? this.password : this.username,
       copyOptions,
     );
-    this.platformUtilsService.showToast(
-      "info",
-      null,
-      this.i18nService.t("valueCopied", this.i18nService.t(password ? "password" : "username")),
-    );
+    this.toastService.showToast({
+      variant: "info",
+      title: null,
+      message: this.i18nService.t(
+        "valueCopied",
+        this.i18nService.t(password ? "password" : "username"),
+      ),
+    });
   }
 
   select() {

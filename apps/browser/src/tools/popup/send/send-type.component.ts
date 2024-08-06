@@ -1,5 +1,5 @@
 import { Location } from "@angular/common";
-import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { first } from "rxjs/operators";
 
@@ -15,7 +15,7 @@ import { SendType } from "@bitwarden/common/tools/send/enums/send-type";
 import { SendView } from "@bitwarden/common/tools/send/models/view/send.view";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { SendService } from "@bitwarden/common/tools/send/services/send.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { BrowserComponentState } from "../../../models/browserComponentState";
 import BrowserPopupUtils from "../../../platform/popup/browser-popup-utils";
@@ -27,7 +27,7 @@ const ComponentId = "SendTypeComponent";
   selector: "app-send-type",
   templateUrl: "send-type.component.html",
 })
-export class SendTypeComponent extends BaseSendComponent {
+export class SendTypeComponent extends BaseSendComponent implements OnInit, OnDestroy {
   groupingTitle: string;
   // State Handling
   state: BrowserComponentState;
@@ -51,6 +51,7 @@ export class SendTypeComponent extends BaseSendComponent {
     logService: LogService,
     sendApiService: SendApiService,
     dialogService: DialogService,
+    toastService: ToastService,
   ) {
     super(
       sendService,
@@ -63,6 +64,7 @@ export class SendTypeComponent extends BaseSendComponent {
       logService,
       sendApiService,
       dialogService,
+      toastService,
     );
     super.onSuccessfulLoad = async () => {
       this.selectType(this.type);

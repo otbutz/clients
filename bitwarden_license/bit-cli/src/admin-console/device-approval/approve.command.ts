@@ -5,6 +5,7 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 
 import { OrganizationAuthRequestService } from "../../../../bit-common/src/admin-console/auth-requests";
+import { ServiceContainer } from "../../service-container";
 
 export class ApproveCommand {
   constructor(
@@ -42,7 +43,7 @@ export class ApproveCommand {
 
       const request = pendingRequests.find((r) => r.id == id);
       if (request == null) {
-        return Response.error("Invalid request id");
+        return Response.error("The request id is invalid.");
       }
 
       await this.organizationAuthRequestService.approvePendingRequest(organizationId, request);
@@ -50,5 +51,12 @@ export class ApproveCommand {
     } catch (e) {
       return Response.error(e);
     }
+  }
+
+  static create(serviceContainer: ServiceContainer) {
+    return new ApproveCommand(
+      serviceContainer.organizationService,
+      serviceContainer.organizationAuthRequestService,
+    );
   }
 }

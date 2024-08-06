@@ -1,6 +1,14 @@
 import { DialogRef } from "@angular/cdk/dialog";
 import { Component, OnDestroy, OnInit, Type, ViewChild, ViewContainerRef } from "@angular/core";
-import { firstValueFrom, lastValueFrom, Observable, Subject, takeUntil } from "rxjs";
+import {
+  first,
+  firstValueFrom,
+  lastValueFrom,
+  Observable,
+  Subject,
+  Subscription,
+  takeUntil,
+} from "rxjs";
 
 import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
@@ -17,7 +25,7 @@ import { TwoFactorYubiKeyResponse } from "@bitwarden/common/auth/models/response
 import { TwoFactorProviders } from "@bitwarden/common/auth/services/two-factor.service";
 import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
-import { ProductType } from "@bitwarden/common/enums";
+import { ProductTierType } from "@bitwarden/common/billing/enums";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { DialogService } from "@bitwarden/components";
 
@@ -34,15 +42,8 @@ import { TwoFactorYubiKeyComponent } from "./two-factor-yubikey.component";
   templateUrl: "two-factor-setup.component.html",
 })
 export class TwoFactorSetupComponent implements OnInit, OnDestroy {
-  @ViewChild("authenticatorTemplate", { read: ViewContainerRef, static: true })
-  authenticatorModalRef: ViewContainerRef;
   @ViewChild("yubikeyTemplate", { read: ViewContainerRef, static: true })
   yubikeyModalRef: ViewContainerRef;
-  @ViewChild("duoTemplate", { read: ViewContainerRef, static: true }) duoModalRef: ViewContainerRef;
-  @ViewChild("emailTemplate", { read: ViewContainerRef, static: true })
-  emailModalRef: ViewContainerRef;
-  @ViewChild("webAuthnTemplate", { read: ViewContainerRef, static: true })
-  webAuthnModalRef: ViewContainerRef;
 
   organizationId: string;
   organization: Organization;
@@ -57,6 +58,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
 
   protected destroy$ = new Subject<void>();
   private twoFactorAuthPolicyAppliesToActiveUser: boolean;
+  protected twoFactorSetupSubscription: Subscription;
 
   constructor(
     protected dialogService: DialogService,
@@ -130,6 +132,9 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   }
 
   async manage(type: TwoFactorProviderType) {
+    // clear any existing subscriptions before creating a new one
+    this.twoFactorSetupSubscription?.unsubscribe();
+
     switch (type) {
       case TwoFactorProviderType.Authenticator: {
         const result: AuthResponse<TwoFactorAuthenticatorResponse> =
@@ -137,14 +142,16 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         if (!result) {
           return;
         }
-        const authComp = await this.openModal(
-          this.authenticatorModalRef,
-          TwoFactorAuthenticatorComponent,
+        const authComp: DialogRef<boolean, any> = TwoFactorAuthenticatorComponent.open(
+          this.dialogService,
+          { data: result },
         );
-        await authComp.auth(result);
-        authComp.onUpdated.pipe(takeUntil(this.destroy$)).subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Authenticator);
-        });
+        this.twoFactorSetupSubscription = authComp.componentInstance.onChangeStatus
+          .pipe(first(), takeUntil(this.destroy$))
+          .subscribe((enabled: boolean) => {
+            authComp.close();
+            this.updateStatus(enabled, TwoFactorProviderType.Authenticator);
+          });
         break;
       }
       case TwoFactorProviderType.Yubikey: {
@@ -153,11 +160,15 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         if (!result) {
           return;
         }
-        const yubiComp = await this.openModal(this.yubikeyModalRef, TwoFactorYubiKeyComponent);
-        yubiComp.auth(result);
-        yubiComp.onUpdated.pipe(takeUntil(this.destroy$)).subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Yubikey);
-        });
+        const yubiComp: DialogRef<boolean, any> = TwoFactorYubiKeyComponent.open(
+          this.dialogService,
+          { data: result },
+        );
+        yubiComp.componentInstance.onUpdated
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((enabled: boolean) => {
+            this.updateStatus(enabled, TwoFactorProviderType.Yubikey);
+          });
         break;
       }
       case TwoFactorProviderType.Duo: {
@@ -166,11 +177,17 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         if (!result) {
           return;
         }
-        const duoComp = await this.openModal(this.duoModalRef, TwoFactorDuoComponent);
-        duoComp.auth(result);
-        duoComp.onUpdated.pipe(takeUntil(this.destroy$)).subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.Duo);
+        const duoComp: DialogRef<boolean, any> = TwoFactorDuoComponent.open(this.dialogService, {
+          data: {
+            authResponse: result,
+          },
         });
+        this.twoFactorSetupSubscription = duoComp.componentInstance.onChangeStatus
+          .pipe(first(), takeUntil(this.destroy$))
+          .subscribe((enabled: boolean) => {
+            duoComp.close();
+            this.updateStatus(enabled, TwoFactorProviderType.Duo);
+          });
         break;
       }
       case TwoFactorProviderType.Email: {
@@ -179,12 +196,16 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         if (!result) {
           return;
         }
-        const authComp: DialogRef<boolean, any> = TwoFactorEmailComponent.open(this.dialogService, {
-          data: result,
-        });
-        authComp.componentInstance.onChangeStatus
-          .pipe(takeUntil(this.destroy$))
+        const emailComp: DialogRef<boolean, any> = TwoFactorEmailComponent.open(
+          this.dialogService,
+          {
+            data: result,
+          },
+        );
+        this.twoFactorSetupSubscription = emailComp.componentInstance.onChangeStatus
+          .pipe(first(), takeUntil(this.destroy$))
           .subscribe((enabled: boolean) => {
+            emailComp.close();
             this.updateStatus(enabled, TwoFactorProviderType.Email);
           });
         break;
@@ -195,14 +216,16 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
         if (!result) {
           return;
         }
-        const webAuthnComp = await this.openModal(
-          this.webAuthnModalRef,
-          TwoFactorWebAuthnComponent,
+        const webAuthnComp: DialogRef<boolean, any> = TwoFactorWebAuthnComponent.open(
+          this.dialogService,
+          { data: result },
         );
-        webAuthnComp.auth(result);
-        webAuthnComp.onUpdated.pipe(takeUntil(this.destroy$)).subscribe((enabled: boolean) => {
-          this.updateStatus(enabled, TwoFactorProviderType.WebAuthn);
-        });
+        this.twoFactorSetupSubscription = webAuthnComp.componentInstance.onChangeStatus
+          .pipe(first(), takeUntil(this.destroy$))
+          .subscribe((enabled: boolean) => {
+            webAuthnComp.close();
+            this.updateStatus(enabled, TwoFactorProviderType.WebAuthn);
+          });
         break;
       }
       default:
@@ -245,7 +268,7 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
       this.modal.close();
     }
     this.providers.forEach((p) => {
-      if (p.type === type) {
+      if (p.type === type && enabled !== undefined) {
         p.enabled = enabled;
       }
     });
@@ -261,6 +284,6 @@ export class TwoFactorSetupComponent implements OnInit, OnDestroy {
   }
 
   get isEnterpriseOrg() {
-    return this.organization?.planProductType === ProductType.Enterprise;
+    return this.organization?.productTierType === ProductTierType.Enterprise;
   }
 }

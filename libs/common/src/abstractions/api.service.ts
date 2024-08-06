@@ -30,6 +30,7 @@ import {
 import { SelectionReadOnlyResponse } from "../admin-console/models/response/selection-read-only.response";
 import { CreateAuthRequest } from "../auth/models/request/create-auth.request";
 import { DeviceVerificationRequest } from "../auth/models/request/device-verification.request";
+import { DisableTwoFactorAuthenticatorRequest } from "../auth/models/request/disable-two-factor-authenticator.request";
 import { EmailTokenRequest } from "../auth/models/request/email-token.request";
 import { EmailRequest } from "../auth/models/request/email.request";
 import { PasswordTokenRequest } from "../auth/models/request/identity-token/password-token.request";
@@ -47,13 +48,14 @@ import { TwoFactorEmailRequest } from "../auth/models/request/two-factor-email.r
 import { TwoFactorProviderRequest } from "../auth/models/request/two-factor-provider.request";
 import { TwoFactorRecoveryRequest } from "../auth/models/request/two-factor-recovery.request";
 import { UpdateProfileRequest } from "../auth/models/request/update-profile.request";
+import { UpdateTdeOffboardingPasswordRequest } from "../auth/models/request/update-tde-offboarding-password.request";
 import { UpdateTempPasswordRequest } from "../auth/models/request/update-temp-password.request";
 import { UpdateTwoFactorAuthenticatorRequest } from "../auth/models/request/update-two-factor-authenticator.request";
 import { UpdateTwoFactorDuoRequest } from "../auth/models/request/update-two-factor-duo.request";
 import { UpdateTwoFactorEmailRequest } from "../auth/models/request/update-two-factor-email.request";
 import { UpdateTwoFactorWebAuthnDeleteRequest } from "../auth/models/request/update-two-factor-web-authn-delete.request";
 import { UpdateTwoFactorWebAuthnRequest } from "../auth/models/request/update-two-factor-web-authn.request";
-import { UpdateTwoFactorYubioOtpRequest } from "../auth/models/request/update-two-factor-yubio-otp.request";
+import { UpdateTwoFactorYubikeyOtpRequest } from "../auth/models/request/update-two-factor-yubikey-otp.request";
 import { ApiKeyResponse } from "../auth/models/response/api-key.response";
 import { AuthRequestResponse } from "../auth/models/response/auth-request.response";
 import { DeviceVerificationResponse } from "../auth/models/response/device-verification.response";
@@ -61,7 +63,6 @@ import { IdentityCaptchaResponse } from "../auth/models/response/identity-captch
 import { IdentityTokenResponse } from "../auth/models/response/identity-token.response";
 import { IdentityTwoFactorResponse } from "../auth/models/response/identity-two-factor.response";
 import { KeyConnectorUserKeyResponse } from "../auth/models/response/key-connector-user-key.response";
-import { MasterPasswordPolicyResponse } from "../auth/models/response/master-password-policy.response";
 import { PreloginResponse } from "../auth/models/response/prelogin.response";
 import { RegisterResponse } from "../auth/models/response/register.response";
 import { SsoPreValidateResponse } from "../auth/models/response/sso-pre-validate.response";
@@ -175,15 +176,13 @@ export abstract class ApiService {
   postAccountKeys: (request: KeysRequest) => Promise<any>;
   postAccountVerifyEmail: () => Promise<any>;
   postAccountVerifyEmailToken: (request: VerifyEmailRequest) => Promise<any>;
-  postAccountVerifyPassword: (
-    request: SecretVerificationRequest,
-  ) => Promise<MasterPasswordPolicyResponse>;
   postAccountRecoverDelete: (request: DeleteRecoverRequest) => Promise<any>;
   postAccountRecoverDeleteToken: (request: VerifyDeleteRecoverRequest) => Promise<any>;
   postAccountKdf: (request: KdfRequest) => Promise<any>;
   postUserApiKey: (id: string, request: SecretVerificationRequest) => Promise<ApiKeyResponse>;
   postUserRotateApiKey: (id: string, request: SecretVerificationRequest) => Promise<ApiKeyResponse>;
   putUpdateTempPassword: (request: UpdateTempPasswordRequest) => Promise<any>;
+  putUpdateTdeOffboardingPassword: (request: UpdateTdeOffboardingPasswordRequest) => Promise<any>;
   postConvertToKeyConnector: () => Promise<void>;
   //passwordless
   postAuthRequest: (request: CreateAuthRequest) => Promise<AuthRequestResponse>;
@@ -327,6 +326,9 @@ export abstract class ApiService {
   putTwoFactorAuthenticator: (
     request: UpdateTwoFactorAuthenticatorRequest,
   ) => Promise<TwoFactorAuthenticatorResponse>;
+  deleteTwoFactorAuthenticator: (
+    request: DisableTwoFactorAuthenticatorRequest,
+  ) => Promise<TwoFactorProviderResponse>;
   putTwoFactorEmail: (request: UpdateTwoFactorEmailRequest) => Promise<TwoFactorEmailResponse>;
   putTwoFactorDuo: (request: UpdateTwoFactorDuoRequest) => Promise<TwoFactorDuoResponse>;
   putTwoFactorOrganizationDuo: (
@@ -334,7 +336,7 @@ export abstract class ApiService {
     request: UpdateTwoFactorDuoRequest,
   ) => Promise<TwoFactorDuoResponse>;
   putTwoFactorYubiKey: (
-    request: UpdateTwoFactorYubioOtpRequest,
+    request: UpdateTwoFactorYubikeyOtpRequest,
   ) => Promise<TwoFactorYubiKeyResponse>;
   putTwoFactorWebAuthn: (
     request: UpdateTwoFactorWebAuthnRequest,

@@ -8,6 +8,7 @@ import { FormValidationErrorsService } from "@bitwarden/angular/platform/abstrac
 import {
   LoginStrategyServiceAbstraction,
   LoginEmailServiceAbstraction,
+  RegisterRouteService,
 } from "@bitwarden/auth/common";
 import { DevicesApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/devices-api.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
@@ -20,8 +21,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { flagEnabled } from "../../platform/flags";
 
@@ -51,6 +52,7 @@ export class LoginComponent extends BaseLoginComponent {
     loginEmailService: LoginEmailServiceAbstraction,
     ssoLoginService: SsoLoginServiceAbstraction,
     webAuthnLoginService: WebAuthnLoginServiceAbstraction,
+    registerRouteService: RegisterRouteService,
   ) {
     super(
       devicesApiService,
@@ -71,6 +73,7 @@ export class LoginComponent extends BaseLoginComponent {
       loginEmailService,
       ssoLoginService,
       webAuthnLoginService,
+      registerRouteService,
     );
     super.onSuccessfulLogin = async () => {
       await syncService.fullSync(true);
@@ -96,7 +99,7 @@ export class LoginComponent extends BaseLoginComponent {
   async launchSsoBrowser() {
     // Save off email for SSO
     await this.ssoLoginService.setSsoEmail(this.formGroup.value.email);
-    await this.loginEmailService.saveEmailSettings();
+
     // Generate necessary sso params
     const passwordOptions: any = {
       type: "password",
@@ -138,5 +141,10 @@ export class LoginComponent extends BaseLoginComponent {
         "&email=" +
         encodeURIComponent(this.formGroup.controls.email.value),
     );
+  }
+
+  async saveEmailSettings() {
+    // values should be saved on home component
+    return;
   }
 }

@@ -5,6 +5,7 @@ import { LogoutReason } from "@bitwarden/auth/common";
 import { ApiService } from "../../abstractions/api.service";
 import { OrganizationService } from "../../admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserType } from "../../admin-console/enums";
+import { Organization } from "../../admin-console/models/domain/organization";
 import { KeysRequest } from "../../models/request/keys.request";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { KeyGenerationService } from "../../platform/abstractions/key-generation.service";
@@ -29,7 +30,7 @@ import { KeyConnectorUserKeyRequest } from "../models/request/key-connector-user
 import { SetKeyConnectorKeyRequest } from "../models/request/set-key-connector-key.request";
 import { IdentityTokenResponse } from "../models/response/identity-token.response";
 
-export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
+export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean | null>(
   KEY_CONNECTOR_DISK,
   "usesKeyConnector",
   {
@@ -38,7 +39,7 @@ export const USES_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
   },
 );
 
-export const CONVERT_ACCOUNT_TO_KEY_CONNECTOR = new UserKeyDefinition<boolean>(
+export const CONVERT_ACCOUNT_TO_KEY_CONNECTOR = new UserKeyDefinition<boolean | null>(
   KEY_CONNECTOR_DISK,
   "convertAccountToKeyConnector",
   {
@@ -114,7 +115,7 @@ export class KeyConnectorService implements KeyConnectorServiceAbstraction {
     }
   }
 
-  async getManagingOrganization() {
+  async getManagingOrganization(): Promise<Organization> {
     const orgs = await this.organizationService.getAll();
     return orgs.find(
       (o) =>

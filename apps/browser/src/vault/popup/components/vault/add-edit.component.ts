@@ -1,5 +1,5 @@
 import { DatePipe, Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import qrcodeParser from "qrcode-parser";
 import { firstValueFrom } from "rxjs";
@@ -39,7 +39,7 @@ import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-
   templateUrl: "add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit {
   currentUris: string[];
   showAttachments = true;
   openAttachmentsInPopup: boolean;
@@ -128,11 +128,20 @@ export class AddEditComponent extends BaseAddEditComponent {
       await this.load();
 
       if (!this.editMode || this.cloneMode) {
+        // Only allow setting username if there's no existing value
+        if (
+          params.username &&
+          (this.cipher.login.username == null || this.cipher.login.username === "")
+        ) {
+          this.cipher.login.username = params.username;
+        }
+
         if (params.name && (this.cipher.name == null || this.cipher.name === "")) {
           this.cipher.name = params.name;
         }
         if (
           params.uri &&
+          this.cipher.login.uris[0] &&
           (this.cipher.login.uris[0].uri == null || this.cipher.login.uris[0].uri === "")
         ) {
           this.cipher.login.uris[0].uri = params.uri;
@@ -170,17 +179,14 @@ export class AddEditComponent extends BaseAddEditComponent {
 
   async submit(): Promise<boolean> {
     const fido2SessionData = await firstValueFrom(this.fido2PopoutSessionData$);
-    const { isFido2Session, sessionId, userVerification, fromLock } = fido2SessionData;
+    const { isFido2Session, sessionId, userVerification } = fido2SessionData;
     const inFido2PopoutWindow = BrowserPopupUtils.inPopout(window) && isFido2Session;
 
+    // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
+    // PM-4577 - https://github.com/bitwarden/clients/pull/8746
     if (
       inFido2PopoutWindow &&
-      userVerification &&
-      !(await this.fido2UserVerificationService.handleUserVerification(
-        userVerification,
-        this.cipher,
-        fromLock,
-      ))
+      !(await this.handleFido2UserVerification(sessionId, userVerification))
     ) {
       return false;
     }
@@ -388,5 +394,15 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (message.command === "inlineAutofillMenuRefreshAddEditCipher") {
       this.load().catch((error) => this.logService.error(error));
     }
+  }
+
+  // TODO: Remove and use fido2 user verification service once user verification for passkeys is approved for production.
+  // Be sure to make the same changes to add-edit-v2.component.ts if applicable
+  private async handleFido2UserVerification(
+    sessionId: string,
+    userVerification: boolean,
+  ): Promise<boolean> {
+    // We are bypassing user verification pending approval for production.
+    return true;
   }
 }

@@ -404,7 +404,7 @@
     "message": "Duljina"
   },
   "passwordMinLength": {
-    "message": "Minimum password length"
+    "message": "Minimalna duljina lozinke"
   },
   "uppercase": {
     "message": "Velika slova (A - Z)"
@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Stvori račun"
   },
+  "setAStrongPassword": {
+    "message": "Postavi jaku lozinku"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Dovrši stvaranje svog računa postavljanjem lozinke"
+  },
   "logIn": {
     "message": "Prijavi se"
   },
@@ -519,6 +525,37 @@
   },
   "masterPassHint": {
     "message": "Podsjetnik glavne lozinke (neobavezno)"
+  },
+  "masterPassHintText": {
+    "message": "Podsjetnik ti možemo poslati ako zaboraviš svoju lozinku. Najviše $CURRENT$/$MAXIMUM$ znakova.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
+  },
+  "masterPassword": {
+    "message": "Glavna lozinka"
+  },
+  "masterPassImportant": {
+    "message": "Glavnu lozinku nije moguće oporaviti ako ju zaboraviš!"
+  },
+  "confirmMasterPassword": {
+    "message": "Potvrdi glavnu lozinku"
+  },
+  "masterPassHintLabel": {
+    "message": "Podsjetnik glavne lozinke"
+  },
+  "joinOrganization": {
+    "message": "Pridruži se organizaciji"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Dovrši pridruživanje organizaciji postavljanjem glavne lozinke."
   },
   "settings": {
     "message": "Postavke"
@@ -554,17 +591,17 @@
       }
     }
   },
+  "youSuccessfullyLoggedIn": {
+    "message": "Prijava uspješna"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Možeš zatvoriti ovaj prozor"
+  },
   "masterPassDoesntMatch": {
     "message": "Potvrda glavne lozinke se ne podudara."
   },
   "newAccountCreated": {
-    "message": "Tvoj novi račun je kreiran! Sada se možeš prijaviti."
-  },
-  "youSuccessfullyLoggedIn": {
-    "message": "You successfully logged in"
-  },
-  "youMayCloseThisWindow": {
-    "message": "You may close this window"
+    "message": "Tvoj novi račun je stvoren! Sada se možeš prijaviti."
   },
   "masterPassSent": {
     "message": "Poslali smo e-poštu s podsjetnikom glavne lozinke."
@@ -591,10 +628,13 @@
     "message": "Kôd za provjeru"
   },
   "confirmIdentity": {
-    "message": "Potvrdite lozinku za nastavak."
+    "message": "Za nastavak, potvrdi svoj identitet."
   },
   "verificationCodeRequired": {
     "message": "Potvrdni kôd je obavezan."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Autentifikacija je otkazana ili je trajala predugo. Molimo pokušaj ponovno."
   },
   "invalidVerificationCode": {
     "message": "Nevažeći kôd za provjeru"
@@ -647,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Autentifikatorska aplikacija"
   },
-  "authenticatorAppDesc": {
-    "message": "Koristi autentifikatorsku aplikaciju (npr. Authy ili Google Authentifikator) za generiranje kontrolnih kodova.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Unesi kôd generiran autentifikatorskom aplikacijom kao npr. Bitwarden Authenticatorom.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP sigurnosni ključ"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP sigurnosni ključ"
   },
   "yubiKeyDesc": {
     "message": "Koristi YubiKey za pristup svojem računu. Radi s YubiKey 4, 4 Nano, 4C i NEO uređajima."
   },
-  "duoDesc": {
-    "message": "Potvrdi s Duo Security pomoću aplikacije Duo Mobile, SMS-om, telefonskim pozivom ili U2F sigurnosnim ključem.",
+  "duoDescV2": {
+    "message": "Unesi kôd generiran Duo Securityjem.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +714,8 @@
   "emailTitle": {
     "message": "E-pošta"
   },
-  "emailDesc": {
-    "message": "Verifikacijski kodovi će biti poslani e-poštom."
+  "emailDescV2": {
+    "message": "Unesi kôd poslan e-poštom."
   },
   "loginUnavailable": {
     "message": "Prijava nije dostupna"
@@ -694,6 +734,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Navedi osnovni URL svoje lokalno smještene Bitwarden instalacije."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Navedi osnovni URL svoje lokalne Bitwarden instalacije, npr.: https://bitwarden.tvrtka.hr"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Kao naprednu postavku, možeš odrediti osnovni URL svake usluge zasebno."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Moraš dodati ili osnovni URL poslužitelja ili barem jedno prilagođeno okruženje."
   },
   "customEnvironment": {
     "message": "Prilagođeno okruženje"
@@ -743,8 +792,23 @@
   "loggedOut": {
     "message": "Odjavljen"
   },
+  "loggedOutDesc": {
+    "message": "Odjavljen/a si sa svog računa."
+  },
   "loginExpired": {
     "message": "Sesija je istekla."
+  },
+  "restartRegistration": {
+    "message": "Ponovno pokreni registraciju"
+  },
+  "expiredLink": {
+    "message": "Istekla poveznica"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Ponovno pokreni registraciju ili se pokušaj prijaviti."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Možda već imaš račun"
   },
   "logOutConfirmation": {
     "message": "Sigurno se želiš odjaviti?"
@@ -801,10 +865,10 @@
     "message": "Promjeni glavnu lozinku"
   },
   "continueToWebApp": {
-    "message": "Continue to web app?"
+    "message": "Nastavi na web aplikaciju?"
   },
   "changeMasterPasswordOnWebConfirmation": {
-    "message": "You can change your master password on the Bitwarden web app."
+    "message": "Svoju lozinku možeš promijeniti u Bitwarden web aplikaciji."
   },
   "fingerprintPhrase": {
     "message": "Jedinstvena fraza",
@@ -1212,6 +1276,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Pogreška osvježavanja tokena pristupa"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Nije pronađen token za osvježavanje ili API ključevi. Pokušaj se odjaviti i ponovno prijaviti."
+  },
   "help": {
     "message": "Pomoć"
   },
@@ -1300,7 +1370,7 @@
     "description": "ex. Date this password was updated"
   },
   "exportFrom": {
-    "message": "Export from"
+    "message": "Izvezi iz"
   },
   "exportVault": {
     "message": "Izvezi trezor"
@@ -1309,31 +1379,31 @@
     "message": "Format datoteke"
   },
   "fileEncryptedExportWarningDesc": {
-    "message": "This file export will be password protected and require the file password to decrypt."
+    "message": "Ova izvozna datoteka biti će zaštićena lozinkom bez koje ju neće biti moguće dešifrirati."
   },
   "filePassword": {
-    "message": "File password"
+    "message": "Lozinka datoteke"
   },
   "exportPasswordDescription": {
-    "message": "This password will be used to export and import this file"
+    "message": "Ova će se lozinka koristiti za izvoz i uvoz ove datoteke"
   },
   "accountRestrictedOptionDescription": {
-    "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
+    "message": "Upotrijebi svoj ključ za šifriranje računa, izveden iz korisničkog imena i glavne lozinke za šifriranje izvoza i ograničavanje uvoza samo na trenutni Bitwarden račun."
   },
   "passwordProtected": {
-    "message": "Password protected"
+    "message": "Zaštićeno lozinkom"
   },
   "passwordProtectedOptionDescription": {
-    "message": "Set a file password to encrypt the export and import it to any Bitwarden account using the password for decryption."
+    "message": "Bitwarden omogućuje dijeljenje trezora s drugima pomoću organizacijskog računa. Za više informacija posjeti bitwarden. com."
   },
   "exportTypeHeading": {
-    "message": "Export type"
+    "message": "Tip izvoza"
   },
   "accountRestricted": {
-    "message": "Account restricted"
+    "message": "Račun ograničen"
   },
   "filePasswordAndConfirmFilePasswordDoNotMatch": {
-    "message": "“File password”  and “Confirm file password“ do not match."
+    "message": "Lozinka se ne podudara."
   },
   "hCaptchaUrl": {
     "message": "hCaptcha Url",
@@ -1432,7 +1502,7 @@
     "message": "Nerispravan PIN."
   },
   "tooManyInvalidPinEntryAttemptsLoggingOut": {
-    "message": "Too many invalid PIN entry attempts. Logging out."
+    "message": "Previše netočnih pokušaja unosa PIN-a. Odjava..."
   },
   "unlockWithWindowsHello": {
     "message": "Otključaj koristeći Windows Hello"
@@ -1555,7 +1625,7 @@
     "message": "Trajno izbriši stavku"
   },
   "permanentlyDeleteItemConfirmation": {
-    "message": "Želiš li zaista trajno izbrisati ovu stavku?"
+    "message": "Sigurno želiš trajno izbrisati ovu stavku?"
   },
   "permanentlyDeletedItem": {
     "message": "Stavka trajno izbrisana"
@@ -1587,7 +1657,7 @@
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
   "verificationRequired": {
-    "message": "Verification required",
+    "message": "Potrebna je potvrda",
     "description": "Default title for the user verification dialog."
   },
   "currentMasterPass": {
@@ -1641,6 +1711,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Tvoja nova glavna lozinka ne ispunjava zahtjeve."
   },
+  "receiveMarketingEmailsV2": {
+    "message": "Primaj e-poštom od Bitwardena savjete, najave i mogućnosti istraživanja."
+  },
+  "unsubscribe": {
+    "message": "Poništi pretplatu"
+  },
+  "atAnyTime": {
+    "message": "bilo kada."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Ako nastaviš, slažeš se s"
+  },
+  "and": {
+    "message": "i"
+  },
   "acceptPolicies": {
     "message": "Označavanjem ove kućice slažete se sa sljedećim:"
   },
@@ -1663,10 +1748,10 @@
     "message": "Integracija preglednika nije podržana"
   },
   "browserIntegrationErrorTitle": {
-    "message": "Error enabling browser integration"
+    "message": "Uključi integraciju s web preglednikom"
   },
   "browserIntegrationErrorDesc": {
-    "message": "An error has occurred while enabling browser integration."
+    "message": "Pogreška prillikom integracije s preglednikom."
   },
   "browserIntegrationMasOnlyDesc": {
     "message": "Nažalost, za sada je integracija s preglednikom podržana samo u Mac App Store verziji aplikacije."
@@ -1684,10 +1769,10 @@
     "message": "Uključi dodatni sloj sigurnosti tražeći verifikaciju jedinstvenom frazom prilikom povezivanja radne površine i preglednika. Kada je ovo uključeno, potrebno je verificirati prilikom svakog novog povezivanja."
   },
   "enableHardwareAcceleration": {
-    "message": "Use hardware acceleration"
+    "message": "Koristi hardversko ubrzanje"
   },
   "enableHardwareAccelerationDesc": {
-    "message": "By default this setting is ON. Turn OFF only if you experience graphical issues. Restart is required."
+    "message": "Zadano je ova postakva uključena. Isključi samo ako iskusiš probleme s grafikom. Potrebno je ponovno pokretanje."
   },
   "approve": {
     "message": "Odobri"
@@ -1903,6 +1988,9 @@
   "emailVerificationRequired": {
     "message": "Potrebna je potvrda e-pošte"
   },
+  "emailVerifiedV2": {
+    "message": "e-pošta potvrđena"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Za korištenje ove značajke, potrebna je ovjera e-pošte."
   },
@@ -1928,40 +2016,40 @@
     "message": "Tvoja glavna lozinka ne zadovoljava pravila ove organizacije. Za pristup trezoru moraš odmah ažurirati svoju glavnu lozinku. Ako nastaviš, odjaviti ćeš se iz trenutne sesije te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne do jedan sat."
   },
   "tryAgain": {
-    "message": "Try again"
+    "message": "Pokušaj ponovno"
   },
   "verificationRequiredForActionSetPinToContinue": {
-    "message": "Verification required for this action. Set a PIN to continue."
+    "message": "Za ovu radnju potrebna je potvrda. Postavi PIN za nastavak."
   },
   "setPin": {
-    "message": "Set PIN"
+    "message": "Postavi PIN"
   },
   "verifyWithBiometrics": {
-    "message": "Verify with biometrics"
+    "message": "Potvrdi biometrijom"
   },
   "awaitingConfirmation": {
-    "message": "Awaiting confirmation"
+    "message": "Čekanje potvrde"
   },
   "couldNotCompleteBiometrics": {
-    "message": "Could not complete biometrics."
+    "message": "Nije moguće dovršiti biometriju."
   },
   "needADifferentMethod": {
-    "message": "Need a different method?"
+    "message": "Koristi drugi način?"
   },
   "useMasterPassword": {
-    "message": "Use master password"
+    "message": "Koristi glavnu lozinku"
   },
   "usePin": {
-    "message": "Use PIN"
+    "message": "Koristi PIN"
   },
   "useBiometrics": {
-    "message": "Use biometrics"
+    "message": "Koristi biometriju"
   },
   "enterVerificationCodeSentToEmail": {
-    "message": "Enter the verification code that was sent to your email."
+    "message": "Unesi kôd za potvrdu primljen e-poštom."
   },
   "resendCode": {
-    "message": "Resend code"
+    "message": "Ponovno pošalji kod"
   },
   "hours": {
     "message": "sat(i)"
@@ -2010,6 +2098,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Vrijeme isteka premašuje ograničenje koju je postavila tvoja organizacija."
+  },
+  "inviteAccepted": {
+    "message": "Pozivnica prihvaćena"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatsko učlanjenje"
@@ -2081,7 +2172,7 @@
     "message": "Promijeni račun"
   },
   "alreadyHaveAccount": {
-    "message": "Already have an account?"
+    "message": "Već imaš račun?"
   },
   "options": {
     "message": "Mogućnosti"
@@ -2102,10 +2193,10 @@
     }
   },
   "exportingOrganizationVaultTitle": {
-    "message": "Exporting organization vault"
+    "message": "Izvoz organizacijskog trezora"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Only the organization vault associated with $ORGANIZATION$ will be exported. Items in individual vaults or other organizations will not be included.",
+    "message": "Izvest će se samo organizacijski trezor povezan s $ORGANIZATION$. Stavke iz osobnih trezora i stavke iz drugih organizacija neće biti uključene.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2178,7 +2269,7 @@
     "message": "Generiraj pseudonim e-pošte s vanjskom uslugom prosljeđivanja."
   },
   "forwarderError": {
-    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "message": "$SERVICENAME$ greška: $ERRORMESSAGE$",
     "description": "Reports an error returned by a forwarding service to the user.",
     "placeholders": {
       "servicename": {
@@ -2192,11 +2283,11 @@
     }
   },
   "forwarderGeneratedBy": {
-    "message": "Generated by Bitwarden.",
+    "message": "Generirao Bitwarden.",
     "description": "Displayed with the address on the forwarding service's configuration screen."
   },
   "forwarderGeneratedByWithWebsite": {
-    "message": "Website: $WEBSITE$. Generated by Bitwarden.",
+    "message": "Web: $WEBSITE$. Generirao Bitwarden.",
     "description": "Displayed with the address on the forwarding service's configuration screen.",
     "placeholders": {
       "WEBSITE": {
@@ -2206,7 +2297,7 @@
     }
   },
   "forwaderInvalidToken": {
-    "message": "Invalid $SERVICENAME$ API token",
+    "message": "Nevažeći $SERVICENAME$ API token",
     "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2216,7 +2307,7 @@
     }
   },
   "forwaderInvalidTokenWithMessage": {
-    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "message": "Nevažeći $SERVICENAME$ API token: $ERRORMESSAGE$",
     "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
     "placeholders": {
       "servicename": {
@@ -2230,7 +2321,7 @@
     }
   },
   "forwarderNoAccountId": {
-    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "message": "Nije moguće dobiti $SERVICENAME$ maskirani ID računa e-pošte.",
     "description": "Displayed when the forwarding service fails to return an account ID.",
     "placeholders": {
       "servicename": {
@@ -2240,7 +2331,7 @@
     }
   },
   "forwarderNoDomain": {
-    "message": "Invalid $SERVICENAME$ domain.",
+    "message": "Nevažeća $SERVICENAME$ domena.",
     "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
     "placeholders": {
       "servicename": {
@@ -2250,7 +2341,7 @@
     }
   },
   "forwarderNoUrl": {
-    "message": "Invalid $SERVICENAME$ url.",
+    "message": "Nevažeći $SERVICENAME$ URL.",
     "description": "Displayed when the url of the forwarding service wasn't supplied.",
     "placeholders": {
       "servicename": {
@@ -2260,7 +2351,7 @@
     }
   },
   "forwarderUnknownError": {
-    "message": "Unknown $SERVICENAME$ error occurred.",
+    "message": "Nepoznata $SERVICENAME$ greška.",
     "description": "Displayed when the forwarding service failed due to an unknown error.",
     "placeholders": {
       "servicename": {
@@ -2270,7 +2361,7 @@
     }
   },
   "forwarderUnknownForwarder": {
-    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "message": "Nepoznati prosljeditelj: '$SERVICENAME$.",
     "description": "Displayed when the forwarding service is not supported.",
     "placeholders": {
       "servicename": {
@@ -2383,9 +2474,6 @@
   "denyLogIn": {
     "message": "Odbij prijavu"
   },
-  "approveLoginRequests": {
-    "message": "Odobri pokušaje prijave"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Prijava za $EMAIL$ potvrđena na uređaju $DEVICE$",
     "placeholders": {
@@ -2420,9 +2508,6 @@
   "thisRequestIsNoLongerValid": {
     "message": "Ovaj zahtjev više nije valjan."
   },
-  "approveLoginRequestDesc": {
-    "message": "Koristi ovaj uređaj za odobrenje zahtjeva za prijavu na drugim uređajima."
-  },
   "confirmLoginAtemptForMail": {
     "message": "Potvrdi pokušaj prijave za $EMAIL$",
     "placeholders": {
@@ -2436,25 +2521,25 @@
     "message": "Zatražena je prijava"
   },
   "creatingAccountOn": {
-    "message": "Creating account on"
+    "message": "Stvaranje računa na"
   },
   "checkYourEmail": {
-    "message": "Check your email"
+    "message": "Provjeri svoju e-poštu"
   },
   "followTheLinkInTheEmailSentTo": {
-    "message": "Follow the link in the email sent to"
+    "message": "Slijedi vezu u e-pošti poslanoj na"
   },
   "andContinueCreatingYourAccount": {
-    "message": "and continue creating your account."
+    "message": "za nastavak stvaranja tvojeg računa."
   },
   "noEmail": {
-    "message": "No email?"
+    "message": "Nema e-pošte?"
   },
   "goBack": {
-    "message": "Go back"
+    "message": "Nazad"
   },
   "toEditYourEmailAddress": {
-    "message": "to edit your email address."
+    "message": "na uređivanje svoje adrese e-pošte."
   },
   "exposedMasterPassword": {
     "message": "Ukradena glavna lozinka"
@@ -2473,6 +2558,12 @@
   },
   "important": {
     "message": "Važno:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Napravljena je odjava ste jer se tvoj pristupni token nije mogao dešifrirati. Ponovno se prijavi."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Napravljena je odjava ste jer se tvoj token za osvježavanje nije mogao dešifrirati. Ponovno se prijavi."
   },
   "masterPasswordHint": {
     "message": "Glavnu lozinku nije moguće oporaviti ako ju zaboraviš!"
@@ -2653,8 +2744,11 @@
   "submenu": {
     "message": "Podizbornik"
   },
+  "toggleSideNavigation": {
+    "message": "U/Isključi bočnu navigaciju"
+  },
   "skipToContent": {
-    "message": "Skip to content"
+    "message": "Preskoči na sadržaj"
   },
   "typePasskey": {
     "message": "Pristupni ključ"
@@ -2708,14 +2802,17 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Greška pri povezivanju s uslugom Duo. Koristi drugu metodu prijave s dvostrukom autentifikacijom ili kontaktiraj Duo za pomoć."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
-    "message": "Launch Duo and follow the steps to finish logging in."
+    "message": "Pokreni Duo i slijedi korake za dovršetak prijave."
   },
   "duoRequiredByOrgForAccount": {
-    "message": "Duo two-step login is required for your account."
+    "message": "Za tvoj račun je potrebna Duo dvostruka autentifikacija."
   },
   "launchDuo": {
-    "message": "Launch Duo in Browser"
+    "message": "Pokreni Duo u pregledniku"
   },
   "importFormatError": {
     "message": "Podaci nisu ispravno formatirani. Provjeri uvoznu datoteku i pokušaj ponovno."
@@ -2729,8 +2826,8 @@
   "invalidFilePassword": {
     "message": "Nesipravna lozinka datoteke. Unesi lozinku izvozne datoteke."
   },
-  "importDestination": {
-    "message": "Odredište uvoza"
+  "destination": {
+    "message": "Odredište"
   },
   "learnAboutImportOptions": {
     "message": "Više o mogućnostima uvoza"
@@ -2788,6 +2885,9 @@
   "confirmFilePassword": {
     "message": "Potvrdi lozinku datoteke"
   },
+  "exportSuccess": {
+    "message": "Podaci iz trezora su izvezeni"
+  },
   "multifactorAuthenticationCancelled": {
     "message": "Multifaktorska autentifikacija otkazana"
   },
@@ -2798,13 +2898,13 @@
     "message": "Neispravno korisničko ime ili lozinka"
   },
   "incorrectPassword": {
-    "message": "Incorrect password"
+    "message": "Neispravna lozinka"
   },
   "incorrectCode": {
-    "message": "Incorrect code"
+    "message": "Neispravan kôd"
   },
   "incorrectPin": {
-    "message": "Incorrect PIN"
+    "message": "Neispravan PIN"
   },
   "multifactorAuthenticationFailed": {
     "message": "Multifaktorska autentifikacija nije uspjela"
@@ -2828,7 +2928,7 @@
     "message": "Odobri svoj zahtjev za prijavu u svojoj aplikaciji za autentifikaciju ili unesi jednokratni kôd."
   },
   "passcode": {
-    "message": "Passcode"
+    "message": "Jednokratni kôd"
   },
   "lastPassMasterPassword": {
     "message": "LastPass glavna lozinka"
@@ -2862,35 +2962,35 @@
     "message": "Umetni YubiKey pridružen svojem LastPass računu u USB priključak račuanala, a zatim dodirni njegovu tipku."
   },
   "commonImportFormats": {
-    "message": "Common formats",
+    "message": "Uobičajeni oblici",
     "description": "Label indicating the most common import formats"
   },
   "success": {
-    "message": "Success"
+    "message": "Uspješno"
   },
   "troubleshooting": {
-    "message": "Troubleshooting"
+    "message": "Rješavanje problema"
   },
   "disableHardwareAccelerationRestart": {
-    "message": "Disable hardware acceleration and restart"
+    "message": "Isključi hardversko ubrzanje i ponovno pokreni"
   },
   "enableHardwareAccelerationRestart": {
-    "message": "Enable hardware acceleration and restart"
+    "message": "Uključi hardversko ubrzanje i ponovno pokreni"
   },
   "removePasskey": {
-    "message": "Remove passkey"
+    "message": "Ukloni pristupni ključ"
   },
   "passkeyRemoved": {
-    "message": "Passkey removed"
+    "message": "Pristupni ključ uklonjen"
   },
   "errorAssigningTargetCollection": {
-    "message": "Error assigning target collection."
+    "message": "Greška pri dodjeljivanju ciljne zbirke."
   },
   "errorAssigningTargetFolder": {
-    "message": "Error assigning target folder."
+    "message": "Greška pri dodjeljivanju ciljne mape."
   },
   "viewItemsIn": {
-    "message": "View items in $NAME$",
+    "message": "Pogledaj stavke u $NAME$",
     "description": "Button to view the contents of a folder or collection",
     "placeholders": {
       "name": {
@@ -2900,7 +3000,7 @@
     }
   },
   "backTo": {
-    "message": "Back to $NAME$",
+    "message": "Natrag na $NAME$",
     "description": "Navigate back to a previous folder or collection",
     "placeholders": {
       "name": {
@@ -2910,11 +3010,11 @@
     }
   },
   "back": {
-    "message": "Back",
+    "message": "Natrag",
     "description": "Button text to navigate back"
   },
   "removeItem": {
-    "message": "Remove $NAME$",
+    "message": "Ukloni $NAME$",
     "description": "Remove a selected option, such as a folder or collection",
     "placeholders": {
       "name": {
@@ -2922,5 +3022,8 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Podaci"
   }
 }

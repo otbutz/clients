@@ -888,7 +888,7 @@ export class CryptoService implements CryptoServiceAbstraction {
     return this.encryptService.decryptToBytes(encBuffer, key);
   }
 
-  userKey$(userId: UserId) {
+  userKey$(userId: UserId): Observable<UserKey> {
     return this.stateProvider.getUser(userId, USER_KEY).state$;
   }
 
@@ -927,6 +927,10 @@ export class CryptoService implements CryptoServiceAbstraction {
 
   userPrivateKey$(userId: UserId): Observable<UserPrivateKey> {
     return this.userPrivateKeyHelper$(userId, false).pipe(map((keys) => keys?.userPrivateKey));
+  }
+
+  userPrivateKeyWithLegacySupport$(userId: UserId): Observable<UserPrivateKey> {
+    return this.userPrivateKeyHelper$(userId, true).pipe(map((keys) => keys?.userPrivateKey));
   }
 
   private userPrivateKeyHelper$(userId: UserId, legacySupport: boolean) {
@@ -1009,8 +1013,8 @@ export class CryptoService implements CryptoServiceAbstraction {
     );
   }
 
-  orgKeys$(userId: UserId) {
-    return this.cipherDecryptionKeys$(userId).pipe(map((keys) => keys?.orgKeys));
+  orgKeys$(userId: UserId): Observable<Record<OrganizationId, OrgKey> | null> {
+    return this.cipherDecryptionKeys$(userId, true).pipe(map((keys) => keys?.orgKeys));
   }
 
   cipherDecryptionKeys$(

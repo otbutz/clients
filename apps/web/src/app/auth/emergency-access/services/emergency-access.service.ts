@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 
+import { UserKeyRotationDataProvider } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyData } from "@bitwarden/common/admin-console/models/data/policy.data";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
@@ -8,6 +9,9 @@ import {
   KdfConfig,
   PBKDF2KdfConfig,
 } from "@bitwarden/common/auth/models/domain/kdf-config";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { BulkEncryptService } from "@bitwarden/common/platform/abstractions/bulk-encrypt.service";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -15,6 +19,7 @@ import { KdfType } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncryptedString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { Cipher } from "@bitwarden/common/vault/models/domain/cipher";
@@ -35,14 +40,18 @@ import {
 import { EmergencyAccessApiService } from "./emergency-access-api.service";
 
 @Injectable()
-export class EmergencyAccessService {
+export class EmergencyAccessService
+  implements UserKeyRotationDataProvider<EmergencyAccessWithIdRequest>
+{
   constructor(
     private emergencyAccessApiService: EmergencyAccessApiService,
     private apiService: ApiService,
     private cryptoService: CryptoService,
     private encryptService: EncryptService,
+    private bulkEncryptService: BulkEncryptService,
     private cipherService: CipherService,
     private logService: LogService,
+    private configService: ConfigService,
   ) {}
 
   /**
@@ -221,10 +230,18 @@ export class EmergencyAccessService {
     );
     const grantorUserKey = new SymmetricCryptoKey(grantorKeyBuffer) as UserKey;
 
-    const ciphers = await this.encryptService.decryptItems(
-      response.ciphers.map((c) => new Cipher(c)),
-      grantorUserKey,
-    );
+    let ciphers: CipherView[] = [];
+    if (await this.configService.getFeatureFlag(FeatureFlag.PM4154_BulkEncryptionService)) {
+      ciphers = await this.bulkEncryptService.decryptItems(
+        response.ciphers.map((c) => new Cipher(c)),
+        grantorUserKey,
+      );
+    } else {
+      ciphers = await this.encryptService.decryptItems(
+        response.ciphers.map((c) => new Cipher(c)),
+        grantorUserKey,
+      );
+    }
     return ciphers.sort(this.cipherService.getLocaleSortingFunction());
   }
 
@@ -286,9 +303,21 @@ export class EmergencyAccessService {
   /**
    * Returns existing emergency access keys re-encrypted with new user key.
    * Intended for grantor.
+   * @param originalUserKey the original user key
    * @param newUserKey the new user key
+   * @param userId the user id
+   * @throws Error if newUserKey is nullish
+   * @returns an array of re-encrypted emergency access requests or an empty array if there are no requests
    */
-  async getRotatedKeys(newUserKey: UserKey): Promise<EmergencyAccessWithIdRequest[]> {
+  async getRotatedData(
+    originalUserKey: UserKey,
+    newUserKey: UserKey,
+    userId: UserId,
+  ): Promise<EmergencyAccessWithIdRequest[]> {
+    if (newUserKey == null) {
+      throw new Error("New user key is required for rotation.");
+    }
+
     const requests: EmergencyAccessWithIdRequest[] = [];
     const existingEmergencyAccess =
       await this.emergencyAccessApiService.getEmergencyAccessTrusted();

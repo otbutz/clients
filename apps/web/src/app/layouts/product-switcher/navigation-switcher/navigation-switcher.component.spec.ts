@@ -13,6 +13,20 @@ import { ProductSwitcherItem, ProductSwitcherService } from "../shared/product-s
 
 import { NavigationProductSwitcherComponent } from "./navigation-switcher.component";
 
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: jest.fn().mockImplementation((query) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: jest.fn(), // deprecated
+    removeListener: jest.fn(), // deprecated
+    addEventListener: jest.fn(),
+    removeEventListener: jest.fn(),
+    dispatchEvent: jest.fn(),
+  })),
+});
+
 describe("NavigationProductSwitcherComponent", () => {
   let fixture: ComponentFixture<NavigationProductSwitcherComponent>;
   let productSwitcherService: MockProxy<ProductSwitcherService>;
@@ -66,7 +80,10 @@ describe("NavigationProductSwitcherComponent", () => {
             isActive: false,
             name: "Other Product",
             icon: "bwi-lock",
-            marketingRoute: "https://www.example.com/",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
           },
         ],
       });
@@ -86,7 +103,10 @@ describe("NavigationProductSwitcherComponent", () => {
             isActive: false,
             name: "Other Product",
             icon: "bwi-lock",
-            marketingRoute: "https://www.example.com/",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
             otherProductOverrides: { name: "Alternate name" },
           },
         ],
@@ -103,7 +123,10 @@ describe("NavigationProductSwitcherComponent", () => {
             isActive: false,
             name: "Other Product",
             icon: "bwi-lock",
-            marketingRoute: "https://www.example.com/",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
             otherProductOverrides: { name: "Alternate name", supportingText: "Supporting Text" },
           },
         ],
@@ -120,9 +143,27 @@ describe("NavigationProductSwitcherComponent", () => {
       mockProducts$.next({
         bento: [],
         other: [
-          { name: "AA Product", icon: "bwi-lock", marketingRoute: "https://www.example.com/" },
-          { name: "Test Product", icon: "bwi-lock", marketingRoute: "https://www.example.com/" },
-          { name: "Organizations", icon: "bwi-lock", marketingRoute: "https://www.example.com/" },
+          {
+            name: "AA Product",
+            icon: "bwi-lock",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
+          },
+          {
+            name: "Test Product",
+            icon: "bwi-lock",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
+          },
+          {
+            name: "Organizations",
+            icon: "bwi-lock",
+            marketingRoute: { route: "https://www.example.com/", external: true },
+          },
         ],
       });
 
@@ -143,7 +184,10 @@ describe("NavigationProductSwitcherComponent", () => {
           {
             name: "Organizations",
             icon: "bwi-lock",
-            marketingRoute: "https://www.example.com/",
+            marketingRoute: {
+              route: "https://www.example.com/",
+              external: true,
+            },
             isActive: true,
           },
         ],

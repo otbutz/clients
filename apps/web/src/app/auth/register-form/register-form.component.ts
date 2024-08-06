@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -17,8 +17,8 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { AcceptOrganizationInviteService } from "../organization-invite/accept-organization.service";
 
@@ -26,7 +26,7 @@ import { AcceptOrganizationInviteService } from "../organization-invite/accept-o
   selector: "app-register-form",
   templateUrl: "./register-form.component.html",
 })
-export class RegisterFormComponent extends BaseRegisterComponent {
+export class RegisterFormComponent extends BaseRegisterComponent implements OnInit {
   @Input() queryParamEmail: string;
   @Input() queryParamFromOrgInvite: boolean;
   @Input() enforcedPolicyOptions: MasterPasswordPolicyOptions;

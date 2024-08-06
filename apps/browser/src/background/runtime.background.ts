@@ -2,7 +2,7 @@ import { firstValueFrom, map, mergeMap } from "rxjs";
 
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
+import { AutofillOverlayVisibility, ExtensionCommand } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
@@ -20,11 +20,11 @@ import {
   openTwoFactorAuthPopout,
 } from "../auth/popup/utils/auth-popout-window";
 import { LockedVaultPendingNotificationsData } from "../autofill/background/abstractions/notification.background";
+import { Fido2Background } from "../autofill/fido2/background/abstractions/fido2.background";
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import { BrowserPlatformUtilsService } from "../platform/services/platform-utils/browser-platform-utils.service";
-import { Fido2Background } from "../vault/fido2/background/abstractions/fido2.background";
 
 import MainBackground from "./main.background";
 
@@ -69,6 +69,7 @@ export default class RuntimeBackground {
       const messagesWithResponse = [
         "biometricUnlock",
         "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
+        "getInlineMenuFieldQualificationFeatureFlag",
       ];
 
       if (messagesWithResponse.includes(msg.command)) {
@@ -116,7 +117,7 @@ export default class RuntimeBackground {
       case "collectPageDetailsResponse":
         switch (msg.sender) {
           case "autofiller":
-          case "autofill_cmd": {
+          case ExtensionCommand.AutofillCommand: {
             const activeUserId = await firstValueFrom(
               this.accountService.activeAccount$.pipe(map((a) => a?.id)),
             );
@@ -129,14 +130,14 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              msg.sender === "autofill_cmd",
+              msg.sender === ExtensionCommand.AutofillCommand,
             );
             if (totpCode != null) {
               this.platformUtilsService.copyToClipboard(totpCode);
             }
             break;
           }
-          case "autofill_card": {
+          case ExtensionCommand.AutofillCard: {
             await this.autofillService.doAutoFillActiveTab(
               [
                 {
@@ -145,12 +146,12 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              false,
+              msg.sender === ExtensionCommand.AutofillCard,
               CipherType.Card,
             );
             break;
           }
-          case "autofill_identity": {
+          case ExtensionCommand.AutofillIdentity: {
             await this.autofillService.doAutoFillActiveTab(
               [
                 {
@@ -159,7 +160,7 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              false,
+              msg.sender === ExtensionCommand.AutofillIdentity,
               CipherType.Identity,
             );
             break;
@@ -186,6 +187,9 @@ export default class RuntimeBackground {
           FeatureFlag.UseTreeWalkerApiForPageDetailsCollection,
         );
       }
+      case "getInlineMenuFieldQualificationFeatureFlag": {
+        return await this.configService.getFeatureFlag(FeatureFlag.InlineMenuFieldQualification);
+      }
     }
   }
 
@@ -196,6 +200,7 @@ export default class RuntimeBackground {
         let item: LockedVaultPendingNotificationsData;
 
         if (msg.command === "loggedIn") {
+          await this.main.initOverlayAndTabsBackground();
           await this.sendBwInstalledMessageToVault();
           await this.autofillService.reloadAutofillScripts();
         }
@@ -229,6 +234,9 @@ export default class RuntimeBackground {
       case "addToLockedVaultPendingNotifications":
         this.lockedVaultPendingNotifications.push(msg.data);
         break;
+      case "lockVault":
+        await this.main.vaultTimeoutService.lock(msg.userId);
+        break;
       case "logout":
         await this.main.logout(msg.expired, msg.userId);
         break;
@@ -239,6 +247,7 @@ export default class RuntimeBackground {
             await this.main.refreshMenu();
           }, 2000);
           await this.configService.ensureConfigFetched();
+          await this.main.updateOverlayCiphers();
         }
         break;
       case "openPopup":

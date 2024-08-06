@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Inject,
@@ -43,11 +44,16 @@ import {
   BitSubmitDirective,
   ButtonModule,
   CalloutModule,
+  CardComponent,
+  ContainerComponent,
   DialogService,
   FormFieldModule,
   IconButtonModule,
   RadioButtonModule,
+  SectionComponent,
+  SectionHeaderComponent,
   SelectModule,
+  ToastService,
 } from "@bitwarden/components";
 
 import { ImportOption, ImportResult, ImportType } from "../models";
@@ -103,10 +109,14 @@ const safeProviders: SafeProvider[] = [
     ReactiveFormsModule,
     ImportLastPassComponent,
     RadioButtonModule,
+    CardComponent,
+    ContainerComponent,
+    SectionHeaderComponent,
+    SectionComponent,
   ],
   providers: safeProviders,
 })
-export class ImportComponent implements OnInit, OnDestroy {
+export class ImportComponent implements OnInit, OnDestroy, AfterViewInit {
   featuredImportOptions: ImportOption[];
   importOptions: ImportOption[];
   format: ImportType = null;
@@ -191,6 +201,7 @@ export class ImportComponent implements OnInit, OnDestroy {
     @Inject(ImportCollectionServiceAbstraction)
     @Optional()
     protected importCollectionService: ImportCollectionServiceAbstraction,
+    protected toastService: ToastService,
   ) {}
 
   protected get importBlockedByPolicy(): boolean {
@@ -256,17 +267,14 @@ export class ImportComponent implements OnInit, OnDestroy {
         if (!this._importBlockedByPolicy) {
           this.formGroup.controls.targetSelector.enable();
         }
-        const flexCollectionEnabled =
-          organizations.find((x) => x.id == this.organizationId)?.flexibleCollections ?? false;
+
         if (value) {
           this.collections$ = Utils.asyncToObservable(() =>
             this.collectionService
               .getAllDecrypted()
               .then((decryptedCollections) =>
                 decryptedCollections
-                  .filter(
-                    (c2) => c2.organizationId === value && (!flexCollectionEnabled || c2.manage),
-                  )
+                  .filter((c2) => c2.organizationId === value && c2.manage)
                   .sort(Utils.getSortFunction(this.i18nService, "name")),
               ),
           );
@@ -339,22 +347,22 @@ export class ImportComponent implements OnInit, OnDestroy {
     );
 
     if (importer === null) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("selectFormat"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: this.i18nService.t("selectFormat"),
+      });
       return;
     }
 
     const importContents = await this.setImportContents();
 
     if (importContents == null || importContents === "") {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("selectFile"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: this.i18nService.t("errorOccurred"),
+        message: this.i18nService.t("selectFile"),
+      });
       return;
     }
 
@@ -505,11 +513,11 @@ export class ImportComponent implements OnInit, OnDestroy {
     }
 
     if (this.importBlockedByPolicy && this.organizationId == null) {
-      this.platformUtilsService.showToast(
-        "error",
-        null,
-        this.i18nService.t("personalOwnershipPolicyInEffectImports"),
-      );
+      this.toastService.showToast({
+        variant: "error",
+        title: null,
+        message: this.i18nService.t("personalOwnershipPolicyInEffectImports"),
+      });
       return false;
     }
 
@@ -520,14 +528,6 @@ export class ImportComponent implements OnInit, OnDestroy {
     const fileEl = document.getElementById("import_input_file") as HTMLInputElement;
     const files = fileEl.files;
     let fileContents = this.formGroup.controls.fileContents.value;
-    if ((files == null || files.length === 0) && (fileContents == null || fileContents === "")) {
-      this.platformUtilsService.showToast(
-        "error",
-        this.i18nService.t("errorOccurred"),
-        this.i18nService.t("selectFile"),
-      );
-      return;
-    }
 
     if (files != null && files.length > 0) {
       try {

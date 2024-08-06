@@ -10,7 +10,7 @@ import { ListResponse } from "./models/response/list.response";
 import { MessageResponse } from "./models/response/message.response";
 import { StringResponse } from "./models/response/string.response";
 import { TemplateResponse } from "./models/response/template.response";
-import { ServiceContainer } from "./service-container";
+import { ServiceContainer } from "./service-container/service-container";
 import { CliUtils } from "./utils";
 
 const writeLn = CliUtils.writeLn;
@@ -140,16 +140,14 @@ export abstract class BaseProgram {
           this.serviceContainer.accountService,
           this.serviceContainer.masterPasswordService,
           this.serviceContainer.cryptoService,
-          this.serviceContainer.stateService,
+          this.serviceContainer.userVerificationService,
           this.serviceContainer.cryptoFunctionService,
-          this.serviceContainer.apiService,
           this.serviceContainer.logService,
           this.serviceContainer.keyConnectorService,
           this.serviceContainer.environmentService,
           this.serviceContainer.syncService,
           this.serviceContainer.organizationApiService,
           this.serviceContainer.logout,
-          this.serviceContainer.kdfConfigService,
         );
         const response = await command.run(null, null);
         if (!response.success) {

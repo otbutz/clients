@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from "@angular/core";
 import { firstValueFrom, Subject } from "rxjs";
 
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -20,7 +20,10 @@ import { CollectionFilter } from "../../individual-vault/vault-filter/shared/mod
   selector: "app-organization-vault-filter",
   templateUrl: "../../individual-vault/vault-filter/components/vault-filter.component.html",
 })
-export class VaultFilterComponent extends BaseVaultFilterComponent implements OnInit, OnDestroy {
+export class VaultFilterComponent
+  extends BaseVaultFilterComponent
+  implements OnInit, OnDestroy, OnChanges
+{
   @Input() set organization(value: Organization) {
     if (value && value !== this._organization) {
       this._organization = value;
@@ -103,11 +106,7 @@ export class VaultFilterComponent extends BaseVaultFilterComponent implements On
   async buildAllFilters(): Promise<VaultFilterList> {
     const builderFilter = {} as VaultFilterList;
     builderFilter.typeFilter = await this.addTypeFilter(["favorites"]);
-    if (this._organization?.flexibleCollections) {
-      builderFilter.collectionFilter = await this.addCollectionFilter();
-    } else {
-      builderFilter.collectionFilter = await super.addCollectionFilter();
-    }
+    builderFilter.collectionFilter = await this.addCollectionFilter();
     builderFilter.trashFilter = await this.addTrashFilter();
     return builderFilter;
   }

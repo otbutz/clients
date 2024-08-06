@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { combineLatest, combineLatestWith, filter, Observable, startWith, switchMap } from "rxjs";
 
@@ -19,6 +19,10 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../../secrets/dialog/secret-dialog.component";
+import {
+  SecretViewDialogComponent,
+  SecretViewDialogParams,
+} from "../../secrets/dialog/secret-view-dialog.component";
 import { SecretService } from "../../secrets/secret.service";
 import { SecretsListComponent } from "../../shared/secrets-list.component";
 import { ProjectService } from "../project.service";
@@ -27,7 +31,7 @@ import { ProjectService } from "../project.service";
   selector: "sm-project-secrets",
   templateUrl: "./project-secrets.component.html",
 })
-export class ProjectSecretsComponent {
+export class ProjectSecretsComponent implements OnInit {
   secrets$: Observable<SecretListView[]>;
 
   private organizationId: string;
@@ -84,6 +88,15 @@ export class ProjectSecretsComponent {
         operation: OperationType.Edit,
         secretId: secretId,
         organizationEnabled: this.organizationEnabled,
+      },
+    });
+  }
+
+  openViewSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretViewDialogParams>(SecretViewDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        secretId: secretId,
       },
     });
   }
