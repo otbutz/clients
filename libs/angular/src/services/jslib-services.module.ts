@@ -6,6 +6,8 @@ import {
   DefaultSetPasswordJitService,
   RegistrationFinishService as RegistrationFinishServiceAbstraction,
   DefaultRegistrationFinishService,
+  AnonLayoutWrapperDataService,
+  DefaultAnonLayoutWrapperDataService,
 } from "@bitwarden/auth/angular";
 import {
   AuthRequestServiceAbstraction,
@@ -267,8 +269,6 @@ import {
   IndividualVaultExportServiceAbstraction,
 } from "@bitwarden/vault-export-core";
 
-import { AuthGuard } from "../auth/guards/auth.guard";
-import { UnauthGuard } from "../auth/guards/unauth.guard";
 import { FormValidationErrorsService as FormValidationErrorsServiceAbstraction } from "../platform/abstractions/form-validation-errors.service";
 import { FormValidationErrorsService } from "../platform/services/form-validation-errors.service";
 import { LoggingErrorHandler } from "../platform/services/logging-error-handler";
@@ -304,8 +304,6 @@ import { ModalService } from "./modal.service";
  * If you need help please ask for it, do NOT change the type of this array.
  */
 const safeProviders: SafeProvider[] = [
-  safeProvider(AuthGuard),
-  safeProvider(UnauthGuard),
   safeProvider(ModalService),
   safeProvider(PasswordRepromptService),
   safeProvider({ provide: WINDOW, useValue: window }),
@@ -687,6 +685,7 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       TokenServiceAbstraction,
       AuthServiceAbstraction,
+      StateProvider,
     ],
   }),
   safeProvider({
@@ -1121,7 +1120,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: GlobalStateProvider,
     useClass: DefaultGlobalStateProvider,
-    deps: [StorageServiceProvider],
+    deps: [StorageServiceProvider, LogService],
   }),
   safeProvider({
     provide: ActiveUserStateProvider,
@@ -1131,7 +1130,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: SingleUserStateProvider,
     useClass: DefaultSingleUserStateProvider,
-    deps: [StorageServiceProvider, StateEventRegistrarService],
+    deps: [StorageServiceProvider, StateEventRegistrarService, LogService],
   }),
   safeProvider({
     provide: DerivedStateProvider,
@@ -1198,7 +1197,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: BillingApiServiceAbstraction,
     useClass: BillingApiService,
-    deps: [ApiServiceAbstraction],
+    deps: [ApiServiceAbstraction, LogService, ToastService],
   }),
   safeProvider({
     provide: PaymentMethodWarningsServiceAbstraction,
@@ -1285,6 +1284,11 @@ const safeProviders: SafeProvider[] = [
     provide: RegisterRouteService,
     useClass: RegisterRouteService,
     deps: [ConfigService],
+  }),
+  safeProvider({
+    provide: AnonLayoutWrapperDataService,
+    useClass: DefaultAnonLayoutWrapperDataService,
+    deps: [],
   }),
   safeProvider({
     provide: RegistrationFinishServiceAbstraction,

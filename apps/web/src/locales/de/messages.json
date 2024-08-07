@@ -48,6 +48,52 @@
   "authenticatorKey": {
     "message": "Authenticator-Schlüssel"
   },
+  "autofillOptions": {
+    "message": "Auto-fill options"
+  },
+  "websiteUri": {
+    "message": "Website (URI)"
+  },
+  "websiteAdded": {
+    "message": "Website added"
+  },
+  "addWebsite": {
+    "message": "Add website"
+  },
+  "deleteWebsite": {
+    "message": "Delete website"
+  },
+  "defaultLabel": {
+    "message": "Default ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Show match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Hide match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Autofill on page load?"
+  },
   "number": {
     "message": "Nummer"
   },
@@ -570,6 +616,24 @@
       }
     }
   },
+  "itemsMovedToOrg": {
+    "message": "Einträge verschoben nach $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "Eintrag verschoben nach $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
   "deleteItem": {
     "message": "Eintrag löschen"
   },
@@ -628,16 +692,16 @@
     "message": "Ihre Anmeldungsitzung ist abgelaufen."
   },
   "restartRegistration": {
-    "message": "Restart registration"
+    "message": "Registrierung neu starten"
   },
   "expiredLink": {
-    "message": "Expired link"
+    "message": "Abgelaufener Link"
   },
   "pleaseRestartRegistrationOrTryLoggingIn": {
-    "message": "Please restart registration or try logging in."
+    "message": "Bitte starte die Registrierung erneut oder versuche dich anzumelden."
   },
   "youMayAlreadyHaveAnAccount": {
-    "message": "You may already have an account"
+    "message": "Du hast möglicherweise bereits ein Konto"
   },
   "logOutConfirmation": {
     "message": "Bist du sicher, dass du dich abmelden möchtest?"
@@ -1488,8 +1552,8 @@
   "importEncKeyError": {
     "message": "Fehler beim Entschlüsseln der exportierten Datei. Dein Verschlüsselungsschlüssel stimmt nicht mit dem beim Export verwendeten Verschlüsselungsschlüssel überein."
   },
-  "importDestination": {
-    "message": "Import-Ziel"
+  "destination": {
+    "message": "Ziel"
   },
   "learnAboutImportOptions": {
     "message": "Erfahre mehr über deine Importoptionen"
@@ -2781,12 +2845,6 @@
   "accessControl": {
     "message": "Zugriffskontrolle"
   },
-  "groupAccessAllItems": {
-    "message": "Diese Gruppe kann auf alle Einträge zugreifen und diese ändern."
-  },
-  "groupAccessSelectedCollections": {
-    "message": "Diese Gruppe kann nur auf die ausgewählten Sammlungen zugreifen."
-  },
   "readOnly": {
     "message": "Schreibgeschützt"
   },
@@ -2831,12 +2889,6 @@
   },
   "userUsingTwoStep": {
     "message": "Dieser Benutzer hat sein Konto mit einer Zwei-Faktor-Authentifizierung geschützt."
-  },
-  "userAccessAllItems": {
-    "message": "Der Benutzer kann alle Einträge einsehen und verändern."
-  },
-  "userAccessSelectedCollections": {
-    "message": "Der Benutzer kann nur auf ausgewählte Sammlungen zugreifen."
   },
   "search": {
     "message": "Suche"
@@ -3453,6 +3505,9 @@
   "joinOrganizationDesc": {
     "message": "Du wurdest eingeladen, dem oben genannten Organisation beizutreten. Um die Einladung anzunehmen, musst du ein Bitwarden-Konto erstellen oder dich mit deinem bestehenden Bitwarden-Konto anmelden."
   },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Schließe den Beitritt zu dieser Organisation ab, indem du ein Master-Passwort festlegst."
+  },
   "inviteAccepted": {
     "message": "Einladung angenommen"
   },
@@ -3811,7 +3866,7 @@
     "message": "Sie haben keine Auswahl getroffen."
   },
   "receiveMarketingEmailsV2": {
-    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
+    "message": "Erhalte Ratschläge, Ankündigungen und Marktforschungsumfragen von Bitwarden in deinem Posteingang."
   },
   "unsubscribe": {
     "message": "Deabonnieren"
@@ -4377,6 +4432,9 @@
     "message": "Send-Link",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "copyLink": {
+    "message": "Link kopieren"
+  },
   "copySendLink": {
     "message": "Send-Link kopieren",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -4792,6 +4850,75 @@
     "message": "oder",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
   },
+  "developmentDevOpsAndITTeamsChooseBWSecret": {
+    "message": "Entwickler, DevOps und IT-Teams wählen den Bitwarden Secrets Manager aus, um ihre Infrastruktur- und Maschinengeheimnisse sicher zu verwalten und bereitzustellen."
+  },
+  "centralizeSecretsManagement": {
+    "message": "Geheimnisverwaltung zentralisieren."
+  },
+  "centralizeSecretsManagementDescription": {
+    "message": "Speicher und verwalte Geheimnisse sicher an einem Ort, um die unkontrollierte Ausbreitung von Geheimnissen in deinem Unternehmen zu verhindern."
+  },
+  "preventSecretLeaks": {
+    "message": "Verhinderung von Geheimdatenlecks."
+  },
+  "preventSecretLeaksDescription": {
+    "message": "Schütze Geheimnisse mit Ende-zu-Ende-Verschlüsselung. Keine fest kodierten Geheimnisse mehr oder Teilen über .env-Dateien."
+  },
+  "enhanceDeveloperProductivity": {
+    "message": "Steigerung der Produktivität der Entwickler."
+  },
+  "enhanceDeveloperProductivityDescription": {
+    "message": "Programmgesteuertes Abrufen und Bereitstellen von Geheimnissen zur Laufzeit, damit sich die Entwickler auf das Wesentliche konzentrieren können, nämlich die Verbesserung der Codequalität."
+  },
+  "strengthenBusinessSecurity": {
+    "message": "Stärkung der Unternehmenssicherheit."
+  },
+  "strengthenBusinessSecurityDescription": {
+    "message": "Behalte mit SSO-Integrationen, Ereignisprotokollen und Zugriffsrotation eine strenge Kontrolle über den maschinellen und menschlichen Zugriff auf Geheimnisse."
+  },
+  "tryItNow": {
+    "message": "Jetzt ausprobieren"
+  },
+  "sendRequest": {
+    "message": "Anfrage absenden"
+  },
+  "addANote": {
+    "message": "Eine Notiz hinzufügen"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager"
+  },
+  "moreProductsFromBitwarden": {
+    "message": "Mehr Produkte von Bitwarden"
+  },
+  "requestAccessToSecretsManager": {
+    "message": "Zugriff auf Secrets Manager anfragen"
+  },
+  "youNeedApprovalFromYourAdminToTrySecretsManager": {
+    "message": "Du benötigst die Genehmigung deines Administrators, um den Secrets Manager auszuprobieren."
+  },
+  "smAccessRequestEmailSent": {
+    "message": "E-Mail mit Zugriffsanfrage für Secrets Manager an Administratoren gesendet."
+  },
+  "requestAccessSMDefaultEmailContent": {
+    "message": "Hi,\n\nich möchte ein Abonnement des Bitwarden Secrets Manager für unser Team beantragen. Deine Unterstützung würde eine Menge bedeuten!\n\nDer Bitwarden Secrets Manager ist eine Ende-zu-Ende-verschlüsselte Verwaltungslösung für das sichere Aufbewahren, Teilen und Bereitstellen von Maschinen-Zugangsdaten wie API-Schlüssel, Datenbank-Passwörter und Authentifizierungszertifikate.\n\nSecrets Manager hilft uns bei der:\n\n- Verbesserung der Sicherheit\n- Rationalisierung von Abläufen\n- Vermeidung kostspieliger Geheimdatenlecks\n\nUm eine kostenlose Testversion für unser Team anzufordern, wende dich bitte an Bitwarden.\n\nVielen Dank für deine Hilfe!"
+  },
+  "giveMembersAccess": {
+    "message": "Mitgliedern Zugriff geben:"
+  },
+  "viewAndSelectTheMembers": {
+    "message": "view and select the members you want to give access to Secrets Manager."
+  },
+  "openYourOrganizations": {
+    "message": "Open your organization's"
+  },
+  "usingTheMenuSelect": {
+    "message": "Using the menu, select"
+  },
+  "toGrantAccessToSelectedMembers": {
+    "message": "to grant access to selected members."
+  },
   "sendVaultCardTryItNow": {
     "message": "probiere es jetzt aus",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, or **try it now**.'"
@@ -5194,6 +5321,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Dein Master-Passwort entspricht nicht einer oder mehreren Richtlinien deiner Organisation. Um auf den Tresor zugreifen zu können, musst du dein Master-Passwort jetzt aktualisieren. Wenn du fortfährst, wirst du von deiner aktuellen Sitzung abgemeldet und musst dich erneut anmelden. Aktive Sitzungen auf anderen Geräten können noch bis zu einer Stunde lang aktiv bleiben."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
   },
   "maximumVaultTimeout": {
     "message": "Tresor-Timeout"
@@ -7547,6 +7677,9 @@
   "requestedDeviceApproval": {
     "message": "Geräte-Genehmigung anfragen."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Starte deine 7-tägige kostenlose Testversion von Bitwarden für $ORG$",
     "placeholders": {
@@ -7915,7 +8048,10 @@
   "assignToTheseCollections": {
     "message": "Diesen Sammlungen zuweisen"
   },
-  "bulkCollectionAssignmentDialogDescription": {
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "Nur Organisationsmitglieder mit Zugriff auf diese Sammlungen können die Einträge sehen."
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
     "message": "Nur Organisationsmitglieder mit Zugriff auf diese Sammlungen können die Einträge sehen."
   },
   "selectCollectionsToAssign": {
@@ -7939,6 +8075,9 @@
         "example": "3"
       }
     }
+  },
+  "addField": {
+    "message": "Add field"
   },
   "items": {
     "message": "Einträge"
@@ -8330,6 +8469,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Rechnungen über das Anbieter-Portal verwalten"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Start your 7-Day free trial of Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Enterprise"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Enter your Teams organization information"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Enter your Families organization information"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Enter your Enterprise organization information"
+  },
   "viewItemsIn": {
     "message": "Einträge in $NAME$ anzeigen",
     "description": "Button to view the contents of a folder or collection",
@@ -8570,21 +8754,33 @@
   "selectFolder": {
     "message": "Ordner auswählen"
   },
-  "personalItemsTransferWarning": {
+  "personalItemTransferWarningSingular": {
+    "message": "1 Eintrag wird dauerhaft an die ausgewählte Organisation übertragen. Du wirst diesen Eintrag nicht mehr besitzen."
+  },
+  "personalItemsTransferWarningPlural": {
     "message": "$PERSONAL_ITEMS_COUNT$ werden dauerhaft an die ausgewählte Organisation übertragen. Du wirst diese Einträge nicht mehr besitzen.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       }
     }
   },
-  "personalItemsWithOrgTransferWarning": {
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1 Eintrag wird dauerhaft an $ORG$ übertragen. Du wirst diesen Eintrag nicht mehr besitzen.",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
     "message": "$PERSONAL_ITEMS_COUNT$ werden dauerhaft an $ORG$ übertragen. Du wirst diese Einträge nicht mehr besitzen.",
     "placeholders": {
       "personal_items_count": {
         "content": "$1",
-        "example": "2 items"
+        "example": "2"
       },
       "org": {
         "content": "$2",
@@ -8592,7 +8788,97 @@
       }
     }
   },
+  "data": {
+    "message": "Daten"
+  },
   "purchasedSeatsRemoved": {
     "message": "erworbene Benutzerplätze entfernt"
+  },
+  "includesXMembers": {
+    "message": "for $COUNT$ member",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Optional on-premises hosting"
+  },
+  "upgradeFreeOrganization": {
+    "message": "Upgrade your $NAME$ organization ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO-Authentifizierung"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Upgrade your plan to invite more members and gain access to additional Bitwarden features"
+  },
+  "upgradeDiscount": {
+    "message": "Save $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Advanced capabilities for larger businesses"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Businesses looking for powerful security"
+  },
+  "teamsInviteMessage": {
+    "message": "Invite unlimited members"
+  },
+  "accessToCreateGroups": {
+    "message": "Access to create groups"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Sync groups and users from a directory"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Share with families and friends"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Access to Premium features"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB additional storage"
   }
 }
