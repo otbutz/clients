@@ -558,7 +558,6 @@ export default class MainBackground {
     );
 
     this.popupViewCacheBackgroundService = new PopupViewCacheBackgroundService(
-      messageListener,
       this.globalStateProvider,
     );
 
