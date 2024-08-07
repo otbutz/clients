@@ -12,13 +12,14 @@ import { canAccessFeature } from "@bitwarden/angular/platform/guard/feature-flag
 import {
   AnonLayoutWrapperComponent,
   AnonLayoutWrapperData,
+  PasswordHintComponent,
   RegistrationFinishComponent,
   RegistrationStartComponent,
   RegistrationStartSecondaryComponent,
   RegistrationStartSecondaryComponentData,
   SetPasswordJitComponent,
-  LockIcon,
   RegistrationLinkExpiredComponent,
+  LockIcon,
 } from "@bitwarden/auth/angular";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
@@ -378,13 +379,14 @@ const routes: Routes = [
         path: "hint",
         canActivate: [unauthGuardFn()],
         data: {
-          pageTitle: "passwordHint",
+          pageTitle: "requestPasswordHint",
+          pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
           titleId: "passwordHint",
         } satisfies DataProperties & AnonLayoutWrapperData,
         children: [
           {
             path: "",
-            component: HintComponent,
+            component: PasswordHintComponent,
           },
           {
             path: "",
@@ -393,6 +395,25 @@ const routes: Routes = [
           },
         ],
       },
+      // {
+      //   path: "hint",
+      //   canActivate: [unauthGuardFn()],
+      //   data: {
+      //     pageTitle: "passwordHint",
+      //     titleId: "passwordHint",
+      //   } satisfies DataProperties & AnonLayoutWrapperData,
+      //   children: [
+      //     {
+      //       path: "",
+      //       component: HintComponent,
+      //     },
+      //     {
+      //       path: "",
+      //       component: EnvironmentSelectorComponent,
+      //       outlet: "environment-selector",
+      //     },
+      //   ],
+      // },
       {
         path: "remove-password",
         component: RemovePasswordComponent,

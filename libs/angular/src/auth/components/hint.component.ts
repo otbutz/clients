@@ -38,6 +38,7 @@ export class HintComponent implements OnInit {
       );
       return;
     }
+
     if (this.email.indexOf("@") === -1) {
       this.platformUtilsService.showToast(
         "error",
@@ -50,7 +51,9 @@ export class HintComponent implements OnInit {
     try {
       this.formPromise = this.apiService.postPasswordHint(new PasswordHintRequest(this.email));
       await this.formPromise;
+
       this.platformUtilsService.showToast("success", null, this.i18nService.t("masterPassSent"));
+
       if (this.onSuccessfulSubmit != null) {
         this.onSuccessfulSubmit();
       } else if (this.router != null) {
