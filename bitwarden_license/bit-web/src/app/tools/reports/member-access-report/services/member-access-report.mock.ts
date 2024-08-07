@@ -1,8 +1,8 @@
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
-import { MemberAccessReportModel } from "../model/member-access-report.model";
+import { MemberAccessResponse } from "../response/member-access-report.response";
 
-export const memberAccessReportsMock: MemberAccessReportModel[] = [
+export const memberAccessReportsMock: MemberAccessResponse[] = [
   {
     userName: "Sarah Johnson",
     email: "sjohnson@email.com",
@@ -13,7 +13,7 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
     totalItemCount: 20,
     accessDetails: [
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c1",
         collectionName: new EncString(
           "2.UiXa3L3Ol1G4QnfFfBjMQw==|sbVTj0EiEkhIrDiropn2Cg==|82P78YgmapW4TdN9jQJgMWKv2gGyK1AnGkr+W9/sq+A=",
@@ -25,7 +25,7 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c2",
         collectionName: new EncString("Collection 2"),
         groupName: "",
@@ -35,7 +35,7 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c3",
         collectionName: new EncString("Collection 3"),
         groupName: "",
@@ -98,9 +98,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c4",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 4"),
         itemCount: 5,
         readOnly: false,
@@ -108,9 +108,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c5",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 5"),
         itemCount: 15,
         readOnly: false,
@@ -129,9 +129,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
     totalItemCount: 20,
     accessDetails: [
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c6",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 6"),
         itemCount: 25,
         readOnly: false,
@@ -160,9 +160,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
     totalItemCount: 20,
     accessDetails: [
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c7",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 7"),
         itemCount: 8,
         readOnly: false,
@@ -170,9 +170,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c8",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 8"),
         itemCount: 12,
         readOnly: false,
@@ -180,9 +180,9 @@ export const memberAccessReportsMock: MemberAccessReportModel[] = [
         manage: false,
       },
       {
-        groupId: null,
+        groupId: "",
         collectionId: "c9",
-        groupName: null,
+        groupName: "",
         collectionName: new EncString("Collection 9"),
         itemCount: 16,
         readOnly: false,
