@@ -17,7 +17,7 @@ describe("ImportService", () => {
 
   describe("generateMemberAccessReportView", () => {
     it("should generate member access report view", () => {
-      const result = memberAccessReportService.generateMemberAccessReportView();
+      const result = memberAccessReportService.generateMemberAccessReportView(mockOrganizationId);
 
       expect(result).toEqual([
         {

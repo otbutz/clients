@@ -1,15 +1,27 @@
 import { Injectable } from "@angular/core";
 
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { OrganizationId } from "@bitwarden/common/types/guid";
+import { CollectionAccessSelectionView } from "@bitwarden/web-vault/app/admin-console/organizations/core/views";
+import {
+  getPermissionList,
+  convertToPermission,
+} from "@bitwarden/web-vault/app/admin-console/organizations/shared/components/access-selector";
 
+import { MemberAccessDetails } from "../response/member-access-report.response";
 import { MemberAccessExportItem } from "../view/member-access-export.view";
 import { MemberAccessReportView } from "../view/member-access-report.view";
 
 import { MemberAccessReportApiService } from "./member-access-report-api.service";
 
+
+
 @Injectable({ providedIn: "root" })
 export class MemberAccessReportService {
-  constructor(private reportApiService: MemberAccessReportApiService) {}
+  constructor(
+    private reportApiService: MemberAccessReportApiService,
+    private i18nService: I18nService,
+  ) {}
   /**
    * Transforms user data into a MemberAccessReportView.
    *
@@ -48,7 +60,7 @@ export class MemberAccessReportService {
           accountRecovery: report.accountRecoveryEnabled ? "On" : "Off",
           group: detail.groupName,
           collection: collectionName,
-          collectionPermission: "read only", //TODO update this value
+          collectionPermission: this.getPermissionText(detail),
           totalItems: detail.itemCount.toString(),
         };
       });
@@ -56,5 +68,18 @@ export class MemberAccessReportService {
     });
     const resolvedItems = await Promise.all(exportItems);
     return resolvedItems.flat();
+  }
+
+  private getPermissionText(accessDetails: MemberAccessDetails): string {
+    const permissionList = getPermissionList();
+    const collectionSelectionView = new CollectionAccessSelectionView({
+      id: accessDetails.groupId ?? accessDetails.collectionId,
+      readOnly: accessDetails.readOnly,
+      hidePasswords: accessDetails.hidePasswords,
+      manage: accessDetails.manage,
+    });
+    return this.i18nService.t(
+      permissionList.find((p) => p.perm === convertToPermission(collectionSelectionView))?.labelId,
+    );
   }
 }
