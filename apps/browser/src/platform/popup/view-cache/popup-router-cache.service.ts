@@ -7,7 +7,7 @@ import {
   Router,
   UrlSerializer,
 } from "@angular/router";
-import { filter, firstValueFrom, from, switchMap } from "rxjs";
+import { filter, firstValueFrom, switchMap } from "rxjs";
 
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
@@ -31,9 +31,8 @@ export class PopupRouterCacheService {
   private location = inject(Location);
 
   constructor() {
-    from(this.initPopoutHistory())
+    this.router.events
       .pipe(
-        switchMap(() => this.router.events),
         filter((event) => event instanceof NavigationEnd),
         filter((_event: NavigationEnd) => {
           const state: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
@@ -101,18 +100,6 @@ export class PopupRouterCacheService {
     });
 
     return this.router.navigateByUrl(newState[newState.length - 1]);
-  }
-
-  /** Retrieve history from popout URL search param `routeHistory` */
-  private async initPopoutHistory(): Promise<void> {
-    if (BrowserPopupUtils.inPopout(window)) {
-      const searchParams = new URL(window.location.href).searchParams;
-      const history = JSON.parse(decodeURIComponent(searchParams.get("routeHistory")));
-      searchParams.delete("routeHistory");
-      if (Array.isArray(history)) {
-        await this.setHistory(history);
-      }
-    }
   }
 }
 
