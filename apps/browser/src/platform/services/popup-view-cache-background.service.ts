@@ -1,4 +1,4 @@
-import { switchMap, merge, delay, filter } from "rxjs";
+import { switchMap, merge, delay, filter, map } from "rxjs";
 
 import {
   POPUP_VIEW_MEMORY,
@@ -28,7 +28,8 @@ export class PopupViewCacheBackgroundService {
       // on tab changed, excluding extension tabs
       fromChromeEvent(chrome.tabs.onActivated).pipe(
         switchMap(([tabInfo]) => chrome.tabs.get(tabInfo.tabId)),
-        filter((tab) => !tab.url.startsWith(chrome.extension.getURL(""))),
+        map((tab) => tab.url || tab.pendingUrl),
+        filter((url) => !url.startsWith(chrome.runtime.getURL(""))),
       ),
 
       // on popup closed, with 2 minute delay that is cancelled by re-opening the popup
