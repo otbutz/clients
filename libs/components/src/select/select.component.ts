@@ -50,6 +50,9 @@ export class SelectComponent<T> implements BitFormFieldControl, ControlValueAcce
 
   @ContentChildren(OptionComponent)
   protected set options(value: QueryList<OptionComponent<T>>) {
+    if (value == null || value.length == 0) {
+      return;
+    }
     this.items = value.toArray();
     this.selectedOption = this.findSelectedOption(this.items, this.selectedValue);
   }
@@ -151,6 +154,6 @@ export class SelectComponent<T> implements BitFormFieldControl, ControlValueAcce
   }
 
   private findSelectedOption(items: Option<T>[], value: T): Option<T> | undefined {
-    return items.find((item) => JSON.stringify(item.value) === JSON.stringify(value));
+    return items.find((item) => item.value === value);
   }
 }

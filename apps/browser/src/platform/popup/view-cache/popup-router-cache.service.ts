@@ -7,14 +7,13 @@ import {
   Router,
   UrlSerializer,
 } from "@angular/router";
-import { filter, firstValueFrom, from, switchMap } from "rxjs";
+import { filter, firstValueFrom, switchMap } from "rxjs";
 
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
-import { POPUP_ROUTE_HISTORY_KEY } from "../../services/popup-view-cache-background.service";
-import BrowserPopupUtils from "../browser-popup-utils";
+import { POPUP_ROUTE_HISTORY_KEY } from "../../../platform/services/popup-view-cache-background.service";
 
 /**
  * Preserves route history when opening and closing the popup
@@ -27,13 +26,17 @@ import BrowserPopupUtils from "../browser-popup-utils";
 export class PopupRouterCacheService {
   private router = inject(Router);
   private state = inject(GlobalStateProvider).get(POPUP_ROUTE_HISTORY_KEY);
-  private configService = inject(ConfigService);
   private location = inject(Location);
 
   constructor() {
-    from(this.initPopoutHistory())
+    // init history with existing state
+    void this.getHistory().then((history) =>
+      history.forEach((location) => this.location.go(location)),
+    );
+
+    // update state when route change occurs
+    this.router.events
       .pipe(
-        switchMap(() => this.router.events),
         filter((event) => event instanceof NavigationEnd),
         filter((_event: NavigationEnd) => {
           const state: ActivatedRouteSnapshot = this.router.routerState.snapshot.root;
@@ -69,8 +72,6 @@ export class PopupRouterCacheService {
 
   /**
    * If in browser popup, push new route onto history stack
-   *
-   * @returns a boolean that indicates if the route was successfully saved
    */
   private async push(url: string): Promise<boolean> {
     if (url === (await this.last())) {
@@ -78,42 +79,22 @@ export class PopupRouterCacheService {
     }
 
     await this.state.update((prevState) => (prevState === null ? [url] : prevState.concat(url)));
-    return true;
   }
 
   /**
-   * Navigate back to the prior URL in the history stack
-   *
-   * @returns a boolean that indicates success
+   * Navigate back in history
    */
-  async back(): Promise<boolean> {
-    if (!(await this.configService.getFeatureFlag(FeatureFlag.PersistPopupView))) {
-      this.location.back();
-      return true;
+  async back() {
+    await this.state.update((prevState) => prevState.slice(0, -1));
+
+    const url = this.router.url;
+    this.location.back();
+    if (url !== this.router.url) {
+      return;
     }
 
-    const length = (await this.getHistory())?.length;
-    if (!length) {
-      return false;
-    }
-
-    const newState = await this.state.update((prevState) => {
-      return prevState.slice(0, -1);
-    });
-
-    return this.router.navigateByUrl(newState[newState.length - 1]);
-  }
-
-  /** Retrieve history from popout URL search param `routeHistory` */
-  private async initPopoutHistory(): Promise<void> {
-    if (BrowserPopupUtils.inPopout(window)) {
-      const searchParams = new URL(window.location.href).searchParams;
-      const history = JSON.parse(decodeURIComponent(searchParams.get("routeHistory")));
-      searchParams.delete("routeHistory");
-      if (Array.isArray(history)) {
-        await this.setHistory(history);
-      }
-    }
+    // if no history is present, fallback to vault page
+    await this.router.navigate([""]);
   }
 }
 
