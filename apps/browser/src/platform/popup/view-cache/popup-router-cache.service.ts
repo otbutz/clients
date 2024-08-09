@@ -14,6 +14,7 @@ import { ConfigService } from "@bitwarden/common/platform/abstractions/config/co
 import { GlobalStateProvider } from "@bitwarden/common/platform/state";
 
 import { POPUP_ROUTE_HISTORY_KEY } from "../../../platform/services/popup-view-cache-background.service";
+import BrowserPopupUtils from "../browser-popup-utils";
 
 /**
  * Preserves route history when opening and closing the popup
@@ -74,7 +75,7 @@ export class PopupRouterCacheService {
    * If in browser popup, push new route onto history stack
    */
   private async push(url: string): Promise<boolean> {
-    if (url === (await this.last())) {
+    if (!BrowserPopupUtils.inPopup(window) || url === (await this.last())) {
       return false;
     }
 
