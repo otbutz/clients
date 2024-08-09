@@ -27,10 +27,15 @@ import BrowserPopupUtils from "../browser-popup-utils";
 export class PopupRouterCacheService {
   private router = inject(Router);
   private state = inject(GlobalStateProvider).get(POPUP_ROUTE_HISTORY_KEY);
-  private configService = inject(ConfigService);
   private location = inject(Location);
 
   constructor() {
+    // init history with existing state
+    void this.getHistory().then((history) =>
+      history.forEach((location) => this.location.go(location)),
+    );
+
+    // update state when route change occurs
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
@@ -68,38 +73,28 @@ export class PopupRouterCacheService {
 
   /**
    * If in browser popup, push new route onto history stack
-   *
-   * @returns a boolean that indicates if the route was successfully saved
    */
   private async push(url: string): Promise<boolean> {
     if (!BrowserPopupUtils.inPopup(window) || url === (await this.last())) {
-      return false;
+      return;
     }
     await this.state.update((prevState) => (prevState === null ? [url] : prevState.concat(url)));
-    return true;
   }
 
   /**
-   * Navigate back to the prior URL in the history stack
-   *
-   * @returns a boolean that indicates success
+   * Navigate back in history
    */
-  async back(): Promise<boolean> {
-    if (!(await this.configService.getFeatureFlag(FeatureFlag.PersistPopupView))) {
-      this.location.back();
-      return true;
+  async back() {
+    await this.state.update((prevState) => prevState.slice(0, -1));
+
+    const url = this.router.url;
+    this.location.back();
+    if (url !== this.router.url) {
+      return;
     }
 
-    const length = (await this.getHistory())?.length;
-    if (!length) {
-      return false;
-    }
-
-    const newState = await this.state.update((prevState) => {
-      return prevState.slice(0, -1);
-    });
-
-    return this.router.navigateByUrl(newState[newState.length - 1]);
+    // if no history is present, fallback to vault page
+    await this.router.navigate([""]);
   }
 }
 

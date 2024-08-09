@@ -98,4 +98,13 @@ describe("Popup router cache guard", () => {
 
     expect(serializer.serialize(response)).toBe("/b");
   });
+
+  it("does not save duplicate routes", async () => {
+    await router.navigate(["a"]);
+    await router.navigate(["a"]);
+
+    await flushPromises();
+
+    expect(await service.getHistory()).toEqual(["/a"]);
+  });
 });
