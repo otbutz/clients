@@ -32,7 +32,6 @@ import { FamiliesForEnterpriseSetupComponent } from "./admin-console/organizatio
 import { VerifyRecoverDeleteProviderComponent } from "./admin-console/providers/verify-recover-delete-provider.component";
 import { CreateOrganizationComponent } from "./admin-console/settings/create-organization.component";
 import { deepLinkGuard } from "./auth/guards/deep-link.guard";
-import { HintComponent } from "./auth/hint.component";
 import { LockComponent } from "./auth/lock.component";
 import { LoginDecryptionOptionsComponent } from "./auth/login/login-decryption-options/login-decryption-options.component";
 import { LoginViaAuthRequestComponent } from "./auth/login/login-via-auth-request.component";
@@ -395,25 +394,6 @@ const routes: Routes = [
           },
         ],
       },
-      // {
-      //   path: "hint",
-      //   canActivate: [unauthGuardFn()],
-      //   data: {
-      //     pageTitle: "passwordHint",
-      //     titleId: "passwordHint",
-      //   } satisfies DataProperties & AnonLayoutWrapperData,
-      //   children: [
-      //     {
-      //       path: "",
-      //       component: HintComponent,
-      //     },
-      //     {
-      //       path: "",
-      //       component: EnvironmentSelectorComponent,
-      //       outlet: "environment-selector",
-      //     },
-      //   ],
-      // },
       {
         path: "remove-password",
         component: RemovePasswordComponent,
