@@ -12,6 +12,7 @@ import { canAccessFeature } from "@bitwarden/angular/platform/guard/feature-flag
 import {
   AnonLayoutWrapperComponent,
   AnonLayoutWrapperData,
+  PasswordHintComponent,
   RegistrationFinishComponent,
   RegistrationStartComponent,
   RegistrationStartSecondaryComponent,
@@ -23,7 +24,6 @@ import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { twofactorRefactorSwap } from "../../../../libs/angular/src/utils/two-factor-component-refactor-route-swap";
 import { AccessibilityCookieComponent } from "../auth/accessibility-cookie.component";
 import { maxAccountsGuardFn } from "../auth/guards/max-accounts.guard";
-import { HintComponent } from "../auth/hint.component";
 import { LockComponent } from "../auth/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/login/login-decryption-options/login-decryption-options.component";
 import { LoginViaAuthRequestComponent } from "../auth/login/login-via-auth-request.component";
@@ -94,7 +94,6 @@ const routes: Routes = [
     canActivate: [authGuard],
   },
   { path: "accessibility-cookie", component: AccessibilityCookieComponent },
-  { path: "hint", component: HintComponent },
   { path: "set-password", component: SetPasswordComponent },
   { path: "sso", component: SsoComponent },
   {
@@ -117,6 +116,14 @@ const routes: Routes = [
     path: "",
     component: AnonLayoutWrapperComponent,
     children: [
+      {
+        path: "hint",
+        component: PasswordHintComponent,
+        data: {
+          pageTitle: "requestPasswordHint",
+          pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
+        },
+      },
       {
         path: "signup",
         canActivate: [canAccessFeature(FeatureFlag.EmailVerification), unauthGuardFn()],
