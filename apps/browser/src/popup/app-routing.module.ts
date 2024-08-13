@@ -378,6 +378,7 @@ const routes: Routes = [
         data: {
           pageTitle: "requestPasswordHint",
           pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
+          showBackButton: true,
           state: "hint",
         },
       },
