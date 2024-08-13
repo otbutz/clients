@@ -10,10 +10,10 @@
   <bit-menu #moreOptions>
     <ng-container *ngIf="canAutofill && !hideAutofillOptions">
       <ng-container *ngIf="autofillAllowed$ | async">
-        <button type="button" bitMenuItem>
+        <button type="button" bitMenuItem (click)="doAutofill()">
           {{ "autofill" | i18n }}
         </button>
-        <button type="button" bitMenuItem *ngIf="canEdit">
+        <button type="button" bitMenuItem *ngIf="canEdit && isLogin" (click)="doAutofillAndSave()">
           {{ "fillAndSave" | i18n }}
         </button>
       </ng-container>
@@ -25,12 +25,12 @@
       {{ favoriteText | i18n }}
     </button>
     <ng-container *ngIf="canEdit">
-      <a routerLink="" bitMenuItem (click)="clone()">
+      <a bitMenuItem (click)="clone()">
         {{ "clone" | i18n }}
       </a>
-      <button type="button" bitMenuItem>
-        {{ "assignCollections" | i18n }}
-      </button>
+      <a bitMenuItem (click)="conditionallyNavigateToAssignCollections()">
+        {{ "assignToCollections" | i18n }}
+      </a>
     </ng-container>
   </bit-menu>
 </bit-item-action>

@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Hlavné heslo"
+  },
+  "masterPassImportant": {
+    "message": "Vaše hlavné heslo sa nebude dať obnoviť, ak ho zabudnete!"
+  },
+  "confirmMasterPassword": {
+    "message": "Potvrdiť hlavné heslo"
+  },
+  "masterPassHintLabel": {
+    "message": "Nápoveda pre hlavné heslo"
+  },
+  "joinOrganization": {
+    "message": "Pripojte sa k organizácii"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Dokončite pripojenie k tejto organizácii nastavením hlavného hesla."
+  },
   "settings": {
     "message": "Nastavenia"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Potvrdenie hlavného hesla sa nezhoduje."
-  },
-  "newAccountCreated": {
-    "message": "Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Úspešne ste sa prihlásili"
   },
   "youMayCloseThisWindow": {
     "message": "Toto okno môžete zavrieť"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Potvrdenie hlavného hesla sa nezhoduje."
+  },
+  "newAccountCreated": {
+    "message": "Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť."
   },
   "masterPassSent": {
     "message": "Emailom sme vám poslali nápoveď k hlavnému heslu."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Overovací kód je povinný."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Overenie bolo zrušené alebo trvalo príliš dlho. Skúste to znova."
   },
   "invalidVerificationCode": {
     "message": "Neplatný verifikačný kód"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Overovacia aplikácia"
   },
-  "authenticatorAppDesc": {
-    "message": "Použite overovaciu aplikáciu (napríklad Authy alebo Google Authenticator) na generovanie časovo obmedzených overovacích kódov.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Zadajte kód vygenerovaný overovacou aplikáciou akou je napríklad Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP bezpečnostný kľúč"
+  "yubiKeyTitleV2": {
+    "message": "Bezpečnostný kľúč Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Použiť YubiKey pre prístup k vášmu účtu. Pracuje s YubiKey 4, 4 Nano, 4C a s NEO zariadeniami."
   },
-  "duoDesc": {
-    "message": "Overiť sa prostredníctvom Duo Security použitím Duo Mobile aplikácie, SMS, telefonátu alebo U2F bezpečnostným kľúčom.",
+  "duoDescV2": {
+    "message": "Zadajte kód vygenerovaný aplikáciou Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Email"
   },
-  "emailDesc": {
-    "message": "Overovacie kódy vám budú zaslané emailom."
+  "emailDescV2": {
+    "message": "Zadajte kód zaslaný na váš e-mail."
   },
   "loginUnavailable": {
     "message": "Prihlásenie nedostupné"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Platnosť prihlásenia vypršala."
+  },
+  "restartRegistration": {
+    "message": "Zopakovať registráciu"
+  },
+  "expiredLink": {
+    "message": "Platnosť odkazu vypršala"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Prosím, zopakujte registráciu alebo sa pokúste prihlásiť."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Možno už máte účet"
   },
   "logOutConfirmation": {
     "message": "Naozaj sa chcete odhlásiť?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Ďalšie nastavenia Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Odomknúť systémovým overením"
+  },
   "windowsHelloConsentMessage": {
     "message": "Overiť sa pre Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Overením odomknete Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Odomknúť s Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Pri spustení požiadať o Windows Hello"
+  },
+  "autoPromptPolkit": {
+    "message": "Pri spustení požiadať o systémové overenie"
   },
   "autoPromptTouchId": {
     "message": "Pri spustení požiadať o Touch ID"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavné heslo nespĺňa pravidlá."
   },
-  "receiveMarketingEmails": {
-    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  "receiveMarketingEmailsV2": {
+    "message": "Dostávajte do schránky rady, oznámenia a príležitosti na výskum od spoločnosti Bitwarden."
   },
   "unsubscribe": {
     "message": "Odhlásiť sa z odberu"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometria prehliadača vyžaduje, aby bola najskôr v nastaveniach povolená biometria počítača."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatické nastavenie nie je k dispozícii"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Vzhľadom na spôsob inštalácie nebolo možné automaticky povoliť podporu biometrie. Chcete otvoriť dokumentáciu, ako to urobiť manuálne?"
   },
   "personalOwnershipSubmitError": {
     "message": "Z dôvodu podnikovej politiky máte obmedzené ukladanie položiek do osobného trezora. Zmeňte možnosť vlastníctvo na organizáciu a vyberte si z dostupných zbierok."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Vyžaduje sa overenie e-mailu"
   },
+  "emailVerifiedV2": {
+    "message": "Overený e-mail"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Na používanie tejto funkcie musíte overiť svoj e-mail."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Vaša organizácia zakázala šifrovanie dôveryhodného zariadenia. Na prístup k trezoru nastavte hlavné heslo."
   },
   "tryAgain": {
     "message": "Skúsiť znova"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou."
+  },
+  "inviteAccepted": {
+    "message": "Pozvánka prijatá"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrácia"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Spustite DuO a postupujte podľa pokynov na dokončenie prihlásenia."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Neplatné heslo súboru, použite heslo, ktoré ste zadali pri vytváraní exportného súboru."
   },
-  "importDestination": {
-    "message": "Cieľ importu"
+  "destination": {
+    "message": "Cieľ"
   },
   "learnAboutImportOptions": {
     "message": "Zistiť viac o možnostiach importu"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Potvrdiť heslo súboru"
+  },
+  "exportSuccess": {
+    "message": "Údaje z trezora boli exportované"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Viacfaktorové overenie zrušené"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Údaje"
+  },
+  "fileSends": {
+    "message": "Sendy so súborom"
+  },
+  "textSends": {
+    "message": "Textové Sendy"
   }
 }

@@ -42,6 +42,58 @@
   "cardholderName": {
     "message": "Kortinhaltijan nimi"
   },
+  "loginCredentials": {
+    "message": "Kirjautumistiedot"
+  },
+  "authenticatorKey": {
+    "message": "Todennusavain"
+  },
+  "autofillOptions": {
+    "message": "Automaattitäytön asetukset"
+  },
+  "websiteUri": {
+    "message": "Verkkosivusto (URI)"
+  },
+  "websiteAdded": {
+    "message": "Verkkosivusto lisättiin"
+  },
+  "addWebsite": {
+    "message": "Lisää verkkosivusto"
+  },
+  "deleteWebsite": {
+    "message": "Poista verkkosivusto"
+  },
+  "defaultLabel": {
+    "message": "Oletus ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Näytä vastaavuuden tunnistus $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Piilota vastaavuuden tunnistus $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Automaattitäytetäänkö sivun avautuessa?"
+  },
   "number": {
     "message": "Numero"
   },
@@ -138,6 +190,15 @@
   "authenticatorKeyTotp": {
     "message": "Todennusavain (TOTP)"
   },
+  "totpHelperTitle": {
+    "message": "Tee kaksivaiheisesta kirjautumisesta saumatonta"
+  },
+  "totpHelper": {
+    "message": "Bitwarden voi säilyttää ja täyttää kaksivaiheisen kirjautumisen koodit. Kopioi ja liitä todennusavain tähän kenttään."
+  },
+  "totpHelperWithCapture": {
+    "message": "Bitwarden voi säilyttää ja täyttää kaksivaiheisen kirjautumisen koodit. Kamerakuvakkeella voit kaapata todennusavaimen avoimen sivun QR-koodista automaattisesti, tai voit kopioida ja liittää sen tähän kenttään manuaalisesti."
+  },
   "folder": {
     "message": "Kansio"
   },
@@ -172,6 +233,10 @@
   "noneFolder": {
     "message": "Ei kansiota",
     "description": "This is the folder for uncategorized items"
+  },
+  "selfOwnershipLabel": {
+    "message": "Sinä",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "addFolder": {
     "message": "Lisää kansio"
@@ -401,6 +466,21 @@
   "item": {
     "message": "Kohde"
   },
+  "itemDetails": {
+    "message": "Kohteen tiedot"
+  },
+  "itemName": {
+    "message": "Kohteen nimi"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "Et voi poistaa kokoelmia, joihin sinulla on vain tarkasteluoikeus: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "esim.",
     "description": "Short abbreviation for 'example'."
@@ -536,6 +616,24 @@
       }
     }
   },
+  "itemsMovedToOrg": {
+    "message": "Kohteet siirrettiin organisaatioon $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "Kohde siirrettiin organisaatioon $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
   "deleteItem": {
     "message": "Poista kohde"
   },
@@ -593,6 +691,18 @@
   "loginExpired": {
     "message": "Kirjautumisistuntosi on erääntynyt."
   },
+  "restartRegistration": {
+    "message": "Aloita rekisteröityminen alusta"
+  },
+  "expiredLink": {
+    "message": "Vanhentunut linkki"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Sinulla saattaa olla jo tili"
+  },
   "logOutConfirmation": {
     "message": "Haluatko varmasti kirjautua ulos?"
   },
@@ -627,7 +737,7 @@
     "message": "Pidä tämä ikkuna avoinna ja seuraa selaimesi opasteita."
   },
   "useADifferentLogInMethod": {
-    "message": "Käytä eri kirjautumistapaa"
+    "message": "Käytä vaihtoehtoista kirjautumistapaa"
   },
   "loginWithPasskey": {
     "message": "Kirjaudu suojausavaimella"
@@ -835,8 +945,8 @@
   "emailAddress": {
     "message": "Sähköpostiosoite"
   },
-  "yourVaultIsLocked": {
-    "message": "Holvi on lukittu. Jatka vahvistamalla pääsalasanasi."
+  "yourVaultIsLockedV2": {
+    "message": "Holvisi on lukittu"
   },
   "uuid": {
     "message": "UUID"
@@ -933,7 +1043,7 @@
     "message": "Lähetä todennuskoodi sähköpostitse uudelleen"
   },
   "useAnotherTwoStepMethod": {
-    "message": "Käytä eri todennusmenetelmää"
+    "message": "Käytä vaihtoehtoista todennustapaa"
   },
   "insertYubiKey": {
     "message": "Kytke YubiKey-todennuslaitteesi tietokoneen USB-porttiin ja paina sen painiketta."
@@ -962,18 +1072,18 @@
   "authenticatorAppTitle": {
     "message": "Todennussovellus"
   },
-  "authenticatorAppDesc": {
-    "message": "Vahvista kirjautuminen todennussoveluksen (esim. Authy ja Google/Microsoft Authenticator) luomilla aikarajallisilla todennuskoodeilla.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Syötä Bitwarden Authenticatorin kaltaisen todennusovelluksen luoma koodi.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Yubico OTP -todennuslaite"
   },
   "yubiKeyDesc": {
     "message": "Vahvista kirjatuminen YubiKey-todennuslaiteella. Toimii YubiKey 4 ja 5 -sarjojen sekä NEO -laitteiden kanssa."
   },
-  "duoDesc": {
-    "message": "Vahvista kirjautuminen Duo Securityn avulla käyttäen Duo Mobile ‑sovellusta, tekstiviestiä, puhelua tai U2F-todennuslaitetta.",
+  "duoDescV2": {
+    "message": "Syötä Duo Securityn luoma koodi.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -987,10 +1097,10 @@
     "message": "FIDO U2F ‑todennuslaite"
   },
   "webAuthnTitle": {
-    "message": "FIDO2 WebAuthn"
+    "message": "Suojausavain"
   },
   "webAuthnDesc": {
-    "message": "Vahvista kirjautuminen WebAuthn-todennuslaitteella."
+    "message": "Vahvista kirjautuminen WebAuthn-suojausavaimella."
   },
   "webAuthnMigrated": {
     "message": "(siirretty FIDO:sta)"
@@ -998,8 +1108,8 @@
   "emailTitle": {
     "message": "Sähköposti"
   },
-  "emailDesc": {
-    "message": "Vahvista kirjautuminen sähköpostitse lähetettävällä todennuskoodilla."
+  "emailDescV2": {
+    "message": "Syötä sähköpostiisi lähetetty koodi."
   },
   "continue": {
     "message": "Jatka"
@@ -1041,7 +1151,7 @@
     "message": "Haluatko varmasti jatkaa?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Valitse kansio, johon haluat siirtää $COUNT$ kohdetta.",
+    "message": "Valitse kansio, johon haluat lisätä $COUNT$ kohteen/kohdetta.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1285,7 +1395,7 @@
     "message": "KDF-toistot"
   },
   "kdfIterationsDesc": {
-    "message": "Korkeampi KDF-toistojen määrä suojaa sinua raakaa laskentatehoa hyväksikäyttäviltä murtoyrityksiltä. Suosittelemme arvoksi vähintään $VALUE$.",
+    "message": "Korkeampi KDF-toistojen määrä vahvistaa pääsalasanasi suojausta väsytyshyökkäyksien varalta. Suosittelemme arvoksi vähintään $VALUE$.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -1313,7 +1423,7 @@
     "message": "KDF-rinnakkaisuus"
   },
   "argon2Desc": {
-    "message": "Korkeammat KDF-toistojen, -muistin ja -rinnakkaisuuksien määrät voivat suojata pääsalasanaasi murtautujien väsytyshyökkäyksiltä."
+    "message": "Korkeammat KDF-toistojen, -muistin ja -rinnakkaisuuksien määrät vahvistavat pääsalasanasi suojausta väsytyshyökkäyksien varalta."
   },
   "changeKdf": {
     "message": "Vaihda KDF-asetuksia"
@@ -1442,8 +1552,8 @@
   "importEncKeyError": {
     "message": "Virhe purettaessa viedyn tiedoston salausta. Salausavaimesi ei vastaa viennissä käytettyä salausavainta."
   },
-  "importDestination": {
-    "message": "Tuontikohde"
+  "destination": {
+    "message": "Kohde"
   },
   "learnAboutImportOptions": {
     "message": "Lue lisää tuontivaihtoehdoista"
@@ -1639,35 +1749,47 @@
   "twoStepLoginAuthDesc": {
     "message": "Syötä pääsalasanasi muokataksesi kaksivaiheisen kirjautumisen asetuksia."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Määritä kaksivaiheinen kirjautuminen todennussovelluksella seuraamalla näitä vaiheita:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Lataa jokin todennussovellus, kuten"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Lataa kaksivaiheisen kirjautumisen todennussovellus"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Tarvitsetko todennussovelluksen kaksivaiheista kirjautumista varten? Lataa jokin seuraavista"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "tai"
   },
-  "iosDevices": {
-    "message": "iOS-laitteet"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Android-laitteet"
+  "continueToExternalUrlTitle": {
+    "message": "Avataanko $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Windows-laitteet"
+  "continueToExternalUrlDesc": {
+    "message": "Olet poistumassa Bitwardenista ja avaamassa ulkoisen verkkosivuston uudessa ikkunassa."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Suosittelemme näitä sovelluksia, mutta myös muut todennussovellukset toimivat."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Avataanko bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Skannaa tämä QR-koodi todennussovelluksellasi"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "Bitwarden Authenticatorin avulla voit säilyttää todennusavaimet ja luoda TOTP-koodeja kaksivaiheista kirjautumista varten. Lue lisää bitwarden.com-sivustolta."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Skannaa alla oleva QR-koodi todennussovelluksellasi tai syötä avain itse."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "QR-koodin lataus ei onnistunut. Yritä uudelleen tai käytä alla olevaa avainta."
   },
   "key": {
     "message": "Avain"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Syötä 6-numeroinen todennuskoodi todennussovelluksestasi"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Todennuskoodi"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "Jos sinun on lisättävä tai siirrettävä todennus toiseen laitteeseen, löydät alta todennussovelluksesi tarvitseman QR-koodin (tai avaimen)."
@@ -1841,7 +1963,7 @@
     "message": "Suojaamattomat sivustot"
   },
   "unsecuredWebsitesReportDesc": {
-    "message": "URL-osoitteet, jotka alkavat http://, eivät hyödynnä parasta mahdollista salausta. Vaihda tällaiset kirjatumisosoitteet https://-muotoisiksi turvallisempaa selausta varten."
+    "message": "URL-osoitteet, jotka alkavat http://, eivät hyödynnä parasta mahdollista salausta. Vaihda tällaiset kirjautumisosoitteet https://-muotoisiksi turvallisempaa selausta varten."
   },
   "unsecuredWebsitesFound": {
     "message": "Suojaamattomia verkkosivustoja löytyi"
@@ -1872,7 +1994,7 @@
     "message": "Löytyi kirjautumistietoja, joille ei ole määritetty kaksivaiheista kirjautumista"
   },
   "inactive2faFoundReportDesc": {
-    "message": "Löysimme holv(e)istasi $COUNT$ sivustoa, joita ei ehkä ole määritetty käyttämään kaksivaiheista tunnistautumista (2fa.directory-sivuston mukaan). Nämä tilit tulisi suojata paremmin määrittämällä niille kaksivaiheinen tunnistautuminen.",
+    "message": "Löysimme holv(e)istasi $COUNT$ sivustoa, joita ei ehkä ole määritetty käyttämään kaksivaiheista kirjautumista (2fa.directory-sivuston mukaan). Nämä tilit tulisi suojata paremmin määrittämällä niille kaksivaiheinen tunnistautuminen.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -2723,12 +2845,6 @@
   "accessControl": {
     "message": "Käyttöoikeuksien laajuus"
   },
-  "groupAccessAllItems": {
-    "message": "Tällä ryhmällä on käyttö- ja muokkausoikeudet kaikkiin kohteisiin."
-  },
-  "groupAccessSelectedCollections": {
-    "message": "Ryhmällä on käyttöoikeudet vain valittuihin kokoelmiin."
-  },
   "readOnly": {
     "message": "Vain luku"
   },
@@ -2774,20 +2890,11 @@
   "userUsingTwoStep": {
     "message": "Käyttäjä on suojannut tilinsä kaksivaiheisella kirjautumisella."
   },
-  "userAccessAllItems": {
-    "message": "Käyttäjällä on käyttö- ja muokkausoikeus kaikkiin kohteisiin."
-  },
-  "userAccessSelectedCollections": {
-    "message": "Käyttäjällä on käyttöoikeudet vain valittuihin kokoelmiin."
-  },
   "search": {
     "message": "Etsi"
   },
   "invited": {
     "message": "Kutsutut"
-  },
-  "accepted": {
-    "message": "Hyväksytyt"
   },
   "confirmed": {
     "message": "Vahvistettu"
@@ -3126,7 +3233,7 @@
     }
   },
   "removeUserIdAccess": {
-    "message": "Poista käyttäjän $ID$ käyttöoikeus",
+    "message": "Mitätöi käyttäjän $ID$ käyttöoikeus",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -3374,6 +3481,9 @@
   "emailVerified": {
     "message": "Tilin sähköpostiosoite on vahvistettu"
   },
+  "emailVerifiedV2": {
+    "message": "Sähköpostiosoite on vahvistettu"
+  },
   "emailVerifiedFailed": {
     "message": "Sähköpostiosoitettasi ei voitu vahvistaa. Yritä lähettää uusi vahvistussähköposti."
   },
@@ -3394,6 +3504,9 @@
   },
   "joinOrganizationDesc": {
     "message": "Sinut on kutsuttu liittymään yllä mainittuun organisaatioon. Hyväksyäksesi kutsun, sinun tulee kirjautua tilillesi tai luoda uusi Bitwarden-tili."
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Viimeistele organisaatioon liittyminen asettamalla pääsalasana."
   },
   "inviteAccepted": {
     "message": "Kutsu hyväksyttiin"
@@ -3680,6 +3793,15 @@
       }
     }
   },
+  "subscriptionSeatMaxReached": {
+    "message": "Voit kutsua enintään $COUNT$ jäsentä korottamatta tilauksesi käyttäjäpaikkojen määrää.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
   "seatsToAdd": {
     "message": "Lisättävät käyttäjäpaikat"
   },
@@ -3743,8 +3865,8 @@
   "nothingSelected": {
     "message": "Et ole valinnut mitään."
   },
-  "receiveMarketingEmails": {
-    "message": "Vastaanota Bitwardenilta uutiskirjeitä julkaisuista, tukiresursseista ja tutkimusmahdollisuuksista."
+  "receiveMarketingEmailsV2": {
+    "message": "Vastaanota Bitwardenilta postilaatikkoosi vinkkejä, uutisia ja tutkimusmahdollisuuksia."
   },
   "unsubscribe": {
     "message": "Lopeta tilaus"
@@ -3918,7 +4040,7 @@
     "message": "API-avain"
   },
   "apiKeyDesc": {
-    "message": "API-avainta voidaan käyttää tunnistautumiseen Bitwardenin julkisen rajapinnan välityksellä (CLI)."
+    "message": "API-avainta voidaan käyttää tunnistautumiseen Bitwardenin julkista rajapintaa vasten."
   },
   "apiKeyRotateDesc": {
     "message": "API-avaimen uudistus mitätöi edellisen avaimen. Voit uudistaa API-avaimen, jos uskot, ettei nykyisen avaimen käyttö ole enää turvallista."
@@ -4023,8 +4145,9 @@
   "minimumNumberOfWords": {
     "message": "Sanojen vähimmäismäärä"
   },
-  "defaultType": {
-    "message": "Oletustyyppi"
+  "overridePasswordTypePolicy": {
+    "message": "Salasanan tyyppi",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Käyttäjän asetus"
@@ -4107,7 +4230,7 @@
     }
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua todennuksen Internet-yhteyden välityksellä. Haluatko varmasti käyttää tätä asetusta?"
+    "message": "Uloskirjautuminen estää pääsyn holviisi ja vaatii ajan umpeuduttua tunnistautumisen Internet-yhteyden välityksellä. Haluatko varmasti käyttää asetusta?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Aikakatkaisutoiminnon vahvistus"
@@ -4150,6 +4273,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Tämä ikkuna sulkeutuu automaattisesti 5 sekunnin kuluttua"
+  },
+  "youMayCloseThisWindow": {
+    "message": "Voit sulkea tämän ikkunan"
   },
   "includeAllTeamsFeatures": {
     "message": "Kaikki Teams-ominaisuudet, sekä:"
@@ -4306,6 +4432,9 @@
   "sendLink": {
     "message": "Send-linkki",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "copyLink": {
+    "message": "Kopioi linkki"
   },
   "copySendLink": {
     "message": "Kopioi Send-linkki",
@@ -4722,6 +4851,75 @@
     "message": "tai",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
   },
+  "developmentDevOpsAndITTeamsChooseBWSecret": {
+    "message": "Development, DevOps, and IT teams choose Bitwarden Secrets Manager to securely manage and deploy their infrastructure and machine secrets."
+  },
+  "centralizeSecretsManagement": {
+    "message": "Keskitä salaisuuksien hallinta."
+  },
+  "centralizeSecretsManagementDescription": {
+    "message": "Säilytä ja hallitse salaisuuksia turvallisesti yhdessä paikassa ja estä salaisuuksien leviäminen organisaatiossasi."
+  },
+  "preventSecretLeaks": {
+    "message": "Estä salaisuuksien vuodot."
+  },
+  "preventSecretLeaksDescription": {
+    "message": "Protect secrets with end-to-end encryption. No more hard coding secrets or sharing through .env files."
+  },
+  "enhanceDeveloperProductivity": {
+    "message": "Paranna kehittäjien tuottavuutta."
+  },
+  "enhanceDeveloperProductivityDescription": {
+    "message": "Programmatically retrieve and deploy secrets at runtime so developers can focus on what matters most, like improving code quality."
+  },
+  "strengthenBusinessSecurity": {
+    "message": "Paranna yrityksen turvallisuutta."
+  },
+  "strengthenBusinessSecurityDescription": {
+    "message": "Maintain tight control over machine and human access to secrets with SSO integrations, event logs, and access rotation."
+  },
+  "tryItNow": {
+    "message": "Kokeile sitä nyt"
+  },
+  "sendRequest": {
+    "message": "Lähetä pyyntö"
+  },
+  "addANote": {
+    "message": "Lisää muistiinpano"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Bitwarden Salaisuushallinta"
+  },
+  "moreProductsFromBitwarden": {
+    "message": "Lisää tuotteita Bitwardenilta"
+  },
+  "requestAccessToSecretsManager": {
+    "message": "Pyydä Salaisuushallinnan käyttöoikeutta"
+  },
+  "youNeedApprovalFromYourAdminToTrySecretsManager": {
+    "message": "Tarvitset ylläpitäjän hyväksynnän kokeillaksesi Salaisuushallintaa."
+  },
+  "smAccessRequestEmailSent": {
+    "message": "Pääsypyyntö Salaisuushallintaan lähetettiin sähköpostitse ylläpitäjille."
+  },
+  "requestAccessSMDefaultEmailContent": {
+    "message": "Hi,\n\nI am requesting a subscription to Bitwarden Secrets Manager for our team. Your support would mean a great deal!\n\nBitwarden Secrets Manager is an end-to-end encrypted secrets management solution for securely storing, sharing, and deploying machine credentials like API keys, database passwords, and authentication certificates.\n\nSecrets Manager will help us to:\n\n- Improve security\n- Streamline operations\n- Prevent costly secret leaks\n\nTo request a free trial for our team, please reach out to Bitwarden.\n\nThank you for your help!"
+  },
+  "giveMembersAccess": {
+    "message": "Anna jäsenille pääsy:"
+  },
+  "viewAndSelectTheMembers": {
+    "message": "tarkastele ja valitse jäseniä, joille haluat antaa pääsyn Salaisuushallintaan."
+  },
+  "openYourOrganizations": {
+    "message": "Avaa organisaatiosi"
+  },
+  "usingTheMenuSelect": {
+    "message": "Valitse valikkoa käyttäen"
+  },
+  "toGrantAccessToSelectedMembers": {
+    "message": "myöntääksesi pääsyn valituille jäsenille."
+  },
   "sendVaultCardTryItNow": {
     "message": "kokeile sitä nyt",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, or **try it now**.'"
@@ -5125,6 +5323,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Organisaatiosi on päivittänyt salauksen purkuasetukset. Käytä holviasi asettamalla pääsalasana."
+  },
   "maximumVaultTimeout": {
     "message": "Holvin aikakatkaisu"
   },
@@ -5475,6 +5676,9 @@
   },
   "verificationCodeRequired": {
     "message": "Todennuskoodi vaaditaan."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Tunnistautuminen peruttiin tai se kesti liian kauan. Yritä uudelleen."
   },
   "invalidVerificationCode": {
     "message": "Virheellinen todennuskoodi"
@@ -5846,6 +6050,26 @@
   "randomWord": {
     "message": "Satunnainen sana"
   },
+  "usernameGenerator": {
+    "message": "Käyttäjätunnusgeneraattori"
+  },
+  "useThisPassword": {
+    "message": "Käytä tätä salasanaa"
+  },
+  "useThisUsername": {
+    "message": "Käytä tätä käyttäjätunnusta"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Käytä generaattoria",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "service": {
     "message": "Palvelu"
   },
@@ -6166,6 +6390,9 @@
         "example": "4"
       }
     }
+  },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Virhe yhdistettäessä Duo-palveluun. Käytä vaihtoehtoista todennustapaa tai ole yhteydessä Duon asiakaspalveluun saadaksesi apua."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Avaa Duo ja viimeistele kirjautuminen seuraamalla ohjeita."
@@ -7103,7 +7330,7 @@
     "message": "Päivitä salausasetuksesi uusien suojaussuositusten mukaisiksi ja vahvista tilisi suojausta."
   },
   "kdfSettingsChangeLogoutWarning": {
-    "message": "Jos jatkat, kaikki aktiiviset istunnot kirjataan ulos. Sinun on kirjauduttava sisään uudelleen ja suoritettava kaksivaiheisen todennuksen määritys. Tietojesi säilyvyyden varmistamiseksi suosittelemme, että viet holvisi sisällön, ennen kuin muutat salausasetuksiasi."
+    "message": "Jos jatkat, kirjataan kaikki aktiiviset istunnot ulos, jonka jälkeen sinun on kirjauduttava sisään uudelleen ja suoritettava mahdollisesti määritetty kaksivaiheinen tunnistautuminen. Tietojesi säilyvyyden varmistamiseksi suosittelemme, että viet holvisi sisällön ennen salausasetustesi muuttamista."
   },
   "secretsManager": {
     "message": "Salaisuushallinta"
@@ -7221,19 +7448,19 @@
     "message": "Henkilöiden poistaminen palvelutililtä ei poista heidän luomiaan käyttötunnisteita. Parasta suojauskäytäntöä varten on suositeltavaa mitätöidä palvelutililtä poistettujen henkilöiden luomat tunnukset."
   },
   "smAccessRemovalWarningProjectTitle": {
-    "message": "Poista projektin käyttöoikeus"
+    "message": "Mitätöi projektin käyttöoikeus"
   },
   "smAccessRemovalWarningProjectMessage": {
-    "message": "Tämä poistaa käyttöoikeutesi projektiin."
+    "message": "Tämä mitätöi käyttöoikeutesi projektiin."
   },
   "smAccessRemovalWarningSaTitle": {
-    "message": "Poista palvelutilin käyttöoikeus"
+    "message": "Mitätöi palvelutilin käyttöoikeus"
   },
   "smAccessRemovalWarningSaMessage": {
-    "message": "Tämä poistaa käyttöoikeutesi palvelutiliin."
+    "message": "Tämä mitätöi käyttöoikeutesi palvelutiliin."
   },
   "removeAccess": {
-    "message": "Poista käyttöoikeus"
+    "message": "Mitätöi käyttöoikeus"
   },
   "checkForBreaches": {
     "message": "Tarkasta esiintyykö salasanaa tunnetuissa tietovuodoissa"
@@ -7286,7 +7513,7 @@
     "message": "Vaadi nykyisiä jäseniä vaihtamaan salasanansa"
   },
   "smProjectDeleteAccessRestricted": {
-    "message": "Käyttöoikeutesi eivät salli tämän projektin poistamista",
+    "message": "Sinulla ei ole oikeutta poistaa tätä projektia",
     "description": "The individual description shown to the user when the user doesn't have access to delete a project."
   },
   "smProjectsDeleteBulkConfirmation": {
@@ -7470,6 +7697,9 @@
   },
   "requestedDeviceApproval": {
     "message": "Laitehyväksyntää pyydetty."
+  },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Aloita seitsemän päivän ilmainen Bitwarden-kokeilu organisaatiolle $ORG$",
@@ -7669,7 +7899,7 @@
     "message": "Onko sinulla jo tili?"
   },
   "toggleSideNavigation": {
-    "message": "Toggle side navigation"
+    "message": "Näytä/piilota sivuvalikko"
   },
   "skipToContent": {
     "message": "Siirry sisältöön"
@@ -7727,10 +7957,10 @@
     "message": "Oikeutesi eivät riitä kokoelman hallintaan."
   },
   "grantAddAccessCollectionWarningTitle": {
-    "message": "Puuttuvat \"Voi hallita\" -käyttöoikeudet"
+    "message": "\"Voi hallita\" -käyttöoikeus puuttuu"
   },
   "grantAddAccessCollectionWarning": {
-    "message": "Myönnä ”Voi hallita” -oikeudet, jotka mahdollistavat kokoelman täydellisen hallinnan, mukaanlukien sen poistamisen."
+    "message": "Myönnä ”Voi hallita” -oikeus, joka mahdollistaa kokoelman täydellisen hallinnan, mukaan lukien sen poistamisen."
   },
   "grantCollectionAccess": {
     "message": "Myönnä ryhmille tai henkilöille kokoelman käyttöoikeus."
@@ -7839,8 +8069,11 @@
   "assignToTheseCollections": {
     "message": "Määritä seuraaviin kokoelmiin"
   },
-  "bulkCollectionAssignmentDialogDescription": {
-    "message": "Valitse kokoelmat, joihin kohteet sisällytetään. Kun kohdetta muokataan yhdessä kokoelmassa, päivittyy muutos kaikkiin kokoelmiin. Kohteet näkyvät vain niille organisaation jäsenille, joilla on näiden kokoelmien käyttöoikeus."
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "Vain näiden kokoelmien käyttöoikeuden omaavat organisaation jäsenet voivat nähdä kohteen."
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
+    "message": "Vain näiden kokoelmien käyttöoikeuden omaavat organisaation jäsenet voivat nähdä kohteet."
   },
   "selectCollectionsToAssign": {
     "message": "Valitse määritettävät kokoelmat"
@@ -7863,6 +8096,9 @@
         "example": "3"
       }
     }
+  },
+  "addField": {
+    "message": "Lisää kenttä"
   },
   "items": {
     "message": "Kohteet"
@@ -8056,10 +8292,10 @@
     "message": "Henkilöiden poistaminen konetililtä ei poista heidän luomiaan käyttötunnisteita. Parasta suojauskäytäntöä varten on suositeltavaa mitätöidä konetililtä poistettujen henkilöiden luomat tunnisteet."
   },
   "smAccessRemovalWarningMaTitle": {
-    "message": "Poista konetilin käyttöoikeus"
+    "message": "Mitätöi konetilin käyttöoikeus"
   },
   "smAccessRemovalWarningMaMessage": {
-    "message": "Tämä poistaa käyttöoikeutesi konetiliin."
+    "message": "Tämä mitätöi käyttöoikeutesi konetiliin."
   },
   "machineAccountsIncluded": {
     "message": "Sisältää $COUNT$ konetiliä",
@@ -8117,23 +8353,6 @@
   },
   "restrictedGroupAccessDesc": {
     "message": "Et voi lisätä itseäsi ryhmään."
-  },
-  "unassignedItemsBannerSelfHost": {
-    "message": "Huomioi: Alkaen 2. toukokuuta 2024, määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerNotice": {
-    "message": "Huomioi: Määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Huomioi: Alkaen 16. toukokuuta 2024, määrittämättömät organisaatiokohteet eivät enää näy laitteidesi \"Kaikki holvit\" -näkymissä, vaan ne ovat käytettävissä vain Hallintapaneelista."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Määritä nämä kohteet kokoelmaan",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "ista, jotta ne näkyvät.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
   },
   "deleteProvider": {
     "message": "Poista toimittaja"
@@ -8271,6 +8490,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Hallitse laskutusta Toimittajaportaaliista"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Aloita seitsemän päivän ilmainen Bitwarden-kokeilu"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Aloita seitsemän päivän ilmainen Bitwarden Salaisuushallinnan kokeilu"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Secrets Manager for Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Aloita seitsemän päivän ilmainen Bitwarden Salasananhallinan kokeilu"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Enterprise"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Enter your Teams organization information"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Enter your Families organization information"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Enter your Enterprise organization information"
+  },
   "viewItemsIn": {
     "message": "Näytä kohteen $NAME$ kohteet",
     "description": "Button to view the contents of a folder or collection",
@@ -8306,22 +8570,22 @@
     }
   },
   "viewInfo": {
-    "message": "Tarkastele tietoja"
+    "message": "Näytä tiedot"
   },
   "viewAccess": {
-    "message": "Tarkastele oikeuksia"
+    "message": "Näytä oikeudet"
   },
   "noCollectionsSelected": {
     "message": "Et ole valinnut yhtään kokoelmaa."
   },
   "updateName": {
-    "message": "Vaihda nimi"
+    "message": "Muuta nimi"
   },
   "updatedOrganizationName": {
-    "message": "Organisaation nimi vaihdettiin"
+    "message": "Organisaation nimi muutettiin"
   },
   "providerPlan": {
-    "message": "Hallittu palvelutoimittaja"
+    "message": "Hallintapalvelun toimittaja"
   },
   "orgSeats": {
     "message": "Organisaation käyttäjäpaikat"
@@ -8366,7 +8630,7 @@
     "message": "Bitcoin"
   },
   "updatedTaxInformation": {
-    "message": "Verotiedot vaihdettiin"
+    "message": "Verotiedot muutettiin"
   },
   "unverified": {
     "message": "Vahvistamaton"
@@ -8378,17 +8642,17 @@
     "message": "Näytä salaisuus"
   },
   "noClients": {
-    "message": "Näytettäviä päätteitä ei ole"
+    "message": "Näytettäviä asiakkaita ei ole"
   },
   "providerBillingEmailHint": {
-    "message": "Tämä sähköpostiosoite vastaanottaa kaikki tähän palveluntarjoajaan liittyvät laskut",
+    "message": "Tämä sähköpostiosoite vastaanottaa kaikki tätä toimittajaa koskevat laskut",
     "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
   },
   "upgradeOrganizationEnterprise": {
-    "message": "Identify security risks by auditing member access"
+    "message": "Tunnista tietoturvariskit tarkastelemalla jäsenten pääsytietoja"
   },
   "onlyAvailableForEnterpriseOrganization": {
-    "message": "Quickly view member access across the organization by upgrading to an Enterprise plan."
+    "message": "Tarkastele jäsenten pääsyä organisaation tietoihin päivittämällä Enterprise-tilaukseen."
   },
   "date": {
     "message": "Päiväys"
@@ -8396,30 +8660,29 @@
   "exportClientReport": {
     "message": "Vie pääteraportti"
   },
-  "invoiceNumberHeader": {
-    "message": "Laskun numero",
-    "description": "A table header for an invoice's number"
-  },
   "memberAccessReport": {
-    "message": "Member access"
+    "message": "Jäsenten pääsytiedot"
   },
   "memberAccessReportDesc": {
-    "message": "Ensure members have access to the right credentials and their accounts are secure. Use this report to obtain a CSV of member access and account configurations."
+    "message": "Varmista, että jäsenillä on oikeiden käyttäjätietojen käyttöoikeus ja että heidän tilinsä on suojattu. Tämän raportin avulla saat CSV-tiedoston käyttäjien oikeuksista ja tiliasetuksista."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Tarkastele organisaation jäsenten käyttöoikeuksia ryhmiin, kokoelmiin ja kokoelmien kohteisiin. CSV-vienti tuottaa yksityiskohtaisen jäsenkohtaisen erittelyn, joka sisältää kokoelmaoikeudet ja tilimääritykset."
   },
   "higherKDFIterations": {
-    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker."
+    "message": "Korkeampi KDF-toistojen määrä vahvistaa pääsalasanasi suojausta väsytyshyökkäyksien varalta."
   },
   "incrementsOf100,000": {
-    "message": "increments of 100,000"
+    "message": "100 000 välein"
   },
   "smallIncrements": {
-    "message": "small increments"
+    "message": "vähitellen"
   },
   "kdfIterationRecommends": {
-    "message": "We recommend 600,000 or more"
+    "message": "Vähimmäissuositus on 600 000"
   },
   "kdfToHighWarningIncreaseInIncrements": {
-    "message": "For older devices, setting your KDF too high may lead to performance issues. Increase the value in $VALUE$ and test your devices.",
+    "message": "Vanhemmilla laitteilla liian korkea KDF-arvo voi aiheuttaa suorituskykyongelmiin. Lisää arvoa $VALUE$ ja kokeile muutoksia laitteillasi.",
     "placeholders": {
       "value": {
         "content": "$1",
@@ -8428,24 +8691,221 @@
     }
   },
   "providerReinstate": {
-    "message": " Contact Customer Support to reinstate your subscription."
+    "message": " Aktivoi tilauksesi uudelleen olemalla yhteydessä asiakaspalveluun."
   },
   "secretPeopleDescription": {
-    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+    "message": "Myönnä ryhmille tai henkilöille salaisuuden käyttöoikeus. Henkilökohtaiset käyttöoikeudet ohittavat ryhmien määrittämät oikeudet."
   },
   "secretPeopleEmptyMessage": {
-    "message": "Add people or groups to share access to this secret"
+    "message": "Myönnä salaisuuden käyttöoikeus lisäämällä henkilöitä tai ryhmiä"
   },
   "secretMachineAccountsDescription": {
-    "message": "Grant machine accounts access to this secret."
+    "message": "Myönnä konetileille salaisuuden käyttöoikeus."
   },
   "secretMachineAccountsEmptyMessage": {
-    "message": "Add machine accounts to grant access to this secret"
+    "message": "Myönnä salaisuuden käyttöoikeus lisäämällä konetilejä"
   },
   "smAccessRemovalWarningSecretTitle": {
-    "message": "Remove access to this secret"
+    "message": "Mitätöi salaisuuden käyttöoikeus"
   },
   "smAccessRemovalSecretMessage": {
-    "message": "This action will remove your access to this secret."
+    "message": "Tämä mitätöi käyttöoikeutesi salaisuuteen."
+  },
+  "invoice": {
+    "message": "Lasku"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "Sinulla on $SEATS$ käyttämätöntä käyttäjäpaikkaa.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Ole lisäpaikkojen hankinnasta yhteydessä palvelutoimittajasi ylläpitoon."
+  },
+  "open": {
+    "message": "Avaa",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Keräämätön",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Asiakastiedot"
+  },
+  "downloadCSV": {
+    "message": "Lataa CSV"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Tilausmuutoksista aiheutuvat laskutussumman muutokset huomioidaan suhteutetusti seuraavan laskutuskauden veloituksessa."
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Tilausmuutoksista aiheutuvat laskutussumman muutokset huomioidaan suhteutetusti kuukausilaskutuksen seuraavassa veloituksessa."
+  },
+  "billingHistoryDescription": {
+    "message": "Lataa CSV-tiedosto nähdäksesi jokaisen laskutuspäivän asiakastiedot. Korjattuja veloituksia ei sisällytetä CSV-tiedostoon ja ne saattavat poiketa liitetystä laskusta. Tarkimmat laskutustiedot näet kuukausilaskuistasi.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "Näytettäviä laskuja ei ole",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Huomautus: Asiakasholvien yksityisyyttä parannetaan myöhemmin tässä kuussa, jonka jälkeen toimittajan jäsenillä ei ole enää käyttöoikeutta niiden sisältämiin kohteisiin. Lisätietoja saat",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "Bitwardenin asiakaspalvelusta.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsoroitu"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "Ota uusimmat muutokset käyttöön lataamalla lisenssitiedostosi Bitwardenin pilvipalvelimen muutosten jälkeen."
+  },
+  "addToFolder": {
+    "message": "Lisää kansioon"
+  },
+  "selectFolder": {
+    "message": "Valitse kansio"
+  },
+  "personalItemTransferWarningSingular": {
+    "message": "1 kohde siirretään pysyvästi valitulle organisaatiolle, jonka jälkeen et enää omista sitä."
+  },
+  "personalItemsTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ kohdetta siirretään pysyvästi valitulle organisaatiolle, jonka jälkeen et enää omista niitä.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1 kohde siirretään pysyvästi organisaatiolle $ORG$, jonka jälkeen et enää omista sitä.",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ kohdetta siirretään pysyvästi organisaatiolle $ORG$, jonka jälkeen et enää omista niitä.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
+  },
+  "data": {
+    "message": "Tiedot"
+  },
+  "purchasedSeatsRemoved": {
+    "message": "ostetut käyttäpaikat poistettiin"
+  },
+  "fileSends": {
+    "message": "Tiedosto-Sendit"
+  },
+  "textSends": {
+    "message": "Teksti-Sendit"
+  },
+  "includesXMembers": {
+    "message": "$COUNT$ jäsenelle",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Optional on-premises hosting"
+  },
+  "upgradeFreeOrganization": {
+    "message": "Päivitä organisaatiosi $NAME$ ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO-todennus"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Päivitä tilauksesi kutsuaksesi lisää jäseniä ja saadaksesi käyttöösi Bitwardenin lisäominaisuuksia"
+  },
+  "upgradeDiscount": {
+    "message": "Säästä $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Kehittyneet ominaisuudet suuremmille yrityksille"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Vahvaa suojausta etsiville yrityksille"
+  },
+  "teamsInviteMessage": {
+    "message": "Kutsu rajattomasti jäseniä"
+  },
+  "accessToCreateGroups": {
+    "message": "Oikeus luoda ryhmiä"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Synkronoi ryhmät ja käyttäjät hakemistosta"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Jaa perheen ja ystävien kanssa"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Premium-ominaisuuksien käyttöoikeus"
+  },
+  "additionalStorageGbMessage": {
+    "message": "Gt ylimääräistä tallennustilaa"
   }
 }

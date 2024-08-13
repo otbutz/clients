@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Мастер-пароль"
+  },
+  "masterPassImportant": {
+    "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
+  },
+  "confirmMasterPassword": {
+    "message": "Подтвердите мастер-пароль"
+  },
+  "masterPassHintLabel": {
+    "message": "Подсказка к мастер-паролю"
+  },
+  "joinOrganization": {
+    "message": "Присоединиться к организации"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Завершите присоединение к этой организации, установив мастер-пароль."
+  },
   "settings": {
     "message": "Настройки"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Мастер-пароли не совпадают."
-  },
-  "newAccountCreated": {
-    "message": "Аккаунт создан! Теперь вы можете войти в систему."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Вы успешно авторизовались"
   },
   "youMayCloseThisWindow": {
     "message": "Можете закрыть это окно"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Мастер-пароли не совпадают."
+  },
+  "newAccountCreated": {
+    "message": "Аккаунт создан! Теперь вы можете войти в систему."
   },
   "masterPassSent": {
     "message": "Мы отправили вам письмо с подсказкой к мастер-паролю."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Необходим код подтверждения."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Аутентификация была отменена или заняла слишком много времени. Пожалуйста, попробуйте еще раз."
   },
   "invalidVerificationCode": {
     "message": "Неверный код подтверждения"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Приложение-аутентификатор"
   },
-  "authenticatorAppDesc": {
-    "message": "Используйте приложение-аутентификатор (например Authy или Google Authenticator) для создания кодов проверки на основе времени.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Введите код, сгенерированный приложением-аутентификатором, например Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Ключ безопасности YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ безопасности Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Используйте YubiKey для доступа к аккаунту. Работает с устройствами YubiKey серий 4, 5 и NEO."
   },
-  "duoDesc": {
-    "message": "Подтвердите с помощью Duo Security, используя приложение Duo Mobile, SMS, телефонный звонок или ключ безопасности U2F.",
+  "duoDescV2": {
+    "message": "Введите код, сгенерированный Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Email"
   },
-  "emailDesc": {
-    "message": "Коды подтверждения будут отправлены вам по электронной почте."
+  "emailDescV2": {
+    "message": "Введите код, отправленный на ваш email."
   },
   "loginUnavailable": {
     "message": "Вход недоступен"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Истек срок действия вашего сеанса."
+  },
+  "restartRegistration": {
+    "message": "Перезапустить регистрацию"
+  },
+  "expiredLink": {
+    "message": "Истекшая ссылка"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Пожалуйста, перезапустите регистрацию или попробуйте авторизоваться."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Возможно, у вас уже есть аккаунт"
   },
   "logOutConfirmation": {
     "message": "Вы действительно хотите выйти?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Дополнительные настройки Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Разблокировать с помощью системной аутентификации"
+  },
   "windowsHelloConsentMessage": {
     "message": "Верификация для Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Для разблокировки Bitwarden пройдите аутентификацию."
   },
   "unlockWithTouchId": {
     "message": "Разблокировать с Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Запрашивать Windows Hello при запуске приложения"
+  },
+  "autoPromptPolkit": {
+    "message": "Запрашивать системную аутентификацию при запуске"
   },
   "autoPromptTouchId": {
     "message": "Запрашивать Touch ID при запуске приложения"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
   },
-  "receiveMarketingEmails": {
-    "message": "Получайте электронные письма от Bitwarden с анонсами, советами и возможностями для исследований."
+  "receiveMarketingEmailsV2": {
+    "message": "Получайте советы, анонсы и возможности для исследований от Bitwarden на свой email."
   },
   "unsubscribe": {
     "message": "Отписаться"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Для активации биометрии в браузере сначала необходимо включить биометрию в приложении для компьютера."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Автоматическая настройка недоступна"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Из-за метода инсталляции не удалось автоматически включить поддержку биометрии. Вы хотите открыть документацию чтобы узнать, как это сделать вручную?"
   },
   "personalOwnershipSubmitError": {
     "message": "В соответствии с корпоративной политикой вам запрещено сохранять элементы в личном хранилище. Измените владельца на организацию и выберите из доступных Коллекций."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Требуется подтверждение электронной почты"
   },
+  "emailVerifiedV2": {
+    "message": "Email подтвержден"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Для использования этой функции необходимо подтвердить свою электронную почту."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "В вашей организации отключено шифрование доверенных устройств. Пожалуйста, установите мастер-пароль для доступа к вашему хранилищу."
   },
   "tryAgain": {
     "message": "Попробуйте снова"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией."
+  },
+  "inviteAccepted": {
+    "message": "Приглашение принято"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматическое развертывание"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Запустите Duo и следуйте шагам для завершения авторизации."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Неверный пароль к файлу. Используйте пароль, введенный при создании файла экспорта."
   },
-  "importDestination": {
-    "message": "Цель импорта"
+  "destination": {
+    "message": "Назначение"
   },
   "learnAboutImportOptions": {
     "message": "Узнайте о возможностях импорта"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Подтвердите пароль к файлу"
+  },
+  "exportSuccess": {
+    "message": "Данные хранилища экспортированы"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Многофакторная аутентификация отменена"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Данные"
+  },
+  "fileSends": {
+    "message": "Файловая Send"
+  },
+  "textSends": {
+    "message": "Текстовая Send"
   }
 }

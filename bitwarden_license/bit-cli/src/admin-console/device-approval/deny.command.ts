@@ -38,7 +38,15 @@ export class DenyCommand {
     }
 
     try {
-      await this.organizationAuthRequestService.denyPendingRequests(organizationId, id);
+      const pendingRequests =
+        await this.organizationAuthRequestService.listPendingRequests(organizationId);
+
+      const request = pendingRequests.find((r) => r.id == id);
+      if (request == null) {
+        return Response.error("The request id is invalid.");
+      }
+
+      await this.organizationAuthRequestService.denyPendingRequest(organizationId, id);
       return Response.success();
     } catch (e) {
       return Response.error(e);

@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { SetPasswordComponent as BaseSetPasswordComponent } from "@bitwarden/angular/auth/components/set-password.component";
@@ -19,10 +19,10 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 const BroadcasterSubscriptionId = "SetPasswordComponent";
 
@@ -30,7 +30,7 @@ const BroadcasterSubscriptionId = "SetPasswordComponent";
   selector: "app-set-password",
   templateUrl: "set-password.component.html",
 })
-export class SetPasswordComponent extends BaseSetPasswordComponent implements OnDestroy {
+export class SetPasswordComponent extends BaseSetPasswordComponent implements OnInit, OnDestroy {
   constructor(
     accountService: AccountService,
     masterPasswordService: InternalMasterPasswordServiceAbstraction,

@@ -1,15 +1,18 @@
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map, Observable, Subscription } from "rxjs";
 import { parse } from "tldts";
 
 import { AuthService } from "../../../auth/abstractions/auth.service";
 import { AuthenticationStatus } from "../../../auth/enums/authentication-status";
 import { DomainSettingsService } from "../../../autofill/services/domain-settings.service";
 import { VaultSettingsService } from "../../../vault/abstractions/vault-settings/vault-settings.service";
+import { Fido2CredentialView } from "../../../vault/models/view/fido2-credential.view";
 import { ConfigService } from "../../abstractions/config/config.service";
+import { Fido2ActiveRequestManager } from "../../abstractions/fido2/fido2-active-request-manager.abstraction";
 import {
   Fido2AuthenticatorError,
   Fido2AuthenticatorErrorCode,
   Fido2AuthenticatorGetAssertionParams,
+  Fido2AuthenticatorGetAssertionResult,
   Fido2AuthenticatorMakeCredentialsParams,
   Fido2AuthenticatorService,
   PublicKeyCredentialDescriptor,
@@ -27,9 +30,12 @@ import {
 } from "../../abstractions/fido2/fido2-client.service.abstraction";
 import { LogService } from "../../abstractions/log.service";
 import { Utils } from "../../misc/utils";
+import { ScheduledTaskNames } from "../../scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../../scheduling/task-scheduler.service";
 
 import { isValidRpId } from "./domain-utils";
 import { Fido2Utils } from "./fido2-utils";
+import { guidToRawFormat } from "./guid-utils";
 
 /**
  * Bitwarden implementation of the Web Authentication API as described by W3C
@@ -38,14 +44,45 @@ import { Fido2Utils } from "./fido2-utils";
  * It is highly recommended that the W3C specification is used a reference when reading this code.
  */
 export class Fido2ClientService implements Fido2ClientServiceAbstraction {
+  private timeoutAbortController: AbortController;
+  private readonly TIMEOUTS = {
+    NO_VERIFICATION: {
+      DEFAULT: 120000,
+      MIN: 30000,
+      MAX: 180000,
+    },
+    WITH_VERIFICATION: {
+      DEFAULT: 300000,
+      MIN: 30000,
+      MAX: 600000,
+    },
+  };
+
   constructor(
     private authenticator: Fido2AuthenticatorService,
     private configService: ConfigService,
     private authService: AuthService,
     private vaultSettingsService: VaultSettingsService,
     private domainSettingsService: DomainSettingsService,
+    private taskSchedulerService: TaskSchedulerService,
+    private requestManager: Fido2ActiveRequestManager,
     private logService?: LogService,
-  ) {}
+  ) {
+    this.taskSchedulerService.registerTaskHandler(ScheduledTaskNames.fido2ClientAbortTimeout, () =>
+      this.timeoutAbortController?.abort(),
+    );
+  }
+
+  availableAutofillCredentials$(tabId: number): Observable<Fido2CredentialView[]> {
+    return this.requestManager
+      .getActiveRequest$(tabId)
+      .pipe(map((request) => request?.credentials ?? []));
+  }
+
+  async autofillCredential(tabId: number, credentialId: string) {
+    const request = this.requestManager.getActiveRequest(tabId);
+    request.subject.next(credentialId);
+  }
 
   async isFido2FeatureEnabled(hostname: string, origin: string): Promise<boolean> {
     const isUserLoggedIn =
@@ -103,7 +140,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     }
 
     params.rp.id = params.rp.id ?? parsedOrigin.hostname;
-    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+    if (
+      parsedOrigin.hostname == undefined ||
+      (!params.origin.startsWith("https://") && parsedOrigin.hostname !== "localhost")
+    ) {
       this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
@@ -158,7 +198,7 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
-    const timeout = setAbortTimeout(
+    const timeoutSubscription = this.setAbortTimeout(
       abortController,
       params.authenticatorSelection?.userVerification,
       params.timeout,
@@ -207,7 +247,8 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       };
     }
 
-    clearTimeout(timeout);
+    timeoutSubscription?.unsubscribe();
+
     return {
       credentialId: Fido2Utils.bufferToString(makeCredentialResult.credentialId),
       attestationObject: Fido2Utils.bufferToString(makeCredentialResult.attestationObject),
@@ -238,7 +279,10 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
 
     params.rpId = params.rpId ?? parsedOrigin.hostname;
 
-    if (parsedOrigin.hostname == undefined || !params.origin.startsWith("https://")) {
+    if (
+      parsedOrigin.hostname == undefined ||
+      (!params.origin.startsWith("https://") && parsedOrigin.hostname !== "localhost")
+    ) {
       this.logService?.warning(`[Fido2Client] Invalid https origin: ${params.origin}`);
       throw new DOMException("'origin' is not a valid https origin", "SecurityError");
     }
@@ -259,6 +303,16 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
     };
     const clientDataJSON = JSON.stringify(collectedClientData);
     const clientDataJSONBytes = Utils.fromByteStringToArray(clientDataJSON);
+
+    if (params.mediation === "conditional") {
+      return this.handleMediatedConditionalRequest(
+        params,
+        tab,
+        abortController,
+        clientDataJSONBytes,
+      );
+    }
+
     const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
     const getAssertionParams = mapToGetAssertionParams({ params, clientDataHash });
 
@@ -267,7 +321,11 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
 
-    const timeout = setAbortTimeout(abortController, params.userVerification, params.timeout);
+    const timeoutSubscription = this.setAbortTimeout(
+      abortController,
+      params.userVerification,
+      params.timeout,
+    );
 
     let getAssertionResult;
     try {
@@ -304,8 +362,62 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       this.logService?.info(`[Fido2Client] Aborted with AbortController`);
       throw new DOMException("The operation either timed out or was not allowed.", "AbortError");
     }
-    clearTimeout(timeout);
 
+    timeoutSubscription?.unsubscribe();
+
+    return this.generateAssertCredentialResult(getAssertionResult, clientDataJSONBytes);
+  }
+
+  private async handleMediatedConditionalRequest(
+    params: AssertCredentialParams,
+    tab: chrome.tabs.Tab,
+    abortController: AbortController,
+    clientDataJSONBytes: Uint8Array,
+  ): Promise<AssertCredentialResult> {
+    let getAssertionResult;
+    let assumeUserPresence = false;
+    while (!getAssertionResult) {
+      const authStatus = await firstValueFrom(this.authService.activeAccountStatus$);
+      const availableCredentials =
+        authStatus === AuthenticationStatus.Unlocked
+          ? await this.authenticator.silentCredentialDiscovery(params.rpId)
+          : [];
+      this.logService?.info(
+        `[Fido2Client] started mediated request, available credentials: ${availableCredentials.length}`,
+      );
+      const credentialId = await this.requestManager.newActiveRequest(
+        tab.id,
+        availableCredentials,
+        abortController,
+      );
+      params.allowedCredentialIds = [Fido2Utils.bufferToString(guidToRawFormat(credentialId))];
+      assumeUserPresence = true;
+
+      const clientDataHash = await crypto.subtle.digest({ name: "SHA-256" }, clientDataJSONBytes);
+      const getAssertionParams = mapToGetAssertionParams({
+        params,
+        clientDataHash,
+        assumeUserPresence,
+      });
+
+      try {
+        getAssertionResult = await this.authenticator.getAssertion(getAssertionParams, tab);
+      } catch (e) {
+        this.logService?.info(`[Fido2Client] Aborted by user: ${e}`);
+      }
+
+      if (abortController.signal.aborted) {
+        this.logService?.info(`[Fido2Client] Aborted with AbortController`);
+      }
+    }
+
+    return this.generateAssertCredentialResult(getAssertionResult, clientDataJSONBytes);
+  }
+
+  private generateAssertCredentialResult(
+    getAssertionResult: Fido2AuthenticatorGetAssertionResult,
+    clientDataJSONBytes: Uint8Array,
+  ): AssertCredentialResult {
     return {
       authenticatorData: Fido2Utils.bufferToString(getAssertionResult.authenticatorData),
       clientDataJSON: Fido2Utils.bufferToString(clientDataJSONBytes),
@@ -317,43 +429,29 @@ export class Fido2ClientService implements Fido2ClientServiceAbstraction {
       signature: Fido2Utils.bufferToString(getAssertionResult.signature),
     };
   }
-}
 
-const TIMEOUTS = {
-  NO_VERIFICATION: {
-    DEFAULT: 120000,
-    MIN: 30000,
-    MAX: 180000,
-  },
-  WITH_VERIFICATION: {
-    DEFAULT: 300000,
-    MIN: 30000,
-    MAX: 600000,
-  },
-};
+  private setAbortTimeout = (
+    abortController: AbortController,
+    userVerification?: UserVerification,
+    timeout?: number,
+  ): Subscription => {
+    let clampedTimeout: number;
 
-function setAbortTimeout(
-  abortController: AbortController,
-  userVerification?: UserVerification,
-  timeout?: number,
-): number {
-  let clampedTimeout: number;
+    const { WITH_VERIFICATION, NO_VERIFICATION } = this.TIMEOUTS;
+    if (userVerification === "required") {
+      timeout = timeout ?? WITH_VERIFICATION.DEFAULT;
+      clampedTimeout = Math.max(WITH_VERIFICATION.MIN, Math.min(timeout, WITH_VERIFICATION.MAX));
+    } else {
+      timeout = timeout ?? NO_VERIFICATION.DEFAULT;
+      clampedTimeout = Math.max(NO_VERIFICATION.MIN, Math.min(timeout, NO_VERIFICATION.MAX));
+    }
 
-  if (userVerification === "required") {
-    timeout = timeout ?? TIMEOUTS.WITH_VERIFICATION.DEFAULT;
-    clampedTimeout = Math.max(
-      TIMEOUTS.WITH_VERIFICATION.MIN,
-      Math.min(timeout, TIMEOUTS.WITH_VERIFICATION.MAX),
+    this.timeoutAbortController = abortController;
+    return this.taskSchedulerService.setTimeout(
+      ScheduledTaskNames.fido2ClientAbortTimeout,
+      clampedTimeout,
     );
-  } else {
-    timeout = timeout ?? TIMEOUTS.NO_VERIFICATION.DEFAULT;
-    clampedTimeout = Math.max(
-      TIMEOUTS.NO_VERIFICATION.MIN,
-      Math.min(timeout, TIMEOUTS.NO_VERIFICATION.MAX),
-    );
-  }
-
-  return self.setTimeout(() => abortController.abort(), clampedTimeout);
+  };
 }
 
 /**
@@ -412,9 +510,11 @@ function mapToMakeCredentialParams({
 function mapToGetAssertionParams({
   params,
   clientDataHash,
+  assumeUserPresence,
 }: {
   params: AssertCredentialParams;
   clientDataHash: ArrayBuffer;
+  assumeUserPresence?: boolean;
 }): Fido2AuthenticatorGetAssertionParams {
   const allowCredentialDescriptorList: PublicKeyCredentialDescriptor[] =
     params.allowedCredentialIds.map((id) => ({
@@ -434,5 +534,6 @@ function mapToGetAssertionParams({
     allowCredentialDescriptorList,
     extensions: {},
     fallbackSupported: params.fallbackSupported,
+    assumeUserPresence,
   };
 }

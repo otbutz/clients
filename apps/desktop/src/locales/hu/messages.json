@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Mesterjelszó"
+  },
+  "masterPassImportant": {
+    "message": "A mesterjelszó nem állítható helyre, ha elfelejtik!"
+  },
+  "confirmMasterPassword": {
+    "message": "Mesterjelszó megerősítése"
+  },
+  "masterPassHintLabel": {
+    "message": "Mesterjelszó emlékeztető"
+  },
+  "joinOrganization": {
+    "message": "Csatlakozás szervezethez"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Fejezzük be a szervezethez csatlakozást egy mesterjelszó beállításával."
+  },
   "settings": {
     "message": "Beállítások"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "A mesterjelszó megerősítése nem egyezik."
-  },
-  "newAccountCreated": {
-    "message": "A fiók létrehozásra került. Most már be lehet jelentkezni."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "A bejelentkezés sikeres volt."
   },
   "youMayCloseThisWindow": {
     "message": "Most már bezárható ez az ablak."
+  },
+  "masterPassDoesntMatch": {
+    "message": "A mesterjelszó megerősítése nem egyezik."
+  },
+  "newAccountCreated": {
+    "message": "A fiók létrehozásra került. Most már be lehet jelentkezni."
   },
   "masterPassSent": {
     "message": "Elküldtünk neked egy emailt a mesterjelszó emlékeztetővel."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Az ellenőrző kód kötelező."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "A hitelesítés megszakításra került vagy túl sokáig tartott. Próbáljuk újra."
   },
   "invalidVerificationCode": {
     "message": "Érvénytelen ellenőrző kód"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Hitelesítő alkalmazás"
   },
-  "authenticatorAppDesc": {
-    "message": "Hitelesítő alkalmazás használata (mint például az Authy vagy a Google Authenticator) idő alapú ellenőrzőkód generálásához.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Adjunk meg egy hitelesítő alkalmazás, például a Bitwarden Authenticator által generált kódot.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "YubiKey OTP egyszeri időalapú jelszó biztonsági kulcs"
+  "yubiKeyTitleV2": {
+    "message": "YubiKey OTP biztonsági kulcs"
   },
   "yubiKeyDesc": {
     "message": "YubiKey használata a fiók eléréséhez. Működik a YubiKey 4, 4 Nano, 4C, és NEO eszközökkel."
   },
-  "duoDesc": {
-    "message": "Ellenőrzés Duo Security segítségével a Duo Mobile alkalmazás, SMS, telefonhívás vagy U2F biztonsági kulcs használatával.",
+  "duoDescV2": {
+    "message": "Adjuk meg a Duo Security által generált kódot.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Email cím"
   },
-  "emailDesc": {
-    "message": "Az ellenőrző kódok emailben kerülnek elküldésre."
+  "emailDescV2": {
+    "message": "Adjuk meg az email címre elküldött kódot."
   },
   "loginUnavailable": {
     "message": "A bejelentkezés nem érhető el."
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "A bejelentkezési munkamenet lejárt."
+  },
+  "restartRegistration": {
+    "message": "Regisztráció újra indítása"
+  },
+  "expiredLink": {
+    "message": "A hivatkozás lejárt."
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "A Bitwarden képes tárolni és kitölteni a kétlépcsős ellenőrző kódokat. Válasszuk a kamera ikont, hogy képernyőképet készítsünk a webhely hitelesítő QR kódjáról vagy másoljuk ki és illesszük be a kulcsot ebbe a mezőbe."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Már rendelkezünkk fiókkal."
   },
   "logOutConfirmation": {
     "message": "Biztosan szeretnénk kijelentkezni?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Kiegészítő Windows Hello beállítások"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden ellenőrzés."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Feloldás Touch ID segítségével"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Windows Hello kérése indításkor"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Érintés AZ kérése indításkor"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Az új mesterjelszó nem felel meg a szabály követelményeknek."
   },
-  "receiveMarketingEmails": {
-    "message": "Emaileket kaphatunk a Bitwardentől bejelentésekről, tanácsokról és kutatási lehetőségekről."
+  "receiveMarketingEmailsV2": {
+    "message": "Tanácsokat, bejelentéseket és kutatási lehetőségeket kaphatunk a Bitwardentől a postaládába."
   },
   "unsubscribe": {
     "message": "Leiratkozás"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "A böngésző biometrikus adataihoz először az asztali biometrikus adatokat kell engedélyezni a beállításokban."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Autometic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Egy vállalati házirend miatt korlátozásra került az elemek személyes tárolóba történő mentése. Módosítsuk a Tulajdon opciót egy szervezetre és válasszunk az elérhető gyűjtemények közül."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Email hitelesítés szükséges"
   },
+  "emailVerifiedV2": {
+    "message": "Az email cím ellenőrzésre került."
+  },
   "emailVerificationRequiredDesc": {
     "message": "A funkció használatához ellenőrizni kell az email címet."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "A szervezete letiltotta a megbízható eszközök titkosítását. Állítsunk be egy mesterjelszót a széf eléréséhez."
   },
   "tryAgain": {
     "message": "Próbáluk újra"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "A széf időkorlátja túllépi a szervezet által beállított korlátozást."
+  },
+  "inviteAccepted": {
+    "message": "A meghívás elfogadásra került."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatikus regisztráció"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Hiba történt a Duo szolgáltatáshoz csatlakozáskor. Használjunk másik kétlépcsős bejelentkezési módot vagy kérjünk segítséget a Duotól."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Indítsuk el a DUO-t és kövessük a lépéseket a bejelentkezés befejezéséhez."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "A fájl jelszó érvénytelen. Használjuk az exportfájl létrehozásakor megadott jelszót."
   },
-  "importDestination": {
-    "message": "Importálás leírás"
+  "destination": {
+    "message": "Cél"
   },
   "learnAboutImportOptions": {
     "message": "Információ az importálási opciókról"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Fájl jelszó megerősítés"
+  },
+  "exportSuccess": {
+    "message": "A széfadatok exportálásra kerültek."
   },
   "multifactorAuthenticationCancelled": {
     "message": "A többtényezős hitelesítés megszakításra került."
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Adat"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

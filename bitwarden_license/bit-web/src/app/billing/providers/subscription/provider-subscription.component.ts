@@ -1,29 +1,38 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
 import { Subject, concatMap, takeUntil } from "rxjs";
 
 import { BillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/billilng-api.service.abstraction";
+import { TaxInformation } from "@bitwarden/common/billing/models/domain";
+import { ExpandedTaxInfoUpdateRequest } from "@bitwarden/common/billing/models/request/expanded-tax-info-update.request";
 import {
   ProviderPlanResponse,
   ProviderSubscriptionResponse,
 } from "@bitwarden/common/billing/models/response/provider-subscription-response";
+import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { ToastService } from "@bitwarden/components";
 
 @Component({
   selector: "app-provider-subscription",
   templateUrl: "./provider-subscription.component.html",
 })
-export class ProviderSubscriptionComponent {
-  subscription: ProviderSubscriptionResponse;
+export class ProviderSubscriptionComponent implements OnInit, OnDestroy {
   providerId: string;
+  subscription: ProviderSubscriptionResponse;
+
   firstLoaded = false;
   loading: boolean;
   private destroy$ = new Subject<void>();
   totalCost: number;
   currentDate = new Date();
 
+  protected readonly TaxInformation = TaxInformation;
+
   constructor(
     private billingApiService: BillingApiServiceAbstraction,
+    private i18nService: I18nService,
     private route: ActivatedRoute,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -54,6 +63,16 @@ export class ProviderSubscriptionComponent {
     this.loading = false;
   }
 
+  updateTaxInformation = async (taxInformation: TaxInformation) => {
+    const request = ExpandedTaxInfoUpdateRequest.From(taxInformation);
+    await this.billingApiService.updateProviderTaxInformation(this.providerId, request);
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("updatedTaxInformation"),
+    });
+  };
+
   getFormattedCost(
     cost: number,
     seatMinimum: number,
@@ -61,8 +80,7 @@ export class ProviderSubscriptionComponent {
     discountPercentage: number,
   ): number {
     const costPerSeat = cost / (seatMinimum + purchasedSeats);
-    const discountedCost = costPerSeat - (costPerSeat * discountPercentage) / 100;
-    return discountedCost;
+    return costPerSeat - (costPerSeat * discountPercentage) / 100;
   }
 
   getFormattedPlanName(planName: string): string {

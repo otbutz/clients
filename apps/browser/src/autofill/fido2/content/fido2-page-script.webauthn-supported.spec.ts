@@ -5,7 +5,7 @@ import {
   createCredentialRequestOptionsMock,
   setupMockedWebAuthnSupport,
 } from "../../../autofill/spec/fido2-testing-utils";
-import { WebauthnUtils } from "../../../vault/fido2/webauthn-utils";
+import { WebauthnUtils } from "../utils/webauthn-utils";
 
 import { MessageType } from "./messaging/message";
 import { Messenger } from "./messaging/messenger";
@@ -16,8 +16,9 @@ const mockGlobalThisDocument = {
   contentType: "text/html",
   location: {
     ...originalGlobalThis.document.location,
-    href: "https://localhost",
-    origin: "https://localhost",
+    href: "https://bitwarden.com",
+    origin: "https://bitwarden.com",
+    hostname: "bitwarden.com",
     protocol: "https:",
   },
 };
@@ -40,7 +41,7 @@ jest.mock("./messaging/messenger", () => {
     },
   };
 });
-jest.mock("../../../vault/fido2/webauthn-utils");
+jest.mock("../utils/webauthn-utils");
 
 describe("Fido2 page script with native WebAuthn support", () => {
   (jest.spyOn(globalThis, "document", "get") as jest.Mock).mockImplementation(
@@ -127,6 +128,17 @@ describe("Fido2 page script with native WebAuthn support", () => {
         mockCredentialAssertResult,
       );
     });
+
+    it("initiates a conditional mediated webauth request", async () => {
+      mockCredentialRequestOptions.mediation = "conditional";
+      mockCredentialRequestOptions.signal = new AbortController().signal;
+
+      await navigator.credentials.get(mockCredentialRequestOptions);
+
+      expect(WebauthnUtils.mapCredentialAssertResult).toHaveBeenCalledWith(
+        mockCredentialAssertResult,
+      );
+    });
   });
 
   describe("destroy", () => {
@@ -166,8 +178,8 @@ describe("Fido2 page script with native WebAuthn support", () => {
         ...mockGlobalThisDocument,
         location: {
           ...mockGlobalThisDocument.location,
-          href: "http://localhost",
-          origin: "http://localhost",
+          href: "http://bitwarden.com",
+          origin: "http://bitwarden.com",
           protocol: "http:",
         },
       }));

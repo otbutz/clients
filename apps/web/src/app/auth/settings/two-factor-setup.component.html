@@ -39,7 +39,7 @@
         title="{{ 'loading' | i18n }}"
         aria-hidden="true"
       ></i>
-      <span class="sr-only">{{ "loading" | i18n }}</span>
+      <span class="tw-sr-only">{{ "loading" | i18n }}</span>
     </small>
   </h2>
   <bit-callout type="warning" *ngIf="showPolicyWarning">
@@ -48,18 +48,23 @@
   <ul class="list-group list-group-2fa">
     <li *ngFor="let p of providers" class="list-group-item d-flex align-items-center">
       <div class="logo-2fa d-flex justify-content-center">
-        <img [class]="'mfaType' + p.type" [alt]="p.name + ' logo'" />
+        <auth-two-factor-icon [provider]="p.type" [name]="p.name" />
       </div>
       <div class="mx-4">
         <h3 class="mb-0">
-          {{ p.name }}
+          <div
+            class="font-weight-semibold tw-text-base"
+            [style]="p.enabled || p.premium ? 'display:inline-block' : ''"
+          >
+            {{ p.name }}
+          </div>
           <ng-container *ngIf="p.enabled">
             <i
               class="bwi bwi-check text-success bwi-fw"
               title="{{ 'enabled' | i18n }}"
               aria-hidden="true"
             ></i>
-            <span class="sr-only">{{ "enabled" | i18n }}</span>
+            <span class="tw-sr-only">{{ "enabled" | i18n }}</span>
           </ng-container>
           <app-premium-badge *ngIf="p.premium"></app-premium-badge>
         </h3>

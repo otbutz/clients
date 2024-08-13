@@ -1,7 +1,7 @@
 import { systemPreferences } from "electron";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { passwords } from "@bitwarden/desktop-native";
+import { passwords } from "@bitwarden/desktop-napi";
 
 import { OsBiometricService } from "./biometrics.service.abstraction";
 
@@ -51,4 +51,14 @@ export default class BiometricDarwinMain implements OsBiometricService {
       return false;
     }
   }
+
+  async osBiometricsNeedsSetup() {
+    return false;
+  }
+
+  async osBiometricsCanAutoSetup(): Promise<boolean> {
+    return false;
+  }
+
+  async osBiometricsSetup(): Promise<void> {}
 }

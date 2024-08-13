@@ -69,14 +69,7 @@
       "reviewers": ["team:team-admin-console-dev"]
     },
     {
-      "matchPackageNames": [
-        "@types/duo_web_sdk",
-        "@types/node-ipc",
-        "duo_web_sdk",
-        "node-ipc",
-        "qrious",
-        "regedit"
-      ],
+      "matchPackageNames": ["@types/node-ipc", "node-ipc", "qrious", "regedit"],
       "description": "Auth owned dependencies",
       "commitMessagePrefix": "[deps] Auth:",
       "reviewers": ["team:team-auth-dev"]
@@ -114,6 +107,26 @@
     },
     {
       "matchPackageNames": [
+        "@types/argon2-browser",
+        "@types/chrome",
+        "@types/firefox-webext-browser",
+        "@types/jquery",
+        "@types/node",
+        "@types/node-forge",
+        "argon2",
+        "argon2-browser",
+        "big-integer",
+        "node-forge",
+        "rxjs",
+        "type-fest",
+        "typescript"
+      ],
+      "description": "Platform owned dependencies",
+      "commitMessagePrefix": "[deps] Platform:",
+      "reviewers": ["team:team-platform-dev"]
+    },
+    {
+      "matchPackageNames": [
         "@angular-devkit/build-angular",
         "@angular/animations",
         "@angular/cdk",
@@ -126,30 +139,6 @@
         "@angular/platform",
         "@angular/compiler",
         "@angular/router",
-        "@types/argon2-browser",
-        "@types/chrome",
-        "@types/firefox-webext-browser",
-        "@types/jquery",
-        "@types/node",
-        "@types/node-forge",
-        "argon2",
-        "argon2-browser",
-        "big-integer",
-        "bootstrap",
-        "jquery",
-        "node-forge",
-        "popper.js",
-        "rxjs",
-        "type-fest",
-        "typescript",
-        "zone.js"
-      ],
-      "description": "Platform owned dependencies",
-      "commitMessagePrefix": "[deps] Platform:",
-      "reviewers": ["team:team-platform-dev"]
-    },
-    {
-      "matchPackageNames": [
         "@compodoc/compodoc",
         "@ng-select/ng-select",
         "@storybook/addon-a11y",
@@ -160,17 +149,21 @@
         "@storybook/angular",
         "@types/react",
         "autoprefixer",
+        "bootstrap",
         "chromatic",
+        "jquery",
         "ngx-toastr",
+        "popper.js",
         "react",
         "react-dom",
         "remark-gfm",
         "storybook",
-        "tailwindcss"
+        "tailwindcss",
+        "zone.js"
       ],
       "description": "Component library owned dependencies",
-      "commitMessagePrefix": "[deps] Platform (CL):",
-      "reviewers": ["team:team-component-library"]
+      "commitMessagePrefix": "[deps] Design System:",
+      "reviewers": ["team:team-design-system"]
     },
     {
       "matchPackageNames": [

@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Hlavní heslo"
+  },
+  "masterPassImportant": {
+    "message": "Pokud zapomenete Vaše hlavní heslo, nebude možné jej obnovit!"
+  },
+  "confirmMasterPassword": {
+    "message": "Potvrzení hlavního hesla"
+  },
+  "masterPassHintLabel": {
+    "message": "Nápověda k hlavnímu heslu"
+  },
+  "joinOrganization": {
+    "message": "Přidat se k organizaci"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Dokončete připojení k této organizaci nastavením hlavního hesla."
+  },
   "settings": {
     "message": "Nastavení"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Potvrzení hlavního hesla se neshoduje."
-  },
-  "newAccountCreated": {
-    "message": "Váš účet byl vytvořen! Můžete se přihlásit."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Byli jste úspěšně přihlášeni"
   },
   "youMayCloseThisWindow": {
     "message": "Toto okno můžete zavřít"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Potvrzení hlavního hesla se neshoduje."
+  },
+  "newAccountCreated": {
+    "message": "Váš účet byl vytvořen! Můžete se přihlásit."
   },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Je vyžadován ověřovací kód."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Ověření bylo zrušeno nebo trvalo příliš dlouho. Zkuste to znovu."
   },
   "invalidVerificationCode": {
     "message": "Neplatný ověřovací kód"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Ověřovací aplikace"
   },
-  "authenticatorAppDesc": {
-    "message": "Použijte ověřovací aplikaci (jako je Authy nebo Google Authenticator) pro generování časově omezených kódů.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Zadejte kód vygenerovaný ověřovací aplikací, jako je Autentikátor Bitwarden.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
+  "yubiKeyTitleV2": {
     "message": "Bezpečnostní klíč YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Použije YubiKey pro přístup k Vašemu trezoru. Podporuje YubiKey 4, 4 Nano, 4C a NEO."
   },
-  "duoDesc": {
-    "message": "Ověření pomocí Duo Security prostřednictvím aplikace Duo Mobile, SMS, telefonního hovoru nebo bezpečnostního klíče U2F.",
+  "duoDescV2": {
+    "message": "Zadejte kód vygenerovaný DUO Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "E-mail"
   },
-  "emailDesc": {
-    "message": "Ověřovací kódy Vám budou zaslány e-mailem."
+  "emailDescV2": {
+    "message": "Zadejte kód odeslaný na Váš e-mail."
   },
   "loginUnavailable": {
     "message": "Přihlášení není dostupné"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
+  },
+  "restartRegistration": {
+    "message": "Restartovat registraci"
+  },
+  "expiredLink": {
+    "message": "Platnost odkazu vypršela"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Restartujte registraci nebo se zkuste přihlásit."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Už možná máte účet"
   },
   "logOutConfirmation": {
     "message": "Opravdu se chcete odhlásit?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Další nastavení Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Ověřte se pro Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Odemknout pomocí Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Požádat o Windows Hello při spuštění aplikace"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Požádat o Touch ID při spuštění aplikace"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavní heslo nesplňuje požadavky zásad."
   },
-  "receiveMarketingEmails": {
-    "message": "Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti."
+  "receiveMarketingEmailsV2": {
+    "message": "Dostávejte do své e-mailové schránky rady, oznámení a příležitosti k výzkumu od společnosti Bitwarden."
   },
   "unsubscribe": {
     "message": "Odhlásit odběr"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometrické prvky v prohlížeči vyžadují, aby byla nastavena biometrie nejprve v aplikaci pro počítač."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Autometic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví položky na organizaci a poté si vyberte z dostupných kolekcí."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Je vyžadováno ověření e-mailu"
   },
+  "emailVerifiedV2": {
+    "message": "E-mail byl ověřen"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Pro použití této funkce musíte ověřit svůj e-mail."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Vaše organizace zakázala šifrování pomocí důvěryhodného zařízení. Nastavte hlavní heslo pro přístup k trezoru."
   },
   "tryAgain": {
     "message": "Zkusit znovu"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Časový limit Vašeho trezoru překračuje omezení stanovená Vaší organizací."
+  },
+  "inviteAccepted": {
+    "message": "Pozvánka byla přijata"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrace"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Chyba při připojování ke službě Duo. Použijte jinou dvoufázovou metodu přihlášení nebo kontaktujte Duo o pomoc."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Spusťte DUO a pro dokončení přihlášení postupujte podle kroků."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Neplatné heslo souboru, použijte heslo zadané při vytvoření souboru exportu."
   },
-  "importDestination": {
-    "message": "Cíl importu"
+  "destination": {
+    "message": "Cíl"
   },
   "learnAboutImportOptions": {
     "message": "Více o volbách importu"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Potvrzení hesla souboru"
+  },
+  "exportSuccess": {
+    "message": "Data trezoru byla exportována"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Vícefázové ověření zrušeno"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Contraseña maestra"
+  },
+  "masterPassImportant": {
+    "message": "¡Tu contraseña maestra no se puede recuperar si la olvidas!"
+  },
+  "confirmMasterPassword": {
+    "message": "Confirmar contraseña maestra"
+  },
+  "masterPassHintLabel": {
+    "message": "Pista de la contraseña maestra"
+  },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Ajustes"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "La confirmación de contraseña maestra no coincide."
-  },
-  "newAccountCreated": {
-    "message": "¡Tu nueva cuenta ha sido creada! Ahora puedes acceder."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Has iniciado sesión correctamente"
   },
   "youMayCloseThisWindow": {
     "message": "Puedes cerrar esta ventana"
+  },
+  "masterPassDoesntMatch": {
+    "message": "La confirmación de contraseña maestra no coincide."
+  },
+  "newAccountCreated": {
+    "message": "¡Tu nueva cuenta ha sido creada! Ahora puedes acceder."
   },
   "masterPassSent": {
     "message": "Te hemos enviado un correo electrónico con la pista de tu contraseña maestra."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Código de verificación requerido."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "Código de verificación incorrecto"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Aplicación de autenticación"
   },
-  "authenticatorAppDesc": {
-    "message": "Utiliza una aplicación de autenticación (como Authy o Google Authenticator) para generar código de verificación basados en tiempo.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Introduce un código generado por una aplicación de autenticación como Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Llave de seguridad YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Llave de seguridad Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Usa un Yubikey para acceder a tu cuenta. Funciona con YubiKey 4, 4 Nano, 4C y dispositivos NEO."
   },
-  "duoDesc": {
-    "message": "Verificar con Duo Security usando la aplicación Duo Mobile, SMS, llamada telefónica o llave de seguridad U2F.",
+  "duoDescV2": {
+    "message": "Introduce un código generado por Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Correo electrónico"
   },
-  "emailDesc": {
-    "message": "Los códigos de verificación te serán enviados por correo electrónico."
+  "emailDescV2": {
+    "message": "Introduce el código enviado a tu dirección de correo electrónico."
   },
   "loginUnavailable": {
     "message": "Entrada no disponible"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Tu sesión ha expirado."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "¿Estás seguro de querer cerrar sesión?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Ajustes adicionales de Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verificar para Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Desbloquear con Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Solicitar Windows Hello al iniciar"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Solicitar Touch ID al iniciar"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Su nueva contraseña maestra no cumple con los requisitos de la política."
   },
-  "receiveMarketingEmails": {
-    "message": "Obtén correos electrónicos de Bitwarden para anuncios, consejos y oportunidades de investigación."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Darse de baja"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "La biometría del navegador requiere habilitar primero la biometría de escritorio en los ajustes."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Autometic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Debido a una política de organización, tiene restringido el guardar elementos a su caja fuerte personal. Cambie la configuración de propietario a organización y elija entre las colecciones disponibles."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Verificación de correo electrónico requerida"
   },
+  "emailVerifiedV2": {
+    "message": "Correo electrónico verificado"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Debes verificar tu correo electrónico para usar esta característica."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Tu contraseña maestra no cumple con una o más de las políticas de tu organización. Para acceder a la caja fuerte, debes actualizar tu contraseña maestra ahora. Proceder te desconectará de tu sesión actual, requiriendo que vuelva a iniciar sesión. Las sesiones activas en otros dispositivos pueden seguir estando activas durante hasta una hora."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
   },
   "tryAgain": {
     "message": "Intentar de nuevo"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "El tiempo de espera de tu caja fuerte excede las restricciones establecidas por tu organización."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Inscripción automática"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Inicia Duo y sigue los pasos para terminar de iniciar sesión."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Contraseña de archivo no válida, por favor utiliza la contraseña que introdujiste cuando creaste el archivo de exportación."
   },
-  "importDestination": {
-    "message": "Destino de importación"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Aprende acerca de tus opciones de importación"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Confirma la contraseña del archivo"
+  },
+  "exportSuccess": {
+    "message": "Datos de la caja fuerte exportados"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Autenticación multifactor cancelada"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

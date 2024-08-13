@@ -2,7 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { FormBuilder } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { RegisterRouteService } from "@bitwarden/auth/common";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
@@ -18,10 +18,10 @@ import { SendAccessView } from "@bitwarden/common/tools/send/models/view/send-ac
 import { SEND_KDF_ITERATIONS } from "@bitwarden/common/tools/send/send-kdf";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { NoItemsModule, ToastService } from "@bitwarden/components";
+import { ExpiredSendIcon } from "@bitwarden/send-ui";
 
 import { SharedModule } from "../../shared";
 
-import { ExpiredSend } from "./icons/expired-send.icon";
 import { SendAccessFileComponent } from "./send-access-file.component";
 import { SendAccessPasswordComponent } from "./send-access-password.component";
 import { SendAccessTextComponent } from "./send-access-text.component";
@@ -51,12 +51,12 @@ export class AccessComponent implements OnInit {
   protected hideEmail = false;
   protected decKey: SymmetricCryptoKey;
   protected accessRequest: SendAccessRequest;
-  protected expiredSendIcon = ExpiredSend;
+  protected expiredSendIcon = ExpiredSendIcon;
 
   protected formGroup = this.formBuilder.group({});
 
   // TODO: remove when email verification flag is removed
-  registerRoute = "/register";
+  registerRoute$ = this.registerRouteService.registerRoute$();
 
   private id: string;
   private key: string;
@@ -69,6 +69,7 @@ export class AccessComponent implements OnInit {
     private toastService: ToastService,
     private i18nService: I18nService,
     private configService: ConfigService,
+    private registerRouteService: RegisterRouteService,
     protected formBuilder: FormBuilder,
   ) {}
 
@@ -87,15 +88,6 @@ export class AccessComponent implements OnInit {
   }
 
   async ngOnInit() {
-    // TODO: remove when email verification flag is removed
-    const emailVerification = await this.configService.getFeatureFlag(
-      FeatureFlag.EmailVerification,
-    );
-
-    if (emailVerification) {
-      this.registerRoute = "/signup";
-    }
-
     // eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe
     this.route.params.subscribe(async (params) => {
       this.id = params.sendId;

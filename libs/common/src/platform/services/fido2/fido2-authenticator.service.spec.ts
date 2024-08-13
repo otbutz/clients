@@ -214,7 +214,8 @@ describe("FidoAuthenticatorService", () => {
 
           expect(userInterfaceSession.confirmNewCredential).toHaveBeenCalledWith({
             credentialName: params.rpEntity.name,
-            userName: params.userEntity.displayName,
+            userName: params.userEntity.name,
+            userHandle: Fido2Utils.bufferToString(params.userEntity.id),
             userVerification,
             rpId: params.rpEntity.id,
           } as NewCredentialParams);
@@ -752,6 +753,22 @@ describe("FidoAuthenticatorService", () => {
         const result = async () => await authenticator.getAssertion(params, tab);
 
         await expect(result).rejects.toThrowError(Fido2AuthenticatorErrorCode.Unknown);
+      });
+    });
+
+    describe("silentCredentialDiscovery", () => {
+      it("returns the fido2Credentials of a cipher found by its rpId", async () => {
+        const credentialId = Utils.newGuid();
+        const cipher = await createCipherView(
+          { type: CipherType.Login },
+          { credentialId, rpId: RpId, discoverable: true },
+        );
+        const ciphers = [cipher];
+        cipherService.getAllDecrypted.mockResolvedValue(ciphers);
+
+        const result = await authenticator.silentCredentialDiscovery(RpId);
+
+        expect(result).toEqual([cipher.login.fido2Credentials[0]]);
       });
     });
 

@@ -1,10 +1,19 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { ReactiveFormsModule, UntypedFormBuilder, Validators } from "@angular/forms";
-import { map, merge, Observable, startWith, Subject, takeUntil } from "rxjs";
+import { combineLatest, map, merge, Observable, startWith, Subject, takeUntil } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { PasswordStrengthComponent } from "@bitwarden/angular/tools/password-strength/password-strength.component";
+import { PasswordStrengthV2Component } from "@bitwarden/angular/tools/password-strength/password-strength-v2.component";
 import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
@@ -16,7 +25,7 @@ import { FileDownloadService } from "@bitwarden/common/platform/abstractions/fil
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { EncryptedExportType } from "@bitwarden/common/tools/enums/encrypted-export-type.enum";
+import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import {
   AsyncActionsModule,
   BitSubmitDirective,
@@ -30,6 +39,8 @@ import {
   ToastService,
 } from "@bitwarden/components";
 import { VaultExportServiceAbstraction } from "@bitwarden/vault-export-core";
+
+import { EncryptedExportType } from "../enums/encrypted-export-type.enum";
 
 import { ExportScopeCalloutComponent } from "./export-scope-callout.component";
 
@@ -50,9 +61,30 @@ import { ExportScopeCalloutComponent } from "./export-scope-callout.component";
     RadioButtonModule,
     ExportScopeCalloutComponent,
     UserVerificationDialogComponent,
+    PasswordStrengthV2Component,
   ],
 })
-export class ExportComponent implements OnInit, OnDestroy {
+export class ExportComponent implements OnInit, OnDestroy, AfterViewInit {
+  private _organizationId: string;
+
+  get organizationId(): string {
+    return this._organizationId;
+  }
+
+  /**
+   * Enables the hosting control to pass in an organizationId
+   * If a organizationId is provided, the organization selection is disabled.
+   */
+  @Input() set organizationId(value: string) {
+    this._organizationId = value;
+    this.organizationService
+      .get$(this._organizationId)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((organization) => {
+        this._organizationId = organization?.id;
+      });
+  }
+
   /**
    * The hosting control also needs a bitSubmitDirective (on the Submit button) which calls this components {@link submit}-method.
    * This components formState (loading/disabled) is emitted back up to the hosting component so for example the Submit button can be enabled/disabled and show loading state.
@@ -82,8 +114,7 @@ export class ExportComponent implements OnInit, OnDestroy {
   @Output()
   onSuccessfulExport = new EventEmitter<string>();
 
-  @Output() onSaved = new EventEmitter();
-  @ViewChild(PasswordStrengthComponent) passwordStrengthComponent: PasswordStrengthComponent;
+  @ViewChild(PasswordStrengthV2Component) passwordStrengthComponent: PasswordStrengthV2Component;
 
   encryptedExportType = EncryptedExportType;
   protected showFilePassword: boolean;
@@ -91,7 +122,6 @@ export class ExportComponent implements OnInit, OnDestroy {
   filePasswordValue: string = null;
   private _disabledByPolicy = false;
 
-  protected organizationId: string = null;
   organizations$: Observable<Organization[]>;
 
   protected get disabledByPolicy(): boolean {
@@ -120,6 +150,7 @@ export class ExportComponent implements OnInit, OnDestroy {
   ];
 
   private destroy$ = new Subject<void>();
+  private onlyManagedCollections = true;
 
   constructor(
     protected i18nService: I18nService,
@@ -132,6 +163,7 @@ export class ExportComponent implements OnInit, OnDestroy {
     protected fileDownloadService: FileDownloadService,
     protected dialogService: DialogService,
     protected organizationService: OrganizationService,
+    private collectionService: CollectionService,
   ) {}
 
   async ngOnInit() {
@@ -163,11 +195,26 @@ export class ExportComponent implements OnInit, OnDestroy {
       );
       this.exportForm.controls.vaultSelector.patchValue(this.organizationId);
       this.exportForm.controls.vaultSelector.disable();
+
+      this.onlyManagedCollections = false;
       return;
     }
 
-    this.organizations$ = this.organizationService.memberOrganizations$.pipe(
-      map((orgs) => orgs.sort(Utils.getSortFunction(this.i18nService, "name"))),
+    this.organizations$ = combineLatest({
+      collections: this.collectionService.decryptedCollections$,
+      memberOrganizations: this.organizationService.memberOrganizations$,
+    }).pipe(
+      map(({ collections, memberOrganizations }) => {
+        const managedCollectionsOrgIds = new Set(
+          collections.filter((c) => c.manage).map((c) => c.organizationId),
+        );
+        // Filter organizations that exist in managedCollectionsOrgIds
+        const filteredOrgs = memberOrganizations.filter((org) =>
+          managedCollectionsOrgIds.has(org.id),
+        );
+        // Sort the filtered organizations based on the name
+        return filteredOrgs.sort(Utils.getSortFunction(this.i18nService, "name"));
+      }),
     );
 
     this.exportForm.controls.vaultSelector.valueChanges
@@ -211,7 +258,12 @@ export class ExportComponent implements OnInit, OnDestroy {
     try {
       const data = await this.getExportData();
       this.downloadFile(data);
-      this.saved();
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("exportSuccess"),
+      });
+      this.onSuccessfulExport.emit(this.organizationId);
       await this.collectEvent();
       this.exportForm.get("secret").setValue("");
       this.exportForm.clearValidators();
@@ -251,11 +303,6 @@ export class ExportComponent implements OnInit, OnDestroy {
 
     await this.doExport();
   };
-
-  protected saved() {
-    this.onSaved.emit();
-    this.onSuccessfulExport.emit(this.organizationId);
-  }
 
   private async verifyUser(): Promise<boolean> {
     let confirmDescription = "exportWarningDesc";
@@ -298,7 +345,7 @@ export class ExportComponent implements OnInit, OnDestroy {
           this.organizationId,
           this.format,
           this.filePassword,
-          true,
+          this.onlyManagedCollections,
         );
   }
 

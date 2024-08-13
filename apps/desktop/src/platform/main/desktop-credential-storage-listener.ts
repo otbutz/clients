@@ -2,7 +2,7 @@ import { ipcMain } from "electron";
 
 import { BiometricKey } from "@bitwarden/common/auth/types/biometric-key";
 import { ConsoleLogService } from "@bitwarden/common/platform/services/console-log.service";
-import { passwords } from "@bitwarden/desktop-native";
+import { passwords } from "@bitwarden/desktop-napi";
 
 import { BiometricMessage, BiometricAction } from "../../types/biometric-message";
 
@@ -78,6 +78,15 @@ export class DesktopCredentialStorageListener {
             break;
           case BiometricAction.OsSupported:
             val = await this.biometricService.osSupportsBiometric();
+            break;
+          case BiometricAction.NeedsSetup:
+            val = await this.biometricService.osBiometricsNeedsSetup();
+            break;
+          case BiometricAction.Setup:
+            await this.biometricService.osBiometricsSetup();
+            break;
+          case BiometricAction.CanAutoSetup:
+            val = await this.biometricService.osBiometricsCanAutoSetup();
             break;
           default:
         }

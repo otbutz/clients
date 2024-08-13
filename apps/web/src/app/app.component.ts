@@ -36,12 +36,12 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { StateEventRunnerService } from "@bitwarden/common/platform/state";
 import { SyncService } from "@bitwarden/common/platform/sync";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { InternalFolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
 import { DialogService, ToastOptions, ToastService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { PolicyListService } from "./admin-console/core/policy-list.service";
 import {
@@ -328,7 +328,6 @@ export class AppComponent implements OnDestroy, OnInit {
     );
 
     await Promise.all([
-      this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.cipherService.clear(userId),
       this.folderService.clear(userId),
@@ -343,6 +342,7 @@ export class AppComponent implements OnDestroy, OnInit {
     this.authService.logOut(async () => {
       await this.stateService.clean({ userId: userId });
       await this.accountService.clean(userId);
+      await this.accountService.switchAccount(null);
 
       await logoutPromise;
 

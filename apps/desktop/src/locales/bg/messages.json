@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Главна парола"
+  },
+  "masterPassImportant": {
+    "message": "Главната парола не може да бъде възстановена, ако я забравите!"
+  },
+  "confirmMasterPassword": {
+    "message": "Потвърждаване на главната парола"
+  },
+  "masterPassHintLabel": {
+    "message": "Подсказка за главната парола"
+  },
+  "joinOrganization": {
+    "message": "Присъединяване към организацията"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Завършете присъединяването си към тази организация като зададете главна парола."
+  },
   "settings": {
     "message": "Настройки"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Главната парола и потвърждението ѝ не съвпадат."
-  },
-  "newAccountCreated": {
-    "message": "Абонаментът ви бе създаден. Вече можете да се впишете."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Вписахте се успешно"
   },
   "youMayCloseThisWindow": {
     "message": "Може да затворите този прозорец"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Главната парола и потвърждението ѝ не съвпадат."
+  },
+  "newAccountCreated": {
+    "message": "Абонаментът ви бе създаден. Вече можете да се впишете."
   },
   "masterPassSent": {
     "message": "Изпратили сме ви е-писмо с подсказка за главната ви парола."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Кодът за потвърждение е задължителен."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Удостоверяването беше отменено или отне твърде много време. Моля, опитайте отново."
   },
   "invalidVerificationCode": {
     "message": "Грешен код за потвърждаване"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Приложение за удостоверяване"
   },
-  "authenticatorAppDesc": {
-    "message": "Използвайте приложение за удостоверяване (като Authy или Google Authenticator) за генерирането на временни кодове за потвърждение.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Въведете код създаден чрез приложение за удостоверяване, като например това на Битуорден.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Устройство YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ за сигурност YubiKey OTP"
   },
   "yubiKeyDesc": {
     "message": "Използвайте устройство на YubiKey, за да влезете в абонамента си. Поддържат се моделите YubiKey 4, 4 Nano, 4C и NEO."
   },
-  "duoDesc": {
-    "message": "Удостоверяване чрез Duo Security, с ползване на приложението Duo Mobile, SMS, телефонен разговор или устройство U2F.",
+  "duoDescV2": {
+    "message": "Въведете код създаден чрез Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Електронна поща"
   },
-  "emailDesc": {
-    "message": "Кодовете за потвърждение ще ви бъдат пратени по е-поща."
+  "emailDescV2": {
+    "message": "Въведете кода изпратен на е-пощата Ви."
   },
   "loginUnavailable": {
     "message": "Записът липсва"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Сесията ви изтече."
+  },
+  "restartRegistration": {
+    "message": "Рестартиране на регистрацията"
+  },
+  "expiredLink": {
+    "message": "Връзка с изтекла давност"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Рестартирайте регистрацията или опитайте да се впишете."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Може вече да имате регистрация"
   },
   "logOutConfirmation": {
     "message": "Сигурни ли сте, че искате да се отпишете?"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Допълнителни настройки на Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Отключване чрез системно удостоверяване"
+  },
   "windowsHelloConsentMessage": {
     "message": "Потвърждаване за Битуорден."
+  },
+  "polkitConsentMessage": {
+    "message": "Идентифицирайте се, за да отключите Битуорден."
   },
   "unlockWithTouchId": {
     "message": "Отключване с Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Питане за Windows Hello при пускане"
+  },
+  "autoPromptPolkit": {
+    "message": "Питане за системно удостоверяване при стартиране"
   },
   "autoPromptTouchId": {
     "message": "Питане за Touch ID при пускане"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Паролата ви не отговаря на политиките."
   },
-  "receiveMarketingEmails": {
-    "message": "Получавайте е-писма от Битоурден за новини, съвети и възможности за проучвания."
+  "receiveMarketingEmailsV2": {
+    "message": "Получавайте съвети, обявления и предложения за участие в проучвания от Битуорден в пощенската си кутия."
   },
   "unsubscribe": {
     "message": "Отписване"
@@ -1770,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Потвърждаването с биометрични данни в браузъра изисква включването включването им в настройките за самостоятелното приложение."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Автоматичното настройване не е налично"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Поради начина на инсталиране, поддръжката на биометрични данни не може да бъде включена автоматично. Искате ли да отворите документацията, за да видите как да го направите ръчно?"
   },
   "personalOwnershipSubmitError": {
     "message": "Заради някоя политика за голяма организация не може да запазвате елементи в собствения си трезор. Променете собствеността да е на организация и изберете от наличните колекции."
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Изисква се потвърждение на е-пощата"
   },
+  "emailVerifiedV2": {
+    "message": "Е-пощата е потвърдена"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Трябва да потвърдите е-пощата си, за да можете да използвате тази функционалност."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Вашата главна парола не отговаря на една или повече политики на организацията Ви. За да получите достъп до трезора, трябва да промените главната си парола сега. Това означава, че ще бъдете отписан(а) от текущата си сесия и ще трябва да се впишете отново. Активните сесии на други устройства може да продължат да бъдат активни още един час."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Вашата организация е деактивирала шифроването чрез доверени устройства. Задайте главна парола, за да получите достъп до трезора си."
   },
   "tryAgain": {
     "message": "Нов опит"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Времето за достъп до трезора Ви превишава ограничението, определено от организацията Ви."
+  },
+  "inviteAccepted": {
+    "message": "Поканата е приета"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматично включване"
@@ -2763,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Грешка при свързването с услугата на Duo. Използвайте друг метод за двустепенно удостоверяване или се свържете с Duo за съдействие."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Стартирайте Duo и следвайте инструкциите, за да завършите вписването."
   },
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Неправилна парола за файла. Използвайте паролата, която сте въвели при създаването на изнесения файл."
   },
-  "importDestination": {
-    "message": "Място на внасяне"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Научете повече относно възможностите за внасяне"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Потвърждаване на паролата на файла"
+  },
+  "exportSuccess": {
+    "message": "Данните от трезора са изнесени"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Многостъпковото удостоверяване е отменено"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Данни"
+  },
+  "fileSends": {
+    "message": "Файлови изпращания"
+  },
+  "textSends": {
+    "message": "Текстови изпращания"
   }
 }

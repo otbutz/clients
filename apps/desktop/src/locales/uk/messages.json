@@ -21,7 +21,7 @@
     "message": "Картка"
   },
   "typeIdentity": {
-    "message": "Особисті дані"
+    "message": "Посвідчення"
   },
   "typeSecureNote": {
     "message": "Захищена нотатка"
@@ -151,7 +151,7 @@
     "message": "Код безпеки"
   },
   "identityName": {
-    "message": "Назва"
+    "message": "Назва посвідчення"
   },
   "company": {
     "message": "Компанія"
@@ -346,7 +346,7 @@
     "message": "Видалити"
   },
   "nameRequired": {
-    "message": "Потрібна назва."
+    "message": "Необхідно ввести назву."
   },
   "addedItem": {
     "message": "Запис додано"
@@ -539,6 +539,24 @@
       }
     }
   },
+  "masterPassword": {
+    "message": "Головний пароль"
+  },
+  "masterPassImportant": {
+    "message": "Головний пароль неможливо відновити, якщо ви його втратите!"
+  },
+  "confirmMasterPassword": {
+    "message": "Підтвердьте головний пароль"
+  },
+  "masterPassHintLabel": {
+    "message": "Підказка для головного пароля"
+  },
+  "joinOrganization": {
+    "message": "Приєднатися до організації"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Завершіть приєднання до цієї організації, встановивши головний пароль."
+  },
   "settings": {
     "message": "Налаштування"
   },
@@ -573,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Підтвердження головного пароля не збігається."
-  },
-  "newAccountCreated": {
-    "message": "Ваш обліковий запис створений! Тепер ви можете увійти."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Ви успішно увійшли в систему"
   },
   "youMayCloseThisWindow": {
     "message": "Можете закрити це вікно"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Підтвердження головного пароля не збігається."
+  },
+  "newAccountCreated": {
+    "message": "Ваш обліковий запис створений! Тепер ви можете увійти."
   },
   "masterPassSent": {
     "message": "Ми надіслали вам лист з підказкою для головного пароля."
@@ -614,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Потрібний код підтвердження."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Автентифікацію було скасовано або вона тривала надто довго. Повторіть спробу."
   },
   "invalidVerificationCode": {
     "message": "Недійсний код підтвердження"
@@ -666,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Програма автентифікації"
   },
-  "authenticatorAppDesc": {
-    "message": "Використовуйте програму автентифікації (наприклад, Authy або Google Authenticator), щоб генерувати тимчасові коди підтвердження.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Введіть код, згенерований програмою для автентифікації, як-от Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Ключ безпеки YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ безпеки Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Використовуйте YubiKey для доступу до сховища. Працює з YubiKey 4, 4 Nano, 4C та пристроями NEO."
   },
-  "duoDesc": {
-    "message": "Авторизуйтесь за допомогою Duo Security з використанням мобільного додатку Duo Mobile, SMS, телефонного виклику, або ключа безпеки U2F.",
+  "duoDescV2": {
+    "message": "Введіть код, згенерований Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -693,8 +714,8 @@
   "emailTitle": {
     "message": "Е-пошта"
   },
-  "emailDesc": {
-    "message": "Коди підтвердження будуть надсилатися на вашу пошту."
+  "emailDescV2": {
+    "message": "Введіть код, надісланий вам електронною поштою."
   },
   "loginUnavailable": {
     "message": "Вхід недоступний"
@@ -712,10 +733,10 @@
     "message": "Середовище власного хостингу"
   },
   "selfHostedEnvironmentFooter": {
-    "message": "Вкажіть основну URL-адресу локально розміщеного встановлення Bitwarden."
+    "message": "Вкажіть основну URL-адресу вашого встановлення Bitwarden на власному хостингу."
   },
   "selfHostedBaseUrlHint": {
-    "message": "Вкажіть основну URL-адресу вашого локально розміщеного встановлення Bitwarden. Зразок: https://bitwarden.company.com"
+    "message": "Вкажіть основну URL-адресу вашого встановлення Bitwarden на власному хостингу. Зразок: https://bitwarden.company.com"
   },
   "selfHostedCustomEnvHeader": {
     "message": "Для розширеної конфігурації ви можете вказати основну URL-адресу окремо для кожної служби."
@@ -736,7 +757,7 @@
     "message": "URL-адреса сервера API"
   },
   "webVaultUrl": {
-    "message": "URL-адреса сервера веб сховища"
+    "message": "URL-адреса сервера вебсховища"
   },
   "identityUrl": {
     "message": "URL-адреса сервера ідентифікації"
@@ -776,6 +797,18 @@
   },
   "loginExpired": {
     "message": "Тривалість вашого сеансу завершилась."
+  },
+  "restartRegistration": {
+    "message": "Перезапустити реєстрацію"
+  },
+  "expiredLink": {
+    "message": "Протерміноване посилання"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Перезапустіть реєстрацію або спробуйте ввійти."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Можливо, ви вже зареєстровані"
   },
   "logOutConfirmation": {
     "message": "Ви дійсно хочете вийти?"
@@ -846,7 +879,7 @@
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
-    "message": "Перейти у веб сховище"
+    "message": "Перейти у вебсховище"
   },
   "getMobileApp": {
     "message": "Отримати мобільний додаток"
@@ -1477,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Додаткові налаштування Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Розблокувати за допомогою системної автентифікації"
+  },
   "windowsHelloConsentMessage": {
     "message": "Перевірити на Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Автентифікуйтесь для розблокування Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Розблокувати з Touch ID"
@@ -1491,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Запитувати Windows Hello під час запуску"
+  },
+  "autoPromptPolkit": {
+    "message": "Запитувати системну автентифікацію під час запуску"
   },
   "autoPromptTouchId": {
     "message": "Запитувати Touch ID під час запуску"
@@ -1678,8 +1720,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новий головний пароль не задовольняє вимоги політики."
   },
-  "receiveMarketingEmails": {
-    "message": "Отримуйте електронні листи від Bitwarden з оголошеннями, порадами та інформацією про нові можливості."
+  "receiveMarketingEmailsV2": {
+    "message": "Отримуйте поради, оголошення та можливості дослідження від Bitwarden у своїй поштовій скриньці."
   },
   "unsubscribe": {
     "message": "Відписатися"
@@ -1771,6 +1813,12 @@
   "biometricsNotEnabledDesc": {
     "message": "Для використання біометрії в браузері необхідно спершу налаштувати її в програмі на комп'ютері."
   },
+  "biometricsManualSetupTitle": {
+    "message": "Автоналаштування недоступне"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "У зв'язку з методом встановлення, не можна автоматично ввімкнути підтримку біометрії. Бажаєте переглянути документацію про те, як зробити це вручну?"
+  },
   "personalOwnershipSubmitError": {
     "message": "Згідно з політикою компанії, вам заборонено зберігати записи в особистому сховищі. Змініть опцію власника на організацію та виберіть серед доступних збірок."
   },
@@ -1781,7 +1829,7 @@
     "message": "Політика організації впливає на ваші параметри власності."
   },
   "personalOwnershipPolicyInEffectImports": {
-    "message": "Політика організації заблокувала імпортування елементів до вашого особистого сховища."
+    "message": "Політика організації заблокувала імпортування записів до вашого особистого сховища."
   },
   "allSends": {
     "message": "Усі відправлення",
@@ -1837,7 +1885,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendPasswordDesc": {
-    "message": "За бажанням вимагати пароль в користувачів для доступу до цього відправлення.",
+    "message": "Ви можете встановити пароль для доступу до цього відправлення.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendNotesDesc": {
@@ -1955,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Необхідно підтвердити е-пошту"
   },
+  "emailVerifiedV2": {
+    "message": "Електронну пошту підтверджено"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Для використання цієї функції необхідно підтвердити електронну пошту."
   },
@@ -1978,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш головний пароль не відповідає одній або більше політикам вашої організації. Щоб отримати доступ до сховища, вам необхідно оновити свій головний пароль зараз. Продовживши, ви вийдете з поточного сеансу, після чого потрібно буде повторно виконати вхід. Сеанси на інших пристроях можуть залишатися активними протягом однієї години."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Ваша організація вимкнула шифрування довірених пристроїв. Встановіть головний пароль для доступу до сховища."
   },
   "tryAgain": {
     "message": "Спробуйте знову"
@@ -2062,6 +2116,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Час очікування сховища перевищує обмеження, встановлені вашою організацією."
+  },
+  "inviteAccepted": {
+    "message": "Запрошення прийнято"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматичне подання запиту"
@@ -2157,7 +2214,7 @@
     "message": "Експортування сховища організації"
   },
   "exportingOrganizationVaultDesc": {
-    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Елементи особистих сховищ або інших організацій не будуть включені.",
+    "message": "Буде експортовано лише сховище організації, пов'язане з $ORGANIZATION$. Записи особистих сховищ або інших організацій не будуть включені.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2743,7 +2800,7 @@
     "message": "Дані успішно імпортовано"
   },
   "importSuccessNumberOfItems": {
-    "message": "Всього імпортовано $AMOUNT$ елементів.",
+    "message": "Всього імпортовано $AMOUNT$ записів.",
     "placeholders": {
       "amount": {
         "content": "$1",
@@ -2762,6 +2819,9 @@
         "example": "My Org Name"
       }
     }
+  },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Помилка під'єднання до служби Duo. Скористайтеся іншим способом двоетапної перевірки або зверніться до служби підтримки Duo по допомогу."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Запустіть Duo і виконайте дії для завершення входу."
@@ -2784,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Неправильний пароль файлу. Використайте пароль, який ви вводили під час створення експортованого файлу."
   },
-  "importDestination": {
-    "message": "Призначення імпорту"
+  "destination": {
+    "message": "Призначення"
   },
   "learnAboutImportOptions": {
     "message": "Дізнайтеся про параметри імпорту"
@@ -2807,7 +2867,7 @@
     }
   },
   "importUnassignedItemsError": {
-    "message": "Файл містить непризначені елементи."
+    "message": "Файл містить непризначені записи."
   },
   "selectFormat": {
     "message": "Оберіть формат імпортованого файлу"
@@ -2842,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Підтвердьте пароль файлу"
+  },
+  "exportSuccess": {
+    "message": "Дані сховища експортовано"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Багатофакторну автентифікацію скасовано"
@@ -2977,5 +3040,14 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Дані"
+  },
+  "fileSends": {
+    "message": "Відправлення файлів"
+  },
+  "textSends": {
+    "message": "Відправлення тексту"
   }
 }

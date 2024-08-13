@@ -1,10 +1,20 @@
 import { CommonModule } from "@angular/common";
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherType } from "@bitwarden/common/vault/enums";
-import { ButtonModule, NoItemsModule, MenuModule } from "@bitwarden/components";
+import { ButtonModule, DialogService, MenuModule, NoItemsModule } from "@bitwarden/components";
+
+import { AddEditQueryParams } from "../add-edit/add-edit-v2.component";
+import { AddEditFolderDialogComponent } from "../add-edit-folder-dialog/add-edit-folder-dialog.component";
+
+export interface NewItemInitialValues {
+  folderId?: string;
+  organizationId?: OrganizationId;
+  collectionId?: CollectionId;
+}
 
 @Component({
   selector: "app-new-item-dropdown",
@@ -12,17 +22,34 @@ import { ButtonModule, NoItemsModule, MenuModule } from "@bitwarden/components";
   standalone: true,
   imports: [NoItemsModule, JslibModule, CommonModule, ButtonModule, RouterLink, MenuModule],
 })
-export class NewItemDropdownV2Component implements OnInit, OnDestroy {
+export class NewItemDropdownV2Component {
   cipherType = CipherType;
 
-  constructor(private router: Router) {}
+  /**
+   * Optional initial values to pass to the add cipher form
+   */
+  @Input()
+  initialValues: NewItemInitialValues;
 
-  ngOnInit(): void {}
+  constructor(
+    private router: Router,
+    private dialogService: DialogService,
+  ) {}
 
-  ngOnDestroy(): void {}
+  private buildQueryParams(type: CipherType): AddEditQueryParams {
+    return {
+      type: type.toString(),
+      collectionId: this.initialValues?.collectionId,
+      organizationId: this.initialValues?.organizationId,
+      folderId: this.initialValues?.folderId,
+    };
+  }
 
-  // TODO PM-6826: add selectedVault query param
   newItemNavigate(type: CipherType) {
-    void this.router.navigate(["/add-cipher"], { queryParams: { type: type, isNew: true } });
+    void this.router.navigate(["/add-cipher"], { queryParams: this.buildQueryParams(type) });
+  }
+
+  openFolderDialog() {
+    this.dialogService.open(AddEditFolderDialogComponent);
   }
 }

@@ -12,7 +12,11 @@ import {
   IconButtonModule,
   ItemModule,
   NoItemsModule,
+  SearchModule,
+  SectionComponent,
 } from "@bitwarden/components";
+
+import { PopupRouterCacheService } from "../view-cache/popup-router-cache.service";
 
 import { PopupFooterComponent } from "./popup-footer.component";
 import { PopupHeaderComponent } from "./popup-header.component";
@@ -33,55 +37,40 @@ class ExtensionContainerComponent {}
 @Component({
   selector: "vault-placeholder",
   template: `
-    <bit-item-group aria-label="Mock Vault Items">
-      <bit-item *ngFor="let item of data; index as i">
-        <button bit-item-content>
-          <i slot="start" class="bwi bwi-globe tw-text-3xl tw-text-muted" aria-hidden="true"></i>
-          {{ i }} of {{ data.length - 1 }}
-          <span slot="secondary">Bar</span>
-        </button>
+    <bit-section disableMargin>
+      <bit-item-group aria-label="Mock Vault Items">
+        <bit-item *ngFor="let item of data; index as i">
+          <button bit-item-content>
+            <i slot="start" class="bwi bwi-globe tw-text-3xl tw-text-muted" aria-hidden="true"></i>
+            {{ i }} of {{ data.length - 1 }}
+            <span slot="secondary">Bar</span>
+          </button>
 
-        <ng-container slot="end">
-          <bit-item-action>
-            <button type="button" bitBadge variant="primary">Auto-fill</button>
-          </bit-item-action>
-          <bit-item-action>
-            <button type="button" bitIconButton="bwi-clone" aria-label="Copy item"></button>
-          </bit-item-action>
-          <bit-item-action>
-            <button type="button" bitIconButton="bwi-ellipsis-v" aria-label="More options"></button>
-          </bit-item-action>
-        </ng-container>
-      </bit-item>
-    </bit-item-group>
+          <ng-container slot="end">
+            <bit-item-action>
+              <button type="button" bitBadge variant="primary">Auto-fill</button>
+            </bit-item-action>
+            <bit-item-action>
+              <button type="button" bitIconButton="bwi-clone" aria-label="Copy item"></button>
+            </bit-item-action>
+            <bit-item-action>
+              <button
+                type="button"
+                bitIconButton="bwi-ellipsis-v"
+                aria-label="More options"
+              ></button>
+            </bit-item-action>
+          </ng-container>
+        </bit-item>
+      </bit-item-group>
+    </bit-section>
   `,
   standalone: true,
-  imports: [CommonModule, ItemModule, BadgeModule, IconButtonModule],
+  imports: [CommonModule, ItemModule, BadgeModule, IconButtonModule, SectionComponent],
 })
 class VaultComponent {
   protected data = Array.from(Array(20).keys());
 }
-
-@Component({
-  selector: "generator-placeholder",
-  template: ` <div class="tw-text-main">generator stuff here</div> `,
-  standalone: true,
-})
-class GeneratorComponent {}
-
-@Component({
-  selector: "send-placeholder",
-  template: ` <div class="tw-text-main">send some stuff</div> `,
-  standalone: true,
-})
-class SendComponent {}
-
-@Component({
-  selector: "settings-placeholder",
-  template: ` <div class="tw-text-main">change your settings</div> `,
-  standalone: true,
-})
-class SettingsComponent {}
 
 @Component({
   selector: "mock-add-button",
@@ -125,6 +114,18 @@ class MockPopoutButtonComponent {}
 class MockCurrentAccountComponent {}
 
 @Component({
+  selector: "mock-search",
+  template: `
+    <div class="tw-p-4">
+      <bit-search placeholder="Search"> </bit-search>
+    </div>
+  `,
+  standalone: true,
+  imports: [SearchModule],
+})
+class MockSearchComponent {}
+
+@Component({
   selector: "mock-vault-page",
   template: `
     <popup-page>
@@ -135,6 +136,7 @@ class MockCurrentAccountComponent {}
           <mock-current-account></mock-current-account>
         </ng-container>
       </popup-header>
+      <mock-search slot="above-scroll-area"></mock-search>
       <vault-placeholder></vault-placeholder>
     </popup-page>
   `,
@@ -145,6 +147,7 @@ class MockCurrentAccountComponent {}
     MockAddButtonComponent,
     MockPopoutButtonComponent,
     MockCurrentAccountComponent,
+    MockSearchComponent,
     VaultComponent,
   ],
 })
@@ -186,7 +189,7 @@ class MockVaultPagePoppedComponent {}
           <mock-current-account></mock-current-account>
         </ng-container>
       </popup-header>
-      <generator-placeholder></generator-placeholder>
+      <div class="tw-text-main">Generator content here</div>
     </popup-page>
   `,
   standalone: true,
@@ -196,7 +199,6 @@ class MockVaultPagePoppedComponent {}
     MockAddButtonComponent,
     MockPopoutButtonComponent,
     MockCurrentAccountComponent,
-    GeneratorComponent,
   ],
 })
 class MockGeneratorPageComponent {}
@@ -212,7 +214,7 @@ class MockGeneratorPageComponent {}
           <mock-current-account></mock-current-account>
         </ng-container>
       </popup-header>
-      <send-placeholder></send-placeholder>
+      <div class="tw-text-main">Send content here</div>
     </popup-page>
   `,
   standalone: true,
@@ -222,7 +224,6 @@ class MockGeneratorPageComponent {}
     MockAddButtonComponent,
     MockPopoutButtonComponent,
     MockCurrentAccountComponent,
-    SendComponent,
   ],
 })
 class MockSendPageComponent {}
@@ -238,7 +239,7 @@ class MockSendPageComponent {}
           <mock-current-account></mock-current-account>
         </ng-container>
       </popup-header>
-      <settings-placeholder></settings-placeholder>
+      <div class="tw-text-main">Settings content here</div>
     </popup-page>
   `,
   standalone: true,
@@ -248,7 +249,6 @@ class MockSendPageComponent {}
     MockAddButtonComponent,
     MockPopoutButtonComponent,
     MockCurrentAccountComponent,
-    SettingsComponent,
   ],
 })
 class MockSettingsPageComponent {}
@@ -266,6 +266,7 @@ class MockSettingsPageComponent {}
       <popup-footer slot="footer">
         <button bitButton buttonType="primary">Save</button>
         <button bitButton buttonType="secondary">Cancel</button>
+        <button slot="end" type="button" buttonType="danger" bitIconButton="bwi-trash"></button>
       </popup-footer>
     </popup-page>
   `,
@@ -279,6 +280,7 @@ class MockSettingsPageComponent {}
     MockPopoutButtonComponent,
     MockCurrentAccountComponent,
     VaultComponent,
+    IconButtonModule,
   ],
 })
 class MockVaultSubpageComponent {}
@@ -303,6 +305,7 @@ export default {
         MockSettingsPageComponent,
         MockVaultPagePoppedComponent,
         NoItemsModule,
+        VaultComponent,
       ],
       providers: [
         {
@@ -310,6 +313,8 @@ export default {
           useFactory: () => {
             return new I18nMockService({
               back: "Back",
+              loading: "Loading",
+              search: "Search",
             });
           },
         },
@@ -331,6 +336,12 @@ export default {
             { useHash: true },
           ),
         ),
+        {
+          provide: PopupRouterCacheService,
+          useValue: {
+            back() {},
+          } as Partial<PopupRouterCacheService>,
+        },
       ],
     }),
   ],
@@ -400,6 +411,39 @@ export const CenteredContent: Story = {
             </div>
           </popup-page>
         </popup-tab-navigation>
+      </extension-container>
+    `,
+  }),
+};
+
+export const Loading: Story = {
+  render: (args) => ({
+    props: args,
+    template: /* HTML */ `
+      <extension-container>
+        <popup-tab-navigation>
+          <popup-page [loading]="true">
+            <popup-header slot="header" pageTitle="Page Header"></popup-header>
+            Content would go here
+          </popup-page>
+        </popup-tab-navigation>
+      </extension-container>
+    `,
+  }),
+};
+
+export const TransparentHeader: Story = {
+  render: (args) => ({
+    props: args,
+    template: /* HTML */ `
+      <extension-container>
+        <popup-page>
+          <popup-header slot="header" background="alt"
+            ><span class="tw-italic tw-text-main">🤠 Custom Content</span></popup-header
+          >
+
+          <vault-placeholder></vault-placeholder>
+        </popup-page>
       </extension-container>
     `,
   }),
