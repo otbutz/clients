@@ -2,6 +2,7 @@ import { Injectable, NgModule } from "@angular/core";
 import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
 
 import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
+import { unauthUiRefreshSwap } from "@bitwarden/angular/auth/functions/unauth-ui-refresh-route-swap";
 import {
   authGuard,
   lockGuard,
@@ -27,6 +28,7 @@ import { fido2AuthGuard } from "../auth/guards/fido2-auth.guard";
 import { AccountSwitcherComponent } from "../auth/popup/account-switching/account-switcher.component";
 import { EnvironmentComponent } from "../auth/popup/environment.component";
 import { ExtensionAnonLayoutWrapperComponent } from "../auth/popup/extension-anon-layout-wrapper/extension-anon-layout-wrapper.component";
+import { HintComponent } from "../auth/popup/hint.component";
 import { HomeComponent } from "../auth/popup/home.component";
 import { LockComponent } from "../auth/popup/lock.component";
 import { LoginDecryptionOptionsComponent } from "../auth/popup/login-decryption-options/login-decryption-options.component";
@@ -372,30 +374,40 @@ const routes: Routes = [
     canActivate: [authGuard],
     data: { state: "update-temp-password" },
   },
-  {
-    path: "",
-    component: ExtensionAnonLayoutWrapperComponent,
-    children: [
-      {
-        path: "hint",
-        canActivate: [unauthGuardFn(unauthRouteOverrides)],
-        data: {
-          pageTitle: "requestPasswordHint",
-          pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
-          showBackButton: true,
-          state: "hint",
-        },
-        children: [
-          { path: "", component: PasswordHintComponent },
-          {
-            path: "",
-            component: EnvironmentSelectorComponent,
-            outlet: "environment-selector",
-          },
-        ],
+  ...unauthUiRefreshSwap(
+    HintComponent,
+    ExtensionAnonLayoutWrapperComponent,
+    {
+      path: "hint",
+      canActivate: [unauthGuardFn(unauthRouteOverrides)],
+      data: {
+        state: "hint",
       },
-    ],
-  },
+    },
+    {
+      path: "",
+      children: [
+        {
+          path: "hint",
+          canActivate: [unauthGuardFn(unauthRouteOverrides)],
+          data: {
+            pageTitle: "requestPasswordHint",
+            pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
+            showBackButton: true,
+            state: "hint",
+          },
+          children: [
+            { path: "", component: PasswordHintComponent },
+            {
+              path: "",
+              component: EnvironmentSelectorComponent,
+              outlet: "environment-selector",
+            },
+          ],
+        },
+      ],
+    },
+  ),
   {
     path: "",
     component: AnonLayoutWrapperComponent,
