@@ -371,11 +371,11 @@ const routes: Routes = [
   },
   {
     path: "",
-    canActivate: [unauthGuardFn(unauthRouteOverrides)],
     component: ExtensionAnonLayoutWrapperComponent,
     children: [
       {
         path: "hint",
+        canActivate: [unauthGuardFn(unauthRouteOverrides)],
         data: {
           pageTitle: "requestPasswordHint",
           pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
