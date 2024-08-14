@@ -1,6 +1,7 @@
 import { Injectable, NgModule } from "@angular/core";
 import { ActivatedRouteSnapshot, RouteReuseStrategy, RouterModule, Routes } from "@angular/router";
 
+import { EnvironmentSelectorComponent } from "@bitwarden/angular/auth/components/environment-selector.component";
 import {
   authGuard,
   lockGuard,
@@ -370,17 +371,25 @@ const routes: Routes = [
   },
   {
     path: "",
+    canActivate: [unauthGuardFn(unauthRouteOverrides)],
     component: ExtensionAnonLayoutWrapperComponent,
     children: [
       {
         path: "hint",
-        component: PasswordHintComponent,
         data: {
           pageTitle: "requestPasswordHint",
           pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
           showBackButton: true,
           state: "hint",
         },
+        children: [
+          { path: "", component: PasswordHintComponent },
+          {
+            path: "",
+            component: EnvironmentSelectorComponent,
+            outlet: "environment-selector",
+          },
+        ],
       },
     ],
   },
