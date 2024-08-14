@@ -68,14 +68,7 @@ export class PasswordHintComponent implements OnInit {
       message: this.i18nService.t("masterPassSent"),
     });
 
-    if (this.clientType === ClientType.Browser) {
-      await this.router.navigate(["login"]);
-      return;
-    }
-
-    if (this.router != null) {
-      await this.router.navigate(["login"]);
-    }
+    await this.router.navigate(["login"]);
   };
 
   private validateEmailOrShowToast(email: string): boolean {
