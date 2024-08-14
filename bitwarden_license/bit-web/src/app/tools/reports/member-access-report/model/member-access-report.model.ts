@@ -10,14 +10,3 @@ export type MemberAccessDetails = {
   hidePasswords: boolean;
   manage: boolean;
 };
-
-export type MemberAccessReportModel = {
-  userName: string;
-  email: string;
-  twoFactorEnabled: boolean;
-  accountRecoveryEnabled: boolean;
-  groupsCount: number;
-  collectionsCount: number;
-  totalItemCount: number;
-  accessDetails: MemberAccessDetails[];
-};

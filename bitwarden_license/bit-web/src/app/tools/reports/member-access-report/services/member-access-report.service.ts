@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { OrganizationId } from "@bitwarden/common/types/guid";
 import { CollectionAccessSelectionView } from "@bitwarden/web-vault/app/admin-console/organizations/core/views";
 import {
@@ -13,8 +14,6 @@ import { MemberAccessExportItem } from "../view/member-access-export.view";
 import { MemberAccessReportView } from "../view/member-access-report.view";
 
 import { MemberAccessReportApiService } from "./member-access-report-api.service";
-
-
 
 @Injectable({ providedIn: "root" })
 export class MemberAccessReportService {
@@ -32,17 +31,14 @@ export class MemberAccessReportService {
   async generateMemberAccessReportView(
     organizationId: OrganizationId,
   ): Promise<MemberAccessReportView[]> {
-    const memberAccessReportViewCollection: MemberAccessReportView[] = [];
     const memberAccessData = await this.reportApiService.getMemberAccessData(organizationId);
-    memberAccessData.forEach((userData) => {
-      memberAccessReportViewCollection.push({
-        name: userData.userName,
-        email: userData.email,
-        collectionsCount: userData.collectionsCount,
-        groupsCount: userData.groupsCount,
-        itemsCount: userData.totalItemCount,
-      });
-    });
+    const memberAccessReportViewCollection = memberAccessData.map((userData) => ({
+      name: userData.userName,
+      email: userData.email,
+      collectionsCount: userData.collectionsCount,
+      groupsCount: userData.groupsCount,
+      itemsCount: userData.totalItemCount,
+    }));
     return memberAccessReportViewCollection;
   }
 
@@ -50,24 +46,36 @@ export class MemberAccessReportService {
     organizationId: OrganizationId,
   ): Promise<MemberAccessExportItem[]> {
     const memberAccessReports = await this.reportApiService.getMemberAccessData(organizationId);
-    const exportItems = memberAccessReports.flatMap(async (report) => {
-      const userDetails = report.accessDetails.map(async (detail) => {
-        const collectionName = await detail.collectionName.decrypt(organizationId);
+    const collectionNames = memberAccessReports.flatMap((item) =>
+      item.accessDetails.map((dtl) => {
+        if (dtl.collectionName) {
+          return dtl.collectionName.encryptedString;
+        }
+      }),
+    );
+    const collectionNameMap = new Map(collectionNames.map((col) => [col, ""]));
+    for await (const key of collectionNameMap.keys()) {
+      const decrypted = new EncString(key);
+      await decrypted.decrypt(organizationId);
+      collectionNameMap.set(key, decrypted.decryptedValue);
+    }
+
+    const exportItems = memberAccessReports.flatMap((report) => {
+      const userDetails = report.accessDetails.map((detail) => {
         return {
           email: report.email,
           name: report.userName,
           twoStepLogin: report.twoFactorEnabled ? "On" : "Off",
           accountRecovery: report.accountRecoveryEnabled ? "On" : "Off",
           group: detail.groupName,
-          collection: collectionName,
+          collection: collectionNameMap.get(detail.collectionName.encryptedString),
           collectionPermission: this.getPermissionText(detail),
           totalItems: detail.itemCount.toString(),
         };
       });
-      return Promise.all(userDetails);
+      return userDetails;
     });
-    const resolvedItems = await Promise.all(exportItems);
-    return resolvedItems.flat();
+    return exportItems.flat();
   }
 
   private getPermissionText(accessDetails: MemberAccessDetails): string {
