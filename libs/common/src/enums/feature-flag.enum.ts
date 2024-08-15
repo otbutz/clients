@@ -70,7 +70,7 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.IdpAutoSubmitLogin]: FALSE,
   [FeatureFlag.DeviceTrustLogging]: FALSE,
   [FeatureFlag.AuthenticatorTwoFactorToken]: FALSE,
-  [FeatureFlag.UnauthenticatedExtensionUIRefresh]: true,
+  [FeatureFlag.UnauthenticatedExtensionUIRefresh]: FALSE,
   [FeatureFlag.EnableUpgradePasswordManagerSub]: FALSE,
   [FeatureFlag.GenerateIdentityFillScriptRefactor]: FALSE,
   [FeatureFlag.DelayFido2PageScriptInitWithinMv2]: FALSE,

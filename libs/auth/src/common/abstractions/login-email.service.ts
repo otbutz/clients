@@ -6,10 +6,14 @@ export abstract class LoginEmailServiceAbstraction {
    * This will return null if an account is being added.
    */
   storedEmail$: Observable<string | null>;
-
+  /**
+   * An observable that monitors the `inMemoryEmail` in memory.
+   */
   inMemoryEmail$: Observable<string | null>;
+  /**
+   * Sets the current email being used in the login process in memory as `inMemoryEmail`
+   */
   setInMemoryEmail: () => Promise<void>;
-
   /**
    * Gets the current email being used in the login process from memory.
    * @returns A string of the email.
