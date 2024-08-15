@@ -1,6 +1,9 @@
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 
-import { MemberAccessResponse } from "../response/member-access-report.response";
+import {
+  MemberAccessDetails,
+  MemberAccessResponse,
+} from "../response/member-access-report.response";
 
 export const memberAccessReportsMock: MemberAccessResponse[] = [
   {
@@ -23,7 +26,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c2",
@@ -33,7 +36,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c3",
@@ -43,7 +46,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g1",
         collectionId: "c1",
@@ -55,7 +58,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g1",
         collectionId: "c2",
@@ -65,9 +68,9 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
     ],
-  },
+  } as MemberAccessResponse,
   {
     userName: "James Lull",
     email: "jlull@email.com",
@@ -86,7 +89,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g4",
         collectionId: "c5",
@@ -96,7 +99,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c4",
@@ -106,7 +109,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c5",
@@ -116,9 +119,9 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
     ],
-  },
+  } as MemberAccessResponse,
   {
     userName: "Beth Williams",
     email: "bwilliams@email.com",
@@ -137,7 +140,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g6",
         collectionId: "c4",
@@ -147,9 +150,9 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
     ],
-  },
+  } as MemberAccessResponse,
   {
     userName: "Ray Williams",
     email: "rwilliams@email.com",
@@ -168,7 +171,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c8",
@@ -178,7 +181,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "",
         collectionId: "c9",
@@ -188,7 +191,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g9",
         collectionId: "c7",
@@ -198,7 +201,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g10",
         collectionId: "c8",
@@ -208,7 +211,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
       {
         groupId: "g11",
         collectionId: "c9",
@@ -218,7 +221,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
         readOnly: false,
         hidePasswords: false,
         manage: false,
-      },
+      } as MemberAccessDetails,
     ],
-  },
+  } as MemberAccessResponse,
 ];
