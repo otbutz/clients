@@ -1,8 +1,9 @@
 import * as signalR from "@microsoft/signalr";
 import * as signalRMsgPack from "@microsoft/signalr-protocol-msgpack";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, Subscription } from "rxjs";
 
-import { AuthRequestServiceAbstraction } from "../../../auth/src/common/abstractions";
+import { LogoutReason } from "@bitwarden/auth/common";
+
 import { ApiService } from "../abstractions/api.service";
 import { NotificationsService as NotificationsServiceAbstraction } from "../abstractions/notifications.service";
 import { AuthService } from "../auth/abstractions/auth.service";
@@ -19,7 +20,8 @@ import { EnvironmentService } from "../platform/abstractions/environment.service
 import { LogService } from "../platform/abstractions/log.service";
 import { MessagingService } from "../platform/abstractions/messaging.service";
 import { StateService } from "../platform/abstractions/state.service";
-import { UserId } from "../types/guid";
+import { ScheduledTaskNames } from "../platform/scheduling/scheduled-task-name.enum";
+import { TaskSchedulerService } from "../platform/scheduling/task-scheduler.service";
 import { SyncService } from "../vault/abstractions/sync/sync.service.abstraction";
 
 export class NotificationsService implements NotificationsServiceAbstraction {
@@ -28,7 +30,8 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   private connected = false;
   private inited = false;
   private inactive = false;
-  private reconnectTimer: any = null;
+  private reconnectTimerSubscription: Subscription;
+  private isSyncingOnReconnect = true;
 
   constructor(
     private logService: LogService,
@@ -36,12 +39,16 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     private appIdService: AppIdService,
     private apiService: ApiService,
     private environmentService: EnvironmentService,
-    private logoutCallback: (expired: boolean) => Promise<void>,
+    private logoutCallback: (logoutReason: LogoutReason) => Promise<void>,
     private stateService: StateService,
     private authService: AuthService,
-    private authRequestService: AuthRequestServiceAbstraction,
     private messagingService: MessagingService,
+    private taskSchedulerService: TaskSchedulerService,
   ) {
+    this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.notificationsReconnectTimeout,
+      () => this.reconnect(this.isSyncingOnReconnect),
+    );
     this.environmentService.environment$.subscribe(() => {
       if (!this.inited) {
         return;
@@ -188,7 +195,7 @@ export class NotificationsService implements NotificationsServiceAbstraction {
         if (isAuthenticated) {
           // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
           // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          this.logoutCallback(true);
+          this.logoutCallback("logoutNotification");
         }
         break;
       case NotificationType.SyncSendCreate:
@@ -203,12 +210,9 @@ export class NotificationsService implements NotificationsServiceAbstraction {
         break;
       case NotificationType.AuthRequest:
         {
-          const userId = await this.stateService.getUserId();
-          if (await this.authRequestService.getAcceptAuthRequests(userId as UserId)) {
-            this.messagingService.send("openLoginApproval", {
-              notificationId: notification.payload.id,
-            });
-          }
+          this.messagingService.send("openLoginApproval", {
+            notificationId: notification.payload.id,
+          });
         }
         break;
       default:
@@ -217,10 +221,8 @@ export class NotificationsService implements NotificationsServiceAbstraction {
   }
 
   private async reconnect(sync: boolean) {
-    if (this.reconnectTimer != null) {
-      clearTimeout(this.reconnectTimer);
-      this.reconnectTimer = null;
-    }
+    this.reconnectTimerSubscription?.unsubscribe();
+
     if (this.connected || !this.inited || this.inactive) {
       return;
     }
@@ -240,7 +242,11 @@ export class NotificationsService implements NotificationsServiceAbstraction {
     }
 
     if (!this.connected) {
-      this.reconnectTimer = setTimeout(() => this.reconnect(sync), this.random(120000, 300000));
+      this.isSyncingOnReconnect = sync;
+      this.reconnectTimerSubscription = this.taskSchedulerService.setTimeout(
+        ScheduledTaskNames.notificationsReconnectTimeout,
+        this.random(120000, 300000),
+      );
     }
   }
 

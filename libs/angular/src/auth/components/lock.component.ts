@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { firstValueFrom, Subject } from "rxjs";
 import { concatMap, map, take, takeUntil } from "rxjs/operators";
 
-import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
+import { PinServiceAbstraction, PinLockType } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -16,11 +16,12 @@ import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractio
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { UserVerificationService } from "@bitwarden/common/auth/abstractions/user-verification/user-verification.service.abstraction";
-import { AuthenticationStatus } from "@bitwarden/common/auth/enums/authentication-status";
+import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
-import { SecretVerificationRequest } from "@bitwarden/common/auth/models/request/secret-verification.request";
-import { MasterPasswordPolicyResponse } from "@bitwarden/common/auth/models/response/master-password-policy.response";
-import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
+import {
+  MasterPasswordVerification,
+  MasterPasswordVerificationResponse,
+} from "@bitwarden/common/auth/types/verification";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -29,11 +30,11 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
-import { HashPurpose, KeySuffixOptions } from "@bitwarden/common/platform/enums";
-import { PinLockType } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
+import { KeySuffixOptions } from "@bitwarden/common/platform/enums";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { UserId } from "@bitwarden/common/types/guid";
 import { UserKey } from "@bitwarden/common/types/key";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 @Directive()
@@ -45,7 +46,7 @@ export class LockComponent implements OnInit, OnDestroy {
   pinEnabled = false;
   masterPasswordEnabled = false;
   webVaultHostname = "";
-  formPromise: Promise<MasterPasswordPolicyResponse>;
+  formPromise: Promise<MasterPasswordVerificationResponse>;
   supportsBiometric: boolean;
   biometricLock: boolean;
 
@@ -55,7 +56,7 @@ export class LockComponent implements OnInit, OnDestroy {
   protected onSuccessfulSubmit: () => Promise<void>;
 
   private invalidPinAttempts = 0;
-  private pinStatus: PinLockType;
+  private pinLockType: PinLockType;
 
   private enforcedMasterPasswordOptions: MasterPasswordPolicyOptions = undefined;
 
@@ -81,11 +82,12 @@ export class LockComponent implements OnInit, OnDestroy {
     protected dialogService: DialogService,
     protected deviceTrustService: DeviceTrustServiceAbstraction,
     protected userVerificationService: UserVerificationService,
-    protected pinCryptoService: PinCryptoServiceAbstraction,
+    protected pinService: PinServiceAbstraction,
     protected biometricStateService: BiometricStateService,
     protected accountService: AccountService,
     protected authService: AuthService,
     protected kdfConfigService: KdfConfigService,
+    protected syncService: SyncService,
   ) {}
 
   async ngOnInit() {
@@ -132,10 +134,13 @@ export class LockComponent implements OnInit, OnDestroy {
     }
 
     await this.biometricStateService.setUserPromptCancelled();
-    const userKey = await this.cryptoService.getUserKeyFromStorage(KeySuffixOptions.Biometric);
+    const userKey = await this.cryptoService.getUserKeyFromStorage(
+      KeySuffixOptions.Biometric,
+      this.activeUserId,
+    );
 
     if (userKey) {
-      await this.setUserKeyAndContinue(userKey, false);
+      await this.setUserKeyAndContinue(userKey, this.activeUserId, false);
     }
 
     return !!userKey;
@@ -168,10 +173,11 @@ export class LockComponent implements OnInit, OnDestroy {
     const MAX_INVALID_PIN_ENTRY_ATTEMPTS = 5;
 
     try {
-      const userKey = await this.pinCryptoService.decryptUserKeyWithPin(this.pin);
+      const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
+      const userKey = await this.pinService.decryptUserKeyWithPin(this.pin, userId);
 
       if (userKey) {
-        await this.setUserKeyAndContinue(userKey);
+        await this.setUserKeyAndContinue(userKey, userId);
         return; // successfully unlocked
       }
 
@@ -216,51 +222,30 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   private async doUnlockWithMasterPassword() {
-    const kdfConfig = await this.kdfConfigService.getKdfConfig();
     const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
 
-    const masterKey = await this.cryptoService.makeMasterKey(
-      this.masterPassword,
-      this.email,
-      kdfConfig,
-    );
-    const storedMasterKeyHash = await firstValueFrom(
-      this.masterPasswordService.masterKeyHash$(userId),
-    );
+    const verification = {
+      type: VerificationType.MasterPassword,
+      secret: this.masterPassword,
+    } as MasterPasswordVerification;
 
     let passwordValid = false;
-
-    if (storedMasterKeyHash != null) {
-      // Offline unlock possible
-      passwordValid = await this.cryptoService.compareAndUpdateKeyHash(
-        this.masterPassword,
-        masterKey,
+    let response: MasterPasswordVerificationResponse;
+    try {
+      this.formPromise = this.userVerificationService.verifyUserByMasterPassword(
+        verification,
+        userId,
+        this.email,
       );
-    } else {
-      // Online only
-      const request = new SecretVerificationRequest();
-      const serverKeyHash = await this.cryptoService.hashMasterKey(
-        this.masterPassword,
-        masterKey,
-        HashPurpose.ServerAuthorization,
+      response = await this.formPromise;
+      this.enforcedMasterPasswordOptions = MasterPasswordPolicyOptions.fromResponse(
+        response.policyOptions,
       );
-      request.masterPasswordHash = serverKeyHash;
-      try {
-        this.formPromise = this.apiService.postAccountVerifyPassword(request);
-        const response = await this.formPromise;
-        this.enforcedMasterPasswordOptions = MasterPasswordPolicyOptions.fromResponse(response);
-        passwordValid = true;
-        const localKeyHash = await this.cryptoService.hashMasterKey(
-          this.masterPassword,
-          masterKey,
-          HashPurpose.LocalAuthorization,
-        );
-        await this.masterPasswordService.setMasterKeyHash(localKeyHash, userId);
-      } catch (e) {
-        this.logService.error(e);
-      } finally {
-        this.formPromise = null;
-      }
+      passwordValid = true;
+    } catch (e) {
+      this.logService.error(e);
+    } finally {
+      this.formPromise = null;
     }
 
     if (!passwordValid) {
@@ -272,13 +257,18 @@ export class LockComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const userKey = await this.cryptoService.decryptUserKeyWithMasterKey(masterKey);
-    await this.masterPasswordService.setMasterKey(masterKey, userId);
-    await this.setUserKeyAndContinue(userKey, true);
+    const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(
+      response.masterKey,
+    );
+    await this.setUserKeyAndContinue(userKey, userId, true);
   }
 
-  private async setUserKeyAndContinue(key: UserKey, evaluatePasswordAfterUnlock = false) {
-    await this.cryptoService.setUserKey(key);
+  private async setUserKeyAndContinue(
+    key: UserKey,
+    userId: UserId,
+    evaluatePasswordAfterUnlock = false,
+  ) {
+    await this.cryptoService.setUserKey(key, userId);
 
     // Now that we have a decrypted user key in memory, we can check if we
     // need to establish trust on the current device
@@ -318,6 +308,9 @@ export class LockComponent implements OnInit, OnDestroy {
       }
     }
 
+    // Vault can be de-synced since notifications get ignored while locked. Need to check whether sync is required using the sync service.
+    await this.syncService.fullSync(false);
+
     if (this.onSuccessfulSubmit != null) {
       await this.onSuccessfulSubmit();
     } else if (this.router != null) {
@@ -328,42 +321,10 @@ export class LockComponent implements OnInit, OnDestroy {
   }
 
   private async load(userId: UserId) {
-    // TODO: Investigate PM-3515
+    this.pinLockType = await this.pinService.getPinLockType(userId);
 
-    // The loading of the lock component works as follows:
-    //   1. If the user is unlocked, we're here in error so we navigate to the home page
-    //   2. First, is locking a valid timeout action?  If not, we will log the user out.
-    //   3. If locking IS a valid timeout action, we proceed to show the user the lock screen.
-    //      The user will be able to unlock as follows:
-    //        - If they have a PIN set, they will be presented with the PIN input
-    //        - If they have a master password and no PIN, they will be presented with the master password input
-    //        - If they have biometrics enabled, they will be presented with the biometric prompt
+    this.pinEnabled = await this.pinService.isPinDecryptionAvailable(userId);
 
-    const isUnlocked = await firstValueFrom(
-      this.authService
-        .authStatusFor$(userId)
-        .pipe(map((status) => status === AuthenticationStatus.Unlocked)),
-    );
-    if (isUnlocked) {
-      // navigate to home
-      await this.router.navigate(["/"]);
-      return;
-    }
-
-    const availableVaultTimeoutActions = await firstValueFrom(
-      this.vaultTimeoutSettingsService.availableVaultTimeoutActions$(userId),
-    );
-    const supportsLock = availableVaultTimeoutActions.includes(VaultTimeoutAction.Lock);
-    if (!supportsLock) {
-      return await this.vaultTimeoutService.logOut(userId);
-    }
-
-    this.pinStatus = await this.vaultTimeoutSettingsService.isPinLockSet();
-
-    let ephemeralPinSet = await this.stateService.getPinKeyEncryptedUserKeyEphemeral();
-    ephemeralPinSet ||= await this.stateService.getDecryptedPinProtected();
-    this.pinEnabled =
-      (this.pinStatus === "TRANSIENT" && !!ephemeralPinSet) || this.pinStatus === "PERSISTANT";
     this.masterPasswordEnabled = await this.userVerificationService.hasMasterPassword();
 
     this.supportsBiometric = await this.platformUtilsService.supportsBiometric();
@@ -371,7 +332,9 @@ export class LockComponent implements OnInit, OnDestroy {
       (await this.vaultTimeoutSettingsService.isBiometricLockSet()) &&
       ((await this.cryptoService.hasUserKeyStored(KeySuffixOptions.Biometric)) ||
         !this.platformUtilsService.supportsSecureStorage());
-    this.email = await this.stateService.getEmail();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
 
     this.webVaultHostname = (await this.environmentService.getEnvironment()).getHostname();
   }

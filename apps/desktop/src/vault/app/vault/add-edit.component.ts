@@ -1,5 +1,5 @@
 import { DatePipe } from "@angular/common";
-import { Component, NgZone, OnChanges, OnDestroy, ViewChild } from "@angular/core";
+import { Component, NgZone, OnChanges, OnInit, OnDestroy, ViewChild } from "@angular/core";
 import { NgForm } from "@angular/forms";
 
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/vault/components/add-edit.component";
@@ -7,13 +7,13 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -27,7 +27,7 @@ const BroadcasterSubscriptionId = "AddEditComponent";
   selector: "app-vault-add-edit",
   templateUrl: "add-edit.component.html",
 })
-export class AddEditComponent extends BaseAddEditComponent implements OnChanges, OnDestroy {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild("form")
   private form: NgForm;
   constructor(
@@ -36,7 +36,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     auditService: AuditService,
-    stateService: StateService,
+    accountService: AccountService,
     collectionService: CollectionService,
     messagingService: MessagingService,
     eventCollectionService: EventCollectionService,
@@ -57,7 +57,7 @@ export class AddEditComponent extends BaseAddEditComponent implements OnChanges,
       i18nService,
       platformUtilsService,
       auditService,
-      stateService,
+      accountService,
       collectionService,
       messagingService,
       eventCollectionService,

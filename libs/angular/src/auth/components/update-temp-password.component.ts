@@ -1,6 +1,6 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
-import { firstValueFrom } from "rxjs";
+import { firstValueFrom, map } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
@@ -12,6 +12,7 @@ import { UserVerificationService } from "@bitwarden/common/auth/abstractions/use
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
+import { UpdateTdeOffboardingPasswordRequest } from "@bitwarden/common/auth/models/request/update-tde-offboarding-password.request";
 import { UpdateTempPasswordRequest } from "@bitwarden/common/auth/models/request/update-temp-password.request";
 import { MasterPasswordVerification } from "@bitwarden/common/auth/types/verification";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -21,15 +22,15 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
 @Directive()
-export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
+export class UpdateTempPasswordComponent extends BaseChangePasswordComponent implements OnInit {
   hint: string;
   key: string;
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
@@ -61,8 +62,8 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     protected router: Router,
     dialogService: DialogService,
     kdfConfigService: KdfConfigService,
-    private accountService: AccountService,
-    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    accountService: AccountService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
   ) {
     super(
       i18nService,
@@ -74,6 +75,8 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       stateService,
       dialogService,
       kdfConfigService,
+      masterPasswordService,
+      accountService,
     );
   }
 
@@ -95,9 +98,13 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   get masterPasswordWarningText(): string {
-    return this.reason == ForceSetPasswordReason.WeakMasterPassword
-      ? this.i18nService.t("updateWeakMasterPasswordWarning")
-      : this.i18nService.t("updateMasterPasswordWarning");
+    if (this.reason == ForceSetPasswordReason.WeakMasterPassword) {
+      return this.i18nService.t("weakMasterPasswordWarning");
+    } else if (this.reason == ForceSetPasswordReason.TdeOffboarding) {
+      return this.i18nService.t("tdeDisabledMasterPasswordRequired");
+    } else {
+      return this.i18nService.t("masterPasswordWarning");
+    }
   }
 
   togglePassword(confirmField: boolean) {
@@ -106,7 +113,9 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   async setupSubmitActions(): Promise<boolean> {
-    this.email = await this.stateService.getEmail();
+    this.email = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.email)),
+    );
     this.kdfConfig = await this.kdfConfigService.getKdfConfig();
     return true;
   }
@@ -161,6 +170,9 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
         case ForceSetPasswordReason.WeakMasterPassword:
           this.formPromise = this.updatePassword(masterPasswordHash, userKey);
           break;
+        case ForceSetPasswordReason.TdeOffboarding:
+          this.formPromise = this.updateTdeOffboardingPassword(masterPasswordHash, userKey);
+          break;
       }
 
       await this.formPromise;
@@ -206,5 +218,17 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     request.key = userKey[1].encryptedString;
 
     return this.apiService.postPassword(request);
+  }
+
+  private async updateTdeOffboardingPassword(
+    masterPasswordHash: string,
+    userKey: [UserKey, EncString],
+  ) {
+    const request = new UpdateTdeOffboardingPasswordRequest();
+    request.key = userKey[1].encryptedString;
+    request.newMasterPasswordHash = masterPasswordHash;
+    request.masterPasswordHint = this.hint;
+
+    return this.apiService.putUpdateTdeOffboardingPassword(request);
   }
 }

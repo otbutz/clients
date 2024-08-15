@@ -62,15 +62,6 @@ describe("AuthRequestService", () => {
     });
   });
 
-  describe("AcceptAuthRequests", () => {
-    it("returns an error when userId isn't provided", async () => {
-      await expect(sut.getAcceptAuthRequests(undefined)).rejects.toThrow("User ID is required");
-      await expect(sut.setAcceptAuthRequests(true, undefined)).rejects.toThrow(
-        "User ID is required",
-      );
-    });
-  });
-
   describe("AdminAuthRequest", () => {
     it("returns an error when userId isn't provided", async () => {
       await expect(sut.getAdminAuthRequest(undefined)).rejects.toThrow("User ID is required");
@@ -142,14 +133,18 @@ describe("AuthRequestService", () => {
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setUserKeyAfterDecryptingSharedUserKey(mockAuthReqResponse, mockPrivateKey);
+      await sut.setUserKeyAfterDecryptingSharedUserKey(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedUserKey).toBeCalledWith(
         mockAuthReqResponse.key,
         mockPrivateKey,
       );
-      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toBeCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 
@@ -172,11 +167,17 @@ describe("AuthRequestService", () => {
 
       masterPasswordService.masterKeySubject.next(undefined);
       masterPasswordService.masterKeyHashSubject.next(undefined);
-      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValueOnce(mockDecryptedUserKey);
+      masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(
+        mockDecryptedUserKey,
+      );
       cryptoService.setUserKey.mockResolvedValueOnce(undefined);
 
       // Act
-      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(mockAuthReqResponse, mockPrivateKey);
+      await sut.setKeysAfterDecryptingSharedMasterKeyAndHash(
+        mockAuthReqResponse,
+        mockPrivateKey,
+        mockUserId,
+      );
 
       // Assert
       expect(sut.decryptPubKeyEncryptedMasterKeyAndHash).toBeCalledWith(
@@ -192,10 +193,12 @@ describe("AuthRequestService", () => {
         mockDecryptedMasterKeyHash,
         mockUserId,
       );
-      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+      expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
         mockDecryptedMasterKey,
+        undefined,
+        undefined,
       );
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(mockDecryptedUserKey, mockUserId);
     });
   });
 

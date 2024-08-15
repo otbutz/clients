@@ -5,7 +5,9 @@ import { takeUntil } from "rxjs";
 
 import { ChangePasswordComponent } from "@bitwarden/angular/auth/components/change-password.component";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -13,8 +15,8 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { EmergencyAccessService } from "../../../emergency-access";
 
@@ -60,6 +62,8 @@ export class EmergencyAccessTakeoverComponent
     dialogService: DialogService,
     private dialogRef: DialogRef<EmergencyAccessTakeoverResultType>,
     kdfConfigService: KdfConfigService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    accountService: AccountService,
   ) {
     super(
       i18nService,
@@ -71,6 +75,8 @@ export class EmergencyAccessTakeoverComponent
       stateService,
       dialogService,
       kdfConfigService,
+      masterPasswordService,
+      accountService,
     );
   }
 

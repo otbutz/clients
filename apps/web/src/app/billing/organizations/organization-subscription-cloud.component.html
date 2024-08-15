@@ -1,9 +1,9 @@
 <app-header></app-header>
 
-<bit-container *ngIf="!IsProviderManaged">
+<bit-container *ngIf="!isManagedByConsolidatedBillingMSP">
   <ng-container *ngIf="!firstLoaded && loading">
     <i class="bwi bwi-spinner bwi-spin text-muted" title="{{ 'loading' | i18n }}"></i>
-    <span class="sr-only">{{ "loading" | i18n }}</span>
+    <span class="tw-sr-only">{{ "loading" | i18n }}</span>
   </ng-container>
 
   <app-org-subscription-hidden
@@ -75,7 +75,7 @@
               <tr bitRow *ngFor="let i of subscriptionLineItems">
                 <td bitCell [ngClass]="{ 'tw-pl-20': i.addonSubscriptionItem }">
                   <span *ngIf="!i.addonSubscriptionItem">{{ i.productName | i18n }} -</span>
-                  {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} @
+                  {{ i.name }} {{ i.quantity > 1 ? "&times;" + i.quantity : "" }} &#64;
                   {{ i.amount | currency: "$" }}
                 </td>
                 <td bitCell class="tw-text-right">
@@ -122,6 +122,7 @@
         <app-change-plan
           [organizationId]="organizationId"
           [currentPlan]="sub.plan"
+          [preSelectedProductTier]="preSelectedProductTier"
           (onChanged)="closeChangePlan()"
           (onCanceled)="closeChangePlan()"
           *ngIf="showChangePlan"
@@ -142,10 +143,22 @@
 
     <ng-container *ngIf="userOrg.canEditSubscription">
       <h2 bitTypography="h2" class="tw-mt-7">{{ "manageSubscription" | i18n }}</h2>
+      <p bitTypography="body1" *ngIf="customerDiscount?.id === 'sm-standalone'">
+        {{ "smStandaloneTrialSeatCountUpdateMessageFragment1" | i18n }}
+        {{ "passwordManager" | i18n }}
+        {{ "smStandaloneTrialSeatCountUpdateMessageFragment2" | i18n }}
+        <a href="https://bitwarden.com/contact/" target="_blank" rel="noreferrer"
+          >{{ "contactSupportShort" | i18n }}.
+        </a>
+      </p>
       <p bitTypography="body1">{{ subscriptionDesc }}</p>
       <ng-container
         *ngIf="
-          subscription && canAdjustSeats && !subscription.cancelled && !subscriptionMarkedForCancel
+          subscription &&
+          canAdjustSeats &&
+          !subscription.cancelled &&
+          !subscriptionMarkedForCancel &&
+          (!customerDiscount || customerDiscount.id != 'sm-standalone')
         "
       >
         <h3 bitTypography="h3" class="tw-mt-7">{{ "passwordManager" | i18n }}</h3>
@@ -168,32 +181,36 @@
       >
         {{ "removeSponsorship" | i18n }}
       </button>
-      <h4 bitTypography="h4" class="tw-mt-9">{{ "storage" | i18n }}</h4>
-      <p bitTypography="body1">
-        {{ "subscriptionStorage" | i18n: sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}
-      </p>
-      <bit-progress [barWidth]="storagePercentage" bgColor="success"></bit-progress>
-      <ng-container *ngIf="subscription && !subscription.cancelled && !subscriptionMarkedForCancel">
-        <div class="tw-mt-3">
-          <div class="tw-flex tw-space-x-2">
-            <button
-              bitButton
-              buttonType="secondary"
-              type="button"
-              [bitAction]="adjustStorage(true)"
-            >
-              {{ "addStorage" | i18n }}
-            </button>
-            <button
-              bitButton
-              buttonType="secondary"
-              type="button"
-              [bitAction]="adjustStorage(false)"
-            >
-              {{ "removeStorage" | i18n }}
-            </button>
+      <ng-container *ngIf="!customerDiscount || customerDiscount.id != 'sm-standalone'">
+        <h4 bitTypography="h4" class="tw-mt-9">{{ "storage" | i18n }}</h4>
+        <p bitTypography="body1">
+          {{ "subscriptionStorage" | i18n: sub.maxStorageGb || 0 : sub.storageName || "0 MB" }}
+        </p>
+        <bit-progress [barWidth]="storagePercentage" bgColor="success"></bit-progress>
+        <ng-container
+          *ngIf="subscription && !subscription.cancelled && !subscriptionMarkedForCancel"
+        >
+          <div class="tw-mt-3">
+            <div class="tw-flex tw-space-x-2">
+              <button
+                bitButton
+                buttonType="secondary"
+                type="button"
+                [bitAction]="adjustStorage(true)"
+              >
+                {{ "addStorage" | i18n }}
+              </button>
+              <button
+                bitButton
+                buttonType="secondary"
+                type="button"
+                [bitAction]="adjustStorage(false)"
+              >
+                {{ "removeStorage" | i18n }}
+              </button>
+            </div>
           </div>
-        </div>
+        </ng-container>
       </ng-container>
       <ng-container *ngIf="showAdjustSecretsManager">
         <h3 bitTypography="h3" class="tw-mt-9">{{ "secretsManager" | i18n }}</h3>
@@ -208,6 +225,14 @@
     <h2 bitTypography="h2" class="tw-mt-7">{{ "selfHostingTitle" | i18n }}</h2>
     <p bitTypography="body1">
       {{ "selfHostingEnterpriseOrganizationSectionCopy" | i18n }}
+      <a
+        href="https://bitwarden.com/help/licensing-on-premise/#retrieve-organization-license"
+        target="_blank"
+        rel="noreferrer"
+        appA11yTitle="{{ 'learnMore' | i18n }}"
+      >
+        <i class="bwi bwi-question-circle" aria-hidden="true"></i
+      ></a>
     </p>
     <div class="tw-flex tw-space-x-2">
       <button
@@ -230,13 +255,6 @@
         {{ (hasBillingSyncToken ? "manageBillingSync" : "setUpBillingSync") | i18n }}
       </button>
     </div>
-    <div class="tw-mt-3" *ngIf="showDownloadLicense">
-      <app-download-license
-        [organizationId]="organizationId"
-        (onDownloaded)="closeDownloadLicense()"
-        (onCanceled)="closeDownloadLicense()"
-      ></app-download-license>
-    </div>
     <ng-container *ngIf="userOrg.canEditSubscription">
       <h2 bitTypography="h2" class="tw-mt-7">{{ "additionalOptions" | i18n }}</h2>
       <p bitTypography="body1">
@@ -256,7 +274,7 @@
     </ng-container>
   </ng-container>
 </bit-container>
-<bit-container *ngIf="IsProviderManaged">
+<bit-container *ngIf="isManagedByConsolidatedBillingMSP">
   <div
     class="tw-mx-auto tw-flex tw-flex-col tw-items-center tw-justify-center tw-pt-24 tw-text-center tw-font-bold"
   >

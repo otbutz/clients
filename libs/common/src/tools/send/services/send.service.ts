@@ -9,6 +9,7 @@ import { Utils } from "../../../platform/misc/utils";
 import { EncArrayBuffer } from "../../../platform/models/domain/enc-array-buffer";
 import { EncString } from "../../../platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "../../../platform/models/domain/symmetric-crypto-key";
+import { UserId } from "../../../types/guid";
 import { UserKey } from "../../../types/key";
 import { SendType } from "../enums/send-type";
 import { SendData } from "../models/data/send.data";
@@ -258,23 +259,36 @@ export class SendService implements InternalSendServiceAbstraction {
     await this.stateProvider.setEncryptedSends(sends);
   }
 
-  async getRotatedKeys(newUserKey: UserKey): Promise<SendWithIdRequest[]> {
+  async getRotatedData(
+    originalUserKey: UserKey,
+    newUserKey: UserKey,
+    userId: UserId,
+  ): Promise<SendWithIdRequest[]> {
     if (newUserKey == null) {
       throw new Error("New user key is required for rotation.");
     }
+    if (originalUserKey == null) {
+      throw new Error("Original user key is required for rotation.");
+    }
 
     const req = await firstValueFrom(
-      this.sends$.pipe(concatMap(async (sends) => this.toRotatedKeyRequestMap(sends, newUserKey))),
+      this.sends$.pipe(
+        concatMap(async (sends) => this.toRotatedKeyRequestMap(sends, originalUserKey, newUserKey)),
+      ),
     );
     // separate return for easier debugging
     return req;
   }
 
-  private async toRotatedKeyRequestMap(sends: Send[], newUserKey: UserKey) {
+  private async toRotatedKeyRequestMap(
+    sends: Send[],
+    originalUserKey: UserKey,
+    rotateUserKey: UserKey,
+  ) {
     const requests = await Promise.all(
       sends.map(async (send) => {
-        const sendKey = await this.encryptService.decryptToBytes(send.key, newUserKey);
-        send.key = await this.encryptService.encrypt(sendKey, newUserKey);
+        const sendKey = await this.encryptService.decryptToBytes(send.key, originalUserKey);
+        send.key = await this.encryptService.encrypt(sendKey, rotateUserKey);
         return new SendWithIdRequest(send);
       }),
     );

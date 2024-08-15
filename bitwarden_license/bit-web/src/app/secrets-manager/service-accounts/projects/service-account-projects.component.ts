@@ -7,7 +7,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 
-import { ServiceAccountGrantedPoliciesView } from "../../models/view/access-policy.view";
+import { ServiceAccountGrantedPoliciesView } from "../../models/view/access-policies/service-account-granted-policies.view";
 import {
   ApItemValueType,
   convertToServiceAccountGrantedPoliciesView,
@@ -144,10 +144,7 @@ export class ServiceAccountProjectsComponent implements OnInit, OnDestroy {
     serviceAccountId: string,
     selectedPolicies: ApItemValueType[],
   ): Promise<ServiceAccountGrantedPoliciesView> {
-    const grantedViews = convertToServiceAccountGrantedPoliciesView(
-      serviceAccountId,
-      selectedPolicies,
-    );
+    const grantedViews = convertToServiceAccountGrantedPoliciesView(selectedPolicies);
     return await this.accessPolicyService.putServiceAccountGrantedPolicies(
       organizationId,
       serviceAccountId,

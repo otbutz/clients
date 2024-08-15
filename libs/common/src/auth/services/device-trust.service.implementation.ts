@@ -2,12 +2,15 @@ import { firstValueFrom, map, Observable } from "rxjs";
 
 import { UserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
 
+import { FeatureFlag } from "../../enums/feature-flag.enum";
 import { AppIdService } from "../../platform/abstractions/app-id.service";
+import { ConfigService } from "../../platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "../../platform/abstractions/crypto-function.service";
 import { CryptoService } from "../../platform/abstractions/crypto.service";
 import { EncryptService } from "../../platform/abstractions/encrypt.service";
 import { I18nService } from "../../platform/abstractions/i18n.service";
 import { KeyGenerationService } from "../../platform/abstractions/key-generation.service";
+import { LogService } from "../../platform/abstractions/log.service";
 import { PlatformUtilsService } from "../../platform/abstractions/platform-utils.service";
 import { AbstractStorageService } from "../../platform/abstractions/storage.service";
 import { StorageLocation } from "../../platform/enums";
@@ -27,13 +30,23 @@ import {
 } from "../models/request/update-devices-trust.request";
 
 /** Uses disk storage so that the device key can persist after log out and tab removal. */
-export const DEVICE_KEY = new UserKeyDefinition<DeviceKey>(DEVICE_TRUST_DISK_LOCAL, "deviceKey", {
-  deserializer: (deviceKey) => SymmetricCryptoKey.fromJSON(deviceKey) as DeviceKey,
-  clearOn: [], // Device key is needed to log back into device, so we can't clear it automatically during lock or logout
-});
+export const DEVICE_KEY = new UserKeyDefinition<DeviceKey | null>(
+  DEVICE_TRUST_DISK_LOCAL,
+  "deviceKey",
+  {
+    deserializer: (deviceKey) =>
+      deviceKey ? (SymmetricCryptoKey.fromJSON(deviceKey) as DeviceKey) : null,
+    clearOn: [], // Device key is needed to log back into device, so we can't clear it automatically during lock or logout
+    cleanupDelayMs: 0,
+    debug: {
+      enableRetrievalLogging: true,
+      enableUpdateLogging: true,
+    },
+  },
+);
 
 /** Uses disk storage so that the shouldTrustDevice bool can persist across login. */
-export const SHOULD_TRUST_DEVICE = new UserKeyDefinition<boolean>(
+export const SHOULD_TRUST_DEVICE = new UserKeyDefinition<boolean | null>(
   DEVICE_TRUST_DISK_LOCAL,
   "shouldTrustDevice",
   {
@@ -61,6 +74,8 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
     private stateProvider: StateProvider,
     private secureStorageService: AbstractStorageService,
     private userDecryptionOptionsService: UserDecryptionOptionsServiceAbstraction,
+    private logService: LogService,
+    private configService: ConfigService,
   ) {
     this.supportsDeviceTrust$ = this.userDecryptionOptionsService.userDecryptionOptions$.pipe(
       map((options) => options?.trustedDeviceOption != null ?? false),
@@ -100,7 +115,7 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
     if (shouldTrustDevice) {
       await this.trustDevice(userId);
       // reset the trust choice
-      await this.setShouldTrustDevice(userId, false);
+      await this.setShouldTrustDevice(userId, null);
     }
   }
 
@@ -110,7 +125,7 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
     }
 
     // Attempt to get user key
-    const userKey: UserKey = await this.cryptoService.getUserKey();
+    const userKey: UserKey = await this.cryptoService.getUserKey(userId);
 
     // If user key is not found, throw error
     if (!userKey) {
@@ -173,7 +188,7 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
     }
 
     // At this point of rotating their keys, they should still have their old user key in state
-    const oldUserKey = await firstValueFrom(this.cryptoService.activeUserKey$);
+    const oldUserKey = await firstValueFrom(this.cryptoService.userKey$(userId));
 
     const deviceIdentifier = await this.appIdService.getAppId();
     const secretVerificationRequest = new SecretVerificationRequest();
@@ -223,19 +238,23 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
       throw new Error("UserId is required. Cannot get device key.");
     }
 
-    if (this.platformSupportsSecureStorage) {
-      const deviceKeyB64 = await this.secureStorageService.get<
-        ReturnType<SymmetricCryptoKey["toJSON"]>
-      >(`${userId}${this.deviceKeySecureStorageKey}`, this.getSecureStorageOptions(userId));
+    try {
+      if (this.platformSupportsSecureStorage) {
+        const deviceKeyB64 = await this.secureStorageService.get<
+          ReturnType<SymmetricCryptoKey["toJSON"]>
+        >(`${userId}${this.deviceKeySecureStorageKey}`, this.getSecureStorageOptions(userId));
 
-      const deviceKey = SymmetricCryptoKey.fromJSON(deviceKeyB64) as DeviceKey;
+        const deviceKey = SymmetricCryptoKey.fromJSON(deviceKeyB64) as DeviceKey;
+
+        return deviceKey;
+      }
+
+      const deviceKey = await firstValueFrom(this.stateProvider.getUserState$(DEVICE_KEY, userId));
 
       return deviceKey;
+    } catch (e) {
+      this.logService.error("Failed to get device key", e);
     }
-
-    const deviceKey = await firstValueFrom(this.stateProvider.getUserState$(DEVICE_KEY, userId));
-
-    return deviceKey;
   }
 
   private async setDeviceKey(userId: UserId, deviceKey: DeviceKey | null): Promise<void> {
@@ -243,16 +262,20 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
       throw new Error("UserId is required. Cannot set device key.");
     }
 
-    if (this.platformSupportsSecureStorage) {
-      await this.secureStorageService.save<DeviceKey>(
-        `${userId}${this.deviceKeySecureStorageKey}`,
-        deviceKey,
-        this.getSecureStorageOptions(userId),
-      );
-      return;
-    }
+    try {
+      if (this.platformSupportsSecureStorage) {
+        await this.secureStorageService.save<DeviceKey>(
+          `${userId}${this.deviceKeySecureStorageKey}`,
+          deviceKey,
+          this.getSecureStorageOptions(userId),
+        );
+        return;
+      }
 
-    await this.stateProvider.setUserState(DEVICE_KEY, deviceKey?.toJSON(), userId);
+      await this.stateProvider.setUserState(DEVICE_KEY, deviceKey?.toJSON(), userId);
+    } catch (e) {
+      this.logService.error("Failed to set device key", e);
+    }
   }
 
   private async makeDeviceKey(): Promise<DeviceKey> {
@@ -270,6 +293,16 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
   ): Promise<UserKey | null> {
     if (!userId) {
       throw new Error("UserId is required. Cannot decrypt user key with device key.");
+    }
+
+    if (!encryptedDevicePrivateKey) {
+      throw new Error(
+        "Encrypted device private key is required. Cannot decrypt user key with device key.",
+      );
+    }
+
+    if (!encryptedUserKey) {
+      throw new Error("Encrypted user key is required. Cannot decrypt user key with device key.");
     }
 
     if (!deviceKey) {
@@ -293,10 +326,19 @@ export class DeviceTrustService implements DeviceTrustServiceAbstraction {
       return new SymmetricCryptoKey(userKey) as UserKey;
     } catch (e) {
       // If either decryption effort fails, we want to remove the device key
+      this.logService.error("Failed to decrypt using device key. Removing device key.");
       await this.setDeviceKey(userId, null);
 
       return null;
     }
+  }
+
+  async recordDeviceTrustLoss(): Promise<void> {
+    if (!(await this.configService.getFeatureFlag(FeatureFlag.DeviceTrustLogging))) {
+      return;
+    }
+    const deviceIdentifier = await this.appIdService.getAppId();
+    await this.devicesApiService.postDeviceTrustLoss(deviceIdentifier);
   }
 
   private getSecureStorageOptions(userId: UserId): StorageOptions {

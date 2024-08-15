@@ -1,14 +1,8 @@
-import { KdfConfig } from "../../auth/models/domain/kdf-config";
+import { Argon2KdfConfig, KdfConfig, PBKDF2KdfConfig } from "../../auth/models/domain/kdf-config";
 import { CsprngArray } from "../../types/csprng";
 import { CryptoFunctionService } from "../abstractions/crypto-function.service";
 import { KeyGenerationService as KeyGenerationServiceAbstraction } from "../abstractions/key-generation.service";
-import {
-  ARGON2_ITERATIONS,
-  ARGON2_MEMORY,
-  ARGON2_PARALLELISM,
-  KdfType,
-  PBKDF2_ITERATIONS,
-} from "../enums";
+import { KdfType } from "../enums";
 import { Utils } from "../misc/utils";
 import { SymmetricCryptoKey } from "../models/domain/symmetric-crypto-key";
 
@@ -51,21 +45,21 @@ export class KeyGenerationService implements KeyGenerationServiceAbstraction {
     let key: Uint8Array = null;
     if (kdfConfig.kdfType == null || kdfConfig.kdfType === KdfType.PBKDF2_SHA256) {
       if (kdfConfig.iterations == null) {
-        kdfConfig.iterations = PBKDF2_ITERATIONS.defaultValue;
+        kdfConfig.iterations = PBKDF2KdfConfig.ITERATIONS.defaultValue;
       }
 
       key = await this.cryptoFunctionService.pbkdf2(password, salt, "sha256", kdfConfig.iterations);
     } else if (kdfConfig.kdfType == KdfType.Argon2id) {
       if (kdfConfig.iterations == null) {
-        kdfConfig.iterations = ARGON2_ITERATIONS.defaultValue;
+        kdfConfig.iterations = Argon2KdfConfig.ITERATIONS.defaultValue;
       }
 
       if (kdfConfig.memory == null) {
-        kdfConfig.memory = ARGON2_MEMORY.defaultValue;
+        kdfConfig.memory = Argon2KdfConfig.MEMORY.defaultValue;
       }
 
       if (kdfConfig.parallelism == null) {
-        kdfConfig.parallelism = ARGON2_PARALLELISM.defaultValue;
+        kdfConfig.parallelism = Argon2KdfConfig.PARALLELISM.defaultValue;
       }
 
       const saltHash = await this.cryptoFunctionService.hash(salt, "sha256");
@@ -80,5 +74,16 @@ export class KeyGenerationService implements KeyGenerationServiceAbstraction {
       throw new Error("Unknown Kdf.");
     }
     return new SymmetricCryptoKey(key);
+  }
+
+  async stretchKey(key: SymmetricCryptoKey): Promise<SymmetricCryptoKey> {
+    const newKey = new Uint8Array(64);
+    const encKey = await this.cryptoFunctionService.hkdfExpand(key.key, "enc", 32, "sha256");
+    const macKey = await this.cryptoFunctionService.hkdfExpand(key.key, "mac", 32, "sha256");
+
+    newKey.set(new Uint8Array(encKey));
+    newKey.set(new Uint8Array(macKey), 32);
+
+    return new SymmetricCryptoKey(newKey);
   }
 }

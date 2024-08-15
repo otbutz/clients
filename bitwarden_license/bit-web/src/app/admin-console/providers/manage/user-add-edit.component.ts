@@ -10,6 +10,9 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
+/**
+ * @deprecated Please use the {@link MembersDialogComponent} instead.
+ */
 @Component({
   selector: "provider-user-add-edit",
   templateUrl: "user-add-edit.component.html",
@@ -18,8 +21,8 @@ export class UserAddEditComponent implements OnInit {
   @Input() name: string;
   @Input() providerUserId: string;
   @Input() providerId: string;
-  @Output() onSavedUser = new EventEmitter();
-  @Output() onDeletedUser = new EventEmitter();
+  @Output() savedUser = new EventEmitter();
+  @Output() deletedUser = new EventEmitter();
 
   loading = true;
   editMode = false;
@@ -46,7 +49,7 @@ export class UserAddEditComponent implements OnInit {
 
     if (this.editMode) {
       this.editMode = true;
-      this.title = this.i18nService.t("editUser");
+      this.title = this.i18nService.t("editMember");
       try {
         const user = await this.apiService.getProviderUser(this.providerId, this.providerUserId);
         this.type = user.type;
@@ -54,7 +57,7 @@ export class UserAddEditComponent implements OnInit {
         this.logService.error(e);
       }
     } else {
-      this.title = this.i18nService.t("inviteUser");
+      this.title = this.i18nService.t("inviteMember");
     }
 
     this.loading = false;
@@ -82,7 +85,7 @@ export class UserAddEditComponent implements OnInit {
         null,
         this.i18nService.t(this.editMode ? "editedUserId" : "invitedUsers", this.name),
       );
-      this.onSavedUser.emit();
+      this.savedUser.emit();
     } catch (e) {
       this.logService.error(e);
     }
@@ -111,7 +114,7 @@ export class UserAddEditComponent implements OnInit {
         null,
         this.i18nService.t("removedUserId", this.name),
       );
-      this.onDeletedUser.emit();
+      this.deletedUser.emit();
     } catch (e) {
       this.logService.error(e);
     }

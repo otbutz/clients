@@ -19,9 +19,7 @@ import { OrganizationService } from "@bitwarden/common/admin-console/abstraction
 import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
-import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -96,12 +94,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
   private organization$ = this.organizationService
     .get$(this.organizationId)
     .pipe(shareReplay({ refCount: true }));
-  protected flexibleCollectionsEnabled$ = this.organization$.pipe(
-    map((o) => o?.flexibleCollections),
-  );
-  private flexibleCollectionsV1Enabled$ = this.configService.getFeatureFlag$(
-    FeatureFlag.FlexibleCollectionsV1,
-  );
 
   protected PermissionMode = PermissionMode;
   protected ResultType = GroupAddEditDialogResultType;
@@ -114,7 +106,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
   group: GroupView;
 
   groupForm = this.formBuilder.group({
-    accessAll: [false],
     name: ["", [Validators.required, Validators.maxLength(100)]],
     externalId: this.formBuilder.control({ value: "", disabled: true }),
     members: [[] as AccessItemValue[]],
@@ -183,20 +174,26 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
-  allowAdminAccessToAllCollectionItems$ = combineLatest([
-    this.organization$,
-    this.flexibleCollectionsV1Enabled$,
-  ]).pipe(
-    map(([organization, flexibleCollectionsV1Enabled]) => {
-      if (!flexibleCollectionsV1Enabled || !organization.flexibleCollections) {
-        return true;
-      }
-
+  protected allowAdminAccessToAllCollectionItems$ = this.organization$.pipe(
+    map((organization) => {
       return organization.allowAdminAccessToAllCollectionItems;
     }),
   );
 
-  restrictGroupAccess$ = combineLatest([
+  protected canAssignAccessToAnyCollection$ = combineLatest([
+    this.organization$,
+    this.allowAdminAccessToAllCollectionItems$,
+  ]).pipe(
+    map(
+      ([org, allowAdminAccessToAllCollectionItems]) =>
+        org.canEditAnyCollection ||
+        // Manage Groups custom permission cannot edit any collection but they can assign access from this dialog
+        // if permitted by collection management settings
+        (org.permissions.manageGroups && allowAdminAccessToAllCollectionItems),
+    ),
+  );
+
+  protected cannotAddSelfToGroup$ = combineLatest([
     this.allowAdminAccessToAllCollectionItems$,
     this.groupDetails$,
   ]).pipe(map(([allowAdminAccess, groupDetails]) => !allowAdminAccess && groupDetails != null));
@@ -214,7 +211,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private dialogService: DialogService,
     private organizationService: OrganizationService,
-    private configService: ConfigService,
     private accountService: AccountService,
     private collectionAdminService: CollectionAdminService,
   ) {
@@ -229,30 +225,16 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
       this.orgCollections$,
       this.orgMembers$,
       this.groupDetails$,
-      this.restrictGroupAccess$,
+      this.cannotAddSelfToGroup$,
       this.accountService.activeAccount$,
       this.organization$,
-      this.flexibleCollectionsV1Enabled$,
     ])
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        ([
-          collections,
-          members,
-          group,
-          restrictGroupAccess,
-          activeAccount,
-          organization,
-          flexibleCollectionsV1Enabled,
-        ]) => {
+        ([collections, members, group, restrictGroupAccess, activeAccount, organization]) => {
           this.members = members;
           this.group = group;
-          this.collections = mapToAccessItemViews(
-            collections,
-            organization,
-            flexibleCollectionsV1Enabled,
-            group,
-          );
+          this.collections = mapToAccessItemViews(collections, organization, group);
 
           if (this.group != undefined) {
             // Must detect changes so that AccessSelector @Inputs() are aware of the latest
@@ -262,7 +244,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
             this.groupForm.patchValue({
               name: this.group.name,
               externalId: this.group.externalId,
-              accessAll: this.group.accessAll,
               members: this.group.members.map((m) => ({
                 id: m,
                 type: AccessItemType.Member,
@@ -273,12 +254,13 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
           // If the current user is not already in the group and cannot add themselves, remove them from the list
           if (restrictGroupAccess) {
-            const organizationUserId = this.members.find((m) => m.userId === activeAccount.id).id;
+            // organizationUserId may be null if accessing via a provider
+            const organizationUserId = this.members.find((m) => m.userId === activeAccount.id)?.id;
             const isAlreadyInGroup = this.groupForm.value.members.some(
               (m) => m.id === organizationUserId,
             );
 
-            if (!isAlreadyInGroup) {
+            if (organizationUserId != null && !isAlreadyInGroup) {
               this.members = this.members.filter((m) => m.id !== organizationUserId);
             }
           }
@@ -313,12 +295,8 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
 
     const formValue = this.groupForm.value;
     groupView.name = formValue.name;
-    groupView.accessAll = formValue.accessAll;
     groupView.members = formValue.members?.map((m) => m.id) ?? [];
-
-    if (!groupView.accessAll) {
-      groupView.collections = formValue.collections.map((c) => convertToSelectionView(c));
-    }
+    groupView.collections = formValue.collections.map((c) => convertToSelectionView(c));
 
     await this.groupService.save(groupView);
 
@@ -378,7 +356,6 @@ function mapToAccessSelections(group: GroupView, items: AccessItemView[]): Acces
 function mapToAccessItemViews(
   collections: CollectionAdminView[],
   organization: Organization,
-  flexibleCollectionsV1Enabled: boolean,
   group?: GroupView,
 ): AccessItemView[] {
   return (
@@ -390,7 +367,7 @@ function mapToAccessItemViews(
           type: AccessItemType.Collection,
           labelName: c.name,
           listName: c.name,
-          readonly: !c.canEditGroupAccess(organization, flexibleCollectionsV1Enabled),
+          readonly: !c.canEditGroupAccess(organization),
           readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
         };
       })

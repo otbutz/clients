@@ -1,8 +1,12 @@
 <app-header>
-  <bit-search class="tw-grow" [(ngModel)]="searchText" [placeholder]="'search' | i18n"></bit-search>
+  <bit-search
+    class="tw-grow"
+    [formControl]="searchControl"
+    [placeholder]="'search' | i18n"
+  ></bit-search>
   <button type="button" bitButton buttonType="primary" (click)="invite()">
     <i class="bwi bwi-plus bwi-fw" aria-hidden="true"></i>
-    {{ "inviteUsers" | i18n }}
+    {{ "inviteMember" | i18n }}
   </button>
 </app-header>
 
@@ -23,7 +27,7 @@
     </bit-toggle>
 
     <bit-toggle [value]="userStatusType.Accepted">
-      {{ "accepted" | i18n }}
+      {{ "needsConfirmation" | i18n }}
       <span bitBadge variant="warning" *ngIf="acceptedCount">{{ acceptedCount }}</span>
     </bit-toggle>
   </bit-toggle-group>
@@ -78,14 +82,14 @@
     title="{{ 'loading' | i18n }}"
     aria-hidden="true"
   ></i>
-  <span class="sr-only">{{ "loading" | i18n }}</span>
+  <span class="tw-sr-only">{{ "loading" | i18n }}</span>
 </ng-container>
 <ng-container
   *ngIf="
     !loading &&
-    (isPaging()
+    ((isPaging$ | async)
       ? pagedUsers
-      : (users | search: searchText : 'name' : 'email' : 'id')) as searchedUsers
+      : (users | search: searchControl.value : 'name' : 'email' : 'id')) as searchedUsers
   "
 >
   <p *ngIf="!searchedUsers.length">{{ "noUsersInList" | i18n }}</p>
@@ -102,7 +106,7 @@
       class="table table-hover table-list"
       infiniteScroll
       [infiniteScrollDistance]="1"
-      [infiniteScrollDisabled]="!isPaging()"
+      [infiniteScrollDisabled]="!(isPaging$ | async)"
       (scrolled)="loadMore()"
     >
       <tbody>
@@ -119,7 +123,7 @@
               "invited" | i18n
             }}</span>
             <span bitBadge variant="warning" *ngIf="u.status === userStatusType.Accepted">{{
-              "accepted" | i18n
+              "needsConfirmation" | i18n
             }}</span>
             <small class="text-muted d-block" *ngIf="u.name">{{ u.name }}</small>
           </td>
@@ -130,7 +134,7 @@
                 title="{{ 'userUsingTwoStep' | i18n }}"
                 aria-hidden="true"
               ></i>
-              <span class="sr-only">{{ "userUsingTwoStep" | i18n }}</span>
+              <span class="tw-sr-only">{{ "userUsingTwoStep" | i18n }}</span>
             </ng-container>
           </td>
           <td>

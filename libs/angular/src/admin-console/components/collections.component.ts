@@ -2,6 +2,8 @@ import { Directive, EventEmitter, Input, OnInit, Output } from "@angular/core";
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -22,7 +24,7 @@ export class CollectionsComponent implements OnInit {
   collectionIds: string[];
   collections: CollectionView[] = [];
   organization: Organization;
-  flexibleCollectionsV1Enabled: boolean;
+  restrictProviderAccess: boolean;
 
   protected cipherDomain: Cipher;
 
@@ -33,9 +35,13 @@ export class CollectionsComponent implements OnInit {
     protected cipherService: CipherService,
     protected organizationService: OrganizationService,
     private logService: LogService,
+    private configService: ConfigService,
   ) {}
 
   async ngOnInit() {
+    this.restrictProviderAccess = await this.configService.getFeatureFlag(
+      FeatureFlag.RestrictProviderAccess,
+    );
     await this.load();
   }
 
@@ -62,7 +68,7 @@ export class CollectionsComponent implements OnInit {
   async submit(): Promise<boolean> {
     const selectedCollectionIds = this.collections
       .filter((c) => {
-        if (this.organization.canEditAllCiphers(this.flexibleCollectionsV1Enabled)) {
+        if (this.organization.canEditAllCiphers(this.restrictProviderAccess)) {
           return !!(c as any).checked;
         } else {
           return !!(c as any).checked && c.readOnly == null;
@@ -85,7 +91,7 @@ export class CollectionsComponent implements OnInit {
       this.platformUtilsService.showToast("success", null, this.i18nService.t("editedItem"));
       return true;
     } catch (e) {
-      this.logService.error(e);
+      this.platformUtilsService.showToast("error", this.i18nService.t("errorOccurred"), e.message);
       return false;
     }
   }

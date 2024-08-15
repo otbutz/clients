@@ -1,4 +1,5 @@
 import { mock, MockProxy } from "jest-mock-extended";
+import { BehaviorSubject } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
@@ -12,6 +13,7 @@ import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/id
 import { IUserDecryptionOptionsServerResponse } from "@bitwarden/common/auth/models/response/user-decryption-options/user-decryption-options.response";
 import { FakeMasterPasswordService } from "@bitwarden/common/auth/services/master-password/fake-master-password.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -22,6 +24,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/services/vault-timeout/vault-timeout-settings.service";
 import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
 import { CsprngArray } from "@bitwarden/common/types/csprng";
 import { UserId } from "@bitwarden/common/types/guid";
@@ -55,6 +58,7 @@ describe("SsoLoginStrategy", () => {
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let i18nService: MockProxy<I18nService>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let vaultTimeoutSettingsService: MockProxy<VaultTimeoutSettingsService>;
   let kdfConfigService: MockProxy<KdfConfigService>;
 
   let ssoLoginStrategy: SsoLoginStrategy;
@@ -88,6 +92,7 @@ describe("SsoLoginStrategy", () => {
     authRequestService = mock<AuthRequestServiceAbstraction>();
     i18nService = mock<I18nService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
+    vaultTimeoutSettingsService = mock<VaultTimeoutSettingsService>();
     kdfConfigService = mock<KdfConfigService>();
 
     tokenService.getTwoFactorToken.mockResolvedValue(null);
@@ -96,8 +101,27 @@ describe("SsoLoginStrategy", () => {
       sub: userId,
     });
 
+    const mockVaultTimeoutAction = VaultTimeoutAction.Lock;
+    const mockVaultTimeoutActionBSub = new BehaviorSubject<VaultTimeoutAction>(
+      mockVaultTimeoutAction,
+    );
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockReturnValue(
+      mockVaultTimeoutActionBSub.asObservable(),
+    );
+
+    const mockVaultTimeout = 1000;
+
+    const mockVaultTimeoutBSub = new BehaviorSubject<number>(mockVaultTimeout);
+    vaultTimeoutSettingsService.getVaultTimeoutByUserId$.mockReturnValue(
+      mockVaultTimeoutBSub.asObservable(),
+    );
+
     ssoLoginStrategy = new SsoLoginStrategy(
       null,
+      keyConnectorService,
+      deviceTrustService,
+      authRequestService,
+      i18nService,
       accountService,
       masterPasswordService,
       cryptoService,
@@ -110,11 +134,8 @@ describe("SsoLoginStrategy", () => {
       stateService,
       twoFactorService,
       userDecryptionOptionsService,
-      keyConnectorService,
-      deviceTrustService,
-      authRequestService,
-      i18nService,
       billingAccountProfileStateService,
+      vaultTimeoutSettingsService,
       kdfConfigService,
     );
     credentials = new SsoLoginCredentials(ssoCode, ssoCodeVerifier, ssoRedirectUrl, ssoOrgId);
@@ -163,7 +184,10 @@ describe("SsoLoginStrategy", () => {
 
     // Assert
     expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledTimes(1);
-    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(tokenResponse.key);
+    expect(cryptoService.setMasterKeyEncryptedUserKey).toHaveBeenCalledWith(
+      tokenResponse.key,
+      userId,
+    );
   });
 
   describe("Trusted Device Decryption", () => {
@@ -187,6 +211,7 @@ describe("SsoLoginStrategy", () => {
         HasAdminApproval: true,
         HasLoginApprovingDevice: true,
         HasManageResetPasswordPermission: false,
+        IsTdeOffboarding: false,
         EncryptedPrivateKey: mockEncDevicePrivateKey,
         EncryptedUserKey: mockEncUserKey,
       },
@@ -227,7 +252,7 @@ describe("SsoLoginStrategy", () => {
       expect(deviceTrustService.getDeviceKey).toHaveBeenCalledTimes(1);
       expect(deviceTrustService.decryptUserKeyWithDeviceKey).toHaveBeenCalledTimes(1);
       expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledTimes(1);
-      expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledWith(mockUserKey);
+      expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledWith(mockUserKey, userId);
     });
 
     it("does not set the user key when deviceKey is missing", async () => {
@@ -288,6 +313,27 @@ describe("SsoLoginStrategy", () => {
       expect(cryptoService.setUserKey).not.toHaveBeenCalled();
     });
 
+    it("logs when a device key is found but no decryption keys were recieved in token response", async () => {
+      // Arrange
+      const userDecryptionOpts = userDecryptionOptsServerResponseWithTdeOption;
+      userDecryptionOpts.TrustedDeviceOption.EncryptedPrivateKey = null;
+      userDecryptionOpts.TrustedDeviceOption.EncryptedUserKey = null;
+
+      const idTokenResponse: IdentityTokenResponse = identityTokenResponseFactory(
+        null,
+        userDecryptionOpts,
+      );
+
+      apiService.postIdentityToken.mockResolvedValue(idTokenResponse);
+      deviceTrustService.getDeviceKey.mockResolvedValue(mockDeviceKey);
+
+      // Act
+      await ssoLoginStrategy.logIn(credentials);
+
+      // Assert
+      expect(deviceTrustService.recordDeviceTrustLoss).toHaveBeenCalledTimes(1);
+    });
+
     describe("AdminAuthRequest", () => {
       let tokenResponse: IdentityTokenResponse;
 
@@ -298,6 +344,7 @@ describe("SsoLoginStrategy", () => {
             HasAdminApproval: true,
             HasLoginApprovingDevice: false,
             HasManageResetPasswordPermission: false,
+            IsTdeOffboarding: false,
             EncryptedPrivateKey: mockEncDevicePrivateKey,
             EncryptedUserKey: mockEncUserKey,
           },
@@ -417,7 +464,7 @@ describe("SsoLoginStrategy", () => {
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
+      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl, userId);
     });
 
     it("converts new SSO user with no master password to Key Connector on first login", async () => {
@@ -430,6 +477,7 @@ describe("SsoLoginStrategy", () => {
       expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
         tokenResponse,
         ssoOrgId,
+        userId,
       );
     });
 
@@ -441,12 +489,16 @@ describe("SsoLoginStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       masterPasswordService.masterKeySubject.next(masterKey);
-      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+      masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+      expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+        masterKey,
+        undefined,
+        undefined,
+      );
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
     });
   });
 
@@ -468,7 +520,7 @@ describe("SsoLoginStrategy", () => {
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl);
+      expect(keyConnectorService.setMasterKeyFromUrl).toHaveBeenCalledWith(keyConnectorUrl, userId);
     });
 
     it("converts new SSO user with no master password to Key Connector on first login", async () => {
@@ -481,6 +533,7 @@ describe("SsoLoginStrategy", () => {
       expect(keyConnectorService.convertNewSsoUserToKeyConnector).toHaveBeenCalledWith(
         tokenResponse,
         ssoOrgId,
+        userId,
       );
     });
 
@@ -492,12 +545,16 @@ describe("SsoLoginStrategy", () => {
 
       apiService.postIdentityToken.mockResolvedValue(tokenResponse);
       masterPasswordService.masterKeySubject.next(masterKey);
-      cryptoService.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
+      masterPasswordService.mock.decryptUserKeyWithMasterKey.mockResolvedValue(userKey);
 
       await ssoLoginStrategy.logIn(credentials);
 
-      expect(cryptoService.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(masterKey);
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+      expect(masterPasswordService.mock.decryptUserKeyWithMasterKey).toHaveBeenCalledWith(
+        masterKey,
+        undefined,
+        undefined,
+      );
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
     });
   });
 });

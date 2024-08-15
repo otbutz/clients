@@ -17,9 +17,11 @@ import {
 
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService } from "@bitwarden/components";
 
+import { OrganizationCounts } from "../models/view/counts.view";
 import { ProjectListView } from "../models/view/project-list.view";
 import { SecretListView } from "../models/view/secret-list.view";
 import {
@@ -40,12 +42,17 @@ import {
   SecretDialogComponent,
   SecretOperation,
 } from "../secrets/dialog/secret-dialog.component";
+import {
+  SecretViewDialogComponent,
+  SecretViewDialogParams,
+} from "../secrets/dialog/secret-view-dialog.component";
 import { SecretService } from "../secrets/secret.service";
 import {
   ServiceAccountDialogComponent,
   ServiceAccountOperation,
 } from "../service-accounts/dialog/service-account-dialog.component";
 import { ServiceAccountService } from "../service-accounts/service-account.service";
+import { CountService } from "../shared/counts/count.service";
 import { SecretsListComponent } from "../shared/secrets-list.component";
 
 import { SMOnboardingTasks, SMOnboardingTasksService } from "./sm-onboarding-tasks.service";
@@ -82,11 +89,13 @@ export class OverviewComponent implements OnInit, OnDestroy {
     latestProjects: ProjectListView[];
     latestSecrets: SecretListView[];
     tasks: OrganizationTasks;
+    counts: OrganizationCounts;
   }>;
 
   constructor(
     private route: ActivatedRoute,
     private projectService: ProjectService,
+    private countService: CountService,
     private secretService: SecretService,
     private serviceAccountService: ServiceAccountService,
     private dialogService: DialogService,
@@ -94,6 +103,7 @@ export class OverviewComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private smOnboardingTasksService: SMOnboardingTasksService,
+    private logService: LogService,
   ) {}
 
   ngOnInit() {
@@ -142,10 +152,19 @@ export class OverviewComponent implements OnInit, OnDestroy {
       share(),
     );
 
+    const counts$ = combineLatest([
+      orgId$,
+      this.secretService.secret$.pipe(startWith(null)),
+      this.projectService.project$.pipe(startWith(null)),
+    ]).pipe(
+      switchMap(([orgId]) => this.countService.getOrganizationCounts(orgId)),
+      share(),
+    );
+
     this.view$ = orgId$.pipe(
       switchMap((orgId) =>
-        combineLatest([projects$, secrets$, serviceAccounts$]).pipe(
-          switchMap(async ([projects, secrets, serviceAccounts]) => ({
+        combineLatest([projects$, secrets$, serviceAccounts$, counts$]).pipe(
+          switchMap(async ([projects, secrets, serviceAccounts, counts]) => ({
             latestProjects: this.getRecentItems(projects, this.tableSize),
             latestSecrets: this.getRecentItems(secrets, this.tableSize),
             allProjects: projects,
@@ -156,6 +175,11 @@ export class OverviewComponent implements OnInit, OnDestroy {
               createProject: projects.length > 0,
               createServiceAccount: serviceAccounts.length > 0,
             }),
+            counts: {
+              projects: counts.projects,
+              secrets: counts.secrets,
+              serviceAccounts: counts.serviceAccounts,
+            },
           })),
         ),
       ),
@@ -275,6 +299,15 @@ export class OverviewComponent implements OnInit, OnDestroy {
     });
   }
 
+  openViewSecret(secretId: string) {
+    this.dialogService.open<unknown, SecretViewDialogParams>(SecretViewDialogComponent, {
+      data: {
+        organizationId: this.organizationId,
+        secretId: secretId,
+      },
+    });
+  }
+
   openDeleteSecret(event: SecretListView[]) {
     this.dialogService.open<unknown, SecretDeleteOperation>(SecretDeleteDialogComponent, {
       data: {
@@ -297,12 +330,13 @@ export class OverviewComponent implements OnInit, OnDestroy {
     SecretsListComponent.copySecretName(name, this.platformUtilsService, this.i18nService);
   }
 
-  copySecretValue(id: string) {
-    SecretsListComponent.copySecretValue(
+  async copySecretValue(id: string) {
+    await SecretsListComponent.copySecretValue(
       id,
       this.platformUtilsService,
       this.i18nService,
       this.secretService,
+      this.logService,
     );
   }
 
@@ -310,11 +344,9 @@ export class OverviewComponent implements OnInit, OnDestroy {
     SecretsListComponent.copySecretUuid(id, this.platformUtilsService, this.i18nService);
   }
 
-  protected hideOnboarding() {
+  protected async hideOnboarding() {
     this.showOnboarding = false;
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.saveCompletedTasks(this.organizationId, {
+    await this.saveCompletedTasks(this.organizationId, {
       importSecrets: true,
       createSecret: true,
       createProject: true,

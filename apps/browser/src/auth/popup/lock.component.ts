@@ -1,9 +1,9 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 
 import { LockComponent as BaseLockComponent } from "@bitwarden/angular/auth/components/lock.component";
-import { PinCryptoServiceAbstraction } from "@bitwarden/auth/common";
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { VaultTimeoutService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout.service";
@@ -25,6 +25,7 @@ import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/pl
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
+import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
 
 import { BiometricErrors, BiometricErrorTypes } from "../../models/biometricErrors";
@@ -35,7 +36,7 @@ import { fido2PopoutSessionData$ } from "../../vault/popup/utils/fido2-popout-se
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
-export class LockComponent extends BaseLockComponent {
+export class LockComponent extends BaseLockComponent implements OnInit {
   private isInitialLockScreen: boolean;
 
   biometricError: string;
@@ -63,11 +64,12 @@ export class LockComponent extends BaseLockComponent {
     dialogService: DialogService,
     deviceTrustService: DeviceTrustServiceAbstraction,
     userVerificationService: UserVerificationService,
-    pinCryptoService: PinCryptoServiceAbstraction,
+    pinService: PinServiceAbstraction,
     private routerService: BrowserRouterService,
     biometricStateService: BiometricStateService,
     accountService: AccountService,
     kdfConfigService: KdfConfigService,
+    syncService: SyncService,
   ) {
     super(
       masterPasswordService,
@@ -89,11 +91,12 @@ export class LockComponent extends BaseLockComponent {
       dialogService,
       deviceTrustService,
       userVerificationService,
-      pinCryptoService,
+      pinService,
       biometricStateService,
       accountService,
       authService,
       kdfConfigService,
+      syncService,
     );
     this.successRoute = "/tabs/current";
     this.isInitialLockScreen = (window as any).previousPopupUrl == null;
@@ -143,15 +146,17 @@ export class LockComponent extends BaseLockComponent {
     try {
       success = await super.unlockBiometric();
     } catch (e) {
-      const error = BiometricErrors[e as BiometricErrorTypes];
+      const error = BiometricErrors[e?.message as BiometricErrorTypes];
 
       if (error == null) {
         this.logService.error("Unknown error: " + e);
+        return false;
       }
 
       this.biometricError = this.i18nService.t(error.description);
+    } finally {
+      this.pendingBiometric = false;
     }
-    this.pendingBiometric = false;
 
     return success;
   }

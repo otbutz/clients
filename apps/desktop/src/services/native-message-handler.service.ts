@@ -22,8 +22,9 @@ import { UnencryptedMessageResponse } from "../models/native-messaging/unencrypt
 
 import { EncryptedMessageHandlerService } from "./encrypted-message-handler.service";
 
-const EncryptionAlgorithm = "sha1";
+const HashAlgorithmForAsymmetricEncryption = "sha1";
 
+// This service handles messages using the protocol created for the DuckDuckGo integration.
 @Injectable()
 export class NativeMessageHandlerService {
   private ddgSharedSecret: SymmetricCryptoKey;
@@ -116,7 +117,7 @@ export class NativeMessageHandlerService {
       const encryptedSecret = await this.cryptoFunctionService.rsaEncrypt(
         secret,
         remotePublicKey,
-        EncryptionAlgorithm,
+        HashAlgorithmForAsymmetricEncryption,
       );
 
       this.sendResponse({

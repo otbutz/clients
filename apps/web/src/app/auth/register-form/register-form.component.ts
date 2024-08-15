@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { UntypedFormBuilder } from "@angular/forms";
 import { Router } from "@angular/router";
 
@@ -10,20 +10,23 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
 import { ReferenceEventRequest } from "@bitwarden/common/models/request/reference-event.request";
+import { RegisterRequest } from "@bitwarden/common/models/request/register.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
+
+import { AcceptOrganizationInviteService } from "../organization-invite/accept-organization.service";
 
 @Component({
   selector: "app-register-form",
   templateUrl: "./register-form.component.html",
 })
-export class RegisterFormComponent extends BaseRegisterComponent {
+export class RegisterFormComponent extends BaseRegisterComponent implements OnInit {
   @Input() queryParamEmail: string;
   @Input() queryParamFromOrgInvite: boolean;
   @Input() enforcedPolicyOptions: MasterPasswordPolicyOptions;
@@ -48,6 +51,7 @@ export class RegisterFormComponent extends BaseRegisterComponent {
     logService: LogService,
     auditService: AuditService,
     dialogService: DialogService,
+    acceptOrgInviteService: AcceptOrganizationInviteService,
   ) {
     super(
       formValidationErrorService,
@@ -65,6 +69,16 @@ export class RegisterFormComponent extends BaseRegisterComponent {
       auditService,
       dialogService,
     );
+    super.modifyRegisterRequest = async (request: RegisterRequest) => {
+      // Org invites are deep linked. Non-existent accounts are redirected to the register page.
+      // Org user id and token are included here only for validation and two factor purposes.
+      const orgInvite = await acceptOrgInviteService.getOrganizationInvite();
+      if (orgInvite != null) {
+        request.organizationUserId = orgInvite.organizationUserId;
+        request.token = orgInvite.token;
+      }
+      // Invite is accepted after login (on deep link redirect).
+    };
   }
 
   async ngOnInit() {

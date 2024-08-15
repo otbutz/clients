@@ -2,12 +2,14 @@ import { firstValueFrom, map, mergeMap } from "rxjs";
 
 import { NotificationsService } from "@bitwarden/common/abstractions/notifications.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
-import { AutofillOverlayVisibility } from "@bitwarden/common/autofill/constants";
+import { AutofillOverlayVisibility, ExtensionCommand } from "@bitwarden/common/autofill/constants";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { SystemService } from "@bitwarden/common/platform/abstractions/system.service";
+import { devFlagEnabled } from "@bitwarden/common/platform/misc/flags";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CipherType } from "@bitwarden/common/vault/enums";
 
@@ -18,11 +20,11 @@ import {
   openTwoFactorAuthPopout,
 } from "../auth/popup/utils/auth-popout-window";
 import { LockedVaultPendingNotificationsData } from "../autofill/background/abstractions/notification.background";
+import { Fido2Background } from "../autofill/fido2/background/abstractions/fido2.background";
 import { AutofillService } from "../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../platform/browser/browser-api";
 import { BrowserEnvironmentService } from "../platform/services/browser-environment.service";
 import { BrowserPlatformUtilsService } from "../platform/services/platform-utils/browser-platform-utils.service";
-import { Fido2Background } from "../vault/fido2/background/abstractions/fido2.background";
 
 import MainBackground from "./main.background";
 
@@ -31,6 +33,7 @@ export default class RuntimeBackground {
   private pageDetailsToAutoFill: any[] = [];
   private onInstalledReason: string = null;
   private lockedVaultPendingNotifications: LockedVaultPendingNotificationsData[] = [];
+  private extensionRefreshIsActive: boolean = false;
 
   constructor(
     private main: MainBackground,
@@ -64,7 +67,11 @@ export default class RuntimeBackground {
       sender: chrome.runtime.MessageSender,
       sendResponse: (response: any) => void,
     ) => {
-      const messagesWithResponse = ["biometricUnlock"];
+      const messagesWithResponse = [
+        "biometricUnlock",
+        "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
+        "getInlineMenuFieldQualificationFeatureFlag",
+      ];
 
       if (messagesWithResponse.includes(msg.command)) {
         this.processMessageWithSender(msg, sender).then(
@@ -82,6 +89,10 @@ export default class RuntimeBackground {
       );
       return false;
     };
+
+    this.extensionRefreshIsActive = await this.configService.getFeatureFlag(
+      FeatureFlag.ExtensionRefresh,
+    );
 
     this.messageListener.allMessages$
       .pipe(
@@ -111,7 +122,7 @@ export default class RuntimeBackground {
       case "collectPageDetailsResponse":
         switch (msg.sender) {
           case "autofiller":
-          case "autofill_cmd": {
+          case ExtensionCommand.AutofillCommand: {
             const activeUserId = await firstValueFrom(
               this.accountService.activeAccount$.pipe(map((a) => a?.id)),
             );
@@ -124,14 +135,14 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              msg.sender === "autofill_cmd",
+              msg.sender === ExtensionCommand.AutofillCommand,
             );
             if (totpCode != null) {
               this.platformUtilsService.copyToClipboard(totpCode);
             }
             break;
           }
-          case "autofill_card": {
+          case ExtensionCommand.AutofillCard: {
             await this.autofillService.doAutoFillActiveTab(
               [
                 {
@@ -140,12 +151,12 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              false,
+              msg.sender === ExtensionCommand.AutofillCard,
               CipherType.Card,
             );
             break;
           }
-          case "autofill_identity": {
+          case ExtensionCommand.AutofillIdentity: {
             await this.autofillService.doAutoFillActiveTab(
               [
                 {
@@ -154,7 +165,7 @@ export default class RuntimeBackground {
                   details: msg.details,
                 },
               ],
-              false,
+              msg.sender === ExtensionCommand.AutofillIdentity,
               CipherType.Identity,
             );
             break;
@@ -176,6 +187,14 @@ export default class RuntimeBackground {
         const result = await this.main.biometricUnlock();
         return result;
       }
+      case "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag": {
+        return await this.configService.getFeatureFlag(
+          FeatureFlag.UseTreeWalkerApiForPageDetailsCollection,
+        );
+      }
+      case "getInlineMenuFieldQualificationFeatureFlag": {
+        return await this.configService.getFeatureFlag(FeatureFlag.InlineMenuFieldQualification);
+      }
     }
   }
 
@@ -186,7 +205,9 @@ export default class RuntimeBackground {
         let item: LockedVaultPendingNotificationsData;
 
         if (msg.command === "loggedIn") {
+          await this.main.initOverlayAndTabsBackground();
           await this.sendBwInstalledMessageToVault();
+          await this.autofillService.reloadAutofillScripts();
         }
 
         if (this.lockedVaultPendingNotifications?.length > 0) {
@@ -195,8 +216,6 @@ export default class RuntimeBackground {
         }
 
         await this.notificationsService.updateConnection(msg.command === "loggedIn");
-        await this.main.refreshBadge();
-        await this.main.refreshMenu(false);
         this.systemService.cancelProcessReload();
 
         if (item) {
@@ -208,10 +227,23 @@ export default class RuntimeBackground {
             item,
           );
         }
+
+        // @TODO these need to happen last to avoid blocking `tabSendMessageData` above
+        // The underlying cause exists within `cipherService.getAllDecrypted` via
+        // `getAllDecryptedForUrl` and is anticipated to be refactored
+        await this.main.refreshBadge();
+        await this.main.refreshMenu(false);
+
+        if (this.extensionRefreshIsActive) {
+          await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
+        }
         break;
       }
       case "addToLockedVaultPendingNotifications":
         this.lockedVaultPendingNotifications.push(msg.data);
+        break;
+      case "lockVault":
+        await this.main.vaultTimeoutService.lock(msg.userId);
         break;
       case "logout":
         await this.main.logout(msg.expired, msg.userId);
@@ -223,6 +255,11 @@ export default class RuntimeBackground {
             await this.main.refreshMenu();
           }, 2000);
           await this.configService.ensureConfigFetched();
+          await this.main.updateOverlayCiphers();
+
+          if (this.extensionRefreshIsActive) {
+            await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
+          }
         }
         break;
       case "openPopup":
@@ -324,9 +361,10 @@ export default class RuntimeBackground {
 
       if (this.onInstalledReason != null) {
         if (this.onInstalledReason === "install") {
-          // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-          // eslint-disable-next-line @typescript-eslint/no-floating-promises
-          BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
+          if (!devFlagEnabled("skipWelcomeOnInstall")) {
+            void BrowserApi.createNewTab("https://bitwarden.com/browser-start/");
+          }
+
           await this.autofillSettingsService.setInlineMenuVisibility(
             AutofillOverlayVisibility.OnFieldFocus,
           );

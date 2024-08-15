@@ -5,12 +5,12 @@ import { concatMap, firstValueFrom, lastValueFrom, Observable, Subject, takeUnti
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationApiKeyType, ProviderType } from "@bitwarden/common/admin-console/enums";
+import { ProviderService } from "@bitwarden/common/admin-console/abstractions/provider.service";
+import { OrganizationApiKeyType, ProviderStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
-import { PlanType } from "@bitwarden/common/billing/enums";
+import { PlanType, ProductTierType } from "@bitwarden/common/billing/enums";
 import { OrganizationSubscriptionResponse } from "@bitwarden/common/billing/models/response/organization-subscription.response";
 import { BillingSubscriptionItemResponse } from "@bitwarden/common/billing/models/response/subscription.response";
-import { ProductType } from "@bitwarden/common/enums";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -28,6 +28,8 @@ import {
 } from "../shared/offboarding-survey.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { ChangePlanDialogResultType, openChangePlanDialog } from "./change-plan-dialog.component";
+import { DownloadLicenceDialogComponent } from "./download-license.component";
 import { ManageBilling } from "./icons/manage-billing.icon";
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
 
@@ -49,14 +51,24 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   locale: string;
   showUpdatedSubscriptionStatusSection$: Observable<boolean>;
   manageBillingFromProviderPortal = ManageBilling;
-  IsProviderManaged = false;
+  isManagedByConsolidatedBillingMSP = false;
+  enableTimeThreshold: boolean;
+  preSelectedProductTier: ProductTierType = ProductTierType.Free;
 
-  protected readonly teamsStarter = ProductType.TeamsStarter;
+  protected readonly teamsStarter = ProductTierType.TeamsStarter;
 
   private destroy$ = new Subject<void>();
 
   protected enableConsolidatedBilling$ = this.configService.getFeatureFlag$(
     FeatureFlag.EnableConsolidatedBilling,
+  );
+
+  protected enableTimeThreshold$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableTimeThreshold,
+  );
+
+  protected EnableUpgradePasswordManagerSub$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableUpgradePasswordManagerSub,
   );
 
   constructor(
@@ -69,6 +81,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private route: ActivatedRoute,
     private dialogService: DialogService,
     private configService: ConfigService,
+    private providerService: ProviderService,
   ) {}
 
   async ngOnInit() {
@@ -76,6 +89,13 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.changePlan();
+      const productTierTypeStr = this.route.snapshot.queryParamMap.get("productTierType");
+      if (productTierTypeStr != null) {
+        const productTier = Number(productTierTypeStr);
+        if (Object.values(ProductTierType).includes(productTier as ProductTierType)) {
+          this.preSelectedProductTier = productTier;
+        }
+      }
     }
 
     this.route.params
@@ -92,6 +112,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     this.showUpdatedSubscriptionStatusSection$ = this.configService.getFeatureFlag$(
       FeatureFlag.AC1795_UpdatedSubscriptionStatusSection,
     );
+    this.enableTimeThreshold = await firstValueFrom(this.enableTimeThreshold$);
   }
 
   ngOnDestroy() {
@@ -106,16 +127,18 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     this.loading = true;
     this.locale = await firstValueFrom(this.i18nService.locale$);
     this.userOrg = await this.organizationService.get(this.organizationId);
-    const enableConsolidatedBilling = await firstValueFrom(this.enableConsolidatedBilling$);
-    this.IsProviderManaged =
-      this.userOrg.hasProvider &&
-      this.userOrg.providerType == ProviderType.Msp &&
-      enableConsolidatedBilling
-        ? true
-        : false;
+
     if (this.userOrg.canViewSubscription) {
+      const enableConsolidatedBilling = await firstValueFrom(this.enableConsolidatedBilling$);
+      const provider = await this.providerService.get(this.userOrg.providerId);
+      this.isManagedByConsolidatedBillingMSP =
+        enableConsolidatedBilling &&
+        this.userOrg.hasProvider &&
+        provider?.providerStatus == ProviderStatusType.Billable;
+
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
       this.lineItems = this.sub?.subscription?.items;
+
       if (this.lineItems && this.lineItems.length) {
         this.lineItems = this.lineItems
           .map((item) => {
@@ -280,16 +303,38 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
         return this.i18nService.t("subscriptionUpgrade", this.sub.seats.toString());
       }
     } else if (this.sub.maxAutoscaleSeats === this.sub.seats && this.sub.seats != null) {
-      return this.i18nService.t("subscriptionMaxReached", this.sub.seats.toString());
-    } else if (this.userOrg.planProductType === ProductType.TeamsStarter) {
+      if (!this.enableTimeThreshold) {
+        return this.i18nService.t("subscriptionMaxReached", this.sub.seats.toString());
+      }
+      const seatAdjustmentMessage = this.sub.plan.isAnnual
+        ? "annualSubscriptionUserSeatsMessage"
+        : "monthlySubscriptionUserSeatsMessage";
+      return this.i18nService.t(
+        seatAdjustmentMessage + "subscriptionSeatMaxReached",
+        this.sub.seats.toString(),
+      );
+    } else if (this.userOrg.productTierType === ProductTierType.TeamsStarter) {
       return this.i18nService.t("subscriptionUserSeatsWithoutAdditionalSeatsOption", 10);
     } else if (this.sub.maxAutoscaleSeats == null) {
-      return this.i18nService.t("subscriptionUserSeatsUnlimitedAutoscale");
+      if (!this.enableTimeThreshold) {
+        return this.i18nService.t("subscriptionUserSeatsUnlimitedAutoscale");
+      }
+
+      const seatAdjustmentMessage = this.sub.plan.isAnnual
+        ? "annualSubscriptionUserSeatsMessage"
+        : "monthlySubscriptionUserSeatsMessage";
+      return this.i18nService.t(seatAdjustmentMessage);
     } else {
-      return this.i18nService.t(
-        "subscriptionUserSeatsLimitedAutoscale",
-        this.sub.maxAutoscaleSeats.toString(),
-      );
+      if (!this.enableTimeThreshold) {
+        return this.i18nService.t(
+          "subscriptionUserSeatsLimitedAutoscale",
+          this.sub.maxAutoscaleSeats.toString(),
+        );
+      }
+      const seatAdjustmentMessage = this.sub.plan.isAnnual
+        ? "annualSubscriptionUserSeatsMessage"
+        : "monthlySubscriptionUserSeatsMessage";
+      return this.i18nService.t(seatAdjustmentMessage, this.sub.maxAutoscaleSeats.toString());
     }
   }
 
@@ -343,15 +388,38 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   };
 
   async changePlan() {
-    this.showChangePlan = !this.showChangePlan;
+    const EnableUpgradePasswordManagerSub = await firstValueFrom(
+      this.EnableUpgradePasswordManagerSub$,
+    );
+    if (EnableUpgradePasswordManagerSub) {
+      const reference = openChangePlanDialog(this.dialogService, {
+        data: {
+          organizationId: this.organizationId,
+          subscription: this.sub,
+          productTierType: this.userOrg.productTierType,
+        },
+      });
+
+      const result = await lastValueFrom(reference.closed);
+
+      if (result === ChangePlanDialogResultType.Submitted) {
+        await this.load();
+      }
+    } else {
+      this.showChangePlan = !this.showChangePlan;
+    }
   }
 
   closeChangePlan() {
     this.showChangePlan = false;
   }
 
-  downloadLicense() {
-    this.showDownloadLicense = !this.showDownloadLicense;
+  async downloadLicense() {
+    DownloadLicenceDialogComponent.open(this.dialogService, {
+      data: {
+        organizationId: this.organizationId,
+      },
+    });
   }
 
   async manageBillingSync() {
@@ -431,12 +499,12 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   };
 
   get showChangePlanButton() {
-    return this.sub.plan.product !== ProductType.Enterprise && !this.showChangePlan;
+    return this.sub.plan.productTier !== ProductTierType.Enterprise && !this.showChangePlan;
   }
 }
 
 /**
- * Helper to sort subscription items by product type and then by addon status
+ * Helper to sort subscription items by productTier type and then by addon status
  */
 function sortSubscriptionItems(
   a: BillingSubscriptionItemResponse,

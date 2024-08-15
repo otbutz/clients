@@ -1,4 +1,8 @@
-import { combineLatest, firstValueFrom, switchMap } from "rxjs";
+import { combineLatest, filter, firstValueFrom, map, switchMap, timeout } from "rxjs";
+
+import { LogoutReason } from "@bitwarden/auth/common";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { TaskSchedulerService, ScheduledTaskNames } from "@bitwarden/common/platform/scheduling";
 
 import { SearchService } from "../../abstractions/search.service";
 import { VaultTimeoutSettingsService } from "../../abstractions/vault-timeout/vault-timeout-settings.service";
@@ -33,9 +37,19 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     private authService: AuthService,
     private vaultTimeoutSettingsService: VaultTimeoutSettingsService,
     private stateEventRunnerService: StateEventRunnerService,
+    private taskSchedulerService: TaskSchedulerService,
+    protected logService: LogService,
     private lockedCallback: (userId?: string) => Promise<void> = null,
-    private loggedOutCallback: (expired: boolean, userId?: string) => Promise<void> = null,
-  ) {}
+    private loggedOutCallback: (
+      logoutReason: LogoutReason,
+      userId?: string,
+    ) => Promise<void> = null,
+  ) {
+    this.taskSchedulerService.registerTaskHandler(
+      ScheduledTaskNames.vaultTimeoutCheckInterval,
+      () => this.checkVaultTimeout(),
+    );
+  }
 
   async init(checkOnInterval: boolean) {
     if (this.inited) {
@@ -49,10 +63,11 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
   }
 
   startCheck() {
-    // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    this.checkVaultTimeout();
-    setInterval(() => this.checkVaultTimeout(), 10 * 1000); // check every 10 seconds
+    this.checkVaultTimeout().catch((error) => this.logService.error(error));
+    this.taskSchedulerService.setInterval(
+      ScheduledTaskNames.vaultTimeoutCheckInterval,
+      10 * 1000, // check every 10 seconds
+    );
   }
 
   async checkVaultTimeout(): Promise<void> {
@@ -80,7 +95,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     );
   }
 
-  async lock(userId?: string): Promise<void> {
+  async lock(userId?: UserId): Promise<void> {
     const authed = await this.stateService.getIsAuthenticated({ userId: userId });
     if (!authed) {
       return;
@@ -94,7 +109,27 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       await this.logOut(userId);
     }
 
-    const currentUserId = (await firstValueFrom(this.accountService.activeAccount$)).id;
+    const currentUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+
+    const lockingUserId = userId ?? currentUserId;
+
+    // HACK: Start listening for the transition of the locking user from something to the locked state.
+    // This is very much a hack to ensure that the authentication status to retrievable right after
+    // it does its work. Particularly the `lockedCallback` and `"locked"` message. Instead
+    // lockedCallback should be deprecated and people should subscribe and react to `authStatusFor$` themselves.
+    const lockPromise = firstValueFrom(
+      this.authService.authStatusFor$(lockingUserId).pipe(
+        filter((authStatus) => authStatus === AuthenticationStatus.Locked),
+        timeout({
+          first: 5_000,
+          with: () => {
+            throw new Error("The lock process did not complete in a reasonable amount of time.");
+          },
+        }),
+      ),
+    );
 
     if (userId == null || userId === currentUserId) {
       await this.searchService.clearIndex();
@@ -102,19 +137,21 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       await this.collectionService.clearActiveUserCache();
     }
 
-    await this.masterPasswordService.clearMasterKey((userId ?? currentUserId) as UserId);
+    await this.masterPasswordService.clearMasterKey(lockingUserId);
 
-    await this.stateService.setUserKeyAutoUnlock(null, { userId: userId });
-    await this.stateService.setCryptoMasterKeyAuto(null, { userId: userId });
+    await this.stateService.setUserKeyAutoUnlock(null, { userId: lockingUserId });
+    await this.stateService.setCryptoMasterKeyAuto(null, { userId: lockingUserId });
 
-    await this.cipherService.clearCache(userId);
+    await this.cipherService.clearCache(lockingUserId);
 
-    await this.stateEventRunnerService.handleEvent("lock", (userId ?? currentUserId) as UserId);
+    await this.stateEventRunnerService.handleEvent("lock", lockingUserId);
 
-    // FIXME: We should send the userId of the user that was locked, in the case of this method being passed
-    // undefined then it should give back the currentUserId. Better yet, this method shouldn't take
-    // an undefined userId at all. All receivers need to be checked for how they handle getting undefined.
-    this.messagingService.send("locked", { userId: userId });
+    // HACK: Sit here and wait for the the auth status to transition to `Locked`
+    // to ensure the message and lockedCallback will get the correct status
+    // if/when they call it.
+    await lockPromise;
+
+    this.messagingService.send("locked", { userId: lockingUserId });
 
     if (this.lockedCallback != null) {
       await this.lockedCallback(userId);
@@ -123,7 +160,7 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
 
   async logOut(userId?: string): Promise<void> {
     if (this.loggedOutCallback != null) {
-      await this.loggedOutCallback(false, userId);
+      await this.loggedOutCallback("vaultTimeout", userId);
     }
   }
 
@@ -148,8 +185,11 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
       return false;
     }
 
-    const vaultTimeout = await this.vaultTimeoutSettingsService.getVaultTimeout(userId);
-    if (vaultTimeout == null || vaultTimeout < 0) {
+    const vaultTimeout = await firstValueFrom(
+      this.vaultTimeoutSettingsService.getVaultTimeoutByUserId$(userId),
+    );
+
+    if (typeof vaultTimeout === "string") {
       return false;
     }
 
@@ -162,9 +202,9 @@ export class VaultTimeoutService implements VaultTimeoutServiceAbstraction {
     return diffSeconds >= vaultTimeoutSeconds;
   }
 
-  private async executeTimeoutAction(userId: string): Promise<void> {
+  private async executeTimeoutAction(userId: UserId): Promise<void> {
     const timeoutAction = await firstValueFrom(
-      this.vaultTimeoutSettingsService.vaultTimeoutAction$(userId),
+      this.vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$(userId),
     );
     timeoutAction === VaultTimeoutAction.LogOut
       ? await this.logOut(userId)

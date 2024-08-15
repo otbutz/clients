@@ -1,4 +1,11 @@
-import { combineLatestWith, map, distinctUntilChanged, shareReplay, combineLatest } from "rxjs";
+import {
+  combineLatestWith,
+  map,
+  distinctUntilChanged,
+  shareReplay,
+  combineLatest,
+  Observable,
+} from "rxjs";
 
 import {
   AccountInfo,
@@ -42,11 +49,11 @@ export class AccountServiceImplementation implements InternalAccountService {
   private accountsState: GlobalState<Record<UserId, AccountInfo>>;
   private activeAccountIdState: GlobalState<UserId | undefined>;
 
-  accounts$;
-  activeAccount$;
-  accountActivity$;
-  sortedUserIds$;
-  nextUpAccount$;
+  accounts$: Observable<Record<UserId, AccountInfo>>;
+  activeAccount$: Observable<{ id: UserId | undefined } & AccountInfo>;
+  accountActivity$: Observable<Record<UserId, Date>>;
+  sortedUserIds$: Observable<UserId[]>;
+  nextUpAccount$: Observable<{ id: UserId } & AccountInfo>;
 
   constructor(
     private messagingService: MessagingService,
@@ -61,7 +68,7 @@ export class AccountServiceImplementation implements InternalAccountService {
     );
     this.activeAccount$ = this.activeAccountIdState.state$.pipe(
       combineLatestWith(this.accounts$),
-      map(([id, accounts]) => (id ? { id, ...accounts[id] } : undefined)),
+      map(([id, accounts]) => (id ? { id, ...(accounts[id] as AccountInfo) } : undefined)),
       distinctUntilChanged((a, b) => a?.id === b?.id && accountInfoEqual(a, b)),
       shareReplay({ bufferSize: 1, refCount: false }),
     );
@@ -118,7 +125,8 @@ export class AccountServiceImplementation implements InternalAccountService {
     await this.removeAccountActivity(userId);
   }
 
-  async switchAccount(userId: UserId): Promise<void> {
+  async switchAccount(userId: UserId | null): Promise<void> {
+    let updateActivity = false;
     await this.activeAccountIdState.update(
       (_, accounts) => {
         if (userId == null) {
@@ -129,6 +137,7 @@ export class AccountServiceImplementation implements InternalAccountService {
         if (accounts?.[userId] == null) {
           throw new Error("Account does not exist");
         }
+        updateActivity = true;
         return userId;
       },
       {
@@ -139,6 +148,10 @@ export class AccountServiceImplementation implements InternalAccountService {
         },
       },
     );
+
+    if (updateActivity) {
+      await this.setAccountActivity(userId, new Date());
+    }
   }
 
   async setAccountActivity(userId: UserId, lastActivity: Date): Promise<void> {

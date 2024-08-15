@@ -1,5 +1,5 @@
 import { DatePipe, Location } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import qrcodeParser from "qrcode-parser";
 import { firstValueFrom } from "rxjs";
@@ -10,13 +10,13 @@ import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { AutofillSettingsServiceAbstraction } from "@bitwarden/common/autofill/services/autofill-settings.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.service.abstraction";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -26,10 +26,11 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { DialogService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
+import { BrowserFido2UserInterfaceSession } from "../../../../autofill/fido2/services/browser-fido2-user-interface.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
 import { PopupCloseWarningService } from "../../../../popup/services/popup-close-warning.service";
-import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-user-interface.service";
+import { Fido2UserVerificationService } from "../../../services/fido2-user-verification.service";
 import { fido2PopoutSessionData$ } from "../../utils/fido2-popout-session-data";
 import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
 
@@ -38,7 +39,7 @@ import { closeAddEditVaultItemPopout, VaultPopoutType } from "../../utils/vault-
   templateUrl: "add-edit.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class AddEditComponent extends BaseAddEditComponent {
+export class AddEditComponent extends BaseAddEditComponent implements OnInit {
   currentUris: string[];
   showAttachments = true;
   openAttachmentsInPopup: boolean;
@@ -52,7 +53,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     i18nService: I18nService,
     platformUtilsService: PlatformUtilsService,
     auditService: AuditService,
-    stateService: StateService,
+    accountService: AccountService,
     private autofillSettingsService: AutofillSettingsServiceAbstraction,
     collectionService: CollectionService,
     messagingService: MessagingService,
@@ -69,6 +70,7 @@ export class AddEditComponent extends BaseAddEditComponent {
     dialogService: DialogService,
     datePipe: DatePipe,
     configService: ConfigService,
+    private fido2UserVerificationService: Fido2UserVerificationService,
   ) {
     super(
       cipherService,
@@ -76,7 +78,7 @@ export class AddEditComponent extends BaseAddEditComponent {
       i18nService,
       platformUtilsService,
       auditService,
-      stateService,
+      accountService,
       collectionService,
       messagingService,
       eventCollectionService,
@@ -126,11 +128,20 @@ export class AddEditComponent extends BaseAddEditComponent {
       await this.load();
 
       if (!this.editMode || this.cloneMode) {
+        // Only allow setting username if there's no existing value
+        if (
+          params.username &&
+          (this.cipher.login.username == null || this.cipher.login.username === "")
+        ) {
+          this.cipher.login.username = params.username;
+        }
+
         if (params.name && (this.cipher.name == null || this.cipher.name === "")) {
           this.cipher.name = params.name;
         }
         if (
           params.uri &&
+          this.cipher.login.uris[0] &&
           (this.cipher.login.uris[0].uri == null || this.cipher.login.uris[0].uri === "")
         ) {
           this.cipher.login.uris[0].uri = params.uri;
@@ -170,6 +181,9 @@ export class AddEditComponent extends BaseAddEditComponent {
     const fido2SessionData = await firstValueFrom(this.fido2PopoutSessionData$);
     const { isFido2Session, sessionId, userVerification } = fido2SessionData;
     const inFido2PopoutWindow = BrowserPopupUtils.inPopout(window) && isFido2Session;
+
+    // TODO: Revert to use fido2 user verification service once user verification for passkeys is approved for production.
+    // PM-4577 - https://github.com/bitwarden/clients/pull/8746
     if (
       inFido2PopoutWindow &&
       !(await this.handleFido2UserVerification(sessionId, userVerification))
@@ -327,14 +341,6 @@ export class AddEditComponent extends BaseAddEditComponent {
     }, 200);
   }
 
-  private async handleFido2UserVerification(
-    sessionId: string,
-    userVerification: boolean,
-  ): Promise<boolean> {
-    // We are bypassing user verification pending implementation of PIN and biometric support.
-    return true;
-  }
-
   repromptChanged() {
     super.repromptChanged();
 
@@ -388,5 +394,15 @@ export class AddEditComponent extends BaseAddEditComponent {
     if (message.command === "inlineAutofillMenuRefreshAddEditCipher") {
       this.load().catch((error) => this.logService.error(error));
     }
+  }
+
+  // TODO: Remove and use fido2 user verification service once user verification for passkeys is approved for production.
+  // Be sure to make the same changes to add-edit-v2.component.ts if applicable
+  private async handleFido2UserVerification(
+    sessionId: string,
+    userVerification: boolean,
+  ): Promise<boolean> {
+    // We are bypassing user verification pending approval for production.
+    return true;
   }
 }

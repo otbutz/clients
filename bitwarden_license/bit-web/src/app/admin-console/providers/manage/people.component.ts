@@ -1,5 +1,6 @@
-import { Component, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, OnInit, ViewChild, ViewContainerRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
+import { lastValueFrom } from "rxjs";
 import { first } from "rxjs/operators";
 
 import { SearchPipe } from "@bitwarden/angular/pipes/search.pipe";
@@ -12,9 +13,9 @@ import { ProviderService } from "@bitwarden/common/admin-console/abstractions/pr
 import { ProviderUserStatusType, ProviderUserType } from "@bitwarden/common/admin-console/enums";
 import { ProviderUserBulkRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-user-bulk.request";
 import { ProviderUserConfirmRequest } from "@bitwarden/common/admin-console/models/request/provider/provider-user-confirm.request";
-import { ProviderUserBulkResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user-bulk.response";
 import { ProviderUserUserDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-user.response";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -29,12 +30,18 @@ import { BulkConfirmComponent } from "./bulk/bulk-confirm.component";
 import { BulkRemoveComponent } from "./bulk/bulk-remove.component";
 import { UserAddEditComponent } from "./user-add-edit.component";
 
+/**
+ * @deprecated Please use the {@link MembersComponent} instead.
+ */
 @Component({
   selector: "provider-people",
   templateUrl: "people.component.html",
 })
 // eslint-disable-next-line rxjs-angular/prefer-takeuntil
-export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetailsResponse> {
+export class PeopleComponent
+  extends BasePeopleComponent<ProviderUserUserDetailsResponse>
+  implements OnInit
+{
   @ViewChild("addEdit", { read: ViewContainerRef, static: true }) addEditModalRef: ViewContainerRef;
   @ViewChild("groupsTemplate", { read: ViewContainerRef, static: true })
   groupsModalRef: ViewContainerRef;
@@ -67,6 +74,7 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
     private providerService: ProviderService,
     dialogService: DialogService,
     organizationManagementPreferencesService: OrganizationManagementPreferencesService,
+    private configService: ConfigService,
   ) {
     super(
       apiService,
@@ -103,7 +111,7 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
 
       /* eslint-disable-next-line rxjs-angular/prefer-takeuntil, rxjs/no-async-subscribe, rxjs/no-nested-subscribe */
       this.route.queryParams.pipe(first()).subscribe(async (qParams) => {
-        this.searchText = qParams.search;
+        this.searchControl.setValue(qParams.search);
         if (qParams.viewEvents != null) {
           const user = this.users.filter((u) => u.id === qParams.viewEvents);
           if (user.length > 0 && user[0].status === ProviderUserStatusType.Confirmed) {
@@ -114,10 +122,6 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
         }
       });
     });
-  }
-
-  ngOnDestroy(): void {
-    super.ngOnDestroy();
   }
 
   getUsers(): Promise<ListResponse<ProviderUserUserDetailsResponse>> {
@@ -158,11 +162,11 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
         comp.name = this.userNamePipe.transform(user);
         comp.providerId = this.providerId;
         comp.providerUserId = user != null ? user.id : null;
-        comp.onSavedUser.subscribe(() => {
+        comp.savedUser.subscribe(() => {
           modal.close();
           this.load();
         });
-        comp.onDeletedUser.subscribe(() => {
+        comp.deletedUser.subscribe(() => {
           modal.close();
           this.removeUser(user);
         });
@@ -222,12 +226,17 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
       const response = this.apiService.postManyProviderUserReinvite(this.providerId, request);
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.showBulkStatus(
-        users,
-        filteredUsers,
-        response,
-        this.i18nService.t("bulkReinviteMessage"),
-      );
+
+      // Bulk Status component open
+      const dialogRef = BulkStatusComponent.open(this.dialogService, {
+        data: {
+          users: users,
+          filteredUsers: filteredUsers,
+          request: response,
+          successfulMessage: this.i18nService.t("bulkReinviteMessage"),
+        },
+      });
+      await lastValueFrom(dialogRef.closed);
     } catch (e) {
       this.validationService.showError(e);
     }
@@ -250,57 +259,5 @@ export class PeopleComponent extends BasePeopleComponent<ProviderUserUserDetails
 
     await modal.onClosedPromise();
     await this.load();
-  }
-
-  private async showBulkStatus(
-    users: ProviderUserUserDetailsResponse[],
-    filteredUsers: ProviderUserUserDetailsResponse[],
-    request: Promise<ListResponse<ProviderUserBulkResponse>>,
-    successfullMessage: string,
-  ) {
-    const [modal, childComponent] = await this.modalService.openViewRef(
-      BulkStatusComponent,
-      this.bulkStatusModalRef,
-      (comp) => {
-        comp.loading = true;
-      },
-    );
-
-    // Workaround to handle closing the modal shortly after it has been opened
-    let close = false;
-    modal.onShown.subscribe(() => {
-      if (close) {
-        modal.close();
-      }
-    });
-
-    try {
-      const response = await request;
-
-      if (modal) {
-        const keyedErrors: any = response.data
-          .filter((r) => r.error !== "")
-          .reduce((a, x) => ({ ...a, [x.id]: x.error }), {});
-        const keyedFilteredUsers: any = filteredUsers.reduce((a, x) => ({ ...a, [x.id]: x }), {});
-
-        childComponent.users = users.map((user) => {
-          let message = keyedErrors[user.id] ?? successfullMessage;
-          // eslint-disable-next-line
-          if (!keyedFilteredUsers.hasOwnProperty(user.id)) {
-            message = this.i18nService.t("bulkFilteredMessage");
-          }
-
-          return {
-            user: user,
-            error: keyedErrors.hasOwnProperty(user.id), // eslint-disable-line
-            message: message,
-          };
-        });
-        childComponent.loading = false;
-      }
-    } catch {
-      close = true;
-      modal.close();
-    }
   }
 }

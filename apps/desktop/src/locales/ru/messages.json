@@ -499,6 +499,12 @@
   "createAccount": {
     "message": "Создать аккаунт"
   },
+  "setAStrongPassword": {
+    "message": "Задайте надежный пароль"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Завершите создание аккаунта, задав пароль"
+  },
   "logIn": {
     "message": "Войти"
   },
@@ -519,6 +525,37 @@
   },
   "masterPassHint": {
     "message": "Подсказка к мастер-паролю (необяз.)"
+  },
+  "masterPassHintText": {
+    "message": "Если вы забудете свой пароль, на ваш email может быть отправлена подсказка для пароля. Максимальное количество символов $CURRENT$/$MAXIMUM$.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
+  },
+  "masterPassword": {
+    "message": "Мастер-пароль"
+  },
+  "masterPassImportant": {
+    "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
+  },
+  "confirmMasterPassword": {
+    "message": "Подтвердите мастер-пароль"
+  },
+  "masterPassHintLabel": {
+    "message": "Подсказка к мастер-паролю"
+  },
+  "joinOrganization": {
+    "message": "Присоединиться к организации"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Завершите присоединение к этой организации, установив мастер-пароль."
   },
   "settings": {
     "message": "Настройки"
@@ -554,17 +591,17 @@
       }
     }
   },
-  "masterPassDoesntMatch": {
-    "message": "Мастер-пароли не совпадают."
-  },
-  "newAccountCreated": {
-    "message": "Аккаунт создан! Теперь вы можете войти в систему."
-  },
   "youSuccessfullyLoggedIn": {
     "message": "Вы успешно авторизовались"
   },
   "youMayCloseThisWindow": {
     "message": "Можете закрыть это окно"
+  },
+  "masterPassDoesntMatch": {
+    "message": "Мастер-пароли не совпадают."
+  },
+  "newAccountCreated": {
+    "message": "Аккаунт создан! Теперь вы можете войти в систему."
   },
   "masterPassSent": {
     "message": "Мы отправили вам письмо с подсказкой к мастер-паролю."
@@ -595,6 +632,9 @@
   },
   "verificationCodeRequired": {
     "message": "Необходим код подтверждения."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Аутентификация была отменена или заняла слишком много времени. Пожалуйста, попробуйте еще раз."
   },
   "invalidVerificationCode": {
     "message": "Неверный код подтверждения"
@@ -647,18 +687,18 @@
   "authenticatorAppTitle": {
     "message": "Приложение-аутентификатор"
   },
-  "authenticatorAppDesc": {
-    "message": "Используйте приложение-аутентификатор (например Authy или Google Authenticator) для создания кодов проверки на основе времени.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Введите код, сгенерированный приложением-аутентификатором, например Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Ключ безопасности YubiKey OTP"
+  "yubiKeyTitleV2": {
+    "message": "Ключ безопасности Yubico OTP"
   },
   "yubiKeyDesc": {
     "message": "Используйте YubiKey для доступа к аккаунту. Работает с устройствами YubiKey серий 4, 5 и NEO."
   },
-  "duoDesc": {
-    "message": "Подтвердите с помощью Duo Security, используя приложение Duo Mobile, SMS, телефонный звонок или ключ безопасности U2F.",
+  "duoDescV2": {
+    "message": "Введите код, сгенерированный Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -674,8 +714,8 @@
   "emailTitle": {
     "message": "Email"
   },
-  "emailDesc": {
-    "message": "Коды подтверждения будут отправлены вам по электронной почте."
+  "emailDescV2": {
+    "message": "Введите код, отправленный на ваш email."
   },
   "loginUnavailable": {
     "message": "Вход недоступен"
@@ -694,6 +734,15 @@
   },
   "selfHostedEnvironmentFooter": {
     "message": "Укажите URL Bitwarden на вашем сервере."
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Укажите базовый URL вашего локального хостинга Bitwarden. Пример: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "Для продвинутой конфигурации можно указать базовый URL каждой службы отдельно."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "Вы должны добавить либо базовый URL сервера, либо хотя бы одно пользовательское окружение."
   },
   "customEnvironment": {
     "message": "Пользовательское окружение"
@@ -743,8 +792,23 @@
   "loggedOut": {
     "message": "Вы вышли из хранилища"
   },
+  "loggedOutDesc": {
+    "message": "Вы вышли из своего аккаунта."
+  },
   "loginExpired": {
     "message": "Истек срок действия вашего сеанса."
+  },
+  "restartRegistration": {
+    "message": "Перезапустить регистрацию"
+  },
+  "expiredLink": {
+    "message": "Истекшая ссылка"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Пожалуйста, перезапустите регистрацию или попробуйте авторизоваться."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Возможно, у вас уже есть аккаунт"
   },
   "logOutConfirmation": {
     "message": "Вы действительно хотите выйти?"
@@ -1212,6 +1276,12 @@
       }
     }
   },
+  "errorRefreshingAccessToken": {
+    "message": "Ошибка обновления токена доступа"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "Не найдены токен обновления или ключи API. Пожалуйста, попробуйте выполнить выход и повторно авторизоваться."
+  },
   "help": {
     "message": "Помощь"
   },
@@ -1299,11 +1369,41 @@
     "message": "Пароль обновлен",
     "description": "ex. Date this password was updated"
   },
+  "exportFrom": {
+    "message": "Экспорт из"
+  },
   "exportVault": {
     "message": "Экспорт хранилища"
   },
   "fileFormat": {
     "message": "Формат файла"
+  },
+  "fileEncryptedExportWarningDesc": {
+    "message": "Экспорт этого файла будет защищен паролем, и для расшифровки потребуется пароль файла."
+  },
+  "filePassword": {
+    "message": "Пароль к файлу"
+  },
+  "exportPasswordDescription": {
+    "message": "Этот пароль будет использоваться для экспорта и импорта этого файла"
+  },
+  "accountRestrictedOptionDescription": {
+    "message": "Использовать ключ шифрования вашего аккаунта, полученный из имени пользователя и мастер-пароля, для шифрования экспорта и ограничения импорта только для текущего аккаунта Bitwarden."
+  },
+  "passwordProtected": {
+    "message": "Пароль защищен"
+  },
+  "passwordProtectedOptionDescription": {
+    "message": "Установите пароль файла для шифрования экспорта и импортируйте его в любую учетную запись Bitwarden, используя пароль для расшифровки."
+  },
+  "exportTypeHeading": {
+    "message": "Тип экспорта"
+  },
+  "accountRestricted": {
+    "message": "Ограничено аккаунтом"
+  },
+  "filePasswordAndConfirmFilePasswordDoNotMatch": {
+    "message": "\"Пароль к файлу\" и \"Подтверждение пароля к файлу\" не совпадают."
   },
   "hCaptchaUrl": {
     "message": "URL hCaptcha",
@@ -1410,8 +1510,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Дополнительные настройки Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Разблокировать с помощью системной аутентификации"
+  },
   "windowsHelloConsentMessage": {
     "message": "Верификация для Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Для разблокировки Bitwarden пройдите аутентификацию."
   },
   "unlockWithTouchId": {
     "message": "Разблокировать с Touch ID"
@@ -1424,6 +1530,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Запрашивать Windows Hello при запуске приложения"
+  },
+  "autoPromptPolkit": {
+    "message": "Запрашивать системную аутентификацию при запуске"
   },
   "autoPromptTouchId": {
     "message": "Запрашивать Touch ID при запуске приложения"
@@ -1611,6 +1720,21 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новый мастер-пароль не соответствует требованиям политики."
   },
+  "receiveMarketingEmailsV2": {
+    "message": "Получайте советы, анонсы и возможности для исследований от Bitwarden на свой email."
+  },
+  "unsubscribe": {
+    "message": "Отписаться"
+  },
+  "atAnyTime": {
+    "message": "в любое время."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "Продолжая, вы соглашаетесь с"
+  },
+  "and": {
+    "message": "и"
+  },
   "acceptPolicies": {
     "message": "Отметив этот флажок, вы соглашаетесь со следующим:"
   },
@@ -1688,6 +1812,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Для активации биометрии в браузере сначала необходимо включить биометрию в приложении для компьютера."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Автоматическая настройка недоступна"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Из-за метода инсталляции не удалось автоматически включить поддержку биометрии. Вы хотите открыть документацию чтобы узнать, как это сделать вручную?"
   },
   "personalOwnershipSubmitError": {
     "message": "В соответствии с корпоративной политикой вам запрещено сохранять элементы в личном хранилище. Измените владельца на организацию и выберите из доступных Коллекций."
@@ -1873,6 +2003,9 @@
   "emailVerificationRequired": {
     "message": "Требуется подтверждение электронной почты"
   },
+  "emailVerifiedV2": {
+    "message": "Email подтвержден"
+  },
   "emailVerificationRequiredDesc": {
     "message": "Для использования этой функции необходимо подтвердить свою электронную почту."
   },
@@ -1896,6 +2029,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "В вашей организации отключено шифрование доверенных устройств. Пожалуйста, установите мастер-пароль для доступа к вашему хранилищу."
   },
   "tryAgain": {
     "message": "Попробуйте снова"
@@ -1981,6 +2117,9 @@
   "vaultTimeoutTooLarge": {
     "message": "Тайм-аут вашего хранилища превышает ограничения, установленные вашей организацией."
   },
+  "inviteAccepted": {
+    "message": "Приглашение принято"
+  },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Автоматическое развертывание"
   },
@@ -2050,6 +2189,9 @@
   "switchAccount": {
     "message": "Сменить аккаунт"
   },
+  "alreadyHaveAccount": {
+    "message": "Уже зарегистрированы?"
+  },
   "options": {
     "message": "Опции"
   },
@@ -2065,6 +2207,18 @@
       "email": {
         "content": "$1",
         "example": "name@example.com"
+      }
+    }
+  },
+  "exportingOrganizationVaultTitle": {
+    "message": "Экспорт хранилища организации"
+  },
+  "exportingOrganizationVaultDesc": {
+    "message": "Будет экспортировано только хранилище организации, связанное с $ORGANIZATION$. Элементы из личных хранилищ и из других организаций включены не будут.",
+    "placeholders": {
+      "organization": {
+        "content": "$1",
+        "example": "ACME Moving Co."
       }
     }
   },
@@ -2131,6 +2285,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Создать псевдоним электронной почты для внешней службы пересылки."
+  },
+  "forwarderError": {
+    "message": "Ошибка $SERVICENAME$: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Создано Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Сайт: $WEBSITE$. Создано Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Неверный токен API $SERVICENAME$",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Неверный токен $SERVICENAME$ API: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Не удалось получить скрытый идентификатор email аккаунта $SERVICENAME$.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Недопустимый домен $SERVICENAME$.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Некорректный URL $SERVICENAME$.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Произошла неизвестная ошибка $SERVICENAME$.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Неизвестный форвардер: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Имя хоста",
@@ -2236,9 +2492,6 @@
   "denyLogIn": {
     "message": "Запретить вход"
   },
-  "approveLoginRequests": {
-    "message": "Одобрение запросов на вход"
-  },
   "logInConfirmedForEmailOnDevice": {
     "message": "Вход подтвержден для $EMAIL$ на $DEVICE$",
     "placeholders": {
@@ -2273,9 +2526,6 @@
   "thisRequestIsNoLongerValid": {
     "message": "Этот запрос больше не действителен."
   },
-  "approveLoginRequestDesc": {
-    "message": "Использовать это устройство для подтверждения запросов на вход, сделанных с других устройств."
-  },
   "confirmLoginAtemptForMail": {
     "message": "Подтвердите попытку входа для $EMAIL$",
     "placeholders": {
@@ -2287,6 +2537,27 @@
   },
   "logInRequested": {
     "message": "Запрошено разрешение на вход"
+  },
+  "creatingAccountOn": {
+    "message": "Создание аккаунта"
+  },
+  "checkYourEmail": {
+    "message": "Проверьте свою почту"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Перейдите по ссылке из отправленного письма"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "и продолжите создание аккаунта."
+  },
+  "noEmail": {
+    "message": "Нет письма?"
+  },
+  "goBack": {
+    "message": "Вернуться"
+  },
+  "toEditYourEmailAddress": {
+    "message": "для изменения адреса email."
   },
   "exposedMasterPassword": {
     "message": "Мастер-пароль скомпрометирован"
@@ -2305,6 +2576,12 @@
   },
   "important": {
     "message": "Важно:"
+  },
+  "accessTokenUnableToBeDecrypted": {
+    "message": "Вы были деавторизованы, поскольку ваш токен доступа не удалось расшифровать. Чтобы решить эту проблему, авторизуйтесь снова."
+  },
+  "refreshTokenSecureStorageRetrievalFailure": {
+    "message": "Вы были деавторизованы, поскольку ваш токен обновления не удалось получить. Чтобы решить эту проблему, авторизуйтесь снова."
   },
   "masterPasswordHint": {
     "message": "Ваш мастер-пароль невозможно восстановить, если вы его забудете!"
@@ -2485,6 +2762,9 @@
   "submenu": {
     "message": "Подменю"
   },
+  "toggleSideNavigation": {
+    "message": "Переключить боковую навигацию"
+  },
   "skipToContent": {
     "message": "Перейти к содержимому"
   },
@@ -2540,6 +2820,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Ошибка при подключении к сервису Duo. Используйте другой метод двухэтапной аутентификации или обратитесь за помощью в Duo."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Запустите Duo и следуйте шагам для завершения авторизации."
   },
@@ -2561,8 +2844,8 @@
   "invalidFilePassword": {
     "message": "Неверный пароль к файлу. Используйте пароль, введенный при создании файла экспорта."
   },
-  "importDestination": {
-    "message": "Цель импорта"
+  "destination": {
+    "message": "Назначение"
   },
   "learnAboutImportOptions": {
     "message": "Узнайте о возможностях импорта"
@@ -2619,6 +2902,9 @@
   },
   "confirmFilePassword": {
     "message": "Подтвердите пароль к файлу"
+  },
+  "exportSuccess": {
+    "message": "Данные хранилища экспортированы"
   },
   "multifactorAuthenticationCancelled": {
     "message": "Многофакторная аутентификация отменена"
@@ -2720,5 +3006,48 @@
   },
   "errorAssigningTargetFolder": {
     "message": "Ошибка при назначении целевой папки."
+  },
+  "viewItemsIn": {
+    "message": "Просмотр элементов в $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Вернуться к $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Назад",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Удалить $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "data": {
+    "message": "Данные"
+  },
+  "fileSends": {
+    "message": "Файловая Send"
+  },
+  "textSends": {
+    "message": "Текстовая Send"
   }
 }

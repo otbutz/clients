@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom, of } from "rxjs";
 import { filter, first, switchMap, tap } from "rxjs/operators";
@@ -17,6 +17,7 @@ import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config
 import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
+import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/auth/models/domain/kdf-config";
 import { SetPasswordRequest } from "@bitwarden/common/auth/models/request/set-password.request";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -24,19 +25,19 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { HashPurpose, DEFAULT_KDF_CONFIG } from "@bitwarden/common/platform/enums";
+import { HashPurpose } from "@bitwarden/common/platform/enums";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
 import { DialogService } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
 @Directive()
-export class SetPasswordComponent extends BaseChangePasswordComponent {
+export class SetPasswordComponent extends BaseChangePasswordComponent implements OnInit {
   syncLoading = true;
   showPassword = false;
   hint = "";
@@ -51,8 +52,8 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
   ForceSetPasswordReason = ForceSetPasswordReason;
 
   constructor(
-    private accountService: AccountService,
-    private masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    accountService: AccountService,
+    masterPasswordService: InternalMasterPasswordServiceAbstraction,
     i18nService: I18nService,
     cryptoService: CryptoService,
     messagingService: MessagingService,
@@ -82,6 +83,8 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       stateService,
       dialogService,
       kdfConfigService,
+      masterPasswordService,
+      accountService,
     );
   }
 
@@ -244,7 +247,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     await this.userDecryptionOptionsService.setUserDecryptionOptions(userDecryptionOpts);
     await this.kdfConfigService.setKdfConfig(this.userId, this.kdfConfig);
     await this.masterPasswordService.setMasterKey(masterKey, this.userId);
-    await this.cryptoService.setUserKey(userKey[0]);
+    await this.cryptoService.setUserKey(userKey[0], this.userId);
 
     // Set private key only for new JIT provisioned users in MP encryption orgs
     // Existing TDE users will have private key set on sync or on login
@@ -253,7 +256,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       this.forceSetPasswordReason !=
         ForceSetPasswordReason.TdeUserWithoutPasswordHasPasswordResetPermission
     ) {
-      await this.cryptoService.setPrivateKey(keyPair[1].encryptedString);
+      await this.cryptoService.setPrivateKey(keyPair[1].encryptedString, this.userId);
     }
 
     const localMasterKeyHash = await this.cryptoService.hashMasterKey(

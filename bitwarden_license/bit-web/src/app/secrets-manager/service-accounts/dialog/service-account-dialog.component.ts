@@ -1,5 +1,5 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -24,7 +24,7 @@ export interface ServiceAccountOperation {
 @Component({
   templateUrl: "./service-account-dialog.component.html",
 })
-export class ServiceAccountDialogComponent {
+export class ServiceAccountDialogComponent implements OnInit {
   protected formGroup = new FormGroup(
     {
       name: new FormControl("", {
@@ -47,9 +47,7 @@ export class ServiceAccountDialogComponent {
 
   async ngOnInit() {
     if (this.data.operation == OperationType.Edit) {
-      // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      this.loadData();
+      await this.loadData();
     }
   }
 

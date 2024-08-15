@@ -1,6 +1,8 @@
 import { MockProxy, mock } from "jest-mock-extended";
+import { BehaviorSubject } from "rxjs";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { VaultTimeoutSettingsService } from "@bitwarden/common/abstractions/vault-timeout/vault-timeout-settings.service";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { DeviceTrustServiceAbstraction } from "@bitwarden/common/auth/abstractions/device-trust.service.abstraction";
 import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
@@ -14,6 +16,7 @@ import { IdentityTokenResponse } from "@bitwarden/common/auth/models/response/id
 import { IdentityTwoFactorResponse } from "@bitwarden/common/auth/models/response/identity-two-factor.response";
 import { FakeMasterPasswordService } from "@bitwarden/common/auth/services/master-password/fake-master-password.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { VaultTimeoutAction } from "@bitwarden/common/enums/vault-timeout-action.enum";
 import { AppIdService } from "@bitwarden/common/platform/abstractions/app-id.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
@@ -24,6 +27,7 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { KdfType } from "@bitwarden/common/platform/enums";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling";
 import {
   FakeAccountService,
   FakeGlobalState,
@@ -67,7 +71,9 @@ describe("LoginStrategyService", () => {
   let authRequestService: MockProxy<AuthRequestServiceAbstraction>;
   let userDecryptionOptionsService: MockProxy<InternalUserDecryptionOptionsServiceAbstraction>;
   let billingAccountProfileStateService: MockProxy<BillingAccountProfileStateService>;
+  let vaultTimeoutSettingsService: MockProxy<VaultTimeoutSettingsService>;
   let kdfConfigService: MockProxy<KdfConfigService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
 
   let stateProvider: FakeGlobalStateProvider;
   let loginStrategyCacheExpirationState: FakeGlobalState<Date | null>;
@@ -97,7 +103,9 @@ describe("LoginStrategyService", () => {
     userDecryptionOptionsService = mock<UserDecryptionOptionsService>();
     billingAccountProfileStateService = mock<BillingAccountProfileStateService>();
     stateProvider = new FakeGlobalStateProvider();
+    vaultTimeoutSettingsService = mock<VaultTimeoutSettingsService>();
     kdfConfigService = mock<KdfConfigService>();
+    taskSchedulerService = mock<TaskSchedulerService>();
 
     sut = new LoginStrategyService(
       accountService,
@@ -122,10 +130,27 @@ describe("LoginStrategyService", () => {
       userDecryptionOptionsService,
       stateProvider,
       billingAccountProfileStateService,
+      vaultTimeoutSettingsService,
       kdfConfigService,
+      taskSchedulerService,
     );
 
     loginStrategyCacheExpirationState = stateProvider.getFake(CACHE_EXPIRATION_KEY);
+
+    const mockVaultTimeoutAction = VaultTimeoutAction.Lock;
+    const mockVaultTimeoutActionBSub = new BehaviorSubject<VaultTimeoutAction>(
+      mockVaultTimeoutAction,
+    );
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockReturnValue(
+      mockVaultTimeoutActionBSub.asObservable(),
+    );
+
+    const mockVaultTimeout = 1000;
+
+    const mockVaultTimeoutBSub = new BehaviorSubject<number>(mockVaultTimeout);
+    vaultTimeoutSettingsService.getVaultTimeoutByUserId$.mockReturnValue(
+      mockVaultTimeoutBSub.asObservable(),
+    );
   });
 
   it("should return an AuthResult on successful login", async () => {

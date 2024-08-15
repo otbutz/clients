@@ -42,6 +42,58 @@
   "cardholderName": {
     "message": "Nom del titular de la targeta"
   },
+  "loginCredentials": {
+    "message": "Credencials d'inici de sessió"
+  },
+  "authenticatorKey": {
+    "message": "Clau autenticadora"
+  },
+  "autofillOptions": {
+    "message": "Opcions d'emplenament automàtic"
+  },
+  "websiteUri": {
+    "message": "Lloc web (URI)"
+  },
+  "websiteAdded": {
+    "message": "Lloc web afegit"
+  },
+  "addWebsite": {
+    "message": "Afig un lloc web"
+  },
+  "deleteWebsite": {
+    "message": "Suprimeix el lloc web"
+  },
+  "defaultLabel": {
+    "message": "Per defecte ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Show match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Hide match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Habilita l'emplenament automàtic en carregar la pàgina?"
+  },
   "number": {
     "message": "Número"
   },
@@ -138,6 +190,15 @@
   "authenticatorKeyTotp": {
     "message": "Clau d'autenticació (TOTP)"
   },
+  "totpHelperTitle": {
+    "message": "Feu que la verificació en dos passos siga perfecta"
+  },
+  "totpHelper": {
+    "message": "Bitwarden pot emmagatzemar i omplir codis de verificació en dos passos. Copieu i enganxeu la clau en aquest camp."
+  },
+  "totpHelperWithCapture": {
+    "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
+  },
   "folder": {
     "message": "Carpeta"
   },
@@ -172,6 +233,10 @@
   "noneFolder": {
     "message": "Cap carpeta",
     "description": "This is the folder for uncategorized items"
+  },
+  "selfOwnershipLabel": {
+    "message": "Tu",
+    "description": "Used as a label to indicate that the user is the owner of an item."
   },
   "addFolder": {
     "message": "Afegeix carpeta"
@@ -401,6 +466,21 @@
   "item": {
     "message": "Element"
   },
+  "itemDetails": {
+    "message": "Detalls de l'element"
+  },
+  "itemName": {
+    "message": "Nom d'element"
+  },
+  "cannotRemoveViewOnlyCollections": {
+    "message": "You cannot remove collections with View only permissions: $COLLECTIONS$",
+    "placeholders": {
+      "collections": {
+        "content": "$1",
+        "example": "Work, Personal"
+      }
+    }
+  },
   "ex": {
     "message": "ex.",
     "description": "Short abbreviation for 'example'."
@@ -536,6 +616,24 @@
       }
     }
   },
+  "itemsMovedToOrg": {
+    "message": "Items moved to $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "Item moved to $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
   "deleteItem": {
     "message": "Suprimeix element"
   },
@@ -581,11 +679,29 @@
   "accessLevel": {
     "message": "Nivell d'accés"
   },
+  "accessing": {
+    "message": "Accessing"
+  },
   "loggedOut": {
     "message": "Sessió tancada"
   },
+  "loggedOutDesc": {
+    "message": "You have been logged out of your account."
+  },
   "loginExpired": {
     "message": "La vostra sessió ha caducat."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Enllaç caducat"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "És possible que ja tingueu un compte"
   },
   "logOutConfirmation": {
     "message": "Segur que voleu tancar la sessió?"
@@ -707,6 +823,12 @@
   "createAccount": {
     "message": "Crea un compte"
   },
+  "setAStrongPassword": {
+    "message": "Estableix una contrasenya segura"
+  },
+  "finishCreatingYourAccountBySettingAPassword": {
+    "message": "Acabeu de crear el vostre compte establint una contrasenya"
+  },
   "newAroundHere": {
     "message": "Nou per ací?"
   },
@@ -715,6 +837,9 @@
   },
   "logIn": {
     "message": "Inicia sessió"
+  },
+  "verifyIdentity": {
+    "message": "Verificació de la vostra identitat"
   },
   "logInInitiated": {
     "message": "S'ha iniciat la sessió"
@@ -751,6 +876,19 @@
   },
   "masterPassHintLabel": {
     "message": "Pista de la contrasenya mestra"
+  },
+  "masterPassHintText": {
+    "message": "Si oblideu la contrasenya, la pista de contrasenya es pot enviar al vostre correu electrònic. $CURRENT$/$MAXIMUM$ caràcters màxim.",
+    "placeholders": {
+      "current": {
+        "content": "$1",
+        "example": "0"
+      },
+      "maximum": {
+        "content": "$2",
+        "example": "50"
+      }
+    }
   },
   "settings": {
     "message": "Configuració"
@@ -807,8 +945,8 @@
   "emailAddress": {
     "message": "Adreça electrònica"
   },
-  "yourVaultIsLocked": {
-    "message": "La caixa forta està bloquejada. Verifiqueu la contrasenya mestra per continuar."
+  "yourVaultIsLockedV2": {
+    "message": "La caixa forta està bloquejada"
   },
   "uuid": {
     "message": "UUID"
@@ -934,18 +1072,18 @@
   "authenticatorAppTitle": {
     "message": "Aplicació autenticadora"
   },
-  "authenticatorAppDesc": {
-    "message": "Utilitzeu una aplicació autenticadora (com Authy o Google Authenticator) per generar codis de verificació basats en el temps.",
-    "description": "'Authy' and 'Google Authenticator' are product names and should not be translated."
+  "authenticatorAppDescV2": {
+    "message": "Enter a code generated by an authenticator app like Bitwarden Authenticator.",
+    "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
-  "yubiKeyTitle": {
-    "message": "Clau de seguretat OTP de YubiKey"
+  "yubiKeyTitleV2": {
+    "message": "Clau de seguretat OTP de Yubico"
   },
   "yubiKeyDesc": {
     "message": "Utilitzeu una YubiKey per accedir al vostre compte. Funciona amb els dispositius YubiKey 4, 4 Nano, 4C i NEO."
   },
-  "duoDesc": {
-    "message": "Verifiqueu amb Duo Security mitjançant l'aplicació Duo Mobile, SMS, trucada telefònica o clau de seguretat U2F.",
+  "duoDescV2": {
+    "message": "Enter a code generated by Duo Security.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
@@ -970,8 +1108,8 @@
   "emailTitle": {
     "message": "Correu electrònic"
   },
-  "emailDesc": {
-    "message": "Els codis de verificació els rebreu per correu electrònic."
+  "emailDescV2": {
+    "message": "Enter a code sent to your email."
   },
   "continue": {
     "message": "Continua"
@@ -1013,7 +1151,7 @@
     "message": "Esteu segur que voleu continuar?"
   },
   "moveSelectedItemsDesc": {
-    "message": "Trieu una carpeta a la que vulgueu desplaçar els $COUNT$ elements seleccionats.",
+    "message": "Trieu una carpeta a la que vulgueu afegir els $COUNT$ elements seleccionats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -1046,6 +1184,12 @@
   },
   "copyUuid": {
     "message": "Copia UUID"
+  },
+  "errorRefreshingAccessToken": {
+    "message": "Access Token Refresh Error"
+  },
+  "errorRefreshingAccessTokenDesc": {
+    "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
     "message": "Advertiment"
@@ -1341,6 +1485,9 @@
   "accountDeletedDesc": {
     "message": "El vostre compte s'ha tancat i s'han eliminat totes les dades associades."
   },
+  "deleteOrganizationWarning": {
+    "message": "La supressió de l'organització és permanent. No es pot desfer."
+  },
   "myAccount": {
     "message": "El meu compte"
   },
@@ -1405,8 +1552,8 @@
   "importEncKeyError": {
     "message": "Error en desxifrar el fitxer exportat. La vostra clau de xifratge no coincideix amb la clau de xifratge utilitzada per exportar les dades."
   },
-  "importDestination": {
-    "message": "Importa destinació"
+  "destination": {
+    "message": "Destinació"
   },
   "learnAboutImportOptions": {
     "message": "Obteniu informació sobre les opcions d'importació"
@@ -1602,35 +1749,47 @@
   "twoStepLoginAuthDesc": {
     "message": "Introduïu la vostra contrasenya mestra per modificar la configuració d'inici de sessió en dues passes."
   },
-  "twoStepAuthenticatorDesc": {
-    "message": "Seguiu aquestes passes per configurar l'inici de sessió en dues passes amb una aplicació autenticadora:"
+  "twoStepAuthenticatorInstructionPrefix": {
+    "message": "Download an authenticator app such as"
   },
-  "twoStepAuthenticatorDownloadApp": {
-    "message": "Baixeu una aplicació autenticadora en dues passes"
+  "twoStepAuthenticatorInstructionInfix1": {
+    "message": ","
   },
-  "twoStepAuthenticatorNeedApp": {
-    "message": "Necessiteu una aplicació d'autenticació en dues passes? Baixeu-ne una de les següents"
+  "twoStepAuthenticatorInstructionInfix2": {
+    "message": "or"
   },
-  "iosDevices": {
-    "message": "Dispositius iOS"
+  "twoStepAuthenticatorInstructionSuffix": {
+    "message": "."
   },
-  "androidDevices": {
-    "message": "Dispositius Android"
+  "continueToExternalUrlTitle": {
+    "message": "Voleu continuar cap a $URL$?",
+    "placeholders": {
+      "url": {
+        "content": "$1",
+        "example": "bitwarden.com"
+      }
+    }
   },
-  "windowsDevices": {
-    "message": "Dispositius Windows"
+  "continueToExternalUrlDesc": {
+    "message": "You are leaving Bitwarden and launching an external website in a new window."
   },
-  "twoStepAuthenticatorAppsRecommended": {
-    "message": "Es recomanen aquestes aplicacions, però, altres aplicacions autenticadores també funcionaran."
+  "twoStepContinueToBitwardenUrlTitle": {
+    "message": "Voleu continuar cap a bitwarden.com?"
   },
-  "twoStepAuthenticatorScanCode": {
-    "message": "Escanegeu aquest codi QR amb l'aplicació autenticadora"
+  "twoStepContinueToBitwardenUrlDesc": {
+    "message": "L'autenticador Bitwarden us permet emmagatzemar claus d'autenticació i generar codis TOTP per a fluxos de verificació en dos passos. Més informació al lloc web bitwarden.com."
+  },
+  "twoStepAuthenticatorScanCodeV2": {
+    "message": "Scan the QR code below with your authenticator app or enter the key."
+  },
+  "twoStepAuthenticatorQRCanvasError": {
+    "message": "Could not load QR code. Try again or use the key below."
   },
   "key": {
     "message": "Clau"
   },
-  "twoStepAuthenticatorEnterCode": {
-    "message": "Introduïu el codi de verificació de 6 dígits generat a l'aplicació"
+  "twoStepAuthenticatorEnterCodeV2": {
+    "message": "Codi de verificació"
   },
   "twoStepAuthenticatorReaddDesc": {
     "message": "En cas que hàgeu d'afegir-lo a un altre dispositiu, a continuació teniu el codi QR (o clau) requerit per l'aplicació autenticadora."
@@ -1710,11 +1869,11 @@
   "twoFactorDuoDesc": {
     "message": "Introduïu la informació de l'aplicació Bitwarden des del vostre tauler d'Administrador de Duo."
   },
-  "twoFactorDuoIntegrationKey": {
-    "message": "Clau d'integració"
+  "twoFactorDuoClientId": {
+    "message": "ID de client"
   },
-  "twoFactorDuoSecretKey": {
-    "message": "Clau Secreta"
+  "twoFactorDuoClientSecret": {
+    "message": "Client Secret"
   },
   "twoFactorDuoApiHostname": {
     "message": "Nom de l'amfitrió d'API"
@@ -2686,12 +2845,6 @@
   "accessControl": {
     "message": "Control d'accés"
   },
-  "groupAccessAllItems": {
-    "message": "Aquest grup pot accedir i modificar tots els elements."
-  },
-  "groupAccessSelectedCollections": {
-    "message": "Aquest grup només pot accedir a les col·leccions seleccionades."
-  },
   "readOnly": {
     "message": "Només de lectura"
   },
@@ -2737,20 +2890,11 @@
   "userUsingTwoStep": {
     "message": "Aquest usuari fa servir l'inici de sessió en dues passes per protegir el seu compte."
   },
-  "userAccessAllItems": {
-    "message": "Aquest usuari pot accedir i modificar tots els elements."
-  },
-  "userAccessSelectedCollections": {
-    "message": "Aquest usuari només pot accedir a les col·leccions seleccionades."
-  },
   "search": {
     "message": "Cerca"
   },
   "invited": {
     "message": "Convidat"
-  },
-  "accepted": {
-    "message": "Acceptat"
   },
   "confirmed": {
     "message": "Confirmat"
@@ -2779,14 +2923,14 @@
   "userDesc": {
     "message": "Accediu i afegiu elements a les col·leccions assignades"
   },
-  "manager": {
-    "message": "Gestor"
-  },
-  "managerDesc": {
-    "message": "Creeu, suprimiu i gestioneu l'accés a les col·leccions assignades"
-  },
   "all": {
     "message": "Tot"
+  },
+  "addAccess": {
+    "message": "Add Access"
+  },
+  "addAccessFilter": {
+    "message": "Add Access Filter"
   },
   "refresh": {
     "message": "Actualitza"
@@ -3235,6 +3379,27 @@
   "device": {
     "message": "Dispositiu"
   },
+  "creatingAccountOn": {
+    "message": "Creating account on"
+  },
+  "checkYourEmail": {
+    "message": "Check your email"
+  },
+  "followTheLinkInTheEmailSentTo": {
+    "message": "Follow the link in the email sent to"
+  },
+  "andContinueCreatingYourAccount": {
+    "message": "and continue creating your account."
+  },
+  "noEmail": {
+    "message": "No email?"
+  },
+  "goBack": {
+    "message": "Torna arrere"
+  },
+  "toEditYourEmailAddress": {
+    "message": "to edit your email address."
+  },
   "view": {
     "message": "Mostra"
   },
@@ -3316,6 +3481,9 @@
   "emailVerified": {
     "message": "S'ha verificat el vostre correu electrònic."
   },
+  "emailVerifiedV2": {
+    "message": "Email verified"
+  },
   "emailVerifiedFailed": {
     "message": "No es pot verificar el vostre correu electrònic. Proveu d'enviar un nou correu electrònic de verificació."
   },
@@ -3336,6 +3504,9 @@
   },
   "joinOrganizationDesc": {
     "message": "Heu estat convidat a unir-vos a l'organització llistada més amunt. Per acceptar la invitació, heu d'iniciar sessió o crear un compte nou a Bitwarden."
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
   },
   "inviteAccepted": {
     "message": "Invitació acceptada"
@@ -3381,6 +3552,9 @@
   },
   "deleteRecoverConfirmDesc": {
     "message": "Heu sol·licitat suprimir el compte de Bitwarden. Feu clic al botó següent per confirmar-ho."
+  },
+  "deleteRecoverOrgConfirmDesc": {
+    "message": "You have requested to delete your Bitwarden organization."
   },
   "myOrganization": {
     "message": "La meua organització"
@@ -3559,6 +3733,12 @@
   "subscriptionUserSeatsUnlimitedAutoscale": {
     "message": "Els ajustos a la vostra subscripció donaran lloc a canvis prorratejats als vostres totals de facturació. Si els nous usuaris convidats superen les vostres places de subscripció, rebreu immediatament un càrrec prorratejat pels usuaris addicionals."
   },
+  "smStandaloneTrialSeatCountUpdateMessageFragment1": {
+    "message": "If you want to add additional"
+  },
+  "smStandaloneTrialSeatCountUpdateMessageFragment2": {
+    "message": "seats without the bundled offer, please contact"
+  },
   "subscriptionUserSeatsLimitedAutoscale": {
     "message": "Els ajustos a la vostra subscripció donaran lloc a canvis prorratejats en els vostres totals de facturació. Si els usuaris recentment convidats excedeixen les vostres places de subscripció, rebreu immediatament un càrrec previst dels usuaris addicionals fins que s'aconseguisca arribar al vostre límit de places ($MAX$).",
     "placeholders": {
@@ -3606,6 +3786,15 @@
   },
   "subscriptionMaxReached": {
     "message": "Els ajustos a la vostra subscripció donaran lloc a canvis prorratejats als vostres totals de facturació. No podeu convidar més de $COUNT$ usuaris sense augmentar les vostres places de subscripció.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "50"
+      }
+    }
+  },
+  "subscriptionSeatMaxReached": {
+    "message": "You cannot invite more than $COUNT$ members without increasing your subscription seats.",
     "placeholders": {
       "count": {
         "content": "$1",
@@ -3675,6 +3864,21 @@
   },
   "nothingSelected": {
     "message": "No heu seleccionat res."
+  },
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
+  },
+  "unsubscribe": {
+    "message": "Anul·la subscripció"
+  },
+  "atAnyTime": {
+    "message": "en qualsevol moment."
+  },
+  "byContinuingYouAgreeToThe": {
+    "message": "By continuing, you agree to the"
+  },
+  "and": {
+    "message": "and"
   },
   "acceptPolicies": {
     "message": "Si activeu aquesta casella, indiqueu que esteu d’acord amb el següent:"
@@ -3941,8 +4145,9 @@
   "minimumNumberOfWords": {
     "message": "Número mínim de paraules"
   },
-  "defaultType": {
-    "message": "Tipus per defecte"
+  "overridePasswordTypePolicy": {
+    "message": "Password Type",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Preferència d'usuari"
@@ -4068,6 +4273,9 @@
   },
   "thisWindowWillCloseIn5Seconds": {
     "message": "Aquesta finestra es tancarà automàticament en 5 segons"
+  },
+  "youMayCloseThisWindow": {
+    "message": "You may close this window"
   },
   "includeAllTeamsFeatures": {
     "message": "Característiques de tots els equips, a més de:"
@@ -4224,6 +4432,9 @@
   "sendLink": {
     "message": "Enllaç Send",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "copyLink": {
+    "message": "Copy link"
   },
   "copySendLink": {
     "message": "Copia l'enllaç Send",
@@ -4525,12 +4736,6 @@
   "permission": {
     "message": "Permisos"
   },
-  "managerPermissions": {
-    "message": "Permisos de l'administrador"
-  },
-  "adminPermissions": {
-    "message": "Permisos de l'administrador"
-  },
   "accessEventLogs": {
     "message": "Registres d'esdeveniments dels accessos"
   },
@@ -4554,9 +4759,6 @@
   },
   "deleteAnyCollection": {
     "message": "Suprimeix alguna la col·lecció"
-  },
-  "manageAssignedCollections": {
-    "message": "Administra les col·leccions assignades"
   },
   "editAssignedCollections": {
     "message": "Edita col·leccions asignades"
@@ -4648,6 +4850,75 @@
   "sendVaultCardOr": {
     "message": "o",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'Learn more, see how it works, **or** try it now.'"
+  },
+  "developmentDevOpsAndITTeamsChooseBWSecret": {
+    "message": "Development, DevOps, and IT teams choose Bitwarden Secrets Manager to securely manage and deploy their infrastructure and machine secrets."
+  },
+  "centralizeSecretsManagement": {
+    "message": "Centralize secrets management."
+  },
+  "centralizeSecretsManagementDescription": {
+    "message": "Securely store and manage secrets in one location to prevent secret sprawl across your organization."
+  },
+  "preventSecretLeaks": {
+    "message": "Prevent secret leaks."
+  },
+  "preventSecretLeaksDescription": {
+    "message": "Protect secrets with end-to-end encryption. No more hard coding secrets or sharing through .env files."
+  },
+  "enhanceDeveloperProductivity": {
+    "message": "Enhance developer productivity."
+  },
+  "enhanceDeveloperProductivityDescription": {
+    "message": "Programmatically retrieve and deploy secrets at runtime so developers can focus on what matters most, like improving code quality."
+  },
+  "strengthenBusinessSecurity": {
+    "message": "Strengthen business security."
+  },
+  "strengthenBusinessSecurityDescription": {
+    "message": "Maintain tight control over machine and human access to secrets with SSO integrations, event logs, and access rotation."
+  },
+  "tryItNow": {
+    "message": "Prova-ho ara"
+  },
+  "sendRequest": {
+    "message": "Envia una sol·licitud"
+  },
+  "addANote": {
+    "message": "Afig una nota"
+  },
+  "bitwardenSecretsManager": {
+    "message": "Administrador de secrets de Bitwarden"
+  },
+  "moreProductsFromBitwarden": {
+    "message": "More products from Bitwarden"
+  },
+  "requestAccessToSecretsManager": {
+    "message": "Request access to Secrets Manager"
+  },
+  "youNeedApprovalFromYourAdminToTrySecretsManager": {
+    "message": "You need approval from your administrator to try Secrets Manager."
+  },
+  "smAccessRequestEmailSent": {
+    "message": "Access request for secrets manager email sent to admins."
+  },
+  "requestAccessSMDefaultEmailContent": {
+    "message": "Hola,\n\nEstem sol·licitant una subscripció a Bitwarden Secrets Manager per al nostre equip. El vostre suport significaria molt!\n\nBitwarden Secrets Manager és una solució de gestió de secrets xifrats d'extrem a extrem per emmagatzemar, compartir i desplegar de manera segura les credencials de la màquina, com ara claus API, contrasenyes de bases de dades i certificats d'autenticació.\n\nSecrets Manager ens ajudarà a:\n\n- Millorar la seguretat\n- Agilitar les operacions\n- Evitar costoses filtracions de secrets\n\nPer sol·licitar una prova gratuïta per al nostre equip, poseu-vos en contacte amb Bitwarden.\n\nGràcies per la vostra ajuda!"
+  },
+  "giveMembersAccess": {
+    "message": "Give members access:"
+  },
+  "viewAndSelectTheMembers": {
+    "message": "view and select the members you want to give access to Secrets Manager."
+  },
+  "openYourOrganizations": {
+    "message": "Open your organization's"
+  },
+  "usingTheMenuSelect": {
+    "message": "Using the menu, select"
+  },
+  "toGrantAccessToSelectedMembers": {
+    "message": "to grant access to selected members."
   },
   "sendVaultCardTryItNow": {
     "message": "prova-ho ara",
@@ -5052,6 +5323,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "La vostra contrasenya mestra no compleix una o més de les polítiques de l'organització. Per accedir a la caixa forta, heu d'actualitzar-la ara. Si continueu, es tancarà la sessió actual i us demanarà que torneu a iniciar-la. Les sessions en altres dispositius poden continuar romanent actives fins a una hora."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+  },
   "maximumVaultTimeout": {
     "message": "Temps d'espera de la caixa forta"
   },
@@ -5403,6 +5677,9 @@
   "verificationCodeRequired": {
     "message": "El codi de verificació és obligatori."
   },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
+  },
   "invalidVerificationCode": {
     "message": "Codi de verificació no vàlid"
   },
@@ -5543,6 +5820,39 @@
   },
   "rotateBillingSyncTokenTitle": {
     "message": "Girar el token de sincronització de facturació invalidarà el token anterior."
+  },
+  "selfHostedServer": {
+    "message": "autoallotjat"
+  },
+  "customEnvironment": {
+    "message": "Entorn personalitzat"
+  },
+  "selfHostedBaseUrlHint": {
+    "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
+  },
+  "selfHostedCustomEnvHeader": {
+    "message": "For advanced configuration, you can specify the base URL of each service independently."
+  },
+  "selfHostedEnvFormInvalid": {
+    "message": "You must add either the base Server URL or at least one custom environment."
+  },
+  "apiUrl": {
+    "message": "URL del servidor API"
+  },
+  "webVaultUrl": {
+    "message": "URL del servidor de la caixa forta web"
+  },
+  "identityUrl": {
+    "message": "URL del servidor d'identitat"
+  },
+  "notificationsUrl": {
+    "message": "URL del servidor de notificacions"
+  },
+  "iconsUrl": {
+    "message": "URL del servidor d'icones"
+  },
+  "environmentSaved": {
+    "message": "S'han guardat les URL de l'entorn"
   },
   "selfHostingTitle": {
     "message": "Autoallotjat"
@@ -5740,6 +6050,26 @@
   "randomWord": {
     "message": "Paraula aleatòria"
   },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "service": {
     "message": "Servei"
   },
@@ -5801,6 +6131,108 @@
   },
   "forwardedEmailDesc": {
     "message": "Genera un àlies de correu electrònic amb un servei de reenviament extern."
+  },
+  "forwarderError": {
+    "message": "$SERVICENAME$ error: $ERRORMESSAGE$",
+    "description": "Reports an error returned by a forwarding service to the user.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Invalid characters in domain name."
+      }
+    }
+  },
+  "forwarderGeneratedBy": {
+    "message": "Generat per Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen."
+  },
+  "forwarderGeneratedByWithWebsite": {
+    "message": "Lloc web: $WEBSITE$. Generat per Bitwarden.",
+    "description": "Displayed with the address on the forwarding service's configuration screen.",
+    "placeholders": {
+      "WEBSITE": {
+        "content": "$1",
+        "example": "www.example.com"
+      }
+    }
+  },
+  "forwaderInvalidToken": {
+    "message": "Invalid $SERVICENAME$ API token",
+    "description": "Displayed when the user's API token is empty or rejected by the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwaderInvalidTokenWithMessage": {
+    "message": "Invalid $SERVICENAME$ API token: $ERRORMESSAGE$",
+    "description": "Displayed when the user's API token is rejected by the forwarding service with an error message.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      },
+      "errormessage": {
+        "content": "$2",
+        "example": "Please verify your email address to continue."
+      }
+    }
+  },
+  "forwarderNoAccountId": {
+    "message": "Unable to obtain $SERVICENAME$ masked email account ID.",
+    "description": "Displayed when the forwarding service fails to return an account ID.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoDomain": {
+    "message": "Invalid $SERVICENAME$ domain.",
+    "description": "Displayed when the domain is empty or domain authorization failed at the forwarding service.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderNoUrl": {
+    "message": "Invalid $SERVICENAME$ url.",
+    "description": "Displayed when the url of the forwarding service wasn't supplied.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownError": {
+    "message": "Unknown $SERVICENAME$ error occurred.",
+    "description": "Displayed when the forwarding service failed due to an unknown error.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "SimpleLogin"
+      }
+    }
+  },
+  "forwarderUnknownForwarder": {
+    "message": "Unknown forwarder: '$SERVICENAME$'.",
+    "description": "Displayed when the forwarding service is not supported.",
+    "placeholders": {
+      "servicename": {
+        "content": "$1",
+        "example": "JustTrust.us"
+      }
+    }
   },
   "hostname": {
     "message": "Nom de l'amfitrió",
@@ -5958,6 +6390,9 @@
         "example": "4"
       }
     }
+  },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Inicieu DUO i seguiu els passos per finalitzar la sessió."
@@ -6480,14 +6915,8 @@
   "editGroupCollectionsDesc": {
     "message": "Doneu accés a les col·leccions afegint-les a aquest grup."
   },
-  "editGroupCollectionsRestrictionsDesc": {
-    "message": "Només podeu assignar col·leccions que gestioneu."
-  },
-  "accessAllCollectionsDesc": {
-    "message": "Doneu accés a totes les col·leccions actuals i futures."
-  },
-  "accessAllCollectionsHelp": {
-    "message": "Si està marcat, substituirà tots els altres permisos de la col·lecció."
+  "restrictedCollectionAssignmentDesc": {
+    "message": "You can only assign collections you manage."
   },
   "selectMembers": {
     "message": "Seleccioneu membres"
@@ -6530,12 +6959,6 @@
   },
   "group": {
     "message": "Grup"
-  },
-  "groupAccessAll": {
-    "message": "Aquest grup pot accedir i modificar tots els elements."
-  },
-  "memberAccessAll": {
-    "message": "Aquest usuari pot accedir i modificar tots els elements."
   },
   "domainVerification": {
     "message": "Verificació de dominis"
@@ -6714,8 +7137,8 @@
   "selectGroups": {
     "message": "Selecciona grups"
   },
-  "userPermissionOverrideHelper": {
-    "message": "Els permisos establerts per a un membre substituiran els permisos establerts pel grup d'aquest membre"
+  "userPermissionOverrideHelperDesc": {
+    "message": "Permissions set for a member will replace permissions set by that member's group."
   },
   "noMembersOrGroupsAdded": {
     "message": "No s'han afegit membres ni grups"
@@ -6906,8 +7329,8 @@
   "updateLowKdfIterationsDesc": {
     "message": "Actualitzeu la configuració d'encriptació per complir les noves recomanacions de seguretat i millorar la protecció del compte."
   },
-  "changeKdfLoggedOutWarning": {
-    "message": "Si continueu, tancareu totes les sessions actives. Haureu de tornar a iniciar sessió i completar la configuració d'inici de sessió en dos passos. Recomanem que exporteu la caixa forta abans de canviar la configuració d'encriptació per evitar la pèrdua de dades."
+  "kdfSettingsChangeLogoutWarning": {
+    "message": "Proceeding will log you out of all active sessions. You will need to log back in and complete two-step login, if any. We recommend exporting your vault before changing your encryption settings to prevent data loss."
   },
   "secretsManager": {
     "message": "Administrador de secrets"
@@ -7275,6 +7698,9 @@
   "requestedDeviceApproval": {
     "message": "S'ha sol·licitat l'aprovació del dispositiu."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Inicieu la vostra prova gratuïta de 7 dies de Bitwarden per a $ORG$",
     "placeholders": {
@@ -7472,6 +7898,9 @@
   "alreadyHaveAccount": {
     "message": "Ja tens un compte?"
   },
+  "toggleSideNavigation": {
+    "message": "Toggle side navigation"
+  },
   "skipToContent": {
     "message": "Vés al contingut"
   },
@@ -7527,6 +7956,12 @@
   "readOnlyCollectionAccess": {
     "message": "No teniu accés per gestionar aquesta col·lecció."
   },
+  "grantAddAccessCollectionWarningTitle": {
+    "message": "Missing Can Manage Permissions"
+  },
+  "grantAddAccessCollectionWarning": {
+    "message": "Grant Can manage permissions to allow full collection management including deletion of collection."
+  },
   "grantCollectionAccess": {
     "message": "Concedeix als grups o membres l'accés a aquesta col·lecció."
   },
@@ -7557,13 +7992,6 @@
     "message": "afig mètode de pagament",
     "description": "This will be used as part of a larger sentence, broken up to include links. The full sentence will read 'To maintain your subscription for $ORG$, add a payment method.'"
   },
-  "collectionEnhancementsDesc": {
-    "message": "Afegiu nous paràmetres i permisos per obtenir més flexibilitat. Substituïu la funció de gestor pel permís \"pot gestionar\" i introduïu opcions per permetre als usuaris crear col·leccions i restringir l'accés administratiu a les col·leccions.",
-    "description": "This describes new features and improvements for user roles and collections"
-  },
-  "collectionEnhancementsLearnMore": {
-    "message": "Més informació sobre gestió de col·leccions"
-  },
   "organizationInformation": {
     "message": "Informació de l'organització"
   },
@@ -7575,12 +8003,6 @@
   },
   "smFreeTrialConfirmationEmail": {
     "message": "Hem enviat un correu electrònic de confirmació al vostre correu electrònic a "
-  },
-  "confirmCollectionEnhancementsDialogTitle": {
-    "message": "Aquesta acció és irreversible"
-  },
-  "confirmCollectionEnhancementsDialogContent": {
-    "message": "En activar aquesta característica, la funció de gestor quedarà obsoleta i se substituirà per Pot gestionar permís. Això tardarà un moment. No feu cap canvi a l'organització fins que no s'haja completat. Esteu segur que voleu continuar?"
   },
   "sorryToSeeYouGo": {
     "message": "Sentim que te'n vages! Ajuda a millorar Bitwarden compartint per què estàs donant-te de baixa.",
@@ -7632,14 +8054,11 @@
   "success": {
     "message": "Èxit"
   },
-  "viewCollection": {
-    "message": "Mostra col·lecció"
-  },
   "restrictedGroupAccess": {
     "message": "No podeu afegir-vos als grups."
   },
-  "restrictedCollectionAccess": {
-    "message": "No podeu afegir-vos a les col·leccions."
+  "cannotAddYourselfToCollections": {
+    "message": "You cannot add yourself to collections."
   },
   "assign": {
     "message": "Assigna"
@@ -7650,8 +8069,11 @@
   "assignToTheseCollections": {
     "message": "Assigna a aquestes col·leccions"
   },
-  "bulkCollectionAssignmentDialogDescription": {
-    "message": "Seleccioneu les col·leccions amb les quals es compartiran els elements. Una vegada que un element s'actualitza en una col·lecció, es reflectirà a totes les col·leccions. Només els membres de l'organització amb accés a aquestes col·leccions podran veure els elements."
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "Only organization members with access to these collections will be able to see the item."
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
+    "message": "Only organization members with access to these collections will be able to see the items."
   },
   "selectCollectionsToAssign": {
     "message": "Seleccioneu les col·leccions per assignar"
@@ -7674,6 +8096,9 @@
         "example": "3"
       }
     }
+  },
+  "addField": {
+    "message": "Afig un camp"
   },
   "items": {
     "message": "Elements"
@@ -7929,23 +8354,6 @@
   "restrictedGroupAccessDesc": {
     "message": "No podeu afegir-vos vosaltres mateix a un grup."
   },
-  "unassignedItemsBannerSelfHost": {
-    "message": "Avís: el 2 de maig de 2024, els elements de l'organització no assignats deixaran de ser visibles a la vista \"Totes les caixes fortes\" en tots els dispositius i només es podran accedir des de la Consola d'administració. Assigna aquests elements a una col·lecció des de la Consola d'administració per fer-los visibles."
-  },
-  "unassignedItemsBannerNotice": {
-    "message": "Avís: els elements de l'organització no assignats ja no són visibles a la visualització de Totes les caixes fortes en tots els dispositius i ara només es poden accedir des de la Consola d'administració."
-  },
-  "unassignedItemsBannerSelfHostNotice": {
-    "message": "Avís: el 16 de maig de 2024, els elements de l'organització no assignats deixaran de ser visibles a la visualització de Totes les caixes fortes en tots els dispositius i només es podran accedir des de la Consola d'administració."
-  },
-  "unassignedItemsBannerCTAPartOne": {
-    "message": "Assigna aquests elements a una col·lecció de",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
-  "unassignedItemsBannerCTAPartTwo": {
-    "message": "per fer-los visibles.",
-    "description": "This will be part of a larger sentence, which will read like so: Assign these items to a collection from the Admin Console to make them visible."
-  },
   "deleteProvider": {
     "message": "Suprimeix proveïdor"
   },
@@ -7961,8 +8369,8 @@
       }
     }
   },
-  "deleteProviderWarningDesc": {
-    "message": "Heu de desenllaçar tots els clients abans de poder suprimir $ID$",
+  "deleteProviderWarningDescription": {
+    "message": "Heu de desenllaçar tots els clients abans de poder suprimir $ID$.",
     "placeholders": {
       "id": {
         "content": "$1",
@@ -8007,11 +8415,17 @@
   "setUpGithubActions": {
     "message": "Configura les accions de Github"
   },
+  "setUpKubernetes": {
+    "message": "Set up Kubernetes"
+  },
   "setUpGitlabCICD": {
     "message": "Configura GitLab CI/CD"
   },
   "setUpAnsible": {
     "message": "Configura Ansible"
+  },
+  "rustSDKRepo": {
+    "message": "View Rust repository"
   },
   "cSharpSDKRepo": {
     "message": "Veure el repositori C#"
@@ -8075,5 +8489,423 @@
   },
   "manageBillingFromProviderPortalMessage": {
     "message": "Gestioneu la facturació des del portal de proveïdors"
+  },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de Bitwarden per a Equips"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de Bitwarden per a Famílies"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de Bitwarden per a Empresa"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de l'Administrador de secrets de Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de l'Administrador de secrets de Bitwarden per a Equips"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de l'Administrador de secrets de Bitwarden per a Famílies"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies de l'Administrador de secrets de Bitwarden per a Empresa"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies del Gestor de contrasenyes de Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Inicieu la vostra prova gratuïta de 7 dies del Gestor de contrasenyes de Bitwarden per a Equips"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Families"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Start your 7-Day free trial of Bitwarden Password Manager for Enterprise"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Enter your Teams organization information"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Enter your Families organization information"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Enter your Enterprise organization information"
+  },
+  "viewItemsIn": {
+    "message": "View items in $NAME$",
+    "description": "Button to view the contents of a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "backTo": {
+    "message": "Back to $NAME$",
+    "description": "Navigate back to a previous folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "back": {
+    "message": "Back",
+    "description": "Button text to navigate back"
+  },
+  "removeItem": {
+    "message": "Remove $NAME$",
+    "description": "Remove a selected option, such as a folder or collection",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Work"
+      }
+    }
+  },
+  "viewInfo": {
+    "message": "View info"
+  },
+  "viewAccess": {
+    "message": "View access"
+  },
+  "noCollectionsSelected": {
+    "message": "You have not selected any collections."
+  },
+  "updateName": {
+    "message": "Update name"
+  },
+  "updatedOrganizationName": {
+    "message": "Updated organization name"
+  },
+  "providerPlan": {
+    "message": "Managed Service Provider"
+  },
+  "orgSeats": {
+    "message": "Organization Seats"
+  },
+  "providerDiscount": {
+    "message": "$AMOUNT$% Discount",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "lowKDFIterationsBanner": {
+    "message": "Low KDF iterations. Increase your iterations to improve the security of your account."
+  },
+  "changeKDFSettings": {
+    "message": "Change KDF settings"
+  },
+  "secureYourInfrastructure": {
+    "message": "Secure your infrastructure"
+  },
+  "protectYourFamilyOrBusiness": {
+    "message": "Protect your family or business"
+  },
+  "upgradeOrganizationCloseSecurityGaps": {
+    "message": "Close security gaps with monitoring reports"
+  },
+  "upgradeOrganizationCloseSecurityGapsDesc": {
+    "message": "Stay ahead of security vulnerabilities by upgrading to a paid plan for enhanced monitoring."
+  },
+  "approveAllRequests": {
+    "message": "Approve all requests"
+  },
+  "allLoginRequestsApproved": {
+    "message": "All login requests approved"
+  },
+  "payPal": {
+    "message": "PayPal"
+  },
+  "bitcoin": {
+    "message": "Bitcoin"
+  },
+  "updatedTaxInformation": {
+    "message": "Updated tax information"
+  },
+  "unverified": {
+    "message": "Unverified"
+  },
+  "verified": {
+    "message": "Verified"
+  },
+  "viewSecret": {
+    "message": "View secret"
+  },
+  "noClients": {
+    "message": "There are no clients to list"
+  },
+  "providerBillingEmailHint": {
+    "message": "This email address will receive all invoices pertaining to this provider",
+    "description": "A hint that shows up on the Provider setup page to inform the admin the billing email will receive the provider's invoices."
+  },
+  "upgradeOrganizationEnterprise": {
+    "message": "Identify security risks by auditing member access"
+  },
+  "onlyAvailableForEnterpriseOrganization": {
+    "message": "Quickly view member access across the organization by upgrading to an Enterprise plan."
+  },
+  "date": {
+    "message": "Data"
+  },
+  "exportClientReport": {
+    "message": "Export client report"
+  },
+  "memberAccessReport": {
+    "message": "Member access"
+  },
+  "memberAccessReportDesc": {
+    "message": "Ensure members have access to the right credentials and their accounts are secure. Use this report to obtain a CSV of member access and account configurations."
+  },
+  "memberAccessReportPageDesc": {
+    "message": "Audit organization member access across groups, collections, and collection items. The CSV export provides a detailed breakdown per member, including information on collection permissions and account configurations."
+  },
+  "higherKDFIterations": {
+    "message": "Higher KDF iterations can help protect your master password from being brute forced by an attacker."
+  },
+  "incrementsOf100,000": {
+    "message": "increments of 100,000"
+  },
+  "smallIncrements": {
+    "message": "small increments"
+  },
+  "kdfIterationRecommends": {
+    "message": "We recommend 600,000 or more"
+  },
+  "kdfToHighWarningIncreaseInIncrements": {
+    "message": "For older devices, setting your KDF too high may lead to performance issues. Increase the value in $VALUE$ and test your devices.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "increments of 100,000"
+      }
+    }
+  },
+  "providerReinstate": {
+    "message": " Contact Customer Support to reinstate your subscription."
+  },
+  "secretPeopleDescription": {
+    "message": "Grant groups or people access to this secret. Permissions set for people will override permissions set by groups."
+  },
+  "secretPeopleEmptyMessage": {
+    "message": "Add people or groups to share access to this secret"
+  },
+  "secretMachineAccountsDescription": {
+    "message": "Grant machine accounts access to this secret."
+  },
+  "secretMachineAccountsEmptyMessage": {
+    "message": "Add machine accounts to grant access to this secret"
+  },
+  "smAccessRemovalWarningSecretTitle": {
+    "message": "Remove access to this secret"
+  },
+  "smAccessRemovalSecretMessage": {
+    "message": "This action will remove your access to this secret."
+  },
+  "invoice": {
+    "message": "Factura"
+  },
+  "unassignedSeatsAvailable": {
+    "message": "You have $SEATS$ unassigned seats available.",
+    "placeholders": {
+      "seats": {
+        "content": "$1",
+        "example": "10"
+      }
+    },
+    "description": "A message showing how many unassigned seats are available for a provider."
+  },
+  "contactYourProviderForAdditionalSeats": {
+    "message": "Contact your provider admin to purchase additional seats."
+  },
+  "open": {
+    "message": "Obri",
+    "description": "The status of an invoice."
+  },
+  "uncollectible": {
+    "message": "Uncollectible",
+    "description": "The status of an invoice."
+  },
+  "clientDetails": {
+    "message": "Client details"
+  },
+  "downloadCSV": {
+    "message": "Download CSV"
+  },
+  "monthlySubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges to your billing totals on your next billing period. "
+  },
+  "annualSubscriptionUserSeatsMessage": {
+    "message": "Adjustments to your subscription will result in prorated charges on a monthly billing cycle. "
+  },
+  "billingHistoryDescription": {
+    "message": "Download a CSV to obtain client details for each billing date. Prorated charges are not included in the CSV and may vary from the linked invoice. For the most accurate billing details, refer to your monthly invoices.",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "noInvoicesToList": {
+    "message": "No hi ha cap factura per llistar",
+    "description": "A paragraph on the Billing History page of the Provider Portal letting users know they can download a CSV report for their invoices that does not include prorations."
+  },
+  "providerClientVaultPrivacyNotification": {
+    "message": "Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions,",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'."
+  },
+  "contactBitwardenSupport": {
+    "message": "contact Bitwarden support.",
+    "description": "This will be displayed as part of a larger sentence. The whole sentence reads: 'Notice: Later this month, client vault privacy will be improved and provider members will no longer have direct access to client vault items. For questions, please contact Bitwarden support'. 'Bitwarden' should not be translated"
+  },
+  "sponsored": {
+    "message": "Sponsored"
+  },
+  "licenseAndBillingManagementDesc": {
+    "message": "After making updates in the Bitwarden cloud server, upload your license file to apply the most recent changes."
+  },
+  "addToFolder": {
+    "message": "Afig a la carpeta"
+  },
+  "selectFolder": {
+    "message": "Selecciona carpeta"
+  },
+  "personalItemTransferWarningSingular": {
+    "message": "1 item will be permanently transferred to the selected organization. You will no longer own this item."
+  },
+  "personalItemsTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to the selected organization. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1 item will be permanently transferred to $ORG$. You will no longer own this item.",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ items will be permanently transferred to $ORG$. You will no longer own these items.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
+  },
+  "data": {
+    "message": "Dades"
+  },
+  "purchasedSeatsRemoved": {
+    "message": "purchased seats removed"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "includesXMembers": {
+    "message": "for $COUNT$ member",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Optional on-premises hosting"
+  },
+  "upgradeFreeOrganization": {
+    "message": "Upgrade your $NAME$ organization ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO Authentication"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "Families organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Upgrade your plan to invite more members and gain access to additional Bitwarden features"
+  },
+  "upgradeDiscount": {
+    "message": "Guarda $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Advanced capabilities for larger businesses"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Businesses looking for powerful security"
+  },
+  "teamsInviteMessage": {
+    "message": "Invite unlimited members"
+  },
+  "accessToCreateGroups": {
+    "message": "Access to create groups"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Sync groups and users from a directory"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Share with families and friends"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Access to Premium features"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB additional storage"
   }
 }

@@ -9,6 +9,7 @@ import { ConfigService } from "@bitwarden/common/platform/abstractions/config/co
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateProvider } from "@bitwarden/common/platform/state";
+import { CipherType } from "@bitwarden/common/vault/enums/cipher-type";
 import { VaultOnboardingMessages } from "@bitwarden/common/vault/enums/vault-onboarding.enum";
 
 import { VaultOnboardingService as VaultOnboardingServiceAbstraction } from "./services/abstraction/vault-onboarding.service";
@@ -21,11 +22,11 @@ describe("VaultOnboardingComponent", () => {
   let mockApiService: Partial<ApiService>;
   let mockPolicyService: MockProxy<PolicyService>;
   let mockI18nService: MockProxy<I18nService>;
-  let mockConfigService: MockProxy<ConfigService>;
   let mockVaultOnboardingService: MockProxy<VaultOnboardingServiceAbstraction>;
   let mockStateProvider: Partial<StateProvider>;
   let setInstallExtLinkSpy: any;
   let individualVaultPolicyCheckSpy: any;
+  let mockConfigService: MockProxy<ConfigService>;
 
   beforeEach(() => {
     mockPolicyService = mock<PolicyService>();
@@ -34,7 +35,6 @@ describe("VaultOnboardingComponent", () => {
     mockApiService = {
       getProfile: jest.fn(),
     };
-    mockConfigService = mock<ConfigService>();
     mockVaultOnboardingService = mock<VaultOnboardingServiceAbstraction>();
     mockStateProvider = {
       getActive: jest.fn().mockReturnValue(
@@ -45,6 +45,7 @@ describe("VaultOnboardingComponent", () => {
         }),
       ),
     };
+    mockConfigService = mock<ConfigService>();
 
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     TestBed.configureTestingModule({
@@ -56,8 +57,8 @@ describe("VaultOnboardingComponent", () => {
         { provide: VaultOnboardingServiceAbstraction, useValue: mockVaultOnboardingService },
         { provide: I18nService, useValue: mockI18nService },
         { provide: ApiService, useValue: mockApiService },
-        { provide: ConfigService, useValue: mockConfigService },
         { provide: StateProvider, useValue: mockStateProvider },
+        { provide: ConfigService, useValue: mockConfigService },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(VaultOnboardingComponent);
@@ -108,7 +109,7 @@ describe("VaultOnboardingComponent", () => {
     it("should set extensionUrl to Chrome Web Store when isChrome is true", async () => {
       jest.spyOn((component as any).platformUtilsService, "isChrome").mockReturnValue(true);
       const expected =
-        "https://chrome.google.com/webstore/detail/bitwarden-free-password-m/nngceckbapebfimnlniiiahkandclblb";
+        "https://chromewebstore.google.com/detail/bitwarden-password-manage/nngceckbapebfimnlniiiahkandclblb";
       await component.ngOnInit();
       expect(component.extensionUrl).toEqual(expected);
     });
@@ -162,10 +163,9 @@ describe("VaultOnboardingComponent", () => {
     });
 
     it("should set installExtension to true when hasBWInstalled command is passed", async () => {
-      const saveCompletedTasksSpy = jest.spyOn(
-        (component as any).vaultOnboardingService,
-        "setVaultOnboardingTasks",
-      );
+      const saveCompletedTasksSpy = jest
+        .spyOn((component as any).vaultOnboardingService, "setVaultOnboardingTasks")
+        .mockReturnValue(Promise.resolve());
 
       (component as any).vaultOnboardingService.vaultOnboardingState$ = of({
         createAccount: true,
@@ -181,6 +181,16 @@ describe("VaultOnboardingComponent", () => {
       await component.getMessages(eventData);
 
       expect(saveCompletedTasksSpy).toHaveBeenCalled();
+    });
+  });
+
+  describe("emitToAddCipher", () => {
+    it("always emits the `CipherType.Login` type when called", () => {
+      const emitSpy = jest.spyOn(component.onAddCipher, "emit");
+
+      component.emitToAddCipher();
+
+      expect(emitSpy).toHaveBeenCalledWith(CipherType.Login);
     });
   });
 });

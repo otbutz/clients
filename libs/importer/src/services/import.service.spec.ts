@@ -1,5 +1,6 @@
 import { mock, MockProxy } from "jest-mock-extended";
 
+import { PinServiceAbstraction } from "@bitwarden/auth/common";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -115,6 +116,7 @@ describe("ImportService", () => {
   let i18nService: MockProxy<I18nService>;
   let collectionService: MockProxy<CollectionService>;
   let cryptoService: MockProxy<CryptoService>;
+  let pinService: MockProxy<PinServiceAbstraction>;
 
   beforeEach(() => {
     cipherService = mock<CipherService>();
@@ -123,6 +125,7 @@ describe("ImportService", () => {
     i18nService = mock<I18nService>();
     collectionService = mock<CollectionService>();
     cryptoService = mock<CryptoService>();
+    pinService = mock<PinServiceAbstraction>();
 
     importService = new ImportService(
       cipherService,
@@ -131,6 +134,7 @@ describe("ImportService", () => {
       i18nService,
       collectionService,
       cryptoService,
+      pinService,
     );
   });
 
@@ -347,7 +351,7 @@ describe("ImportService", () => {
       importResult.collections.push(mockImportTargetCollection);
 
       await importService["setImportTarget"](importResult, "123", mockImportTargetCollection);
-      expect(importResult.collections.length).toBe(1);
+      expect(importResult.collections.length).toBe(2);
       expect(importResult.collections[0].name).toBe("myImportTarget");
     });
   });

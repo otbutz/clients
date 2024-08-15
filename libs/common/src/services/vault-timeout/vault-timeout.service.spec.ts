@@ -1,5 +1,9 @@
 import { MockProxy, any, mock } from "jest-mock-extended";
-import { BehaviorSubject, of } from "rxjs";
+import { BehaviorSubject, from, of } from "rxjs";
+
+import { LogoutReason } from "@bitwarden/auth/common";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { TaskSchedulerService } from "@bitwarden/common/platform/scheduling";
 
 import { FakeAccountService, mockAccountServiceWith } from "../../../spec/fake-account-service";
 import { SearchService } from "../../abstractions/search.service";
@@ -15,6 +19,7 @@ import { StateService } from "../../platform/abstractions/state.service";
 import { Utils } from "../../platform/misc/utils";
 import { StateEventRunnerService } from "../../platform/state";
 import { UserId } from "../../types/guid";
+import { VaultTimeout, VaultTimeoutStringType } from "../../types/vault-timeout.type";
 import { CipherService } from "../../vault/abstractions/cipher.service";
 import { CollectionService } from "../../vault/abstractions/collection.service";
 import { FolderService } from "../../vault/abstractions/folder/folder.service.abstraction";
@@ -34,8 +39,10 @@ describe("VaultTimeoutService", () => {
   let authService: MockProxy<AuthService>;
   let vaultTimeoutSettingsService: MockProxy<VaultTimeoutSettingsService>;
   let stateEventRunnerService: MockProxy<StateEventRunnerService>;
+  let taskSchedulerService: MockProxy<TaskSchedulerService>;
+  let logService: MockProxy<LogService>;
   let lockedCallback: jest.Mock<Promise<void>, [userId: string]>;
-  let loggedOutCallback: jest.Mock<Promise<void>, [expired: boolean, userId?: string]>;
+  let loggedOutCallback: jest.Mock<Promise<void>, [logoutReason: LogoutReason, userId?: string]>;
 
   let vaultTimeoutActionSubject: BehaviorSubject<VaultTimeoutAction>;
   let availableVaultTimeoutActionsSubject: BehaviorSubject<VaultTimeoutAction[]>;
@@ -57,13 +64,17 @@ describe("VaultTimeoutService", () => {
     authService = mock();
     vaultTimeoutSettingsService = mock();
     stateEventRunnerService = mock();
+    taskSchedulerService = mock<TaskSchedulerService>();
+    logService = mock<LogService>();
 
     lockedCallback = jest.fn();
     loggedOutCallback = jest.fn();
 
     vaultTimeoutActionSubject = new BehaviorSubject(VaultTimeoutAction.Lock);
 
-    vaultTimeoutSettingsService.vaultTimeoutAction$.mockReturnValue(vaultTimeoutActionSubject);
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockReturnValue(
+      vaultTimeoutActionSubject,
+    );
 
     availableVaultTimeoutActionsSubject = new BehaviorSubject<VaultTimeoutAction[]>([]);
 
@@ -80,6 +91,8 @@ describe("VaultTimeoutService", () => {
       authService,
       vaultTimeoutSettingsService,
       stateEventRunnerService,
+      taskSchedulerService,
+      logService,
       lockedCallback,
       loggedOutCallback,
     );
@@ -93,7 +106,7 @@ describe("VaultTimeoutService", () => {
         authStatus?: AuthenticationStatus;
         isAuthenticated?: boolean;
         lastActive?: number;
-        vaultTimeout?: number;
+        vaultTimeout?: VaultTimeout;
         timeoutAction?: VaultTimeoutAction;
         availableTimeoutActions?: VaultTimeoutAction[];
       }
@@ -106,6 +119,13 @@ describe("VaultTimeoutService", () => {
     // Both are available by default and the specific test can change this per test
     availableVaultTimeoutActionsSubject.next([VaultTimeoutAction.Lock, VaultTimeoutAction.LogOut]);
 
+    authService.authStatusFor$.mockImplementation((userId) => {
+      return from([
+        accounts[userId]?.authStatus ?? AuthenticationStatus.LoggedOut,
+        AuthenticationStatus.Locked,
+      ]);
+    });
+
     authService.getAuthStatus.mockImplementation((userId) => {
       return Promise.resolve(accounts[userId]?.authStatus);
     });
@@ -114,8 +134,8 @@ describe("VaultTimeoutService", () => {
       return Promise.resolve(accounts[options.userId ?? globalSetups?.userId]?.isAuthenticated);
     });
 
-    vaultTimeoutSettingsService.getVaultTimeout.mockImplementation((userId) => {
-      return Promise.resolve(accounts[userId]?.vaultTimeout);
+    vaultTimeoutSettingsService.getVaultTimeoutByUserId$.mockImplementation((userId) => {
+      return new BehaviorSubject<VaultTimeout>(accounts[userId]?.vaultTimeout);
     });
 
     stateService.getUserId.mockResolvedValue(globalSetups?.userId);
@@ -154,7 +174,7 @@ describe("VaultTimeoutService", () => {
 
     platformUtilsService.isViewOpen.mockResolvedValue(globalSetups?.isViewOpen ?? false);
 
-    vaultTimeoutSettingsService.vaultTimeoutAction$.mockImplementation((userId) => {
+    vaultTimeoutSettingsService.getVaultTimeoutActionByUserId$.mockImplementation((userId) => {
       return new BehaviorSubject<VaultTimeoutAction>(accounts[userId]?.timeoutAction);
     });
 
@@ -180,7 +200,7 @@ describe("VaultTimeoutService", () => {
   };
 
   const expectUserToHaveLoggedOut = (userId: string) => {
-    expect(loggedOutCallback).toHaveBeenCalledWith(false, userId);
+    expect(loggedOutCallback).toHaveBeenCalledWith("vaultTimeout", userId);
   };
 
   const expectNoAction = (userId: string) => {
@@ -205,18 +225,18 @@ describe("VaultTimeoutService", () => {
     );
 
     it.each([
-      null, // never
-      -1, // onRestart
-      -2, // onLocked
-      -3, // onSleep
-      -4, // onIdle
+      VaultTimeoutStringType.Never,
+      VaultTimeoutStringType.OnRestart,
+      VaultTimeoutStringType.OnLocked,
+      VaultTimeoutStringType.OnSleep,
+      VaultTimeoutStringType.OnIdle,
     ])(
       "does not log out or lock a user who has %s as their vault timeout",
       async (vaultTimeout) => {
         setupAccounts({
           1: {
             authStatus: AuthenticationStatus.Unlocked,
-            vaultTimeout: vaultTimeout,
+            vaultTimeout: vaultTimeout as VaultTimeout,
             isAuthenticated: true,
           },
         });
@@ -387,18 +407,6 @@ describe("VaultTimeoutService", () => {
       expect(stateEventRunnerService.handleEvent).toHaveBeenCalledWith("lock", "user1");
     });
 
-    it("should call messaging service locked message if no user passed into lock", async () => {
-      setupLock();
-
-      await vaultTimeoutService.lock();
-
-      // Currently these pass `undefined` (or what they were given) as the userId back
-      // but we could change this to give the user that was locked (active) to these methods
-      // so they don't have to get it their own way, but that is a behavioral change that needs
-      // to be tested.
-      expect(messagingService.send).toHaveBeenCalledWith("locked", { userId: undefined });
-    });
-
     it("should call locked callback if no user passed into lock", async () => {
       setupLock();
 
@@ -414,25 +422,31 @@ describe("VaultTimeoutService", () => {
     it("should call state event runner with user passed into lock", async () => {
       setupLock();
 
-      await vaultTimeoutService.lock("user2");
+      const user2 = "user2" as UserId;
 
-      expect(stateEventRunnerService.handleEvent).toHaveBeenCalledWith("lock", "user2");
+      await vaultTimeoutService.lock(user2);
+
+      expect(stateEventRunnerService.handleEvent).toHaveBeenCalledWith("lock", user2);
     });
 
     it("should call messaging service locked message with user passed into lock", async () => {
       setupLock();
 
-      await vaultTimeoutService.lock("user2");
+      const user2 = "user2" as UserId;
 
-      expect(messagingService.send).toHaveBeenCalledWith("locked", { userId: "user2" });
+      await vaultTimeoutService.lock(user2);
+
+      expect(messagingService.send).toHaveBeenCalledWith("locked", { userId: user2 });
     });
 
     it("should call locked callback with user passed into lock", async () => {
       setupLock();
 
-      await vaultTimeoutService.lock("user2");
+      const user2 = "user2" as UserId;
 
-      expect(lockedCallback).toHaveBeenCalledWith("user2");
+      await vaultTimeoutService.lock(user2);
+
+      expect(lockedCallback).toHaveBeenCalledWith(user2);
     });
   });
 });

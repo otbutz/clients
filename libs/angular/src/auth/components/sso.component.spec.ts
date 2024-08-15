@@ -27,8 +27,8 @@ import { LogService } from "@bitwarden/common/platform/abstractions/log.service"
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { FakeAccountService, mockAccountServiceWith } from "@bitwarden/common/spec";
-import { PasswordGenerationServiceAbstraction } from "@bitwarden/common/tools/generator/password";
 import { UserId } from "@bitwarden/common/types/guid";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { SsoComponent } from "./sso.component";
 // test component that extends the SsoComponent
@@ -154,12 +154,12 @@ describe("SsoComponent", () => {
       }),
       withMasterPasswordAndTrustedDevice: new UserDecryptionOptions({
         hasMasterPassword: true,
-        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, false),
+        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, false, false),
         keyConnectorOption: undefined,
       }),
       withMasterPasswordAndTrustedDeviceWithManageResetPassword: new UserDecryptionOptions({
         hasMasterPassword: true,
-        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, true),
+        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, true, false),
         keyConnectorOption: undefined,
       }),
       withMasterPasswordAndKeyConnector: new UserDecryptionOptions({
@@ -169,12 +169,12 @@ describe("SsoComponent", () => {
       }),
       noMasterPasswordWithTrustedDevice: new UserDecryptionOptions({
         hasMasterPassword: false,
-        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, false),
+        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, false, false),
         keyConnectorOption: undefined,
       }),
       noMasterPasswordWithTrustedDeviceWithManageResetPassword: new UserDecryptionOptions({
         hasMasterPassword: false,
-        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, true),
+        trustedDeviceOption: new TrustedDeviceUserDecryptionOption(true, false, true, false),
         keyConnectorOption: undefined,
       }),
       noMasterPasswordWithKeyConnector: new UserDecryptionOptions({
@@ -201,7 +201,10 @@ describe("SsoComponent", () => {
         { provide: ApiService, useValue: mockApiService },
         { provide: CryptoFunctionService, useValue: mockCryptoFunctionService },
         { provide: EnvironmentService, useValue: mockEnvironmentService },
-        { provide: PasswordGenerationServiceAbstraction, useValue: mockPasswordGenerationService },
+        {
+          provide: PasswordGenerationServiceAbstraction,
+          useValue: mockPasswordGenerationService,
+        },
 
         {
           provide: UserDecryptionOptionsServiceAbstraction,
