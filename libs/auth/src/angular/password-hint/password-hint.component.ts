@@ -9,6 +9,7 @@ import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { PasswordHintRequest } from "@bitwarden/common/auth/models/request/password-hint.request";
 import { ClientType } from "@bitwarden/common/enums";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import {
   AsyncActionsModule,
   ButtonModule,
@@ -45,9 +46,12 @@ export class PasswordHintComponent implements OnInit {
     private formBuilder: FormBuilder,
     private i18nService: I18nService,
     private loginEmailService: LoginEmailServiceAbstraction,
+    private platformUtilsService: PlatformUtilsService,
     private toastService: ToastService,
     private router: Router,
-  ) {}
+  ) {
+    this.clientType = this.platformUtilsService.getClientType();
+  }
 
   ngOnInit(): void {
     const email = this.loginEmailService.getEmail() ?? "";
