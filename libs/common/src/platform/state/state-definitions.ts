@@ -50,6 +50,7 @@ export const DEVICE_TRUST_DISK_LOCAL = new StateDefinition("deviceTrust", "disk"
 });
 export const KDF_CONFIG_DISK = new StateDefinition("kdfConfig", "disk");
 export const KEY_CONNECTOR_DISK = new StateDefinition("keyConnector", "disk");
+export const LOGIN_EMAIL_MEMORY = new StateDefinition("loginEmail", "memory");
 export const LOGIN_EMAIL_DISK = new StateDefinition("loginEmail", "disk", {
   web: "disk-local",
 });

@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router, RouterModule } from "@angular/router";
+import { firstValueFrom } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { LoginEmailServiceAbstraction } from "@bitwarden/auth/common";
@@ -53,8 +54,14 @@ export class PasswordHintComponent implements OnInit {
     this.clientType = this.platformUtilsService.getClientType();
   }
 
-  ngOnInit(): void {
-    const email = this.loginEmailService.getEmail() ?? "";
+  async ngOnInit(): Promise<void> {
+    this.loginEmailService.setInMemoryEmail();
+
+    const email =
+      this.loginEmailService.getEmail() ??
+      (await firstValueFrom(this.loginEmailService.inMemoryEmail$)) ??
+      "";
+
     this.formGroup.controls.email.setValue(email);
   }
 
@@ -72,8 +79,18 @@ export class PasswordHintComponent implements OnInit {
       message: this.i18nService.t("masterPassSent"),
     });
 
+    this.loginEmailService.setEmail(this.email);
+    this.loginEmailService.setInMemoryEmail();
+
     await this.router.navigate(["login"]);
   };
+
+  protected async cancel() {
+    this.loginEmailService.setEmail(this.email);
+    this.loginEmailService.setInMemoryEmail();
+
+    await this.router.navigate(["login"]);
+  }
 
   private validateEmailOrShowToast(email: string): boolean {
     // If email is null or empty, show error toast and return false

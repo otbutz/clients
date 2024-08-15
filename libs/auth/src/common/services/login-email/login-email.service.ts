@@ -8,11 +8,16 @@ import {
   GlobalState,
   KeyDefinition,
   LOGIN_EMAIL_DISK,
+  LOGIN_EMAIL_MEMORY,
   StateProvider,
 } from "../../../../../common/src/platform/state";
 import { LoginEmailServiceAbstraction } from "../../abstractions/login-email.service";
 
 export const STORED_EMAIL = new KeyDefinition<string>(LOGIN_EMAIL_DISK, "storedEmail", {
+  deserializer: (value: string) => value,
+});
+
+export const IN_MEMORY_EMAIL = new KeyDefinition<string>(LOGIN_EMAIL_MEMORY, "tempEmail", {
   deserializer: (value: string) => value,
 });
 
@@ -26,12 +31,16 @@ export class LoginEmailService implements LoginEmailServiceAbstraction {
   private readonly storedEmailState: GlobalState<string>;
   storedEmail$: Observable<string | null>;
 
+  private readonly inMemoryEmailState: GlobalState<string>;
+  inMemoryEmail$: Observable<string | null>;
+
   constructor(
     private accountService: AccountService,
     private authService: AuthService,
     private stateProvider: StateProvider,
   ) {
     this.storedEmailState = this.stateProvider.getGlobal(STORED_EMAIL);
+    this.inMemoryEmailState = this.stateProvider.getGlobal(IN_MEMORY_EMAIL);
 
     // In order to determine if an account is being added, we check if any account is not logged out
     this.addingAccount$ = this.authService.authStatuses$.pipe(
@@ -55,6 +64,8 @@ export class LoginEmailService implements LoginEmailServiceAbstraction {
         return storedEmail;
       }),
     );
+
+    this.inMemoryEmail$ = this.inMemoryEmailState.state$;
   }
 
   getEmail() {
@@ -63,6 +74,10 @@ export class LoginEmailService implements LoginEmailServiceAbstraction {
 
   setEmail(email: string) {
     this.email = email;
+  }
+
+  async setInMemoryEmail() {
+    await this.inMemoryEmailState.update((_) => this.email);
   }
 
   getRememberEmail() {
