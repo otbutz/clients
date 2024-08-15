@@ -173,40 +173,6 @@ const routes: Routes = [
       },
     ],
   },
-  ...unauthUiRefreshSwap(
-    HintComponent,
-    AnonLayoutWrapperComponent,
-    {
-      path: "hint",
-      canActivate: [unauthGuardFn()],
-      data: {
-        pageTitle: "passwordHint",
-        titleId: "passwordHint",
-      },
-    },
-    {
-      path: "",
-      children: [
-        {
-          path: "hint",
-          canActivate: [unauthGuardFn()],
-          data: {
-            pageTitle: "requestPasswordHint",
-            pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
-            state: "hint",
-          },
-          children: [
-            { path: "", component: PasswordHintComponent },
-            {
-              path: "",
-              component: EnvironmentSelectorComponent,
-              outlet: "environment-selector",
-            },
-          ],
-        },
-      ],
-    },
-  ),
   {
     path: "",
     component: AnonLayoutWrapperComponent,
@@ -246,6 +212,48 @@ const routes: Routes = [
           },
         ],
       },
+      ...unauthUiRefreshSwap(
+        HintComponent,
+        PasswordHintComponent,
+        {
+          path: "hint",
+          canActivate: [unauthGuardFn()],
+          data: {
+            pageTitle: "passwordHint",
+            titleId: "passwordHint",
+          },
+          children: [
+            { path: "", component: HintComponent },
+            {
+              path: "",
+              component: EnvironmentSelectorComponent,
+              outlet: "environment-selector",
+            },
+          ],
+        },
+        {
+          path: "",
+          children: [
+            {
+              path: "hint",
+              canActivate: [unauthGuardFn()],
+              data: {
+                pageTitle: "requestPasswordHint",
+                pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
+                state: "hint",
+              },
+              children: [
+                { path: "", component: PasswordHintComponent },
+                {
+                  path: "",
+                  component: EnvironmentSelectorComponent,
+                  outlet: "environment-selector",
+                },
+              ],
+            },
+          ],
+        },
+      ),
       {
         path: "set-password-jit",
         canActivate: [canAccessFeature(FeatureFlag.EmailVerification)],
