@@ -21,6 +21,7 @@ import {
   SetPasswordJitComponent,
   RegistrationLinkExpiredComponent,
   LockIcon,
+  UserLockIcon,
 } from "@bitwarden/auth/angular";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 
@@ -201,6 +202,7 @@ const routes: Routes = [
           data: {
             pageTitle: "requestPasswordHint",
             pageSubtitle: "enterYourAccountEmailAddressAndYourPasswordHintWillBeSentToYou",
+            pageIcon: UserLockIcon,
             state: "hint",
           },
           children: [
