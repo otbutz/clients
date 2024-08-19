@@ -297,7 +297,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
 
   private async loadEmailSettings() {
     // Try to load from memory first
-    const email = this.loginEmailService.getEmail();
+    const email = await firstValueFrom(this.loginEmailService.loginEmail$);
     const rememberEmail = this.loginEmailService.getRememberEmail();
     if (email) {
       this.formGroup.controls.email.setValue(email);
@@ -314,7 +314,7 @@ export class LoginComponent extends CaptchaProtectedComponent implements OnInit,
   }
 
   protected async saveEmailSettings() {
-    this.loginEmailService.setEmail(this.formGroup.value.email);
+    this.loginEmailService.setLoginEmail(this.formGroup.value.email);
     this.loginEmailService.setRememberEmail(this.formGroup.value.rememberEmail);
     await this.loginEmailService.saveEmailSettings();
   }

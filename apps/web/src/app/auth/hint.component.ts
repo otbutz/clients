@@ -34,8 +34,8 @@ export class HintComponent extends BaseHintComponent implements OnInit {
     super(router, i18nService, apiService, platformUtilsService, logService, loginEmailService);
   }
 
-  ngOnInit(): void {
-    super.ngOnInit();
+  async ngOnInit(): Promise<void> {
+    await super.ngOnInit();
     this.emailFormControl.setValue(this.email);
   }
 
