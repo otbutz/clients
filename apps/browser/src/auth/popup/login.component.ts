@@ -84,9 +84,8 @@ export class LoginComponent extends BaseLoginComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     if (this.showPasswordless) {
-      this.formGroup.controls.email.setValue(
-        await firstValueFrom(this.loginEmailService.loginEmail$),
-      );
+      const loginEmail = await firstValueFrom(this.loginEmailService.loginEmail$);
+      this.formGroup.controls.email.setValue(loginEmail);
       this.formGroup.controls.rememberEmail.setValue(this.loginEmailService.getRememberEmail());
       await this.validateEmail();
     }
