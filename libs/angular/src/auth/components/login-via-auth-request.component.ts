@@ -105,13 +105,7 @@ export class LoginViaAuthRequestComponent
   }
 
   async ngOnInit() {
-    // TODO: I don't know why this is necessary.
-    // Why would the existence of the email depend on the navigation?
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation) {
-      this.email = await firstValueFrom(this.loginEmailService.loginEmail$);
-    }
-
+    this.email = await firstValueFrom(this.loginEmailService.loginEmail$);
     this.userAuthNStatus = await this.authService.getAuthStatus();
 
     const matchOptions: IsActiveMatchOptions = {
