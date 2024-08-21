@@ -4,7 +4,7 @@
   </bit-section-header>
   <bit-card>
     <div
-      class="tw-border-secondary-300"
+      class="tw-border-secondary-300 [&_bit-form-field:last-of-type]:tw-mb-0"
       *ngFor="let field of fields; let last = last"
       [ngClass]="{ 'tw-mb-4': !last }"
     >
@@ -17,6 +17,7 @@
           type="button"
           [appCopyClick]="field.value"
           showToast
+          [valueLabel]="field.name"
           [appA11yTitle]="'copyValue' | i18n"
         ></button>
       </bit-form-field>
@@ -30,6 +31,7 @@
           type="button"
           [appCopyClick]="field.value"
           showToast
+          [valueLabel]="field.name"
           [appA11yTitle]="'copyValue' | i18n"
         ></button>
       </bit-form-field>

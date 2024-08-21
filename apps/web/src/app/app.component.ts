@@ -94,7 +94,7 @@ export class AppComponent implements OnDestroy, OnInit {
     private policyService: InternalPolicyService,
     protected policyListService: PolicyListService,
     private keyConnectorService: KeyConnectorService,
-    private configService: ConfigService,
+    protected configService: ConfigService,
     private dialogService: DialogService,
     private biometricStateService: BiometricStateService,
     private stateEventRunnerService: StateEventRunnerService,
@@ -323,7 +323,6 @@ export class AppComponent implements OnDestroy, OnInit {
     );
 
     await Promise.all([
-      this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.cipherService.clear(userId),
       this.folderService.clear(userId),

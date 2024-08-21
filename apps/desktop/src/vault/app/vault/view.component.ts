@@ -5,6 +5,8 @@ import {
   EventEmitter,
   NgZone,
   OnChanges,
+  OnDestroy,
+  OnInit,
   Output,
 } from "@angular/core";
 
@@ -12,6 +14,7 @@ import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/vault/com
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
@@ -35,7 +38,7 @@ const BroadcasterSubscriptionId = "ViewComponent";
   selector: "app-vault-view",
   templateUrl: "view.component.html",
 })
-export class ViewComponent extends BaseViewComponent implements OnChanges {
+export class ViewComponent extends BaseViewComponent implements OnInit, OnDestroy, OnChanges {
   @Output() onViewCipherPasswordHistory = new EventEmitter<CipherView>();
 
   constructor(
@@ -60,6 +63,7 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
     dialogService: DialogService,
     datePipe: DatePipe,
     billingAccountProfileStateService: BillingAccountProfileStateService,
+    accountService: AccountService,
   ) {
     super(
       cipherService,
@@ -82,6 +86,7 @@ export class ViewComponent extends BaseViewComponent implements OnChanges {
       fileDownloadService,
       dialogService,
       datePipe,
+      accountService,
       billingAccountProfileStateService,
     );
   }

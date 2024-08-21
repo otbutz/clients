@@ -8,4 +8,6 @@ pub mod ipc;
 #[cfg(feature = "sys")]
 pub mod password;
 #[cfg(feature = "sys")]
+pub mod process_isolation;
+#[cfg(feature = "sys")]
 pub mod powermonitor;

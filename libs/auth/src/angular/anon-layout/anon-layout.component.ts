@@ -26,6 +26,7 @@ export class AnonLayoutComponent implements OnInit, OnChanges {
   @Input() showReadonlyHostname: boolean;
   @Input() hideLogo: boolean = false;
   @Input() hideFooter: boolean = false;
+  @Input() decreaseTopPadding: boolean = false;
   /**
    * Max width of the layout content
    *
@@ -74,6 +75,10 @@ export class AnonLayoutComponent implements OnInit, OnChanges {
     if (changes.icon) {
       const theme = await firstValueFrom(this.themeStateService.selectedTheme$);
       await this.updateIcon(theme);
+    }
+
+    if (changes.maxWidth) {
+      this.maxWidth = changes.maxWidth.currentValue ?? "md";
     }
   }
 

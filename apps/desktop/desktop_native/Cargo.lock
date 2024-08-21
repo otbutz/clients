@@ -284,9 +284,9 @@ dependencies = [
 
 [[package]]
 name = "bytes"
-version = "1.6.0"
+version = "1.7.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "514de17de45fdb8dc022b1a7975556c53c86f9f0aa5f534b98977b171857c2c9"
+checksum = "8318a53db07bb3f8dca91a600466bdb3f2eaadeedfdbcf02e1accbad9271ba50"
 
 [[package]]
 name = "cbc"
@@ -508,6 +508,7 @@ dependencies = [
  "gio",
  "interprocess",
  "keytar",
+ "libc",
  "libsecret",
  "log",
  "rand",
@@ -523,6 +524,7 @@ dependencies = [
  "widestring",
  "windows",
  "zbus",
+ "zbus_polkit",
 ]
 
 [[package]]
@@ -1097,9 +1099,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.21"
+version = "0.4.22"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "90ed8c1e510134f979dbc4f070f87d4313098b704861a105fe34231c70a3901c"
+checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 
 [[package]]
 name = "memchr"
@@ -2519,6 +2521,19 @@ dependencies = [
  "serde",
  "static_assertions",
  "zvariant",
+]
+
+[[package]]
+name = "zbus_polkit"
+version = "4.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "00a29bfa927b29f91b7feb4e1990f2dd1b4604072f493dc2f074cf59e4e0ba90"
+dependencies = [
+ "enumflags2",
+ "serde",
+ "serde_repr",
+ "static_assertions",
+ "zbus",
 ]
 
 [[package]]

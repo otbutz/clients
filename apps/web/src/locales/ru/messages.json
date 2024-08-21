@@ -36,6 +36,9 @@
   "notes": {
     "message": "Заметки"
   },
+  "note": {
+    "message": "Заметка"
+  },
   "customFields": {
     "message": "Пользовательские поля"
   },
@@ -47,6 +50,62 @@
   },
   "authenticatorKey": {
     "message": "Ключ аутентификатора"
+  },
+  "autofillOptions": {
+    "message": "Параметры автозаполнения"
+  },
+  "websiteUri": {
+    "message": "Сайт (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Веб-сайт (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "websiteAdded": {
+    "message": "Сайт добавлен"
+  },
+  "addWebsite": {
+    "message": "Добавить сайт"
+  },
+  "deleteWebsite": {
+    "message": "Удалить сайт"
+  },
+  "defaultLabel": {
+    "message": "По умолчанию ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Показать обнаружение совпадений $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Скрыть обнаружение совпадений $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Автозаполнение при загрузке страницы?"
   },
   "number": {
     "message": "Номер"
@@ -145,13 +204,16 @@
     "message": "Ключ аутентификатора (TOTP)"
   },
   "totpHelperTitle": {
-    "message": "Сделать двухэтапную аутентификацию бесшовной"
+    "message": "Сделайте двухэтапную аутентификацию простой и удобной"
   },
   "totpHelper": {
     "message": "Bitwarden может хранить и заполнять коды двухэтапной аутентификации. Скопируйте и вставьте ключ в это поле."
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden может хранить и заполнять коды двухэтапной аутентификации. Выберите значок камеры, чтобы сделать скриншот QR-кода этого сайта, или скопируйте и вставьте ключ в это поле."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Узнайте больше об аутентификаторах"
   },
   "folder": {
     "message": "Папка"
@@ -1458,6 +1520,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "новый элемент.",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "новый логин",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " вместо этого.",
@@ -4099,8 +4165,9 @@
   "minimumNumberOfWords": {
     "message": "Минимальное количество слов"
   },
-  "defaultType": {
-    "message": "Тип по умолчанию"
+  "overridePasswordTypePolicy": {
+    "message": "Тип пароля",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Предпочтения пользователя"
@@ -5276,6 +5343,21 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш мастер-пароль не соответствует требованиям политики вашей организации. Для доступа к хранилищу вы должны обновить свой мастер-пароль прямо сейчас. При этом текущий сеанс будет завершен и потребуется повторная авторизация. Сеансы на других устройствах могут оставаться активными в течение часа."
   },
+  "automaticAppLogin": {
+    "message": "Автоматическая авторизация пользователей в разрешенные приложения"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Формы авторизаций будут автоматически заполняться и отправляться для приложений, запущенных с помощью настроенного провайдера идентификационных данных."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Хост провайдера идентификации"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Введите URL хоста провайдера идентификационных данных. Вводите несколько URL, разделяя их запятой."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Ваша организация обновила параметры расшифровки. Пожалуйста, установите мастер-пароль для доступа к вашему хранилищу."
+  },
   "maximumVaultTimeout": {
     "message": "Тайм-аут хранилища"
   },
@@ -5999,6 +6081,26 @@
   },
   "randomWord": {
     "message": "Случайное слово"
+  },
+  "usernameGenerator": {
+    "message": "Генератор имени пользователя"
+  },
+  "useThisPassword": {
+    "message": "Использовать этот пароль"
+  },
+  "useThisUsername": {
+    "message": "Использовать это имя пользователя"
+  },
+  "securePasswordGenerated": {
+    "message": "Безопасный пароль сгенерирован! Не забудьте также обновить свой пароль на сайте."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Использовать генератор",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "для создания надежного уникального пароля",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Служба"
@@ -7628,6 +7730,9 @@
   "requestedDeviceApproval": {
     "message": "Запрошено одобрение устройства."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "Пользователь установил мастер-пароль при деактивации TDE."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Начните 7-дневную бесплатную пробную версию Bitwarden для $ORG$",
     "placeholders": {
@@ -8024,6 +8129,9 @@
       }
     }
   },
+  "addField": {
+    "message": "Добавить поле"
+  },
   "items": {
     "message": "Элементы"
   },
@@ -8414,6 +8522,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Управление биллингом на портале провайдера"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Начните 7-дневную бесплатную пробную версию Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Начните 7-дневную бесплатную пробную версию Bitwarden Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Начните 7-дневную бесплатную пробную версию Bitwarden Family"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Начните 7-дневную бесплатную пробную версию Bitwarden Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера секретов Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера секретов Bitwarden Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера секретов Bitwarden Family"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера секретов Bitwarden Enterprise"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера паролей Bitwarden"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера паролей Bitwarden Teams"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера паролей Bitwarden Family"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Начните 7-дневную бесплатную пробную версию менеджера паролей Bitwarden Enterprise"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Введите информацию о вашей команде"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Введите информацию о вашей семье"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Введите информацию о вашей организации"
+  },
   "viewItemsIn": {
     "message": "Просмотр элементов в $NAME$",
     "description": "Button to view the contents of a folder or collection",
@@ -8693,5 +8846,98 @@
   },
   "purchasedSeatsRemoved": {
     "message": "купленные места удалены"
+  },
+  "fileSends": {
+    "message": "Файловая Send"
+  },
+  "textSends": {
+    "message": "Текстовая Send"
+  },
+  "includesXMembers": {
+    "message": "для участников: $COUNT$",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Дополнительный локальный хостинг"
+  },
+  "upgradeFreeOrganization": {
+    "message": "Обновление организации $NAME$ ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "Аутентификация SSO"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "В семейных организациях может быть до $SEATCOUNT$ участников. Перейдите на платный план, чтобы пригласить больше участников.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "В семейных организациях может быть до $SEATCOUNT$ участников. Свяжитесь с владельцем вашей организации для обновления.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Повысьте тарифный план, чтобы пригласить больше участников и получить доступ к дополнительным возможностям Bitwarden"
+  },
+  "upgradeDiscount": {
+    "message": "Сэкономить $AMOUNT$%",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Расширенные возможности для крупного бизнеса"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Предприятиям нужна мощная система безопасности"
+  },
+  "teamsInviteMessage": {
+    "message": "Приглашайте неограниченное количество участников"
+  },
+  "accessToCreateGroups": {
+    "message": "Доступ к созданию групп"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Синхронизация групп и пользователей из каталога"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Делитесь с семьей и друзьями"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Доступ к премиум-возможностям"
+  },
+  "additionalStorageGbMessage": {
+    "message": "Дополнительное место в хранилище"
   }
 }

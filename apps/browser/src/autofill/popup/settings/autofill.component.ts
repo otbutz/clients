@@ -87,6 +87,9 @@ export class AutofillComponent implements OnInit {
     DisablePasswordManagerUris.Unknown;
   protected browserShortcutsURI: BrowserShortcutsUri = BrowserShortcutsUris.Unknown;
   protected browserClientIsUnknown: boolean;
+  protected autofillOnPageLoadFromPolicy$ =
+    this.autofillSettingsService.activateAutofillOnPageLoadFromPolicy$;
+
   enableAutofillOnPageLoad = false;
   enableInlineMenu = false;
   enableInlineMenuOnIconSelect = false;
@@ -126,7 +129,7 @@ export class AutofillComponent implements OnInit {
       { name: i18nService.t("fiveMinutes"), value: ClearClipboardDelay.FiveMinutes },
     ];
     this.uriMatchOptions = [
-      { name: i18nService.t("baseDomain"), value: UriMatchStrategy.Domain },
+      { name: i18nService.t("baseDomainOptionRecommended"), value: UriMatchStrategy.Domain },
       { name: i18nService.t("host"), value: UriMatchStrategy.Host },
       { name: i18nService.t("startsWith"), value: UriMatchStrategy.StartsWith },
       { name: i18nService.t("regEx"), value: UriMatchStrategy.RegularExpression },

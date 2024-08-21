@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notlar"
   },
+  "note": {
+    "message": "Not"
+  },
   "customFields": {
     "message": "Özəl xanalar"
   },
@@ -47,6 +50,62 @@
   },
   "authenticatorKey": {
     "message": "Kimlik doğrulayıcı açarı"
+  },
+  "autofillOptions": {
+    "message": "Avto-doldurma seçimləri"
+  },
+  "websiteUri": {
+    "message": "Veb sayt (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Veb sayt (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "websiteAdded": {
+    "message": "Veb sayt əlavə edildi"
+  },
+  "addWebsite": {
+    "message": "Veb sayt əlavə et"
+  },
+  "deleteWebsite": {
+    "message": "Veb saytı sil"
+  },
+  "defaultLabel": {
+    "message": "İlkin ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "$WEBSITE$ ilə uyuşma aşkarlamasını göstər",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "$WEBSITE$ ilə uyuşma aşkarlamasını gizlət",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Səhifə yüklənəndə avto-doldurulsun?"
   },
   "number": {
     "message": "Nömrə"
@@ -152,6 +211,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden, 2 addımlı doğrulama kodlarını saxlaya və doldura bilər. Bu veb sayt kimlik doğrulayıcı QR kodunun ekran şəklini çəkmək üçün kamera ikonunu seçin, ya da açarı kopyalayıb bu xanaya yapışdırın."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Kimlik doğrulayıcılar haqqında daha ətraflı"
   },
   "folder": {
     "message": "Qovluq"
@@ -1458,6 +1520,10 @@
   "onboardingImportDataDetailsLink": {
     "message": " ",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "yeni giriş",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " ",
@@ -4099,8 +4165,9 @@
   "minimumNumberOfWords": {
     "message": "Minimum söz sayı"
   },
-  "defaultType": {
-    "message": "İlkin növ"
+  "overridePasswordTypePolicy": {
+    "message": "Parol növü",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "İstifadəçi tərcihi"
@@ -4865,13 +4932,13 @@
     "message": "Sirr Menecerinə müraciət icazəsi vermək üçün üzvləri görün və seçin."
   },
   "openYourOrganizations": {
-    "message": "Open your organization's"
+    "message": "Təşkilatınızın"
   },
   "usingTheMenuSelect": {
     "message": "Using the menu, select"
   },
   "toGrantAccessToSelectedMembers": {
-    "message": "to grant access to selected members."
+    "message": "seçilmiş üzvlərə müraciət verin."
   },
   "sendVaultCardTryItNow": {
     "message": "indi sınayın",
@@ -5275,6 +5342,21 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
+  "automaticAppLogin": {
+    "message": "Automatically log in users for allowed applications"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Login forms will automatically be filled and submitted for apps launched from your configured identity provider."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identity provider host"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Enter your identity provider host URL. Enter multiple URLs by separating with a comma."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
   },
   "maximumVaultTimeout": {
     "message": "Anbara müraciət bitəcək"
@@ -5999,6 +6081,26 @@
   },
   "randomWord": {
     "message": "Təsadüfi söz"
+  },
+  "usernameGenerator": {
+    "message": "İstifadəçi adı yaradıcı"
+  },
+  "useThisPassword": {
+    "message": "Bu parolu istifadə et"
+  },
+  "useThisUsername": {
+    "message": "Bu istifadəçi adını istifadə et"
+  },
+  "securePasswordGenerated": {
+    "message": "Güvənli parol yaradıldı! Həmçinin veb saytdakı parolunuzu güncəlləməyi unutmayın."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Yaradıcı istifadə et",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "Daha unikal parollar yarat",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Xidmət"
@@ -7628,6 +7730,9 @@
   "requestedDeviceApproval": {
     "message": "Tələb edilən cihaz təsdiqi."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "User set a master password during TDE offboarding."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "$ORG$ üçün Bitwarden 7 günlük ödənişsiz sınağı başladın",
     "placeholders": {
@@ -8024,6 +8129,9 @@
       }
     }
   },
+  "addField": {
+    "message": "Xana əlavə et"
+  },
   "items": {
     "message": "Elementlər"
   },
@@ -8414,6 +8522,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "Fakturanı \"Provayder Portalı\"ndan idarə et"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "Bitwarden-in 7 günlük ödənişsiz sınağını başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "Bitwarden for Teams üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "Bitwarden for Families üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "Bitwarden for Enterprise üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "Bitwarden Secrets Manager üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "Bitwarden Secrets Manager for Teams üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "Bitwarden Secrets Manager for Families üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "Bitwarden Secrets Manager for Enterprise üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "Bitwarden Password Manager üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "Bitwarden Password Manager for Teams üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "Bitwarden Password Manager for Families üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "Bitwarden Password Manager for Enterprise üçün 7 günlük ödənişsiz sınağı başladın"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Teams təşkilatınızın məlumatlarını daxil edin"
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Families təşkilatınızın məlumatlarını daxil edin"
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Enterprise təşkilatınızın məlumatlarını daxil edin"
+  },
   "viewItemsIn": {
     "message": "$NAME$ daxilindəki elementlərə bax",
     "description": "Button to view the contents of a folder or collection",
@@ -8693,5 +8846,98 @@
   },
   "purchasedSeatsRemoved": {
     "message": "satın alınmış yerlər silindi"
+  },
+  "fileSends": {
+    "message": "Fayl \"Send\"ləri"
+  },
+  "textSends": {
+    "message": "Mətn \"Send\"ləri"
+  },
+  "includesXMembers": {
+    "message": "$COUNT$ üzv üçün",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Optional on-premises hosting"
+  },
+  "upgradeFreeOrganization": {
+    "message": "$NAME$ təşkilatınızı yüksəldin ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO kimlik doğrulama"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "Ailə təşkilatında ən çox $SEATCOUNT$ üzv ola bilər. Daha çox üzv dəvət etmək üçün ödənişli bir plana yüksəldin.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "Ailə təşkilatında ən çox $SEATCOUNT$ üzv ola bilər. Yüksəltmək üçün təşkilatınızın sahibi ilə əlaqə saxlayın.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Daha çox üzv dəvət etmək və əlavə Bitwarden özəlliklərinə müraciət əldə etmək üçün planınızı yüksəldin"
+  },
+  "upgradeDiscount": {
+    "message": "$AMOUNT$% endirim",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Daha böyük bizneslər üçün qabaqcıl imkanlar"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Güclü təhlükəsizlik axtaran bizneslər"
+  },
+  "teamsInviteMessage": {
+    "message": "Limitsiz üzv dəvət et"
+  },
+  "accessToCreateGroups": {
+    "message": "Qrup yaratma müraciəti"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "Qrupları və istifadəçiləri bir kataloqdan sinxronlaşdır"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Ailə və dostlarla paylaş"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Premium özəlliklərə müraciət"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB əlavə saxlama sahəsi"
   }
 }

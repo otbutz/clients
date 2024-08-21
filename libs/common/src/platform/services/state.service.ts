@@ -301,23 +301,6 @@ export class StateService<
     );
   }
 
-  async getLastSync(options?: StorageOptions): Promise<string> {
-    return (
-      await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()))
-    )?.profile?.lastSync;
-  }
-
-  async setLastSync(value: string, options?: StorageOptions): Promise<void> {
-    const account = await this.getAccount(
-      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()),
-    );
-    account.profile.lastSync = value;
-    await this.saveAccount(
-      account,
-      this.reconcileOptions(options, await this.defaultOnDiskMemoryOptions()),
-    );
-  }
-
   async getUserId(options?: StorageOptions): Promise<string> {
     return (
       await this.getAccount(this.reconcileOptions(options, await this.defaultOnDiskOptions()))
@@ -414,11 +397,11 @@ export class StateService<
     }
 
     const account = options?.useSecureStorage
-      ? ((await this.secureStorageService.get<TAccount>(options.userId, options)) ??
+      ? (await this.secureStorageService.get<TAccount>(options.userId, options)) ??
         (await this.storageService.get<TAccount>(
           options.userId,
           this.reconcileOptions(options, { htmlStorageLocation: HtmlStorageLocation.Local }),
-        )))
+        ))
       : await this.storageService.get<TAccount>(options.userId, options);
     return account;
   }

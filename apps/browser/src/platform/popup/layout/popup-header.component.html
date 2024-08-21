@@ -4,7 +4,7 @@
     'tw-bg-background-alt tw-border-transparent':
       this.background === 'alt' && !pageContentScrolled(),
     'tw-bg-background tw-border-secondary-300':
-      (this.background === 'alt' && pageContentScrolled()) || this.background === 'default',
+      (this.background === 'alt' && pageContentScrolled()) || this.background === 'default'
   }"
 >
   <div class="tw-max-w-screen-sm tw-mx-auto tw-flex tw-justify-between tw-w-full">
@@ -14,7 +14,7 @@
         type="button"
         *ngIf="showBackButton"
         [title]="'back' | i18n"
-        [ariaLabel]="'back' | i18n"
+        [attr.aria-label]="'back' | i18n"
         [bitAction]="backAction"
       ></button>
       <h1 *ngIf="pageTitle" bitTypography="h3" class="!tw-mb-0.5 tw-text-headers">
