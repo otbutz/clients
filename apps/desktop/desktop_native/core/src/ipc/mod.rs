@@ -18,13 +18,22 @@ pub fn path(name: &str) -> std::path::PathBuf {
 
     #[cfg(target_os = "macos")]
     {
-        // On MacOS builds, we use the Application Support directory.
-        // This directory should already exist as it's also used for
-        // the application data and other electron caches.
-        // On sandboxed App Store builds, this should ensure that
-        // the socket is only accessible to the app bundle.
-        let config = dirs::config_dir().unwrap();
-        config.join("Bitwarden").join(format!("app.{name}"))
+        let mut home = dirs::home_dir().unwrap();
+
+        // When running in an unsandboxed environment, path is: /Users/<user>/
+        // While running sandboxed, it's different: /Users/<user>/Library/Containers/com.bitwarden.desktop/Data
+        //
+        // We want to use App Groups in /Users/<user>/Library/Group Containers/LTZ2PFU5D6.com.bitwarden.desktop,
+        // so we need to remove all the components after the user.
+        // Note that we subtract 3 because the root directory is counted as a component (/, Users, <user>).
+        let num_components = home.components().count();
+        for _ in 0..num_components - 3 {
+            debug_assert!(home.pop(), "Failed to pop a component");
+        }
+
+        home.join(format!(
+            "Library/Group Containers/LTZ2PFU5D6.com.bitwarden.desktop/tmp/app.{name}"
+        ))
     }
 
     #[cfg(target_os = "linux")]
