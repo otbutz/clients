@@ -1,4 +1,7 @@
+import { firstValueFrom, map } from "rxjs";
+
 import { PinServiceAbstraction } from "@bitwarden/auth/common";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { ImportCiphersRequest } from "@bitwarden/common/models/request/import-ciphers.request";
 import { ImportOrganizationCiphersRequest } from "@bitwarden/common/models/request/import-organization-ciphers.request";
 import { KvpRequest } from "@bitwarden/common/models/request/kvp.request";
@@ -102,6 +105,7 @@ export class ImportService implements ImportServiceAbstraction {
     private collectionService: CollectionService,
     private cryptoService: CryptoService,
     private pinService: PinServiceAbstraction,
+    private accountService: AccountService,
   ) {}
 
   getImportOptions(): ImportOption[] {
@@ -210,6 +214,7 @@ export class ImportService implements ImportServiceAbstraction {
           this.i18nService,
           this.cipherService,
           this.pinService,
+          this.accountService,
           promptForPassword_callback,
         );
       case "lastpasscsv":
@@ -336,8 +341,14 @@ export class ImportService implements ImportServiceAbstraction {
 
   private async handleIndividualImport(importResult: ImportResult) {
     const request = new ImportCiphersRequest();
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+
     try {
-      const cipherTasks = (importResult.ciphers ?? []).map((c) => this.cipherService.encrypt(c));
+      const cipherTasks = (importResult.ciphers ?? []).map((c) =>
+        this.cipherService.encrypt(c, activeUserId),
+      );
 
       for (const c of await Promise.all(cipherTasks)) {
         request.ciphers.push(new CipherRequest(c));
@@ -360,8 +371,14 @@ export class ImportService implements ImportServiceAbstraction {
 
   private async handleOrganizationalImport(importResult: ImportResult, organizationId: string) {
     const request = new ImportOrganizationCiphersRequest();
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+
     try {
-      const cipherTasks = (importResult.ciphers ?? []).map((c) => this.cipherService.encrypt(c));
+      const cipherTasks = (importResult.ciphers ?? []).map((c) =>
+        this.cipherService.encrypt(c, activeUserId),
+      );
 
       for (const c of await Promise.all(cipherTasks)) {
         request.ciphers.push(new CipherRequest(c));

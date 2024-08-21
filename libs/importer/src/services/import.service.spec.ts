@@ -1,11 +1,13 @@
 import { mock, MockProxy } from "jest-mock-extended";
+import { BehaviorSubject } from "rxjs";
 
 import { PinServiceAbstraction } from "@bitwarden/auth/common";
+import { AccountInfo, AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
-import { CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
+import { CollectionId, OrganizationId, UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
@@ -109,6 +111,7 @@ const folderData: FolderData = {
 };
 
 describe("ImportService", () => {
+  const activeAccountSubject = new BehaviorSubject<{ id: UserId } & AccountInfo>(null);
   let importService: ImportService;
   let cipherService: MockProxy<CipherService>;
   let folderService: MockProxy<FolderService>;
@@ -117,6 +120,7 @@ describe("ImportService", () => {
   let collectionService: MockProxy<CollectionService>;
   let cryptoService: MockProxy<CryptoService>;
   let pinService: MockProxy<PinServiceAbstraction>;
+  let accountService: MockProxy<AccountService>;
 
   beforeEach(() => {
     cipherService = mock<CipherService>();
@@ -126,6 +130,9 @@ describe("ImportService", () => {
     collectionService = mock<CollectionService>();
     cryptoService = mock<CryptoService>();
     pinService = mock<PinServiceAbstraction>();
+    accountService = mock<AccountService>();
+
+    accountService.activeAccount$ = activeAccountSubject;
 
     importService = new ImportService(
       cipherService,
@@ -135,6 +142,7 @@ describe("ImportService", () => {
       collectionService,
       cryptoService,
       pinService,
+      accountService,
     );
   });
 
