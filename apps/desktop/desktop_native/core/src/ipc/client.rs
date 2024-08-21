@@ -1,4 +1,7 @@
-use std::time::Duration;
+use std::{
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use interprocess::local_socket::{
     tokio::{prelude::*, Stream},
@@ -11,6 +14,7 @@ use tokio::{
 };
 
 pub async fn connect(
+    path: PathBuf,
     send: tokio::sync::mpsc::Sender<String>,
     mut recv: tokio::sync::mpsc::Receiver<String>,
 ) {
@@ -18,7 +22,7 @@ pub async fn connect(
     let mut connection_failures = 0;
 
     loop {
-        match connect_inner(&send, &mut recv).await {
+        match connect_inner(&path, &send, &mut recv).await {
             Ok(()) => return,
             Err(e) => {
                 connection_failures += 1;
@@ -36,11 +40,10 @@ pub async fn connect(
 }
 
 async fn connect_inner(
+    path: &Path,
     send: &tokio::sync::mpsc::Sender<String>,
     recv: &mut tokio::sync::mpsc::Receiver<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let path = super::path("bitwarden");
-
     info!("Attempting to connect to {}", path.display());
 
     let name = path.as_os_str().to_fs_name::<GenericFilePath>()?;

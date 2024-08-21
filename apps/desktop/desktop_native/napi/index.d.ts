@@ -66,6 +66,7 @@ export namespace ipc {
   export class IpcServer {
     /**
      * Create and start the IPC server without blocking.
+     *
      * @param name The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
      * @param callback This function will be called whenever a message is received from a client.
      */
@@ -74,6 +75,7 @@ export namespace ipc {
     stop(): void
     /**
      * Send a message over the IPC server to all the connected clients
+     *
      * @return The number of clients that the message was sent to. Note that the number of messages
      * actually received may be less, as some clients could disconnect before receiving the message.
      */

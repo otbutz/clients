@@ -54,7 +54,9 @@ async fn main() {
     let (in_send, in_recv) = tokio::sync::mpsc::channel(32);
     let (out_send, mut out_recv) = tokio::sync::mpsc::channel(32);
 
-    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(out_send, in_recv));
+    let path = desktop_core::ipc::path("bitwarden");
+
+    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(path, out_send, in_recv));
 
     // Create a new codec for reading and writing messages from stdin/stdout.
     let mut stdin = LengthDelimitedCodec::builder()
