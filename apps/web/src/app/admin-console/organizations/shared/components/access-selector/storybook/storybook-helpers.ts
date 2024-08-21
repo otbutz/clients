@@ -1,6 +1,6 @@
 import { action } from "@storybook/addon-actions";
 
-import { AccessItemType, AccessItemView } from "./access-selector.models";
+import { AccessItemType, AccessItemView } from "../access-selector.models";
 
 export const actionsData = {
   onValueChanged: action("onValueChanged"),

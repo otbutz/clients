@@ -2,7 +2,6 @@ import { importProvidersFrom } from "@angular/core";
 import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { applicationConfig, Meta, moduleMetadata, Story } from "@storybook/angular";
 
-
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import {
   AvatarModule,
@@ -15,12 +14,12 @@ import {
   TabsModule,
 } from "@bitwarden/components";
 
-import { PreloadedEnglishI18nModule } from "../../../../../core/tests";
+import { PreloadedEnglishI18nModule } from "../../../../../../core/tests";
+import { AccessSelectorComponent } from "../access-selector.component";
+import { AccessItemType } from "../access-selector.models";
+import { UserTypePipe } from "../user-type.pipe";
 
-import { AccessSelectorComponent } from "./access-selector.component";
-import { AccessItemType } from "./access-selector.models";
 import { itemsFactory, actionsData } from "./storybook-helpers";
-import { UserTypePipe } from "./user-type.pipe";
 
 export default {
   title: "Web/Organizations/Access Selector",
