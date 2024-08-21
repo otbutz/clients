@@ -3,10 +3,11 @@ import { Component } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormsModule } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Observable, switchMap } from "rxjs";
+import { firstValueFrom, map, Observable, switchMap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
@@ -22,8 +23,11 @@ import {
   DialogService,
   ToastService,
 } from "@bitwarden/components";
+import { TotpCaptureService } from "@bitwarden/vault";
 
 import { CipherViewComponent } from "../../../../../../../../libs/vault/src/cipher-view";
+import { PopOutComponent } from "../../../../../platform/popup/components/pop-out.component";
+import { BrowserTotpCaptureService } from "../../../services/browser-totp-capture.service";
 
 import { PopupFooterComponent } from "./../../../../../platform/popup/layout/popup-footer.component";
 import { PopupHeaderComponent } from "./../../../../../platform/popup/layout/popup-header.component";
@@ -33,6 +37,7 @@ import { PopupPageComponent } from "./../../../../../platform/popup/layout/popup
   selector: "app-view-v2",
   templateUrl: "view-v2.component.html",
   standalone: true,
+  providers: [{ provide: TotpCaptureService, useClass: BrowserTotpCaptureService }],
   imports: [
     CommonModule,
     SearchModule,
@@ -45,11 +50,11 @@ import { PopupPageComponent } from "./../../../../../platform/popup/layout/popup
     IconButtonModule,
     CipherViewComponent,
     AsyncActionsModule,
+    PopOutComponent,
   ],
 })
 export class ViewV2Component {
   headerText: string;
-  cipherId: string;
   cipher: CipherView;
   organization$: Observable<Organization>;
   folder$: Observable<FolderView>;
@@ -63,6 +68,7 @@ export class ViewV2Component {
     private dialogService: DialogService,
     private logService: LogService,
     private toastService: ToastService,
+    private accountService: AccountService,
   ) {
     this.subscribeToParams();
   }
@@ -70,14 +76,14 @@ export class ViewV2Component {
   subscribeToParams(): void {
     this.route.queryParams
       .pipe(
-        switchMap((param) => {
-          return this.getCipherData(param.cipherId);
+        switchMap(async (params): Promise<CipherView> => {
+          return await this.getCipherData(params.cipherId);
         }),
         takeUntilDestroyed(),
       )
-      .subscribe((data) => {
-        this.cipher = data;
-        this.headerText = this.setHeader(data.type);
+      .subscribe((cipher) => {
+        this.cipher = cipher;
+        this.headerText = this.setHeader(cipher.type);
       });
   }
 
@@ -99,7 +105,12 @@ export class ViewV2Component {
 
   async getCipherData(id: string) {
     const cipher = await this.cipherService.get(id);
-    return await cipher.decrypt(await this.cipherService.getKeyForCipherKeyDecryption(cipher));
+    const activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+    );
+    return await cipher.decrypt(
+      await this.cipherService.getKeyForCipherKeyDecryption(cipher, activeUserId),
+    );
   }
 
   async editCipher() {

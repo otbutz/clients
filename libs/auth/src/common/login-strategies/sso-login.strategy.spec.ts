@@ -211,6 +211,7 @@ describe("SsoLoginStrategy", () => {
         HasAdminApproval: true,
         HasLoginApprovingDevice: true,
         HasManageResetPasswordPermission: false,
+        IsTdeOffboarding: false,
         EncryptedPrivateKey: mockEncDevicePrivateKey,
         EncryptedUserKey: mockEncUserKey,
       },
@@ -251,7 +252,7 @@ describe("SsoLoginStrategy", () => {
       expect(deviceTrustService.getDeviceKey).toHaveBeenCalledTimes(1);
       expect(deviceTrustService.decryptUserKeyWithDeviceKey).toHaveBeenCalledTimes(1);
       expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledTimes(1);
-      expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledWith(mockUserKey);
+      expect(cryptoSvcSetUserKeySpy).toHaveBeenCalledWith(mockUserKey, userId);
     });
 
     it("does not set the user key when deviceKey is missing", async () => {
@@ -343,6 +344,7 @@ describe("SsoLoginStrategy", () => {
             HasAdminApproval: true,
             HasLoginApprovingDevice: false,
             HasManageResetPasswordPermission: false,
+            IsTdeOffboarding: false,
             EncryptedPrivateKey: mockEncDevicePrivateKey,
             EncryptedUserKey: mockEncUserKey,
           },
@@ -496,7 +498,7 @@ describe("SsoLoginStrategy", () => {
         undefined,
         undefined,
       );
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
     });
   });
 
@@ -552,7 +554,7 @@ describe("SsoLoginStrategy", () => {
         undefined,
         undefined,
       );
-      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey);
+      expect(cryptoService.setUserKey).toHaveBeenCalledWith(userKey, userId);
     });
   });
 });

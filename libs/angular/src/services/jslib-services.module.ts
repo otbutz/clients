@@ -685,6 +685,7 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       TokenServiceAbstraction,
       AuthServiceAbstraction,
+      StateProvider,
     ],
   }),
   safeProvider({
@@ -774,6 +775,7 @@ const safeProviders: SafeProvider[] = [
       CollectionServiceAbstraction,
       CryptoServiceAbstraction,
       PinServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -799,6 +801,7 @@ const safeProviders: SafeProvider[] = [
       CryptoFunctionServiceAbstraction,
       CollectionServiceAbstraction,
       KdfConfigServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -1196,7 +1199,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: BillingApiServiceAbstraction,
     useClass: BillingApiService,
-    deps: [ApiServiceAbstraction],
+    deps: [ApiServiceAbstraction, LogService, ToastService],
   }),
   safeProvider({
     provide: PaymentMethodWarningsServiceAbstraction,

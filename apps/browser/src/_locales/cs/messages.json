@@ -116,6 +116,21 @@
   "copySecurityCode": {
     "message": "Kopírovat bezpečnostní kód"
   },
+  "copyName": {
+    "message": "Kopírovat název"
+  },
+  "copyCompany": {
+    "message": "Kopírovat společnost"
+  },
+  "copySSN": {
+    "message": "Kopírovat rodné číslo"
+  },
+  "copyPassportNumber": {
+    "message": "Kopírovat číslo pasu"
+  },
+  "copyLicenseNumber": {
+    "message": "Kopírovat číslo dokladu totožnosti"
+  },
   "autoFill": {
     "message": "Automatické vyplňování"
   },
@@ -288,6 +303,24 @@
   },
   "editFolder": {
     "message": "Upravit složku"
+  },
+  "newFolder": {
+    "message": "Nová složka"
+  },
+  "folderName": {
+    "message": "Název složky"
+  },
+  "folderHintText": {
+    "message": "Vnořit složku přidáním názvu nadřazené složky následovaného znakem \"/\". Příklad: Sociální/Fóra"
+  },
+  "noFoldersAdded": {
+    "message": "Nebyly přidány žádné složky"
+  },
+  "createFoldersToOrganize": {
+    "message": "Vytvořte složky pro organizaci Vašich položek trezoru"
+  },
+  "deleteFolderPermanently": {
+    "message": "Opravdu chcete trvale smazat tuto složku?"
   },
   "deleteFolder": {
     "message": "Smazat složku"
@@ -657,6 +690,9 @@
   "totpHelperWithCapture": {
     "message": "Bitwarden umí ukládat a vyplňovat dvoufázové ověřovací kódy. Vyberte ikonu fotoaparátu a pořiďte snímek obrazovky ověřovacího QR kódu této webové stránky nebo klíč zkopírujte a vložte do tohoto pole."
   },
+  "learnMoreAboutAuthenticators": {
+    "message": "Zjistěte více o autentizátorech"
+  },
   "copyTOTP": {
     "message": "Kopírovat autentizační klíč (TOTP)"
   },
@@ -871,7 +907,7 @@
   },
   "defaultUriMatchDetection": {
     "message": "Výchozí zjišťování shody URI",
-    "description": "Default URI match detection for auto-fill."
+    "description": "Default URI match detection for autofill."
   },
   "defaultUriMatchDetectionDesc": {
     "message": "Vyberte výchozí způsob, jakým se detekuje shoda URI přihlašovacích údajů. Používá se například pro automatické vyplňování."
@@ -1046,6 +1082,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB šifrovaného úložiště pro přílohy."
   },
+  "premiumSignUpEmergency": {
+    "message": "Nouzový přístup"
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Volby proprietálních dvoufázových přihlášení jako je YubiKey a Duo."
   },
@@ -1066,6 +1105,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Prémiové členství můžete zakoupit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Premium si můžete zakoupit v nastavení účtu ve webové aplikaci Bitwarden."
   },
   "premiumCurrentMember": {
     "message": "Jste prémiovým členem!"
@@ -1240,7 +1282,7 @@
   },
   "showAutoFillMenuOnFormFields": {
     "message": "Zobrazit menu automatického vyplňování v polích formuláře",
-    "description": "Represents the message for allowing the user to enable the auto-fill overlay"
+    "description": "Represents the message for allowing the user to enable the autofill overlay"
   },
   "autofillSuggestionsSectionTitle": {
     "message": "Návrhy automatického vyplňování"
@@ -1327,8 +1369,14 @@
   "commandOpenSidebar": {
     "message": "Otevřít trezor v postranním panelu"
   },
-  "commandAutofillDesc": {
+  "commandAutofillLoginDesc": {
     "message": "Automaticky vyplní poslední použité přihlašovací údaje pro tuto stránku."
+  },
+  "commandAutofillCardDesc": {
+    "message": "Automaticky vyplní poslední použitou kartu pro tuto stránku."
+  },
+  "commandAutofillIdentityDesc": {
+    "message": "Automaticky vyplní poslední použitou identitu pro tuto stránku."
   },
   "commandGeneratePasswordDesc": {
     "message": "Vygeneruje a zkopíruje nové náhodné heslo do schránky."
@@ -1634,6 +1682,10 @@
     "message": "Základní doména",
     "description": "Domain name. Ex. website.com"
   },
+  "baseDomainOptionRecommended": {
+    "message": "Základní doména (doporučeno)",
+    "description": "Domain name. Ex. website.com"
+  },
   "domainName": {
     "message": "Název domény",
     "description": "Domain name. Ex. website.com"
@@ -1654,11 +1706,11 @@
   },
   "matchDetection": {
     "message": "Zjišťování shody",
-    "description": "URI match detection for auto-fill."
+    "description": "URI match detection for autofill."
   },
   "defaultMatchDetection": {
     "message": "Výchozí zjišťování shody",
-    "description": "Default URI match detection for auto-fill."
+    "description": "Default URI match detection for autofill."
   },
   "toggleOptions": {
     "message": "Přepnout volby"
@@ -1777,6 +1829,29 @@
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "Jedna nebo více zásad organizace ovlivňují nastavení generátoru."
+  },
+  "passwordGenerator": {
+    "message": "Generátor hesla"
+  },
+  "usernameGenerator": {
+    "message": "Generátor uživatelského jména"
+  },
+  "useThisPassword": {
+    "message": "Použít toto heslo"
+  },
+  "useThisUsername": {
+    "message": "Použít toto uživatelské jméno"
+  },
+  "securePasswordGenerated": {
+    "message": "Bezpečné heslo bylo vygenerováno! Nezapomeňte také aktualizovat heslo na webu."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Použijte generátor",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "pro vytvoření silného jedinečného hesla",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "vaultTimeoutAction": {
     "message": "Akce při vypršení časového limitu"
@@ -1974,6 +2049,12 @@
   },
   "nativeMessagingWrongUserTitle": {
     "message": "Neshoda účtů"
+  },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "Biometrické odemknutí se nezdařilo. Zkuste znovu nastavit biometrické prvky."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "Neshoda biometrického klíče"
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometrie není nastavena"
@@ -2223,6 +2304,24 @@
     "message": "Send vytvořen",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "createdSendSuccessfully": {
+    "message": "Send byl úspěšně vytvořen!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "Send bude k dispozici na příštích $DAYS$ dnů každému, kdo má odkaz.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Odkaz Send byl zkopírován",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "editedSend": {
     "message": "Send upraven",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -2301,6 +2400,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Vaše organizace zakázala šifrování pomocí důvěryhodného zařízení. Nastavte hlavní heslo pro přístup k trezoru."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrace"
@@ -2758,14 +2860,17 @@
   "autofillKeyboardShortcutUpdateLabel": {
     "message": "Změnit zkratku"
   },
+  "autofillKeyboardManagerShortcutsLabel": {
+    "message": "Spravovat zástupce"
+  },
   "autofillShortcut": {
     "message": "Klávesová zkratka pro automatické vyplňování"
   },
-  "autofillShortcutNotSet": {
-    "message": "Klávesová zkratka pro automatické vyplňování není nastavena. Změňte ji v nastavení prohlížeče."
+  "autofillLoginShortcutNotSet": {
+    "message": "Klávesová zkratka pro automatické vyplnění přihlášení není nastavena. Změňte ji v nastavení prohlížeče."
   },
-  "autofillShortcutText": {
-    "message": "Klávesová zkratka pro automatické vyplňování: $COMMAND$. Změňte ji v nastavení prohlížeče.",
+  "autofillLoginShortcutText": {
+    "message": "Klávesová zkratka pro automatické vyplnění přihlášení je $COMMAND$. Spravujte všechny zkratky v nastavení prohlížeče.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2774,7 +2879,7 @@
     }
   },
   "autofillShortcutTextSafari": {
-    "message": "Výchozí klávesová kombinace pro automatické vyplňování: $COMMAND$.",
+    "message": "Výchozí klávesová zkratka pro automatické vyplňování: $COMMAND$.",
     "placeholders": {
       "command": {
         "content": "$1",
@@ -2948,6 +3053,18 @@
       }
     }
   },
+  "singleFieldNeedsAttention": {
+    "message": "1 pole vyžaduje Vaši pozornost."
+  },
+  "multipleFieldsNeedAttention": {
+    "message": "$COUNT$ polí vyžaduje Vaši pozornost.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "selectPlaceholder": {
     "message": "-- Vybrat --"
   },
@@ -3016,11 +3133,11 @@
   },
   "passwordRepromptDisabledAutofillOnPageLoad": {
     "message": "Položky se žádostí o změnu hlavního hesla nemohou být automaticky vyplněny při načítání stránky. Automatické vyplnění při načítání stránky je vypnuto.",
-    "description": "Toast message for describing that master password re-prompt cannot be auto-filled on page load."
+    "description": "Toast message for describing that master password re-prompt cannot be autofilled on page load."
   },
   "autofillOnPageLoadSetToDefault": {
     "message": "Automatické vyplnění při načítání stránky bylo nastaveno na výchozí nastavení.",
-    "description": "Toast message for informing the user that auto-fill on page load has been set to the default setting."
+    "description": "Toast message for informing the user that autofill on page load has been set to the default setting."
   },
   "turnOffMasterPasswordPromptToEditField": {
     "message": "Pro úpravu tohoto pole vypněte požadavek na hlavní heslo",
@@ -3597,7 +3714,7 @@
   },
   "autofillTitle": {
     "message": "Automatické vyplnění - $ITEMNAME$",
-    "description": "Title for a button that auto-fills a login item.",
+    "description": "Title for a button that autofills a login item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3787,6 +3904,62 @@
   "authenticatorKey": {
     "message": "Ověřovací klíč"
   },
+  "autofillOptions": {
+    "message": "Volby automatického vyplňování"
+  },
+  "websiteUri": {
+    "message": "Webová stránka (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Webová stránka (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "websiteAdded": {
+    "message": "Webová stránka přidána"
+  },
+  "addWebsite": {
+    "message": "Přidat webovou stránku"
+  },
+  "deleteWebsite": {
+    "message": "Vymazat webovou stránku"
+  },
+  "defaultLabel": {
+    "message": "Výchozí ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Zobrazit detekci shody $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Skrýt detekci shody $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Automaticky vyplnit při načtení stránky?"
+  },
   "cardDetails": {
     "message": "Podrobnosti karty"
   },
@@ -3807,6 +3980,18 @@
   },
   "data": {
     "message": "Data"
+  },
+  "passkeys": {
+    "message": "Přístupové klíče",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Hesla",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Přihlásit se pomocí přístupového klíče",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
     "message": "Přiřadit"
@@ -4001,5 +4186,29 @@
   },
   "itemLocation": {
     "message": "Umístění položky"
+  },
+  "fileSends": {
+    "message": "Sends se soubory"
+  },
+  "textSends": {
+    "message": "Sends s texty"
+  },
+  "bitwardenNewLook": {
+    "message": "Bitwarden má nový vzhled!"
+  },
+  "bitwardenNewLookDesc": {
+    "message": "Je snazší a intuitivnější než kdy jindy automaticky vyplňovat a vyhledávat z karty trezor. Mrkněte se!"
+  },
+  "accountActions": {
+    "message": "Činnosti účtu"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Zobrazit počet návrhů automatického vyplňování přihlášení na ikoně rozšíření"
+  },
+  "systemDefault": {
+    "message": "Systémový výchozí"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "Na toto nastavení byly uplatněny požadavky podnikových zásad"
   }
 }
