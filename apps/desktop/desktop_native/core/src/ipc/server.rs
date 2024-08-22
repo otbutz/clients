@@ -1,13 +1,13 @@
 use std::{error::Error, path::Path, vec};
 
-use futures::{Sink, SinkExt, TryFutureExt};
+use futures::TryFutureExt;
 
 use anyhow::Result;
 use interprocess::local_socket::{tokio::prelude::*, GenericFilePath, ListenerOptions};
 use log::{error, info};
 use tokio::{
     io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt},
-    sync::broadcast::Receiver,
+    sync::{broadcast, mpsc},
 };
 use tokio_util::sync::CancellationToken;
 
@@ -29,7 +29,7 @@ pub enum MessageType {
 
 pub struct Server {
     cancel_token: CancellationToken,
-    server_to_clients_send: tokio::sync::broadcast::Sender<String>,
+    server_to_clients_send: broadcast::Sender<String>,
 }
 
 impl Server {
@@ -39,11 +39,10 @@ impl Server {
     ///
     /// - `name`: The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
     /// - `client_to_server_send`: This [`Sink`] will receive all the [`Message`]'s that the clients send to this server.
-    pub fn start<T>(path: &Path, client_to_server_send: T) -> Result<Self, Box<dyn Error>>
-    where
-        T: Sink<Message> + Unpin + Send + Clone + 'static,
-        <T as Sink<Message>>::Error: std::error::Error + 'static,
-    {
+    pub fn start(
+        path: &Path,
+        client_to_server_send: mpsc::Sender<Message>,
+    ) -> Result<Self, Box<dyn Error>> {
         // If the unix socket file already exists, we get an error when trying to bind to it. So we remove it first.
         // Any processes that were using the old socket should remain connected to it but any new connections will use the new socket.
         if !cfg!(windows) {
@@ -56,8 +55,7 @@ impl Server {
 
         // This broadcast channel is used for sending messages to all connected clients, and so the sender
         // will be stored in the server while the receiver will be cloned and passed to each client handler.
-        let (server_to_clients_send, server_to_clients_recv) =
-            tokio::sync::broadcast::channel::<String>(32);
+        let (server_to_clients_send, server_to_clients_recv) = broadcast::channel::<String>(32);
 
         // This cancellation token allows us to cleanly stop the server and all the spawned
         // tasks without having to wait on all the pending tasks finalizing first
@@ -103,15 +101,12 @@ impl Drop for Server {
     }
 }
 
-async fn listen_incoming<T>(
+async fn listen_incoming(
     listener: LocalSocketListener,
-    client_to_server_send: T,
-    server_to_clients_recv: Receiver<String>,
+    client_to_server_send: mpsc::Sender<Message>,
+    server_to_clients_recv: broadcast::Receiver<String>,
     cancel_token: CancellationToken,
-) where
-    T: Sink<Message> + Unpin + Send + Clone + 'static,
-    <T as Sink<Message>>::Error: std::error::Error + 'static,
-{
+) {
     // We use a simple incrementing ID for each client
     let mut next_client_id = 1_u32;
 
@@ -154,17 +149,13 @@ async fn listen_incoming<T>(
     }
 }
 
-async fn handle_connection<T>(
+async fn handle_connection(
     mut client_stream: impl AsyncRead + AsyncWrite + Unpin,
-    mut client_to_server_send: T,
-    mut server_to_clients_recv: Receiver<String>,
+    client_to_server_send: mpsc::Sender<Message>,
+    mut server_to_clients_recv: broadcast::Receiver<String>,
     cancel_token: CancellationToken,
     client_id: u32,
-) -> Result<(), Box<dyn Error>>
-where
-    T: Sink<Message> + Unpin,
-    <T as Sink<Message>>::Error: std::error::Error + 'static,
-{
+) -> Result<(), Box<dyn Error>> {
     client_to_server_send
         .send(Message {
             client_id,

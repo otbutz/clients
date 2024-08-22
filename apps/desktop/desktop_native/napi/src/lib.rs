@@ -196,7 +196,6 @@ pub mod ipc {
     use napi::threadsafe_function::{
         ErrorStrategy, ThreadsafeFunction, ThreadsafeFunctionCallMode,
     };
-    use tokio_util::sync::PollSender;
 
     #[napi(object)]
     pub struct IpcMessage {
@@ -258,7 +257,7 @@ pub mod ipc {
 
             let path = desktop_core::ipc::path(&name);
 
-            let server = desktop_core::ipc::server::Server::start(&path, PollSender::new(send))
+            let server = desktop_core::ipc::server::Server::start(&path, send)
                 .map_err(|e| napi::Error::from_reason(e.to_string()))?;
 
             Ok(IpcServer { server })
