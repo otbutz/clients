@@ -13,6 +13,8 @@ use tokio::{
     time::sleep,
 };
 
+use crate::ipc::NATIVE_MESSAGING_BUFFER_SIZE;
+
 pub async fn connect(
     path: PathBuf,
     send: tokio::sync::mpsc::Sender<String>,
@@ -53,7 +55,7 @@ async fn connect_inner(
 
     send.send("{\"command\":\"connected\"}".to_owned()).await?;
 
-    let mut buffer = vec![0; 8192];
+    let mut buffer = vec![0; NATIVE_MESSAGING_BUFFER_SIZE];
 
     // Listen to IPC messages
     loop {

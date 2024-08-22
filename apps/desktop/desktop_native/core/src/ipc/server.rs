@@ -11,6 +11,8 @@ use tokio::{
 };
 use tokio_util::sync::CancellationToken;
 
+use super::NATIVE_MESSAGING_BUFFER_SIZE;
+
 #[derive(Debug)]
 pub struct Message {
     pub client_id: u32,
@@ -169,7 +171,7 @@ where
         })
         .await?;
 
-    let mut buf = vec![0u8; 8192];
+    let mut buf = vec![0u8; NATIVE_MESSAGING_BUFFER_SIZE];
 
     loop {
         tokio::select! {

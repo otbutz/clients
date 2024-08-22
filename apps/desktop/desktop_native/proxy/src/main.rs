@@ -1,3 +1,4 @@
+use desktop_core::ipc::NATIVE_MESSAGING_BUFFER_SIZE;
 use futures::{SinkExt, StreamExt};
 use log::*;
 use tokio_util::codec::LengthDelimitedCodec;
@@ -60,11 +61,11 @@ async fn main() {
 
     // Create a new codec for reading and writing messages from stdin/stdout.
     let mut stdin = LengthDelimitedCodec::builder()
-        .max_frame_length(8192)
+        .max_frame_length(NATIVE_MESSAGING_BUFFER_SIZE)
         .native_endian()
         .new_read(tokio::io::stdin());
     let mut stdout = LengthDelimitedCodec::builder()
-        .max_frame_length(8192)
+        .max_frame_length(NATIVE_MESSAGING_BUFFER_SIZE)
         .native_endian()
         .new_write(tokio::io::stdout());
 
