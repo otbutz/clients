@@ -1,11 +1,14 @@
+import { ScrollingModule } from "@angular/cdk/scrolling";
 import { CommonModule } from "@angular/common";
 import { booleanAttribute, Component, EventEmitter, Input, Output } from "@angular/core";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import {
   BadgeModule,
+  BitItemHeight,
+  BitItemHeightClass,
   ButtonModule,
   IconButtonModule,
   ItemModule,
@@ -13,7 +16,7 @@ import {
   SectionHeaderComponent,
   TypographyModule,
 } from "@bitwarden/components";
-import { OrgIconDirective } from "@bitwarden/vault";
+import { OrgIconDirective, PasswordRepromptService } from "@bitwarden/vault";
 
 import { VaultPopupAutofillService } from "../../../services/vault-popup-autofill.service";
 import { PopupCipherView } from "../../../views/popup-cipher.view";
@@ -35,12 +38,16 @@ import { ItemMoreOptionsComponent } from "../item-more-options/item-more-options
     ItemCopyActionsComponent,
     ItemMoreOptionsComponent,
     OrgIconDirective,
+    ScrollingModule,
   ],
   selector: "app-vault-list-items-container",
   templateUrl: "vault-list-items-container.component.html",
   standalone: true,
 })
 export class VaultListItemsContainerComponent {
+  protected ItemHeightClass = BitItemHeightClass;
+  protected ItemHeight = BitItemHeight;
+
   /**
    * The list of ciphers to display.
    */
@@ -100,9 +107,22 @@ export class VaultListItemsContainerComponent {
   constructor(
     private i18nService: I18nService,
     private vaultPopupAutofillService: VaultPopupAutofillService,
+    private passwordRepromptService: PasswordRepromptService,
+    private router: Router,
   ) {}
 
   async doAutofill(cipher: PopupCipherView) {
     await this.vaultPopupAutofillService.doAutofill(cipher);
+  }
+
+  async onViewCipher(cipher: PopupCipherView) {
+    const repromptPassed = await this.passwordRepromptService.passwordRepromptCheck(cipher);
+    if (!repromptPassed) {
+      return;
+    }
+
+    await this.router.navigate(["/view-cipher"], {
+      queryParams: { cipherId: cipher.id, type: cipher.type },
+    });
   }
 }

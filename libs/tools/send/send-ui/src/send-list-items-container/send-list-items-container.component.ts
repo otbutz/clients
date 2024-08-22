@@ -48,6 +48,9 @@ export class SendListItemsContainerComponent {
   @Input()
   sends: SendView[] = [];
 
+  @Input()
+  headerText: string;
+
   constructor(
     protected dialogService: DialogService,
     protected environmentService: EnvironmentService,
@@ -82,9 +85,9 @@ export class SendListItemsContainerComponent {
     }
   }
 
-  async copySendLink(s: SendView) {
+  async copySendLink(send: SendView) {
     const env = await firstValueFrom(this.environmentService.environment$);
-    const link = env.getSendUrl() + s.accessId + "/" + s.urlB64Key;
+    const link = env.getSendUrl() + send.accessId + "/" + send.urlB64Key;
     this.platformUtilsService.copyToClipboard(link);
     this.toastService.showToast({
       variant: "success",

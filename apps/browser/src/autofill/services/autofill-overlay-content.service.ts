@@ -249,10 +249,6 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    * to the background script to add a new cipher.
    */
   async addNewVaultItem({ addNewCipherType }: AutofillExtensionMessage) {
-    if (!(await this.isInlineMenuListVisible())) {
-      return;
-    }
-
     const command = "autofillOverlayAddNewVaultItem";
 
     if (addNewCipherType === CipherType.Login) {
@@ -338,7 +334,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
 
     const indexOffset = direction === RedirectFocusDirection.Previous ? -1 : 1;
     const redirectFocusElement = this.focusableElements[focusedElementIndex + indexOffset];
-    redirectFocusElement?.focus();
+    if (redirectFocusElement) {
+      redirectFocusElement.focus();
+      return;
+    }
+
+    this.focusMostRecentlyFocusedField();
   }
 
   /**
@@ -675,7 +676,9 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     }
 
     if (elementIsSelectElement(formFieldElement)) {
-      await this.sendExtensionMessage("closeAutofillInlineMenu");
+      await this.sendExtensionMessage("closeAutofillInlineMenu", {
+        forceCloseInlineMenu: true,
+      });
       return;
     }
 
@@ -758,7 +761,11 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   private async updateMostRecentlyFocusedField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
   ) {
-    if (!formFieldElement || !elementIsFillableFormField(formFieldElement)) {
+    if (
+      !formFieldElement ||
+      !elementIsFillableFormField(formFieldElement) ||
+      elementIsSelectElement(formFieldElement)
+    ) {
       return;
     }
 
@@ -785,6 +792,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       focusedFieldRects: { width, height, top, left },
       filledByCipherType: autofillFieldData?.filledByCipherType,
       showInlineMenuAccountCreation: autofillFieldData?.showInlineMenuAccountCreation,
+      showPasskeys: !!autofillFieldData?.showPasskeys,
       accountCreationFieldType,
     };
 
@@ -867,6 +875,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       this.inlineMenuFieldQualificationService.isFieldForLoginForm(autofillFieldData, pageDetails)
     ) {
       autofillFieldData.filledByCipherType = CipherType.Login;
+      autofillFieldData.showPasskeys = autofillFieldData.autoCompleteType.includes("webauthn");
       return false;
     }
 
@@ -1418,10 +1427,10 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       focusedFieldRectsTop + this.focusedFieldData?.focusedFieldRects?.height;
     const viewportHeight = globalThis.innerHeight + globalThis.scrollY;
     return (
-      focusedFieldRectsTop &&
-      focusedFieldRectsTop > 0 &&
+      !globalThis.isNaN(focusedFieldRectsTop) &&
+      focusedFieldRectsTop >= 0 &&
       focusedFieldRectsTop < viewportHeight &&
-      focusedFieldRectsBottom < viewportHeight
+      focusedFieldRectsBottom <= viewportHeight
     );
   }
 

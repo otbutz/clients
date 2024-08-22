@@ -16,7 +16,7 @@ import { ConfigService } from "@bitwarden/common/platform/abstractions/config/co
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import {
   AdjustStorageDialogResult,
@@ -28,6 +28,7 @@ import {
 } from "../shared/offboarding-survey.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { ChangePlanDialogResultType, openChangePlanDialog } from "./change-plan-dialog.component";
 import { DownloadLicenceDialogComponent } from "./download-license.component";
 import { ManageBilling } from "./icons/manage-billing.icon";
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
@@ -66,6 +67,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     FeatureFlag.EnableTimeThreshold,
   );
 
+  protected EnableUpgradePasswordManagerSub$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableUpgradePasswordManagerSub,
+  );
+
   constructor(
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
@@ -77,6 +82,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private dialogService: DialogService,
     private configService: ConfigService,
     private providerService: ProviderService,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -373,7 +379,11 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
     try {
       await this.organizationApiService.reinstate(this.organizationId);
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("reinstated"));
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("reinstated"),
+      });
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.load();
@@ -383,7 +393,26 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   };
 
   async changePlan() {
-    this.showChangePlan = !this.showChangePlan;
+    const EnableUpgradePasswordManagerSub = await firstValueFrom(
+      this.EnableUpgradePasswordManagerSub$,
+    );
+    if (EnableUpgradePasswordManagerSub) {
+      const reference = openChangePlanDialog(this.dialogService, {
+        data: {
+          organizationId: this.organizationId,
+          subscription: this.sub,
+          productTierType: this.userOrg.productTierType,
+        },
+      });
+
+      const result = await lastValueFrom(reference.closed);
+
+      if (result === ChangePlanDialogResultType.Submitted) {
+        await this.load();
+      }
+    } else {
+      this.showChangePlan = !this.showChangePlan;
+    }
   }
 
   closeChangePlan() {
@@ -451,11 +480,11 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
     try {
       await this.apiService.deleteRemoveSponsorship(this.organizationId);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("removeSponsorshipSuccess"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("removeSponsorshipSuccess"),
+      });
       await this.load();
     } catch (e) {
       this.logService.error(e);

@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common";
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -23,6 +24,7 @@ import { EventType } from "@bitwarden/common/enums";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import {
@@ -37,6 +39,7 @@ import {
   SelectModule,
   ToastService,
 } from "@bitwarden/components";
+import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 import { VaultExportServiceAbstraction } from "@bitwarden/vault-export-core";
 
 import { EncryptedExportType } from "../enums/encrypted-export-type.enum";
@@ -63,7 +66,7 @@ import { ExportScopeCalloutComponent } from "./export-scope-callout.component";
     PasswordStrengthV2Component,
   ],
 })
-export class ExportComponent implements OnInit, OnDestroy {
+export class ExportComponent implements OnInit, OnDestroy, AfterViewInit {
   private _organizationId: string;
 
   get organizationId(): string {
@@ -156,6 +159,8 @@ export class ExportComponent implements OnInit, OnDestroy {
     protected toastService: ToastService,
     protected exportService: VaultExportServiceAbstraction,
     protected eventCollectionService: EventCollectionService,
+    protected passwordGenerationService: PasswordGenerationServiceAbstraction,
+    private platformUtilsService: PlatformUtilsService,
     private policyService: PolicyService,
     private logService: LogService,
     private formBuilder: UntypedFormBuilder,
@@ -270,6 +275,22 @@ export class ExportComponent implements OnInit, OnDestroy {
       this.logService.error(e);
     }
   }
+
+  generatePassword = async () => {
+    const [options] = await this.passwordGenerationService.getOptions();
+    this.filePasswordValue = await this.passwordGenerationService.generatePassword(options);
+    this.exportForm.get("filePassword").setValue(this.filePasswordValue);
+    this.exportForm.get("confirmFilePassword").setValue(this.filePasswordValue);
+  };
+
+  copyPasswordToClipboard = async () => {
+    this.platformUtilsService.copyToClipboard(this.filePasswordValue);
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("valueCopied", this.i18nService.t("password")),
+    });
+  };
 
   submit = async () => {
     if (this.isFileEncryptedExport && this.filePassword != this.confirmFilePassword) {

@@ -1,4 +1,8 @@
+import { ProviderOrganizationOrganizationDetailsResponse } from "@bitwarden/common/admin-console/models/response/provider/provider-organization.response";
 import { InvoicesResponse } from "@bitwarden/common/billing/models/response/invoices.response";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
+import { ToastService } from "@bitwarden/components";
 
 import { ApiService } from "../../abstractions/api.service";
 import { BillingApiServiceAbstraction } from "../../billing/abstractions";
@@ -8,8 +12,6 @@ import { SubscriptionCancellationRequest } from "../../billing/models/request/su
 import { TokenizedPaymentMethodRequest } from "../../billing/models/request/tokenized-payment-method.request";
 import { VerifyBankAccountRequest } from "../../billing/models/request/verify-bank-account.request";
 import { OrganizationBillingMetadataResponse } from "../../billing/models/response/organization-billing-metadata.response";
-import { OrganizationBillingStatusResponse } from "../../billing/models/response/organization-billing-status.response";
-import { OrganizationSubscriptionResponse } from "../../billing/models/response/organization-subscription.response";
 import { PaymentInformationResponse } from "../../billing/models/response/payment-information.response";
 import { PlanResponse } from "../../billing/models/response/plan.response";
 import { ListResponse } from "../../models/response/list.response";
@@ -18,7 +20,11 @@ import { UpdateClientOrganizationRequest } from "../models/request/update-client
 import { ProviderSubscriptionResponse } from "../models/response/provider-subscription-response";
 
 export class BillingApiService implements BillingApiServiceAbstraction {
-  constructor(private apiService: ApiService) {}
+  constructor(
+    private apiService: ApiService,
+    private logService: LogService,
+    private toastService: ToastService,
+  ) {}
 
   cancelOrganizationSubscription(
     organizationId: string,
@@ -37,7 +43,7 @@ export class BillingApiService implements BillingApiServiceAbstraction {
     return this.apiService.send("POST", "/accounts/cancel", request, true, false);
   }
 
-  createClientOrganization(
+  createProviderClientOrganization(
     providerId: string,
     request: CreateClientOrganizationRequest,
   ): Promise<void> {
@@ -65,17 +71,6 @@ export class BillingApiService implements BillingApiServiceAbstraction {
     return response as string;
   }
 
-  async getBillingStatus(id: string): Promise<OrganizationBillingStatusResponse> {
-    const r = await this.apiService.send(
-      "GET",
-      "/organizations/" + id + "/billing-status",
-      null,
-      true,
-      true,
-    );
-    return new OrganizationBillingStatusResponse(r);
-  }
-
   async getOrganizationBillingMetadata(
     organizationId: string,
   ): Promise<OrganizationBillingMetadataResponse> {
@@ -88,19 +83,6 @@ export class BillingApiService implements BillingApiServiceAbstraction {
     );
 
     return new OrganizationBillingMetadataResponse(r);
-  }
-
-  async getOrganizationSubscription(
-    organizationId: string,
-  ): Promise<OrganizationSubscriptionResponse> {
-    const r = await this.apiService.send(
-      "GET",
-      "/organizations/" + organizationId + "/subscription",
-      null,
-      true,
-      true,
-    );
-    return new OrganizationSubscriptionResponse(r);
   }
 
   async getPlans(): Promise<ListResponse<PlanResponse>> {
@@ -119,40 +101,55 @@ export class BillingApiService implements BillingApiServiceAbstraction {
     return response as string;
   }
 
+  async getProviderClientOrganizations(
+    providerId: string,
+  ): Promise<ListResponse<ProviderOrganizationOrganizationDetailsResponse>> {
+    const response = await this.execute(() =>
+      this.apiService.send("GET", "/providers/" + providerId + "/organizations", null, true, true),
+    );
+    return new ListResponse(response, ProviderOrganizationOrganizationDetailsResponse);
+  }
+
   async getProviderInvoices(providerId: string): Promise<InvoicesResponse> {
-    const response = await this.apiService.send(
-      "GET",
-      "/providers/" + providerId + "/billing/invoices",
-      null,
-      true,
-      true,
+    const response = await this.execute(() =>
+      this.apiService.send(
+        "GET",
+        "/providers/" + providerId + "/billing/invoices",
+        null,
+        true,
+        true,
+      ),
     );
     return new InvoicesResponse(response);
   }
 
   async getProviderPaymentInformation(providerId: string): Promise<PaymentInformationResponse> {
-    const response = await this.apiService.send(
-      "GET",
-      "/providers/" + providerId + "/billing/payment-information",
-      null,
-      true,
-      true,
+    const response = await this.execute(() =>
+      this.apiService.send(
+        "GET",
+        "/providers/" + providerId + "/billing/payment-information",
+        null,
+        true,
+        true,
+      ),
     );
     return new PaymentInformationResponse(response);
   }
 
   async getProviderSubscription(providerId: string): Promise<ProviderSubscriptionResponse> {
-    const r = await this.apiService.send(
-      "GET",
-      "/providers/" + providerId + "/billing/subscription",
-      null,
-      true,
-      true,
+    const response = await this.execute(() =>
+      this.apiService.send(
+        "GET",
+        "/providers/" + providerId + "/billing/subscription",
+        null,
+        true,
+        true,
+      ),
     );
-    return new ProviderSubscriptionResponse(r);
+    return new ProviderSubscriptionResponse(response);
   }
 
-  async updateClientOrganization(
+  async updateProviderClientOrganization(
     providerId: string,
     organizationId: string,
     request: UpdateClientOrganizationRequest,
@@ -197,5 +194,21 @@ export class BillingApiService implements BillingApiServiceAbstraction {
       true,
       false,
     );
+  }
+
+  private async execute(request: () => Promise<any>): Promise<any> {
+    try {
+      return await request();
+    } catch (error) {
+      this.logService.error(error);
+      if (error instanceof ErrorResponse) {
+        this.toastService.showToast({
+          variant: "error",
+          title: null,
+          message: error.getSingleMessage(),
+        });
+      }
+      throw error;
+    }
   }
 }

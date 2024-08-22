@@ -123,14 +123,12 @@ import {
   BillingApiServiceAbstraction,
   BraintreeServiceAbstraction,
   OrganizationBillingServiceAbstraction,
-  PaymentMethodWarningsServiceAbstraction,
   StripeServiceAbstraction,
 } from "@bitwarden/common/billing/abstractions";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { DefaultBillingAccountProfileStateService } from "@bitwarden/common/billing/services/account/billing-account-profile-state.service";
 import { BillingApiService } from "@bitwarden/common/billing/services/billing-api.service";
 import { OrganizationBillingService } from "@bitwarden/common/billing/services/organization-billing.service";
-import { PaymentMethodWarningsService } from "@bitwarden/common/billing/services/payment-method-warnings.service";
 import { BraintreeService } from "@bitwarden/common/billing/services/payment-processors/braintree.service";
 import { StripeService } from "@bitwarden/common/billing/services/payment-processors/stripe.service";
 import { AppIdService as AppIdServiceAbstraction } from "@bitwarden/common/platform/abstractions/app-id.service";
@@ -685,6 +683,7 @@ const safeProviders: SafeProvider[] = [
       BillingAccountProfileStateService,
       TokenServiceAbstraction,
       AuthServiceAbstraction,
+      StateProvider,
     ],
   }),
   safeProvider({
@@ -774,6 +773,7 @@ const safeProviders: SafeProvider[] = [
       CollectionServiceAbstraction,
       CryptoServiceAbstraction,
       PinServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -799,6 +799,7 @@ const safeProviders: SafeProvider[] = [
       CryptoFunctionServiceAbstraction,
       CollectionServiceAbstraction,
       KdfConfigServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -1119,7 +1120,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: GlobalStateProvider,
     useClass: DefaultGlobalStateProvider,
-    deps: [StorageServiceProvider],
+    deps: [StorageServiceProvider, LogService],
   }),
   safeProvider({
     provide: ActiveUserStateProvider,
@@ -1129,7 +1130,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: SingleUserStateProvider,
     useClass: DefaultSingleUserStateProvider,
-    deps: [StorageServiceProvider, StateEventRegistrarService],
+    deps: [StorageServiceProvider, StateEventRegistrarService, LogService],
   }),
   safeProvider({
     provide: DerivedStateProvider,
@@ -1196,12 +1197,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: BillingApiServiceAbstraction,
     useClass: BillingApiService,
-    deps: [ApiServiceAbstraction],
-  }),
-  safeProvider({
-    provide: PaymentMethodWarningsServiceAbstraction,
-    useClass: PaymentMethodWarningsService,
-    deps: [BillingApiServiceAbstraction, StateProvider],
+    deps: [ApiServiceAbstraction, LogService, ToastService],
   }),
   safeProvider({
     provide: BillingAccountProfileStateService,

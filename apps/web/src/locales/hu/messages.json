@@ -36,6 +36,9 @@
   "notes": {
     "message": "Jegyzetek"
   },
+  "note": {
+    "message": "Jegyzet"
+  },
   "customFields": {
     "message": "Egyedi mezők"
   },
@@ -47,6 +50,62 @@
   },
   "authenticatorKey": {
     "message": "Hitelesítő kulcs"
+  },
+  "autofillOptions": {
+    "message": "Automatikus kitöltés opciók"
+  },
+  "websiteUri": {
+    "message": "Webhely (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Webhely (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "websiteAdded": {
+    "message": "A webhely hozzáadásra került."
+  },
+  "addWebsite": {
+    "message": "Webhely hozzáadása"
+  },
+  "deleteWebsite": {
+    "message": "Webhely törlése"
+  },
+  "defaultLabel": {
+    "message": "Alapértelmezés ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "$WEBSITE$ egyező érzékelés megjelenítése",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "$WEBSITE$ egyező érzékelés elrejtése",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Automatikus kitöltés oldalbetöltésnél?"
   },
   "number": {
     "message": "Szám"
@@ -135,6 +194,12 @@
   "dr": {
     "message": "Dr."
   },
+  "cardExpiredTitle": {
+    "message": "Lejárt kártya"
+  },
+  "cardExpiredMessage": {
+    "message": "Ha megújítottuk, frissítsük a kártya adatait."
+  },
   "expirationMonth": {
     "message": "Lejárati hónap"
   },
@@ -152,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "A Bitwarden képes tárolni és kitölteni a kétlépcsős ellenőrző kódokat. Válasszuk a kamera ikont, hogy képernyőképet készítsünk a webhely hitelesítő QR kódjáról vagy másoljuk ki és illesszük be a kulcsot ebbe a mezőbe."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "További információ a hitelesítőkről"
   },
   "folder": {
     "message": "Mappa"
@@ -412,6 +480,15 @@
   },
   "viewItem": {
     "message": "Elem megtekintése"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ megtekintése",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Új",
@@ -1458,6 +1535,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "új elemet",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "új bejelentkezés",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " helyett.",
@@ -4099,8 +4180,9 @@
   "minimumNumberOfWords": {
     "message": "Szavak minimális száma"
   },
-  "defaultType": {
-    "message": "Alapértelmezett típus"
+  "overridePasswordTypePolicy": {
+    "message": "Jelszótípus",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Felhasználói előbeállítás"
@@ -4387,7 +4469,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copyLink": {
-    "message": "Copy link"
+    "message": "Hivatkozás másolása"
   },
   "copySendLink": {
     "message": "Send hivatkozás másolása",
@@ -5276,6 +5358,21 @@
   "updateWeakMasterPasswordWarning": {
     "message": "A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak."
   },
+  "automaticAppLogin": {
+    "message": "A felhasználók automatikus bejelentkezése az engedélyezett alkalmazásokhoz"
+  },
+  "automaticAppLoginDesc": {
+    "message": "A bejelentkezési űrlapok automatikusan kitöltésre és elküldésre kerülnek a konfigurált azonosság szolgáltatótól indított alkalmazásokhoz."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Azonosság szolgáltató kiszolgáló"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Adjuk meg az azonosság szolgáltató kiszolgáló webcímét. Több webcímet vesszővel elválasztva adjunk meg."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "A szervezete frissítette a visszafejtési beállításokat. Állítsunk be egy mestarjelszót a széf eléréséhez."
+  },
   "maximumVaultTimeout": {
     "message": "Széf időkifutás"
   },
@@ -5999,6 +6096,26 @@
   },
   "randomWord": {
     "message": "Véletlenszerű szó"
+  },
+  "usernameGenerator": {
+    "message": "Felhasználónév generátor"
+  },
+  "useThisPassword": {
+    "message": "Jelszó használata"
+  },
+  "useThisUsername": {
+    "message": "Felhasználónév használata"
+  },
+  "securePasswordGenerated": {
+    "message": "A biztonságos jelszó generálásra került! Ne felejtsük el frissíteni a jelszót a webhelyen is."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Generátor használata",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "erős egyedi jelszó létrehozásához",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Szolgáltatás"
@@ -7628,6 +7745,9 @@
   "requestedDeviceApproval": {
     "message": "A kért eszköz jóváhagyása."
   },
+  "tdeOffboardingPasswordSet": {
+    "message": "A felhasználó beállított egy mesterjelszót a TDE kilptetés során."
+  },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
     "placeholders": {
@@ -8024,6 +8144,9 @@
       }
     }
   },
+  "addField": {
+    "message": "Mező hozzáadása"
+  },
   "items": {
     "message": "Elemek"
   },
@@ -8414,6 +8537,51 @@
   "manageBillingFromProviderPortalMessage": {
     "message": "A számlázás kezelése a szolgáltatói portálon keresztül"
   },
+  "startYour7DayFreeTrialOfBitwarden": {
+    "message": "A Bitwarden 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenForTeams": {
+    "message": "A Bitwarden for Teams 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenForFamilies": {
+    "message": "A Bitwarden for Families 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenForEnterprise": {
+    "message": "A Bitwarden for Enterprise 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManager": {
+    "message": "A Bitwarden Secrets Manager 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForTeams": {
+    "message": "A Bitwarden Secrets Manager for Teams 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForFamilies": {
+    "message": "A Bitwarden Secrets Manager for Families 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenSecretsManagerForEnterprise": {
+    "message": "A Bitwarden Secrets Manager for Enterprise 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManager": {
+    "message": "A Bitwarden Password Manager 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForTeams": {
+    "message": "A Bitwarden Password Manager for Teams 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForFamilies": {
+    "message": "A Bitwarden Password Manager for Families 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "startYour7DayFreeTrialOfBitwardenPasswordManagerForEnterprise": {
+    "message": "A Bitwarden password Manager for Enterprise 7 napos ingyenes próbaverziójának elindítása"
+  },
+  "enterTeamsOrgInfo": {
+    "message": "Adjuk meg a Teams szervezet információit."
+  },
+  "enterFamiliesOrgInfo": {
+    "message": "Adjuk meg a Családi szervezet információit."
+  },
+  "enterEnterpriseOrgInfo": {
+    "message": "Adjuk meg a Vállalat szervezet információit."
+  },
   "viewItemsIn": {
     "message": "$NAME$ elemek megtekintése",
     "description": "Button to view the contents of a folder or collection",
@@ -8693,5 +8861,98 @@
   },
   "purchasedSeatsRemoved": {
     "message": "megvásárolt hely eltávolításra került."
+  },
+  "fileSends": {
+    "message": "Fájl küldés"
+  },
+  "textSends": {
+    "message": "Szöveg küldés"
+  },
+  "includesXMembers": {
+    "message": "$COUNT$ member részére",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "costPerMember": {
+    "message": "$COST$",
+    "placeholders": {
+      "cost": {
+        "content": "$1",
+        "example": "$3"
+      }
+    }
+  },
+  "optionalOnPremHosting": {
+    "message": "Választható helyszín tárhely"
+  },
+  "upgradeFreeOrganization": {
+    "message": "$NAME$ szervezet áttérés ",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Teams"
+      }
+    }
+  },
+  "includeSsoAuthenticationMessage": {
+    "message": "SSO hitelesítés"
+  },
+  "familiesPlanInvLimitReachedManageBilling": {
+    "message": "A családi szervezeteknek legfeljebb $SEATCOUNT$ tagja lehet. Térjünk át fizetős csomagra további tagok meghívásához.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "familiesPlanInvLimitReachedNoManageBilling": {
+    "message": "A családi szervezeteknek legfeljebb $SEATCOUNT$ tagja lehet. Az áttéréshez forduljunk a szervezet tulajdonosához.",
+    "placeholders": {
+      "seatcount": {
+        "content": "$1",
+        "example": "6"
+      }
+    }
+  },
+  "upgradePlan": {
+    "message": "Térjünk át más csomagra, hogy több tagot hívhassunk meg és hozzáférjünk a Bitwarden további funkcióihoz."
+  },
+  "upgradeDiscount": {
+    "message": "$AMOUNT$% megtakarítás",
+    "placeholders": {
+      "amount": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "upgradeEnterpriseMessage": {
+    "message": "Fejlett képességek nagyobb vállalkozások számára"
+  },
+  "upgradeTeamsMessage": {
+    "message": "Hatékony biztonságot kereső vállalkozások"
+  },
+  "teamsInviteMessage": {
+    "message": "Korlátlan számú tagok meghívása"
+  },
+  "accessToCreateGroups": {
+    "message": "Hozzáférés csoportok létrehozásához"
+  },
+  "syncGroupsAndUsersFromDirectory": {
+    "message": "A felhasználók és csoportok szinkronizálása könyvtárból"
+  },
+  "upgradeFamilyMessage": {
+    "message": "Mggosztáás családtagokkal és ismerősökkel"
+  },
+  "accessToPremiumFeatures": {
+    "message": "Prémium funkciók elérése"
+  },
+  "additionalStorageGbMessage": {
+    "message": "GB kiegészítő tároló"
   }
 }
