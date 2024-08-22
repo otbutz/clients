@@ -38,7 +38,7 @@ impl Server {
     /// # Parameters
     ///
     /// - `name`: The endpoint name to listen on. This name uniquely identifies the IPC connection and must be the same for both the server and client.
-    /// - `client_to_server_send`: This [`Sink`] will receive all the [`Message`]'s that the clients send to this server.
+    /// - `client_to_server_send`: This [`mpsc::Sender<Message>`] will receive all the [`Message`]'s that the clients send to this server.
     pub fn start(
         path: &Path,
         client_to_server_send: mpsc::Sender<Message>,
