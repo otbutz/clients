@@ -198,7 +198,7 @@ pub mod ipc {
     };
     use tokio_util::sync::PollSender;
 
-    #[napi]
+    #[napi(object)]
     pub struct IpcMessage {
         pub client_id: u32,
         pub kind: IpcMessageType,

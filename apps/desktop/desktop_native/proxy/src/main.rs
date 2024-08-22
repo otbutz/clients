@@ -1,12 +1,13 @@
+use std::path::Path;
+
 use desktop_core::ipc::NATIVE_MESSAGING_BUFFER_SIZE;
 use futures::{SinkExt, StreamExt};
 use log::*;
 use tokio_util::codec::LengthDelimitedCodec;
 
-fn init_logging() {
+fn init_logging(log_path: &Path, level: log::LevelFilter) {
     use simplelog::{ColorChoice, CombinedLogger, Config, SharedLogger, TermLogger, TerminalMode};
 
-    let level = LevelFilter::Info;
     let config = Config::default();
 
     let mut loggers: Vec<Box<dyn SharedLogger>> = Vec::new();
@@ -17,15 +18,12 @@ fn init_logging() {
         ColorChoice::Auto,
     ));
 
-    #[cfg(debug_assertions)]
-    {
-        match std::fs::File::create(std::env::temp_dir().join("bitwarden_desktop_proxy.log")) {
-            Ok(file) => {
-                loggers.push(simplelog::WriteLogger::new(level, config, file));
-            }
-            Err(e) => {
-                eprintln!("Can't create file: {}", e);
-            }
+    match std::fs::File::create(log_path) {
+        Ok(file) => {
+            loggers.push(simplelog::WriteLogger::new(level, config, file));
+        }
+        Err(e) => {
+            eprintln!("Can't create file: {}", e);
         }
     }
 
@@ -48,16 +46,42 @@ fn init_logging() {
 ///
 #[tokio::main(flavor = "current_thread")]
 async fn main() {
-    init_logging();
+    let sock_path = desktop_core::ipc::path("bitwarden");
+
+    let log_path = {
+        let mut path = sock_path.clone();
+        path.set_extension("bitwarden.log");
+        path
+    };
+
+    init_logging(&log_path, LevelFilter::Info);
+
     info!("Starting Bitwarden IPC Proxy.");
+
+    /*
+    Different browsers send different arguments when the app starts:
+
+    Firefox:
+        - The complete path to the app manifest. (in the form `/Users/<user>/Library/.../Mozilla/NativeMessagingHosts/com.8bit.bitwarden.json`)
+        - (in Firefox 55+) the ID (as given in the manifest.json) of the add-on that started it (in the form `{[UUID]}`).
+
+    Chrome on Windows:
+        - Origin of the extension that started it (in the form `chrome-extension://[ID]`).
+        - Handle to the Chrome native window that started the app.
+
+    Chrome on Linux and Mac:
+        Origin of the extension that started it (in the form `chrome-extension://[ID]`).
+    */
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    info!("Process args: {:?}", args);
 
     // Setup two channels, one for sending messages to the desktop application (`out`) and one for receiving messages from the desktop application (`in`)
     let (in_send, in_recv) = tokio::sync::mpsc::channel(32);
     let (out_send, mut out_recv) = tokio::sync::mpsc::channel(32);
 
-    let path = desktop_core::ipc::path("bitwarden");
-
-    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(path, out_send, in_recv));
+    let mut handle = tokio::spawn(desktop_core::ipc::client::connect(
+        sock_path, out_send, in_recv,
+    ));
 
     // Create a new codec for reading and writing messages from stdin/stdout.
     let mut stdin = LengthDelimitedCodec::builder()

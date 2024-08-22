@@ -53,15 +53,15 @@ export namespace powermonitors {
   export function isLockMonitorAvailable(): Promise<boolean>
 }
 export namespace ipc {
+  export interface IpcMessage {
+    clientId: number
+    kind: IpcMessageType
+    message: string
+  }
   export const enum IpcMessageType {
     Connected = 0,
     Disconnected = 1,
     Message = 2
-  }
-  export class IpcMessage {
-    clientId: number
-    kind: IpcMessageType
-    message: string
   }
   export class IpcServer {
     /**

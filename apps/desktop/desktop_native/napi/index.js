@@ -206,11 +206,4 @@ if (!nativeBinding) {
   throw new Error(`Failed to load native binding`)
 }
 
-const { passwords, biometrics, clipboards, processisolations, powermonitors, ipc } = nativeBinding
-
-module.exports.passwords = passwords
-module.exports.biometrics = biometrics
-module.exports.clipboards = clipboards
-module.exports.processisolations = processisolations
-module.exports.powermonitors = powermonitors
-module.exports.ipc = ipc
+module.exports = nativeBinding
