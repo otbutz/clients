@@ -24,6 +24,7 @@ import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.servi
 import { TotpService } from "@bitwarden/common/vault/abstractions/totp.service";
 import { FieldType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CardView } from "@bitwarden/common/vault/models/view/card.view";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import { FieldView } from "@bitwarden/common/vault/models/view/field.view";
 import { IdentityView } from "@bitwarden/common/vault/models/view/identity.view";
@@ -47,6 +48,7 @@ import {
 } from "./abstractions/autofill.service";
 import {
   AutoFillConstants,
+  CardExpiryDateFormat,
   CreditCardAutoFillConstants,
   IdentityAutoFillConstants,
 } from "./autofill-constants";
@@ -981,6 +983,7 @@ export default class AutofillService implements AutofillServiceInterface {
     this.makeScriptAction(fillScript, card, fillFields, filledFields, "code");
     this.makeScriptAction(fillScript, card, fillFields, filledFields, "brand");
 
+    // There is an expiration month field and the cipher has an expiration month value
     if (fillFields.expMonth && AutofillService.hasValue(card.expMonth)) {
       let expMonth: string = card.expMonth;
 
@@ -1019,6 +1022,7 @@ export default class AutofillService implements AutofillServiceInterface {
       AutofillService.fillByOpid(fillScript, fillFields.expMonth, expMonth);
     }
 
+    // There is an expiration year field and the cipher has an expiration year value
     if (fillFields.expYear && AutofillService.hasValue(card.expYear)) {
       let expYear: string = card.expYear;
       if (fillFields.expYear.selectInfo && fillFields.expYear.selectInfo.options) {
@@ -1065,11 +1069,28 @@ export default class AutofillService implements AutofillServiceInterface {
       AutofillService.fillByOpid(fillScript, fillFields.expYear, expYear);
     }
 
+    // There is a single expiry date field (combined values) and the cipher has both expiration month and year
     if (
       fillFields.exp &&
       AutofillService.hasValue(card.expMonth) &&
       AutofillService.hasValue(card.expYear)
     ) {
+      // @TODO replace with actual feature flag
+      const featureFlagEnabledPlaceholder = false;
+
+      if (featureFlagEnabledPlaceholder) {
+        const combinedExpiryFillValue = this.generateCombinedExpiryValue(card, fillFields.exp);
+
+        this.makeScriptActionWithValue(
+          fillScript,
+          combinedExpiryFillValue,
+          fillFields.exp,
+          filledFields,
+        );
+
+        return fillScript;
+      }
+
       const fullMonth = ("0" + card.expMonth).slice(-2);
 
       let fullYear: string = card.expYear;
@@ -1084,6 +1105,7 @@ export default class AutofillService implements AutofillServiceInterface {
       let exp: string = null;
       for (let i = 0; i < CreditCardAutoFillConstants.MonthAbbr.length; i++) {
         if (
+          // mm/yyyy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] +
@@ -1093,6 +1115,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + "/" + fullYear;
         } else if (
+          // mm/yy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] +
@@ -1103,6 +1126,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + "/" + partYear;
         } else if (
+          // yyyy/mm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrLong[i] +
@@ -1112,6 +1136,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullYear + "/" + fullMonth;
         } else if (
+          // yy/mm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrShort[i] +
@@ -1122,6 +1147,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = partYear + "/" + fullMonth;
         } else if (
+          // mm-yyyy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] +
@@ -1131,6 +1157,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + "-" + fullYear;
         } else if (
+          // mm-yy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] +
@@ -1141,6 +1168,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + "-" + partYear;
         } else if (
+          // yyyy-mm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrLong[i] +
@@ -1150,6 +1178,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullYear + "-" + fullMonth;
         } else if (
+          // yy-mm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrShort[i] +
@@ -1160,6 +1189,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = partYear + "-" + fullMonth;
         } else if (
+          // yyyymm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrLong[i] + CreditCardAutoFillConstants.MonthAbbr[i],
@@ -1167,6 +1197,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullYear + fullMonth;
         } else if (
+          // yymm
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.YearAbbrShort[i] + CreditCardAutoFillConstants.MonthAbbr[i],
@@ -1175,6 +1206,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = partYear + fullMonth;
         } else if (
+          // mmyyyy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrLong[i],
@@ -1182,6 +1214,7 @@ export default class AutofillService implements AutofillServiceInterface {
         ) {
           exp = fullMonth + fullYear;
         } else if (
+          // mmyy
           this.fieldAttrsContain(
             fillFields.exp,
             CreditCardAutoFillConstants.MonthAbbr[i] + CreditCardAutoFillConstants.YearAbbrShort[i],
@@ -1196,6 +1229,7 @@ export default class AutofillService implements AutofillServiceInterface {
         }
       }
 
+      // If none of the previous cases applied, set as default
       if (exp == null) {
         exp = fullYear + "-" + fullMonth;
       }
@@ -1241,28 +1275,157 @@ export default class AutofillService implements AutofillServiceInterface {
    * Used when handling autofill on credit card fields. Determines whether
    * the field has an attribute that matches the given value.
    * @param {AutofillField} field
-   * @param {string} containsVal
+   * @param {string} containsValue
    * @returns {boolean}
    * @private
    */
-  private fieldAttrsContain(field: AutofillField, containsVal: string): boolean {
+  private fieldAttrsContain(field: AutofillField, containsValue: string): boolean {
     if (!field) {
       return false;
     }
 
-    let doesContain = false;
-    CreditCardAutoFillConstants.CardAttributesExtended.forEach((attr) => {
-      // eslint-disable-next-line
-      if (doesContain || !field.hasOwnProperty(attr) || !field[attr]) {
+    let doesContainValue = false;
+    CreditCardAutoFillConstants.CardAttributesExtended.forEach((attributeName) => {
+      // eslint-disable-next-line no-prototype-builtins
+      if (doesContainValue || !field.hasOwnProperty(attributeName) || !field[attributeName]) {
         return;
       }
 
-      let val = field[attr];
-      val = val.replace(/ /g, "").toLowerCase();
-      doesContain = val.indexOf(containsVal) > -1;
+      let fieldValue = field[attributeName];
+      fieldValue = fieldValue.replace(/ /g, "").toLowerCase();
+      doesContainValue = fieldValue.indexOf(containsValue) > -1;
     });
 
-    return doesContain;
+    return doesContainValue;
+  }
+
+  /**
+   * Returns a string value representation of the combined card expiration month and year values
+   * in a format matching discovered guidance within the field attributes (typically provided for users).
+   * @private
+   * @param {CardView} cardCipher
+   * @param {AutofillField} field
+   * @returns {string}
+   * @memberof AutofillService
+   */
+  private generateCombinedExpiryValue(cardCipher: CardView, field: AutofillField): string {
+    // Expiry format options
+    let useMonthPadding = true;
+    let useYearFull = false;
+    let delimiter = "-";
+    let orderByYear = false;
+
+    // Note, we construct the output rather than doing string replacement against the format guidance pattern to avoid edge cases that would output invalid values
+    const [
+      // The guidance parsed from the field properties regarding expiry format
+      expectedExpiryDateFormat,
+      // The (localized) date pattern set that was used to parse the expiry format guidance
+      expiryDateFormatPatterns,
+    ] = this.getExpectedExpiryDateFormat(field);
+
+    // @TODO if expectedExpiryDateFormat is falsey, and there is a `pattern` attribute, cycle through generated formatted values, checking against the provided regex pattern
+    if (expectedExpiryDateFormat) {
+      const expiryDateDelimitersPattern =
+        "\\" + CreditCardAutoFillConstants.CardExpiryDateDelimiters.join("\\");
+
+      // assign the delimiter from the expected format string
+      delimiter =
+        expectedExpiryDateFormat.match(new RegExp(`[${expiryDateDelimitersPattern}]`, "g"))?.[0] ||
+        "";
+
+      // check if the expected format starts with a month form
+      if (expectedExpiryDateFormat.indexOf(expiryDateFormatPatterns.MonthShort + delimiter) === 0) {
+        useMonthPadding = false;
+        orderByYear = false;
+      } else if (
+        expectedExpiryDateFormat.indexOf(expiryDateFormatPatterns.Month + delimiter) === 0
+      ) {
+        useMonthPadding = true;
+        orderByYear = false;
+      } else {
+        orderByYear = true;
+
+        // check on both sides of month pattern to avoid short form matching against long form
+        const endsWithShortMonthPattern = new RegExp(
+          `\\${delimiter}${expiryDateFormatPatterns.MonthShort}$`,
+          "i",
+        );
+        useMonthPadding = !endsWithShortMonthPattern.test(expectedExpiryDateFormat);
+      }
+
+      // check on both sides of year pattern to avoid short form matching against long form
+      const startsWithShortYearPattern = `^${expiryDateFormatPatterns.YearShort}\\${delimiter}`;
+      const endsWithShortYearPattern = `\\${delimiter}${expiryDateFormatPatterns.YearShort}$`;
+      const containsShortYearPattern = new RegExp(
+        `${startsWithShortYearPattern}|${endsWithShortYearPattern}`,
+        "i",
+      );
+
+      useYearFull = !containsShortYearPattern.test(expectedExpiryDateFormat);
+    }
+
+    const month = useMonthPadding ? ("0" + cardCipher.expMonth).slice(-2) : cardCipher.expMonth;
+    const year = useYearFull ? cardCipher.expYear : cardCipher.expYear.slice(-2);
+
+    const combinedExpiryFillValue = (orderByYear ? [year, month] : [month, year]).join(delimiter);
+
+    return combinedExpiryFillValue;
+  }
+
+  /**
+   * Returns a string value representation of discovered guidance for a combined month and year expiration value from the field attributes
+   * @private
+   * @param {AutofillField} field
+   * @returns {([string | null, CardExpiryDateFormat | null])}
+   * @memberof AutofillService
+   */
+  private getExpectedExpiryDateFormat(
+    field: AutofillField,
+  ): [string | null, CardExpiryDateFormat | null] {
+    let expectedDateFormat = null;
+    let dateFormatPatterns = null;
+
+    const expiryDateDelimitersPattern =
+      "\\" + CreditCardAutoFillConstants.CardExpiryDateDelimiters.join("\\");
+
+    CreditCardAutoFillConstants.CardExpiryDateFormats.find((dateFormat) => {
+      dateFormatPatterns = dateFormat;
+
+      const { Month, MonthShort, YearShort, Year } = dateFormat;
+
+      // Non-exhaustive coverage of field guidances. Some uncovered edge cases: ". " delimiter, space-delimited delimiters ("mm / yyyy").
+      // We should consider if added whitespace is for improved readability of user-guidance or actually desired in the filled value.
+      // e.g. "/((mm|m)[\/\-\.\ ]{0,1}(yyyy|yy))|((yyyy|yy)[\/\-\.\ ]{0,1}(mm|m))/gi"
+      const dateFormatPattern = new RegExp(
+        `((${Month}|${MonthShort})[${expiryDateDelimitersPattern}]{0,1}(${Year}|${YearShort}))|((${Year}|${YearShort})[${expiryDateDelimitersPattern}]{0,1}(${Month}|${MonthShort}))`,
+        "gi",
+      );
+
+      return CreditCardAutoFillConstants.CardAttributesExtended.find((attributeName) => {
+        const fieldAttributeValue = field[attributeName];
+
+        const fieldAttributeMatch = fieldAttributeValue?.match(dateFormatPattern);
+        // break find as soon as a match is found
+
+        if (fieldAttributeMatch?.length) {
+          expectedDateFormat = fieldAttributeMatch[0];
+
+          // remove any irrelevant characters
+          const irrelevantExpiryCharactersPattern = new RegExp(
+            // "or digits" to ensure numbers are removed from guidance pattern, which aren't covered by ^\w
+            `[^\\w${expiryDateDelimitersPattern}]|[\\d]`,
+            "gi",
+          );
+          expectedDateFormat.replaceAll(irrelevantExpiryCharactersPattern, "");
+
+          return true;
+        }
+
+        return false;
+      });
+    });
+
+    return [expectedDateFormat, dateFormatPatterns];
   }
 
   /**
