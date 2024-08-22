@@ -112,9 +112,9 @@ const plugins = [
     chunks: ["connectors/sso"],
   }),
   new HtmlWebpackPlugin({
-    template: "./src/connectors/signup-redirect.html",
-    filename: "signup-redirect-connector.html",
-    chunks: ["connectors/signup-redirect"],
+    template: "./src/connectors/redirect.html",
+    filename: "redirect-connector.html",
+    chunks: ["connectors/redirect"],
   }),
   new HtmlWebpackPlugin({
     template: "./src/connectors/captcha.html",
@@ -330,7 +330,7 @@ const webpackConfig = {
     "connectors/sso": "./src/connectors/sso.ts",
     "connectors/captcha": "./src/connectors/captcha.ts",
     "connectors/duo-redirect": "./src/connectors/duo-redirect.ts",
-    "connectors/signup-redirect": "./src/connectors/signup-redirect.ts",
+    "connectors/redirect": "./src/connectors/redirect.ts",
     styles: ["./src/scss/styles.scss", "./src/scss/tailwind.css"],
     theme_head: "./src/theme.ts",
   },
