@@ -60,7 +60,7 @@ async fn connect_inner(
     // Listen to IPC messages
     loop {
         tokio::select! {
-            // Send messages to the IPC server
+            // Forward messages to the IPC server
             msg = recv.recv() => {
                 match msg {
                     Some(msg) => {
@@ -73,7 +73,7 @@ async fn connect_inner(
                 }
             },
 
-            // Read messages from the IPC server
+            // Forward messages from the IPC server
             res = conn.read(&mut buffer[..]) => {
                 match res {
                     Err(e) => {
