@@ -49,11 +49,17 @@ async function run(context) {
 }
 
 function getIdentities(csc_name) {
-  return child_process
-    .execSync("/usr/bin/security find-identity -v")
-    .toString()
+  const ids = child_process
+    .execSync("/usr/bin/security find-identity -v -p codesigning")
+    .toString();
+
+  console.log("CSC Name:", csc_name);
+  console.log("Identities:");
+  console.log(ids);
+
+  return ids
     .split("\n")
-    .filter((line) => line.includes("Apple Development:") && line.includes(csc_name))
+    .filter((line) => line.includes(csc_name))
     .map((line) => {
       const split = line.trim().split(" ");
       const id = split[1];
