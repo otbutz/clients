@@ -125,9 +125,13 @@ import {
   OrganizationBillingServiceAbstraction,
   StripeServiceAbstraction,
 } from "@bitwarden/common/billing/abstractions";
+import { AccountBillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/account/account-billing-api.service.abstraction";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
+import { OrganizationBillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/organizations/organization-billing-api.service.abstraction";
+import { AccountBillingApiService } from "@bitwarden/common/billing/services/account/account-billing-api.service";
 import { DefaultBillingAccountProfileStateService } from "@bitwarden/common/billing/services/account/billing-account-profile-state.service";
 import { BillingApiService } from "@bitwarden/common/billing/services/billing-api.service";
+import { OrganizationBillingApiService } from "@bitwarden/common/billing/services/organization/organization-billing-api.service";
 import { OrganizationBillingService } from "@bitwarden/common/billing/services/organization-billing.service";
 import { BraintreeService } from "@bitwarden/common/billing/services/payment-processors/braintree.service";
 import { StripeService } from "@bitwarden/common/billing/services/payment-processors/stripe.service";
@@ -975,6 +979,16 @@ const safeProviders: SafeProvider[] = [
     // rather than updating the OrganizationService directly. Instead OrganizationService
     // subscribes to sync notifications and will update itself based on that.
     deps: [ApiServiceAbstraction, SyncService],
+  }),
+  safeProvider({
+    provide: OrganizationBillingApiServiceAbstraction,
+    useClass: OrganizationBillingApiService,
+    deps: [ApiServiceAbstraction],
+  }),
+  safeProvider({
+    provide: AccountBillingApiServiceAbstraction,
+    useClass: AccountBillingApiService,
+    deps: [ApiServiceAbstraction],
   }),
   safeProvider({
     provide: DefaultConfigService,
