@@ -1076,9 +1076,9 @@ export default class AutofillService implements AutofillServiceInterface {
       AutofillService.hasValue(card.expYear)
     ) {
       // @TODO replace with actual feature flag
-      const featureFlagEnabledPlaceholder = false;
+      const enableNewCombinedCardExpiryAutofill = false;
 
-      if (featureFlagEnabledPlaceholder) {
+      if (enableNewCombinedCardExpiryAutofill) {
         const combinedExpiryFillValue = this.generateCombinedExpiryValue(card, fillFields.exp);
 
         this.makeScriptActionWithValue(
@@ -1309,13 +1309,33 @@ export default class AutofillService implements AutofillServiceInterface {
    * @memberof AutofillService
    */
   private generateCombinedExpiryValue(cardCipher: CardView, field: AutofillField): string {
+    /*
+      Some expectations of the passed stored card cipher view:
+
+      - At the time of writing, the stored card expiry year value (`expYear`)
+        can be any arbitrary string (no format validation). We may attempt some format
+        normalization here, but expect the user to have entered a string of integers
+        with a length of 2 or 4
+
+      - the `expiration` property cannot be used for autofill as it is an opinionated
+        format
+
+      - `expMonth` a stringified integer stored with no zero-padding and is not
+        zero-indexed (e.g. January is "1", not "01" or 0)
+    */
+
     // Expiry format options
     let useMonthPadding = true;
     let useYearFull = false;
     let delimiter = "-";
     let orderByYear = false;
 
-    // Note, we construct the output rather than doing string replacement against the format guidance pattern to avoid edge cases that would output invalid values
+    // Because users are allowed to store truncated years, we need to make assumptions
+    // about the full year format when called for
+    const fallbackYearLongformPrefix = "20";
+
+    // Note, we construct the output rather than doing string replacement against the
+    // format guidance pattern to avoid edge cases that would output invalid values
     const [
       // The guidance parsed from the field properties regarding expiry format
       expectedExpiryDateFormat,
@@ -1323,8 +1343,9 @@ export default class AutofillService implements AutofillServiceInterface {
       expiryDateFormatPatterns,
     ] = this.getExpectedExpiryDateFormat(field);
 
-    // @TODO if expectedExpiryDateFormat is falsey, and there is a `pattern` attribute, cycle through generated formatted values, checking against the provided regex pattern
     if (expectedExpiryDateFormat) {
+      const { Month, MonthShort, Year } = expiryDateFormatPatterns;
+
       const expiryDateDelimitersPattern =
         "\\" + CreditCardAutoFillConstants.CardExpiryDateDelimiters.join("\\");
 
@@ -1334,38 +1355,29 @@ export default class AutofillService implements AutofillServiceInterface {
         "";
 
       // check if the expected format starts with a month form
-      if (expectedExpiryDateFormat.indexOf(expiryDateFormatPatterns.MonthShort + delimiter) === 0) {
-        useMonthPadding = false;
-        orderByYear = false;
-      } else if (
-        expectedExpiryDateFormat.indexOf(expiryDateFormatPatterns.Month + delimiter) === 0
-      ) {
+      // order matters here; check long form first, since short form will match against long
+      if (expectedExpiryDateFormat.indexOf(Month + delimiter) === 0) {
         useMonthPadding = true;
+        orderByYear = false;
+      } else if (expectedExpiryDateFormat.indexOf(MonthShort + delimiter) === 0) {
+        useMonthPadding = false;
         orderByYear = false;
       } else {
         orderByYear = true;
 
-        // check on both sides of month pattern to avoid short form matching against long form
-        const endsWithShortMonthPattern = new RegExp(
-          `\\${delimiter}${expiryDateFormatPatterns.MonthShort}$`,
-          "i",
-        );
-        useMonthPadding = !endsWithShortMonthPattern.test(expectedExpiryDateFormat);
+        // short form can match against long form, but long won't match against short
+        const containsLongMonthPattern = new RegExp(`${Month}`, "i");
+        useMonthPadding = containsLongMonthPattern.test(expectedExpiryDateFormat);
       }
 
-      // check on both sides of year pattern to avoid short form matching against long form
-      const startsWithShortYearPattern = `^${expiryDateFormatPatterns.YearShort}\\${delimiter}`;
-      const endsWithShortYearPattern = `\\${delimiter}${expiryDateFormatPatterns.YearShort}$`;
-      const containsShortYearPattern = new RegExp(
-        `${startsWithShortYearPattern}|${endsWithShortYearPattern}`,
-        "i",
-      );
+      const containsLongYearPattern = new RegExp(`${Year}`, "i");
 
-      useYearFull = !containsShortYearPattern.test(expectedExpiryDateFormat);
+      useYearFull = containsLongYearPattern.test(expectedExpiryDateFormat);
     }
 
     const month = useMonthPadding ? ("0" + cardCipher.expMonth).slice(-2) : cardCipher.expMonth;
-    const year = useYearFull ? cardCipher.expYear : cardCipher.expYear.slice(-2);
+    // Note: assumes the user entered an `expYear` value with a length of either 2 or 4
+    const year = (fallbackYearLongformPrefix + cardCipher.expYear).slice(useYearFull ? -4 : -2);
 
     const combinedExpiryFillValue = (orderByYear ? [year, month] : [month, year]).join(delimiter);
 
@@ -1424,6 +1436,8 @@ export default class AutofillService implements AutofillServiceInterface {
         return false;
       });
     });
+    // @TODO if expectedDateFormat is still null, and there is a `pattern` attribute, cycle
+    // through generated formatted values, checking against the provided regex pattern
 
     return [expectedDateFormat, dateFormatPatterns];
   }
