@@ -13,6 +13,7 @@ import {
 import { InlineMenuVisibilitySetting } from "@bitwarden/common/autofill/types";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { EventType } from "@bitwarden/common/enums";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { UriMatchStrategy } from "@bitwarden/common/models/domain/domain-service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
@@ -2430,10 +2431,10 @@ describe("AutofillService", () => {
       options.cipher.card = mock<CardView>();
     });
 
-    it("returns null if the passed options contains a cipher with no card view", () => {
+    it("returns null if the passed options contains a cipher with no card view", async () => {
       options.cipher.card = undefined;
 
-      const value = autofillService["generateCardFillScript"](
+      const value = await autofillService["generateCardFillScript"](
         fillScript,
         pageDetails,
         filledFields,
@@ -2454,7 +2455,7 @@ describe("AutofillService", () => {
         untrustedIframe: false,
       };
 
-      it("returns an unmodified fill script when the field is a `span` field", () => {
+      it("returns an unmodified fill script when the field is a `span` field", async () => {
         const spanField = createAutofillFieldMock({
           opid: "span-field",
           form: "validFormId",
@@ -2465,7 +2466,7 @@ describe("AutofillService", () => {
         pageDetails.fields = [spanField];
         jest.spyOn(AutofillService, "isExcludedFieldType");
 
-        const value = autofillService["generateCardFillScript"](
+        const value = await autofillService["generateCardFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -2477,7 +2478,7 @@ describe("AutofillService", () => {
       });
 
       AutoFillConstants.ExcludedAutofillTypes.forEach((excludedType) => {
-        it(`returns an unmodified fill script when the field has a '${excludedType}' type`, () => {
+        it(`returns an unmodified fill script when the field has a '${excludedType}' type`, async () => {
           const invalidField = createAutofillFieldMock({
             opid: `${excludedType}-field`,
             form: "validFormId",
@@ -2488,7 +2489,7 @@ describe("AutofillService", () => {
           pageDetails.fields = [invalidField];
           jest.spyOn(AutofillService, "isExcludedFieldType");
 
-          const value = autofillService["generateCardFillScript"](
+          const value = await autofillService["generateCardFillScript"](
             fillScript,
             pageDetails,
             filledFields,
@@ -2503,7 +2504,7 @@ describe("AutofillService", () => {
         });
       });
 
-      it("returns an unmodified fill script when the field is not viewable", () => {
+      it("returns an unmodified fill script when the field is not viewable", async () => {
         const notViewableField = createAutofillFieldMock({
           opid: "invalid-field",
           form: "validFormId",
@@ -2516,7 +2517,7 @@ describe("AutofillService", () => {
         jest.spyOn(AutofillService, "forCustomFieldsOnly");
         jest.spyOn(AutofillService, "isExcludedFieldType");
 
-        const value = autofillService["generateCardFillScript"](
+        const value = await autofillService["generateCardFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -2618,8 +2619,8 @@ describe("AutofillService", () => {
         jest.spyOn(autofillService as any, "makeScriptActionWithValue");
       });
 
-      it("returns a fill script containing all of the passed card fields", () => {
-        const value = autofillService["generateCardFillScript"](
+      it("returns a fill script containing all of the passed card fields", async () => {
+        const value = await autofillService["generateCardFillScript"](
           fillScript,
           pageDetails,
           filledFields,
@@ -2885,11 +2886,26 @@ describe("AutofillService", () => {
       });
     });
 
+    const expectedDateFormats = [
+      ["mm/yyyy", "05/2024"],
+      ["mm/yy", "05/24"],
+      ["yyyy/mm", "2024/05"],
+      ["yy/mm", "24/05"],
+      ["mm-yyyy", "05-2024"],
+      ["mm-yy", "05-24"],
+      ["yyyy-mm", "2024-05"],
+      ["yy-mm", "24-05"],
+      ["yyyymm", "202405"],
+      ["yymm", "2405"],
+      ["mmyyyy", "052024"],
+      ["mmyy", "0524"],
+    ];
     describe("given a generic expiration date field", () => {
       let expirationDateField: AutofillField;
       let expirationDateFieldView: FieldView;
 
       beforeEach(() => {
+        configService.getFeatureFlag.mockResolvedValue(false);
         expirationDateField = createAutofillFieldMock({
           opid: "expirationDate",
           form: "validFormId",
@@ -2904,29 +2920,23 @@ describe("AutofillService", () => {
         options.cipher.card.expYear = "2024";
       });
 
-      const expectedDateFormats = [
-        ["mm/yyyy", "05/2024"],
-        ["mm/yy", "05/24"],
-        ["yyyy/mm", "2024/05"],
-        ["yy/mm", "24/05"],
-        ["mm-yyyy", "05-2024"],
-        ["mm-yy", "05-24"],
-        ["yyyy-mm", "2024-05"],
-        ["yy-mm", "24-05"],
-        ["yyyymm", "202405"],
-        ["yymm", "2405"],
-        ["mmyyyy", "052024"],
-        ["mmyy", "0524"],
-      ];
       expectedDateFormats.forEach((dateFormat, index) => {
         it(`returns an expiration date format matching '${dateFormat[0]}'`, async () => {
           expirationDateField.placeholder = dateFormat[0];
+
+          // test alternate stored cipher value formats
           if (index === 0) {
             options.cipher.card.expYear = "24";
           }
           if (index === 1) {
             options.cipher.card.expMonth = "5";
           }
+
+          const enableNewCardCombinedExpiryAutofill = await configService.getFeatureFlag(
+            FeatureFlag.EnableNewCardCombinedExpiryAutofill,
+          );
+
+          expect(enableNewCardCombinedExpiryAutofill).toEqual(false);
 
           const value = await autofillService["generateCardFillScript"](
             fillScript,
@@ -2947,7 +2957,118 @@ describe("AutofillService", () => {
           options,
         );
 
+        const enableNewCardCombinedExpiryAutofill = await configService.getFeatureFlag(
+          FeatureFlag.EnableNewCardCombinedExpiryAutofill,
+        );
+
+        expect(enableNewCardCombinedExpiryAutofill).toEqual(false);
+
         expect(value.script[2]).toStrictEqual(["fill_by_opid", "expirationDate", "2024-05"]);
+      });
+    });
+
+    const extraExpectedDateFormats = [
+      ...expectedDateFormats,
+      ["m yy", "5 24"],
+      ["m yyyy", "5 2024"],
+      ["m-yy", "5-24"],
+      ["m-yyyy", "5-2024"],
+      ["m.yy", "5.24"],
+      ["m.yyyy", "5.2024"],
+      ["m/yy", "5/24"],
+      ["m/yyyy", "5/2024"],
+      ["mm åååå", "05 2024"],
+      ["mm yy", "05 24"],
+      ["mm yyyy", "05 2024"],
+      ["mm.yy", "05.24"],
+      ["mm.yyyy", "05.2024"],
+      ["myy", "524"],
+      ["myyyy", "52024"],
+      ["yy m", "24 5"],
+      ["yy mm", "24 05"],
+      ["yy mm", "24 05"],
+      ["yy-m", "24-5"],
+      ["yy.m", "24.5"],
+      ["yy.mm", "24.05"],
+      ["yy/m", "24/5"],
+      ["yym", "245"],
+      ["yyyy m", "2024 5"],
+      ["yyyy mm", "2024 05"],
+      ["yyyy-m", "2024-5"],
+      ["yyyy.m", "2024.5"],
+      ["yyyy.mm", "2024.05"],
+      ["yyyy/m", "2024/5"],
+      ["yyyym", "20245"],
+      ["мм гг", "05 24"],
+    ];
+    describe("given a generic expiration date field with the `enable-new-card-combined-expiry-autofill` feature-flag enabled", () => {
+      let expirationDateField: AutofillField;
+      let expirationDateFieldView: FieldView;
+
+      beforeEach(() => {
+        configService.getFeatureFlag.mockResolvedValue(true);
+        expirationDateField = createAutofillFieldMock({
+          opid: "expirationDate",
+          form: "validFormId",
+          elementNumber: 3,
+          htmlName: "expiration-date",
+        });
+        filledFields["exp-field"] = expirationDateField;
+        expirationDateFieldView = mock<FieldView>({ name: "exp" });
+        pageDetails.fields = [expirationDateField];
+        options.cipher.fields = [expirationDateFieldView];
+        options.cipher.card.expMonth = "05";
+        options.cipher.card.expYear = "2024";
+      });
+
+      afterEach(() => {
+        configService.getFeatureFlag.mockResolvedValue(false);
+      });
+
+      extraExpectedDateFormats.forEach((dateFormat, index) => {
+        it(`feature-flagged logic returns an expiration date format matching '${dateFormat[0]}'`, async () => {
+          expirationDateField.placeholder = dateFormat[0];
+
+          // test alternate stored cipher value formats
+          if (index === 0) {
+            options.cipher.card.expYear = "24";
+          }
+          if (index === 1) {
+            options.cipher.card.expMonth = "05";
+          }
+
+          const enableNewCardCombinedExpiryAutofill = await configService.getFeatureFlag(
+            FeatureFlag.EnableNewCardCombinedExpiryAutofill,
+          );
+
+          expect(enableNewCardCombinedExpiryAutofill).toEqual(true);
+
+          const value = await autofillService["generateCardFillScript"](
+            fillScript,
+            pageDetails,
+            filledFields,
+            options,
+          );
+
+          expect(value.script[2]).toStrictEqual(["fill_by_opid", "expirationDate", dateFormat[1]]);
+        });
+      });
+
+      it("feature-flagged logic returns an expiration date format matching `mm/yy` if no valid format can be identified", async () => {
+        const value = await autofillService["generateCardFillScript"](
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
+
+        const enableNewCardCombinedExpiryAutofill = await configService.getFeatureFlag(
+          FeatureFlag.EnableNewCardCombinedExpiryAutofill,
+        );
+
+        expect(enableNewCardCombinedExpiryAutofill).toEqual(true);
+
+        expect(value.script[2]).toStrictEqual(["fill_by_opid", "expirationDate", "05/24"]);
       });
     });
   });
