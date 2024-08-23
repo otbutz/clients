@@ -301,6 +301,7 @@ export class CreditCardAutoFillConstants {
 
   static readonly CardExpiryDateDelimiters: string[] = ["/", "-", ".", " "];
 
+  // Note, these are expressions of user-guidance for the expected expiry date format to be used
   static readonly CardExpiryDateFormats: CardExpiryDateFormat[] = [
     // English
     {
