@@ -71,6 +71,14 @@ const MINIMIZE_ON_COPY = new UserKeyDefinition<boolean>(DESKTOP_SETTINGS_DISK, "
   clearOn: [], // User setting, no need to clear
 });
 
+const SCREENSHOT_PROTECTION = new KeyDefinition<boolean>(
+  DESKTOP_SETTINGS_DISK,
+  "screenshotProtection",
+  {
+    deserializer: (b) => b,
+  },
+);
+
 /**
  * Various settings for controlling application behavior specific to the desktop client.
  */
@@ -138,6 +146,13 @@ export class DesktopSettingsService {
    */
   browserIntegrationFingerprintEnabled$ =
     this.browserIntegrationFingerprintEnabledState.state$.pipe(map(Boolean));
+
+  private readonly screenshotProtectionState = this.stateProvider.getGlobal(SCREENSHOT_PROTECTION);
+
+  /**
+   * The application setting for whether or not the screenshot protection is enabled.
+   */
+  screenshotProtection$ = this.screenshotProtectionState.state$.pipe(map(Boolean));
 
   private readonly minimizeOnCopyState = this.stateProvider.getActive(MINIMIZE_ON_COPY);
 
@@ -254,5 +269,13 @@ export class DesktopSettingsService {
    */
   async setMinimizeOnCopy(value: boolean, userId: UserId) {
     await this.stateProvider.getUser(userId, MINIMIZE_ON_COPY).update(() => value);
+  }
+
+  /**
+   * Sets the setting for whether or not the screenshot protection is enabled.
+   * @param value `true` if the screenshot protection is enabled, `false` if it is not.
+   */
+  async setScreenshotProtection(value: boolean) {
+    await this.screenshotProtectionState.update(() => value);
   }
 }
