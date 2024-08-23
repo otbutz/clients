@@ -30,6 +30,7 @@ export enum FeatureFlag {
   UnauthenticatedExtensionUIRefresh = "unauth-ui-refresh",
   EnableUpgradePasswordManagerSub = "AC-2708-upgrade-password-manager-sub",
   GenerateIdentityFillScriptRefactor = "generate-identity-fill-script-refactor",
+  EnableNewCardCombinedExpiryAutofill = "enable-new-card-combined-expiry-autofill",
   DelayFido2PageScriptInitWithinMv2 = "delay-fido2-page-script-init-within-mv2",
   AccountDeprovisioning = "pm-10308-account-deprovisioning",
 }
@@ -72,6 +73,7 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.UnauthenticatedExtensionUIRefresh]: FALSE,
   [FeatureFlag.EnableUpgradePasswordManagerSub]: FALSE,
   [FeatureFlag.GenerateIdentityFillScriptRefactor]: FALSE,
+  [FeatureFlag.EnableNewCardCombinedExpiryAutofill]: FALSE,
   [FeatureFlag.DelayFido2PageScriptInitWithinMv2]: FALSE,
   [FeatureFlag.AccountDeprovisioning]: FALSE,
 } satisfies Record<FeatureFlag, AllowedFeatureFlagTypes>;
