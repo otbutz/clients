@@ -677,7 +677,12 @@ export default class AutofillService implements AutofillServiceInterface {
         );
         break;
       case CipherType.Card:
-        fillScript = this.generateCardFillScript(fillScript, pageDetails, filledFields, options);
+        fillScript = await this.generateCardFillScript(
+          fillScript,
+          pageDetails,
+          filledFields,
+          options,
+        );
         break;
       case CipherType.Identity:
         fillScript = await this.generateIdentityFillScript(
@@ -893,12 +898,12 @@ export default class AutofillService implements AutofillServiceInterface {
    * @returns {AutofillScript|null}
    * @private
    */
-  private generateCardFillScript(
+  private async generateCardFillScript(
     fillScript: AutofillScript,
     pageDetails: AutofillPageDetails,
     filledFields: { [id: string]: AutofillField },
     options: GenerateFillScriptOptions,
-  ): AutofillScript | null {
+  ): Promise<AutofillScript | null> {
     if (!options.cipher.card) {
       return null;
     }
@@ -1075,10 +1080,11 @@ export default class AutofillService implements AutofillServiceInterface {
       AutofillService.hasValue(card.expMonth) &&
       AutofillService.hasValue(card.expYear)
     ) {
-      // @TODO replace with actual feature flag
-      const enableNewCombinedCardExpiryAutofill = false;
+      const enableNewCardCombinedExpiryAutofill = await this.configService.getFeatureFlag(
+        FeatureFlag.EnableNewCardCombinedExpiryAutofill,
+      );
 
-      if (enableNewCombinedCardExpiryAutofill) {
+      if (enableNewCardCombinedExpiryAutofill) {
         const combinedExpiryFillValue = this.generateCombinedExpiryValue(card, fillFields.exp);
 
         this.makeScriptActionWithValue(
