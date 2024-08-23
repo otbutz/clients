@@ -38,6 +38,8 @@ export class MemberAccessReportService {
       collectionsCount: userData.collectionsCount,
       groupsCount: userData.groupsCount,
       itemsCount: userData.totalItemCount,
+      userGuid: userData.userGuid,
+      usesKeyConnector: userData.usesKeyConnector,
     }));
     return memberAccessReportViewCollection;
   }

@@ -14,13 +14,13 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
     groupsCount: 2,
     collectionsCount: 4,
     totalItemCount: 20,
+    userGuid: "1234",
+    usesKeyConnector: false,
     accessDetails: [
       {
         groupId: "",
         collectionId: "c1",
-        collectionName: new EncString(
-          "2.UiXa3L3Ol1G4QnfFfBjMQw==|sbVTj0EiEkhIrDiropn2Cg==|82P78YgmapW4TdN9jQJgMWKv2gGyK1AnGkr+W9/sq+A=",
-        ),
+        collectionName: new EncString("Collection 1"),
         groupName: "",
         itemCount: 10,
         readOnly: false,
@@ -50,9 +50,7 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
       {
         groupId: "g1",
         collectionId: "c1",
-        collectionName: new EncString(
-          "2.UiXa3L3Ol1G4QnfFfBjMQw==|sbVTj0EiEkhIrDiropn2Cg==|82P78YgmapW4TdN9jQJgMWKv2gGyK1AnGkr+W9/sq+A=",
-        ),
+        collectionName: new EncString("Collection 1"),
         groupName: "Group 1",
         itemCount: 30,
         readOnly: false,
@@ -79,6 +77,8 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
     groupsCount: 2,
     collectionsCount: 4,
     totalItemCount: 20,
+    userGuid: "1234",
+    usesKeyConnector: false,
     accessDetails: [
       {
         groupId: "g4",
@@ -130,6 +130,8 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
     groupsCount: 2,
     collectionsCount: 4,
     totalItemCount: 20,
+    userGuid: "1234",
+    usesKeyConnector: false,
     accessDetails: [
       {
         groupId: "",
@@ -161,6 +163,8 @@ export const memberAccessReportsMock: MemberAccessResponse[] = [
     groupsCount: 2,
     collectionsCount: 4,
     totalItemCount: 20,
+    userGuid: "1234",
+    usesKeyConnector: false,
     accessDetails: [
       {
         groupId: "",

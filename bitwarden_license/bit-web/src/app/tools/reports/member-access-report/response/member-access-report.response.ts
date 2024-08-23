@@ -1,5 +1,6 @@
 import { BaseResponse } from "@bitwarden/common/models/response/base.response";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
+import { Guid } from "@bitwarden/common/types/guid";
 
 export class MemberAccessDetails extends BaseResponse {
   collectionId: string;
@@ -33,6 +34,8 @@ export class MemberAccessResponse extends BaseResponse {
   groupsCount: number;
   totalItemCount: number;
   accessDetails: MemberAccessDetails[] = [];
+  userGuid: Guid;
+  usesKeyConnector: boolean;
 
   constructor(response: any) {
     super(response);
@@ -43,6 +46,8 @@ export class MemberAccessResponse extends BaseResponse {
     this.collectionsCount = this.getResponseProperty("CollectionsCount");
     this.groupsCount = this.getResponseProperty("GroupsCount");
     this.totalItemCount = this.getResponseProperty("TotalItemCount");
+    this.userGuid = this.getResponseProperty("UserGuid");
+    this.usesKeyConnector = this.getResponseProperty("UsesKeyConnector");
 
     const details = this.getResponseProperty("AccessDetails");
     if (details != null) {

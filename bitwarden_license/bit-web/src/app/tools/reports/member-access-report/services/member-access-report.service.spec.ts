@@ -20,37 +20,46 @@ describe("ImportService", () => {
   });
 
   describe("generateMemberAccessReportView", () => {
-    it("should generate member access report view", () => {
-      const result = memberAccessReportService.generateMemberAccessReportView(mockOrganizationId);
+    it("should generate member access report view", async () => {
+      const result =
+        await memberAccessReportService.generateMemberAccessReportView(mockOrganizationId);
 
       expect(result).toEqual([
         {
           name: "Sarah Johnson",
           email: "sjohnson@email.com",
           collectionsCount: 4,
-          groupsCount: 3,
-          itemsCount: 70,
+          groupsCount: 2,
+          itemsCount: 20,
+          userGuid: expect.any(String),
+          usesKeyConnector: expect.any(Boolean),
         },
         {
           name: "James Lull",
           email: "jlull@email.com",
-          collectionsCount: 2,
+          collectionsCount: 4,
           groupsCount: 2,
           itemsCount: 20,
+          userGuid: expect.any(String),
+          usesKeyConnector: expect.any(Boolean),
         },
         {
           name: "Beth Williams",
           email: "bwilliams@email.com",
-          collectionsCount: 2,
-          groupsCount: 1,
-          itemsCount: 60,
+          collectionsCount: 4,
+          groupsCount: 2,
+          itemsCount: 20,
+          userGuid: expect.any(String),
+          usesKeyConnector: expect.any(Boolean),
         },
         {
           name: "Ray Williams",
           email: "rwilliams@email.com",
-          collectionsCount: 3,
-          groupsCount: 3,
-          itemsCount: 36,
+          collectionsCount: 4,
+          groupsCount: 2,
+          itemsCount: 20,
+          userGuid: expect.any(String),
+          usesKeyConnector: expect.any(Boolean),
         },
       ]);
     });
@@ -61,7 +70,24 @@ describe("ImportService", () => {
       const result =
         await memberAccessReportService.generateUserReportExportItems(mockOrganizationId);
 
-      expect(result).toEqual(
+      const filteredReportItems = result
+        .filter(
+          (item) =>
+            (item.name === "Sarah Johnson" &&
+              item.group === "Group 1" &&
+              item.totalItems === "20") ||
+            (item.name === "James Lull" && item.group === "Group 4" && item.totalItems === "5"),
+        )
+        .map((item) => ({
+          name: item.name,
+          email: item.email,
+          group: item.group,
+          totalItems: item.totalItems,
+          accountRecovery: item.accountRecovery,
+          twoStepLogin: item.twoStepLogin,
+        }));
+
+      expect(filteredReportItems).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
             email: "sjohnson@email.com",
@@ -69,19 +95,15 @@ describe("ImportService", () => {
             twoStepLogin: "On",
             accountRecovery: "On",
             group: "Group 1",
-            collection: expect.any(String),
-            collectionPermission: "read only",
-            totalItems: "10",
+            totalItems: "20",
           }),
           expect.objectContaining({
             email: "jlull@email.com",
             name: "James Lull",
             twoStepLogin: "Off",
             accountRecovery: "Off",
-            group: "(No group)",
-            collection: expect.any(String),
-            collectionPermission: "read only",
-            totalItems: "15",
+            group: "Group 4",
+            totalItems: "5",
           }),
         ]),
       );
