@@ -1,6 +1,7 @@
 import { APP_INITIALIZER, NgModule, NgZone } from "@angular/core";
 import { Subject, merge, of } from "rxjs";
 
+import { ViewCacheService } from "@bitwarden/angular/platform/abstractions/view-cache.service";
 import { AngularThemingService } from "@bitwarden/angular/platform/services/theming/angular-theming.service";
 import { SafeProvider, safeProvider } from "@bitwarden/angular/platform/utils/safe-provider";
 import {
@@ -41,6 +42,10 @@ import {
 } from "@bitwarden/common/autofill/services/user-notification-settings.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { ClientType } from "@bitwarden/common/enums";
+import {
+  AnimationControlService,
+  DefaultAnimationControlService,
+} from "@bitwarden/common/platform/abstractions/animation-control.service";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { CryptoFunctionService } from "@bitwarden/common/platform/abstractions/crypto-function.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -98,6 +103,7 @@ import { OffscreenDocumentService } from "../../platform/offscreen-document/abst
 import { DefaultOffscreenDocumentService } from "../../platform/offscreen-document/offscreen-document.service";
 import BrowserPopupUtils from "../../platform/popup/browser-popup-utils";
 import { BrowserFileDownloadService } from "../../platform/popup/services/browser-file-download.service";
+import { PopupViewCacheService } from "../../platform/popup/view-cache/popup-view-cache.service";
 import { ScriptInjectorService } from "../../platform/services/abstractions/script-injector.service";
 import { BrowserCryptoService } from "../../platform/services/browser-crypto.service";
 import { BrowserEnvironmentService } from "../../platform/services/browser-environment.service";
@@ -300,6 +306,11 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: AutofillServiceAbstraction,
     useExisting: AutofillService,
+  }),
+  safeProvider({
+    provide: ViewCacheService,
+    useExisting: PopupViewCacheService,
+    deps: [],
   }),
   safeProvider({
     provide: AutofillService,
@@ -526,6 +537,11 @@ const safeProviders: SafeProvider[] = [
     provide: Fido2UserVerificationService,
     useClass: Fido2UserVerificationService,
     deps: [PasswordRepromptService, UserVerificationService, DialogService],
+  }),
+  safeProvider({
+    provide: AnimationControlService,
+    useClass: DefaultAnimationControlService,
+    deps: [GlobalStateProvider],
   }),
   safeProvider({
     provide: TaskSchedulerService,

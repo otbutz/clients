@@ -27,7 +27,7 @@ jobs:
       release-version: ${{ steps.version.outputs.version }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332 # v4.1.7
 
       - name: Branch check
         if: ${{ inputs.release_type != 'Dry Run' }}
@@ -92,7 +92,8 @@ jobs:
                       apps/cli/bw-linux-sha256-${{ env.PKG_VERSION }}.txt,
                       apps/cli/bitwarden-cli.${{ env.PKG_VERSION }}.nupkg,
                       apps/cli/bw_${{ env.PKG_VERSION }}_amd64.snap,
-                      apps/cli/bw-snap-sha256-${{ env.PKG_VERSION }}.txt"
+                      apps/cli/bw-snap-sha256-${{ env.PKG_VERSION }}.txt,
+                      apps/cli/bitwarden-cli-${{ env.PKG_VERSION }}-npm-build.zip"
           commit: ${{ github.sha }}
           tag: cli-v${{ env.PKG_VERSION }}
           name: CLI v${{ env.PKG_VERSION }}
