@@ -114,7 +114,7 @@ const plugins = [
   new HtmlWebpackPlugin({
     template: "./src/connectors/redirect.html",
     filename: "redirect-connector.html",
-    chunks: ["connectors/redirect"],
+    chunks: ["connectors/redirect", "styles"],
   }),
   new HtmlWebpackPlugin({
     template: "./src/connectors/captcha.html",

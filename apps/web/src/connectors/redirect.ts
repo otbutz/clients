@@ -1,5 +1,3 @@
-require("./redirect.scss");
-
 // This redirect connector is used to redirect users to the correct URL after they have been sent here from an email link.
 // The fragment contains the information needed to redirect the user to the correct page.
 // This is required because android app links couldn't properly handle the angular hash based route we originally had in the email link.
