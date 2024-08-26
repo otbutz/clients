@@ -3,7 +3,9 @@
     <h2 bitTypography="h6">{{ "personalDetails" | i18n }}</h2>
   </bit-section-header>
 
-  <bit-card class="[&_bit-form-field:last-of-type]:tw-mb-0">
+  <bit-card
+    class="[&_bit-form-field:last-of-type]:tw-mb-0 [&_bit-form-field:last-of-type_[data-bordered-element]]:tw-border-transparent"
+  >
     <bit-form-field *ngIf="cipher.identity.fullName">
       <bit-label>{{ "name" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.fullName" readonly data-testid="name" />
@@ -51,7 +53,9 @@
     <h2 bitTypography="h6">{{ "identification" | i18n }}</h2>
   </bit-section-header>
 
-  <bit-card class="[&_bit-form-field:last-of-type]:tw-mb-0">
+  <bit-card
+    class="[&_bit-form-field:last-of-type]:tw-mb-0 [&_bit-form-field:last-of-type_[data-bordered-element]]:tw-border-transparent"
+  >
     <bit-form-field *ngIf="cipher.identity.ssn">
       <bit-label>{{ "ssn" | i18n }}</bit-label>
       <input bitInput type="password" [value]="cipher.identity.ssn" readonly data-testid="ssn" />
@@ -119,7 +123,9 @@
     <h2 bitTypography="h6">{{ "contactInfo" | i18n }}</h2>
   </bit-section-header>
 
-  <bit-card class="[&_bit-form-field:last-of-type]:tw-mb-0">
+  <bit-card
+    class="[&_bit-form-field:last-of-type]:tw-mb-0 [&_bit-form-field:last-of-type_[data-bordered-element]]:tw-border-transparent"
+  >
     <bit-form-field *ngIf="cipher.identity.email">
       <bit-label>{{ "email" | i18n }}</bit-label>
       <input bitInput [value]="cipher.identity.email" readonly data-testid="email" />
