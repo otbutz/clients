@@ -11,7 +11,6 @@ pub mod server;
 /// https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging#native-messaging-host-protocol
 pub const NATIVE_MESSAGING_BUFFER_SIZE: usize = 1024 * 1024;
 
-
 /// Resolve the path to the IPC socket.
 pub fn path(name: &str) -> std::path::PathBuf {
     #[cfg(target_os = "windows")]
@@ -39,7 +38,7 @@ pub fn path(name: &str) -> std::path::PathBuf {
         // Note that we subtract 3 because the root directory is counted as a component (/, Users, <user>).
         let num_components = home.components().count();
         for _ in 0..num_components - 3 {
-            debug_assert!(home.pop(), "Failed to pop a component");
+            home.pop();
         }
 
         home.join(format!(
