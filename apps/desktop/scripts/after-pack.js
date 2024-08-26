@@ -48,6 +48,14 @@ async function run(context) {
   }
 }
 
+const appleCertificatePrefixes = [
+  "Developer ID Application:",
+  "Developer ID Installer:",
+  "3rd Party Mac Developer Application:",
+  "3rd Party Mac Developer Installer:",
+];
+
+// https://github.com/electron-userland/electron-builder/blob/d5d9f3f9aaac0385cc943e30a0841669133afde8/packages/app-builder-lib/src/codeSign/macCodeSign.ts
 function getIdentities(csc_name) {
   const ids = child_process
     .execSync("/usr/bin/security find-identity -v -p codesigning")
@@ -59,6 +67,14 @@ function getIdentities(csc_name) {
 
   return ids
     .split("\n")
+    .filter((line) => {
+      for (const prefix of appleCertificatePrefixes) {
+        if (line.includes(prefix)) {
+          return true;
+        }
+      }
+      return false;
+    })
     .filter((line) => line.includes(csc_name))
     .map((line) => {
       const split = line.trim().split(" ");
