@@ -69,11 +69,11 @@ export class WindowMain {
       this.logService.info("Render process reloaded");
     });
 
-    this.desktopSettingsService.screenshotProtection$.subscribe((enabled) => {
+    this.desktopSettingsService.allowScreenshots$.subscribe((allowed) => {
       if (this.win == null) {
         return;
       }
-      this.win.setContentProtection(enabled);
+      this.win.setContentProtection(!allowed);
     });
 
     return new Promise<void>((resolve, reject) => {
@@ -277,9 +277,9 @@ export class WindowMain {
       });
     });
 
-    firstValueFrom(this.desktopSettingsService.screenshotProtection$)
-      .then((screenshotProtection) => {
-        this.win.setContentProtection(screenshotProtection);
+    firstValueFrom(this.desktopSettingsService.allowScreenshots$)
+      .then((allowScreenshots) => {
+        this.win.setContentProtection(!allowScreenshots);
       })
       .catch((e) => {
         this.logService.error(e);
