@@ -48,14 +48,18 @@ async function run(context) {
   }
 }
 
+// Partially based on electron-builder code:
+// https://github.com/electron-userland/electron-builder/blob/master/packages/app-builder-lib/src/macPackager.ts
+// https://github.com/electron-userland/electron-builder/blob/master/packages/app-builder-lib/src/codeSign/macCodeSign.ts
+
 const appleCertificatePrefixes = [
   "Developer ID Application:",
-  "Developer ID Installer:",
-  "3rd Party Mac Developer Application:",
-  "3rd Party Mac Developer Installer:",
+  // "Developer ID Installer:",
+  // "3rd Party Mac Developer Application:",
+  // "3rd Party Mac Developer Installer:",
+  "Apple Development:",
 ];
 
-// https://github.com/electron-userland/electron-builder/blob/d5d9f3f9aaac0385cc943e30a0841669133afde8/packages/app-builder-lib/src/codeSign/macCodeSign.ts
 function getIdentities(csc_name) {
   const ids = child_process
     .execSync("/usr/bin/security find-identity -v -p codesigning")
