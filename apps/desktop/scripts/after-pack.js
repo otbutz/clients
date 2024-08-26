@@ -39,7 +39,7 @@ async function run(context) {
     const appPath = `${context.appOutDir}/${appName}.app`;
     const proxyPath = path.join(appPath, "Contents", "MacOS", "desktop_proxy");
 
-    const packageId = "LTZ2PFU5D6.com.bitwarden.desktop";
+    const packageId = "com.bitwarden.desktop";
     const entitlementsName = "entitlements.desktop_proxy.plist";
     const entitlementsPath = path.join(__dirname, "..", "resources", entitlementsName);
     child_process.execSync(
