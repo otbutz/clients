@@ -2,7 +2,9 @@
   <bit-section-header>
     <h2 bitTypography="h6">{{ setSectionTitle }}</h2>
   </bit-section-header>
-  <bit-card class="[&_bit-form-field:last-of-type]:tw-mb-0">
+  <bit-card
+    class="[&_bit-form-field:last-of-type]:tw-mb-0 [&_bit-form-field:last-of-type_[data-bordered-element]]:tw-border-transparent"
+  >
     <bit-form-field *ngIf="card.cardholderName">
       <bit-label>{{ "cardholderName" | i18n }}</bit-label>
       <input
