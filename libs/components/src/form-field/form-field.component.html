@@ -80,14 +80,17 @@
     >
       <ng-container *ngTemplateOutlet="labelContent"></ng-container>
     </label>
+
+    <!-- `data-bordered-element` is used to target bordered element by consuming components -->
     <div
       class="tw-gap-1 tw-flex tw-min-h-11 tw-border-0 tw-border-solid"
       [ngClass]="{
         'tw-border-secondary-300/50 tw-border-b':
           !disableReadOnlyBorder && !defaultContentIsFocused(),
         'tw-border-b-2 tw-border-transparent': disableReadOnlyBorder && !defaultContentIsFocused(),
-        'tw-border-b-2 tw-border-primary-500': defaultContentIsFocused(),
+        'tw-border-b-2 !tw-border-primary-500': defaultContentIsFocused(),
       }"
+      data-bordered-element
     >
       <div
         #prefixContainer
