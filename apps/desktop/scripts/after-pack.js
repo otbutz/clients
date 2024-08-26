@@ -65,10 +65,6 @@ function getIdentities(csc_name) {
     .execSync("/usr/bin/security find-identity -v -p codesigning")
     .toString();
 
-  console.log("CSC Name:", csc_name);
-  console.log("Identities:");
-  console.log(ids);
-
   return ids
     .split("\n")
     .filter((line) => {
