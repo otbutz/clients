@@ -15,7 +15,7 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { ColorPasswordCountPipe } from "@bitwarden/angular/pipes/color-password-count.pipe";
 import { ColorPasswordPipe } from "@bitwarden/angular/pipes/color-password.pipe";
 import { UserVerificationDialogComponent } from "@bitwarden/auth/angular";
-import { AvatarModule, ButtonModule, ToastModule } from "@bitwarden/components";
+import { AvatarModule, ButtonModule, FormFieldModule, ToastModule } from "@bitwarden/components";
 
 import { AccountComponent } from "../auth/popup/account-switching/account.component";
 import { CurrentAccountComponent } from "../auth/popup/account-switching/current-account.component";
@@ -29,6 +29,7 @@ import { LoginComponent } from "../auth/popup/login.component";
 import { RegisterComponent } from "../auth/popup/register.component";
 import { RemovePasswordComponent } from "../auth/popup/remove-password.component";
 import { SetPasswordComponent } from "../auth/popup/set-password.component";
+import { AccountSecurityComponent as AccountSecurityComponentV1 } from "../auth/popup/settings/account-security-v1.component";
 import { AccountSecurityComponent } from "../auth/popup/settings/account-security.component";
 import { VaultTimeoutInputComponent } from "../auth/popup/settings/vault-timeout-input.component";
 import { SsoComponent } from "../auth/popup/sso.component";
@@ -94,6 +95,7 @@ import "../platform/popup/locales";
     A11yModule,
     AppRoutingModule,
     AutofillComponent,
+    AccountSecurityComponent,
     ToastModule.forRoot({
       maxOpened: 2,
       autoDismiss: true,
@@ -125,6 +127,7 @@ import "../platform/popup/locales";
     HeaderComponent,
     UserVerificationDialogComponent,
     CurrentAccountComponent,
+    FormFieldModule,
   ],
   declarations: [
     ActionButtonsComponent,
@@ -163,7 +166,6 @@ import "../platform/popup/locales";
     SendListComponent,
     SendTypeComponent,
     SetPasswordComponent,
-    AccountSecurityComponent,
     SettingsComponent,
     VaultSettingsComponent,
     ShareComponent,
@@ -175,6 +177,7 @@ import "../platform/popup/locales";
     TwoFactorOptionsComponent,
     UpdateTempPasswordComponent,
     UserVerificationComponent,
+    AccountSecurityComponentV1,
     VaultTimeoutInputComponent,
     ViewComponent,
     ViewCustomFieldsComponent,
