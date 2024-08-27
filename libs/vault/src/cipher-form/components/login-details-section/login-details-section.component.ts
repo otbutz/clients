@@ -102,6 +102,10 @@ export class LoginDetailsSectionComponent implements OnInit {
     return true;
   }
 
+  get initialValues() {
+    return this.cipherFormContainer.config.initialValues;
+  }
+
   constructor(
     private cipherFormContainer: CipherFormContainer,
     private formBuilder: FormBuilder,
@@ -151,8 +155,8 @@ export class LoginDetailsSectionComponent implements OnInit {
 
   private initFromExistingCipher(existingLogin: LoginView) {
     this.loginDetailsForm.patchValue({
-      username: existingLogin.username,
-      password: existingLogin.password,
+      username: this.initialValues?.username ?? existingLogin.username,
+      password: this.initialValues?.password ?? existingLogin.password,
       totp: existingLogin.totp,
     });
 
@@ -166,8 +170,8 @@ export class LoginDetailsSectionComponent implements OnInit {
 
   private async initNewCipher() {
     this.loginDetailsForm.patchValue({
-      username: this.cipherFormContainer.config.initialValues?.username || "",
-      password: "",
+      username: this.initialValues?.username || "",
+      password: this.initialValues?.password || "",
     });
   }
 
