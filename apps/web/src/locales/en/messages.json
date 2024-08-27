@@ -1219,10 +1219,10 @@
   "copyUuid": {
     "message": "Copy UUID"
   },
-  "errorRefreshingAccessToken":{
+  "errorRefreshingAccessToken": {
     "message": "Access Token Refresh Error"
   },
-  "errorRefreshingAccessTokenDesc":{
+  "errorRefreshingAccessTokenDesc": {
     "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "warning": {
@@ -5394,8 +5394,8 @@
   "minutes": {
     "message": "Minutes"
   },
-  "vaultTimeoutPolicyInEffect": {
-    "message": "Your organization policies have set your maximum allowed vault timeout to $HOURS$ hour(s) and $MINUTES$ minute(s).",
+  "vaultTimeoutPolicyInEffect1": {
+    "message": "$HOURS$ hour(s) and $MINUTES$ minute(s) maximum.",
     "placeholders": {
       "hours": {
         "content": "$1",
@@ -8437,7 +8437,7 @@
   "deleteProviderRecoverConfirmDesc": {
     "message": "You have requested to delete this Provider. Use the button below to confirm."
   },
- "deleteProviderWarning": {
+  "deleteProviderWarning": {
     "message": "Deleting your provider is permanent. It cannot be undone."
   },
   "errorAssigningTargetCollection": {
@@ -8521,7 +8521,7 @@
   },
   "createdNewClient": {
     "message": "Successfully created new client"
-   },
+  },
   "noAccess": {
     "message": "No access"
   },
