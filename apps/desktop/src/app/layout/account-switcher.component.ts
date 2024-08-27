@@ -1,6 +1,6 @@
 import { animate, state, style, transition, trigger } from "@angular/animations";
 import { ConnectedPosition } from "@angular/cdk/overlay";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { combineLatest, firstValueFrom, map, Observable, switchMap } from "rxjs";
 
@@ -51,7 +51,7 @@ type InactiveAccount = ActiveAccount & {
     ]),
   ],
 })
-export class AccountSwitcherComponent {
+export class AccountSwitcherComponent implements OnInit {
   activeAccount$: Observable<ActiveAccount | null>;
   inactiveAccounts$: Observable<{ [userId: string]: InactiveAccount }>;
   authStatus = AuthenticationStatus;
