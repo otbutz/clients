@@ -1113,7 +1113,7 @@
     "message": "Thank you for supporting Bitwarden."
   },
   "premiumFeatures": {
-    "message": "Upgrade to premium and receive:"
+    "message": "Upgrade to Premium and receive:"
   },
   "premiumPrice": {
     "message": "All for just $PRICE$ /year!",
@@ -2082,6 +2082,12 @@
   },
   "biometricsNotUnlockedDesc": {
     "message": "Please unlock this user in the desktop application and try again."
+  },
+  "biometricsNotAvailableTitle": {
+    "message": "Biometric unlock unavailable"
+  },
+  "biometricsNotAvailableDesc": {
+    "message": "Biometric unlock is currently unavailable. Please try again later."
   },
   "biometricsFailedTitle": {
     "message": "Biometrics failed"

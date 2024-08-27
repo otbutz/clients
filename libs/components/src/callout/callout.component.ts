@@ -5,7 +5,7 @@ import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.servic
 import { SharedModule } from "../shared";
 import { TypographyModule } from "../typography";
 
-type CalloutTypes = "success" | "info" | "warning" | "danger";
+export type CalloutTypes = "success" | "info" | "warning" | "danger";
 
 const defaultIcon: Record<CalloutTypes, string> = {
   success: "bwi-check",
