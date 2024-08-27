@@ -451,9 +451,9 @@ export class AccountSecurityComponent implements OnInit, OnDestroy {
     let setupResult = false;
 
     const waitForUserDialogPromise = async () => {
-      // only show waiting dialog if we have waited for 200 msec to prevent double dialog
+      // only show waiting dialog if we have waited for 500 msec to prevent double dialog
       // the os will respond instantly if the dialog shows successfully, and the desktop app will respond instantly if something is wrong
-      await new Promise((resolve) => setTimeout(resolve, 200));
+      await new Promise((resolve) => setTimeout(resolve, 500));
       if (biometricsResponseReceived) {
         return;
       }
