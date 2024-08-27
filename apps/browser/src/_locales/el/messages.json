@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Ολοκληρώστε τη δημιουργία του λογαριασμού σας ορίζοντας έναν κωδικό πρόσβασης"
   },
-  "login": {
-    "message": "Σύνδεση"
-  },
   "enterpriseSingleSignOn": {
     "message": "Ενιαία είσοδος για επιχειρήσεις"
   },
@@ -303,6 +300,24 @@
   },
   "editFolder": {
     "message": "Επεξεργασία φακέλου"
+  },
+  "newFolder": {
+    "message": "Νέος φάκελος"
+  },
+  "folderName": {
+    "message": "Όνομα φακέλου"
+  },
+  "folderHintText": {
+    "message": "Nest a folder by adding the parent folder's name followed by a “/”. Example: Social/Forums"
+  },
+  "noFoldersAdded": {
+    "message": "Δεν προστέθηκαν φάκελοι"
+  },
+  "createFoldersToOrganize": {
+    "message": "Δημιουργήστε φακέλους για να οργανώσετε τα στοιχεία του θησαυ/κίου σας"
+  },
+  "deleteFolderPermanently": {
+    "message": "Είστε σίγουροι ότι θέλετε να διαγράψετε μόνιμα αυτόν το φάκελο;"
   },
   "deleteFolder": {
     "message": "Διαγραφή φακέλου"
@@ -671,6 +686,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Το Bitwarden μπορεί να αποθηκεύσει και να συμπληρώσει τους κωδικούς επαλήθευσης 2 βημάτων. Επιλέξτε το εικονίδιο της κάμερας για λήψη στιγμιότυπου του κωδικού QR του αυθεντικοποιητή αυτής της ιστοσελίδας, ή αντιγράψτε και επικολλήστε το κλειδί σε αυτό το πεδίο."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Μάθετε περισσότερα για της εφαρμογές αυθεντικοποίησης"
   },
   "copyTOTP": {
     "message": "Αντιγραφή κλειδιού Αυθεντικοποιητή (TOTP)"
@@ -1061,6 +1079,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB κρυπτογραφημένο αποθηκευτικό χώρο για συνημμένα αρχεία."
   },
+  "premiumSignUpEmergency": {
+    "message": "Emergency access."
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Πρόσθετες επιλογές σύνδεσης δύο βημάτων, όπως το YubiKey και το Duo."
   },
@@ -1082,14 +1103,29 @@
   "premiumPurchaseAlert": {
     "message": "Μπορείτε να αγοράσετε συνδρομή Premium στο διαδικτυακό θησαυ/κιο του bitwarden.com. Θέλετε να επισκεφθείτε την ιστοσελίδα τώρα;"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "Είστε Premium μέλος!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Ευχαριστούμε που υποστηρίζετε το Bitwarden."
   },
+  "premiumFeatures": {
+    "message": "Upgrade to premium and receive:"
+  },
   "premiumPrice": {
     "message": "Όλα για μόνο $PRICE$ /έτος!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "All for just $PRICE$ per year!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1803,6 +1839,29 @@
   "passwordGeneratorPolicyInEffect": {
     "message": "Μία ή περισσότερες πολιτικές του οργανισμού επηρεάζουν τις ρυθμίσεις της γεννήτριας."
   },
+  "passwordGenerator": {
+    "message": "Γεννήτρια κωδικού πρόσβασης"
+  },
+  "usernameGenerator": {
+    "message": "Γεννήτρια ονόματος χρήστη"
+  },
+  "useThisPassword": {
+    "message": "Χρήση αυτού του κωδικού πρόσβασης"
+  },
+  "useThisUsername": {
+    "message": "Χρήση αυτού του ονόματος χρήστη"
+  },
+  "securePasswordGenerated": {
+    "message": "Δημιουργήθηκε ασφαλής κωδικός πρόσβασης! Μην ξεχάσετε να ενημερώσετε επίσης τον κωδικό πρόσβασής σας στην ιστοσελίδα."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Χρήση της γεννήτριας",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "για να δημιουργήσετε έναν ισχυρό μοναδικό κωδικό πρόσβασης",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "vaultTimeoutAction": {
     "message": "Ενέργεια Χρόνου Λήξης Vault"
   },
@@ -1999,6 +2058,12 @@
   },
   "nativeMessagingWrongUserTitle": {
     "message": "Απόρριψη λογαριασμού"
+  },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "Το βιομετρικό ξεκλείδωμα απέτυχε. Το βιομετρικό μυστικό κλειδί απέτυχε να ξεκλειδώσει το θησαυ/κιο. Προσπαθήστε να ρυθμίσετε ξανά τα βιομετρικά."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "Αναντιστοιχία βιομετρικού κλειδιού"
   },
   "biometricsNotEnabledTitle": {
     "message": "Δεν έχουν οριστεί βιομετρικά"
@@ -2248,6 +2313,24 @@
     "message": "Το Send δημιουργήθηκε",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "createdSendSuccessfully": {
+    "message": "Send created successfully!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "The Send will be available to anyone with the link for the next $DAYS$ days.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Send link copied",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "editedSend": {
     "message": "Το Send αποθηκεύτηκε",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -2328,7 +2411,7 @@
     "message": "Ο Κύριος κωδικός πρόσβασης δεν πληροί τις απαιτήσεις πολιτικής αυτού του οργανισμού. Για να έχετε πρόσβαση στο vault, πρέπει να ενημερώσετε τον Κύριο σας κωδικό άμεσα. Η διαδικασία θα σας αποσυνδέσει από την τρέχουσα συνεδρία σας, απαιτώντας από εσάς να συνδεθείτε ξανά. Οι ενεργές συνεδρίες σε άλλες συσκευές ενδέχεται να συνεχίσουν να είναι ενεργές για μία ώρα."
   },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+    "message": "Ο οργανισμός σας έχει απενεργοποιήσει την κρυπτογράφηση αξιόπιστης συσκευής. Παρακαλώ ορίστε έναν κύριο κωδικό πρόσβασης για να αποκτήσετε πρόσβαση στο θησαυροφυλάκιο σας."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Αυτόματη εγγραφή"
@@ -3836,6 +3919,16 @@
   "websiteUri": {
     "message": "Ιστοσελίδα (URI)"
   },
+  "websiteUriCount": {
+    "message": "Ιστοσελίδα (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "websiteAdded": {
     "message": "Η ιστοσελίδα προστέθηκε"
   },
@@ -3876,6 +3969,12 @@
   "autoFillOnPageLoad": {
     "message": "Αυτόματη συμπλήρωση κατά τη φόρτωση της σελίδας;"
   },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "cardDetails": {
     "message": "Στοιχεία κάρτας"
   },
@@ -3888,6 +3987,9 @@
       }
     }
   },
+  "enableAnimations": {
+    "message": "Enable animations"
+  },
   "addAccount": {
     "message": "Προσθήκη λογαριασμού"
   },
@@ -3896,6 +3998,18 @@
   },
   "data": {
     "message": "Δεδομένα"
+  },
+  "passkeys": {
+    "message": "Κλειδιά πρόσβασης",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Κωδικοί πρόσβασης",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Σύνδεση με κλειδί πρόσβασης",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
     "message": "Ανάθεση"
@@ -4091,6 +4205,12 @@
   "itemLocation": {
     "message": "Τοποθεσία Αντικειμένου"
   },
+  "fileSends": {
+    "message": "Send αρχείων"
+  },
+  "textSends": {
+    "message": "Send κειμένων"
+  },
   "bitwardenNewLook": {
     "message": "Το Bitwarden έχει μια νέα εμφάνιση!"
   },
@@ -4099,5 +4219,14 @@
   },
   "accountActions": {
     "message": "Ενέργειες λογαριασμού"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Εμφάνιση αριθμού προτάσεων αυτόματης συμπλήρωσης σύνδεσης στο εικονίδιο επέκτασης"
+  },
+  "systemDefault": {
+    "message": "Προεπιλογή συστήματος"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "Οι απαιτήσεις της πολιτικής για επιχειρήσεις έχουν εφαρμοστεί σε αυτήν τη ρύθμιση"
   }
 }

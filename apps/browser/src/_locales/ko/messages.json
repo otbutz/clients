@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Finish creating your account by setting a password"
   },
-  "login": {
-    "message": "로그인"
-  },
   "enterpriseSingleSignOn": {
     "message": "엔터프라이즈 통합 인증 (SSO)"
   },
@@ -117,19 +114,19 @@
     "message": "보안 코드 복사"
   },
   "copyName": {
-    "message": "Copy name"
+    "message": "이름 복사"
   },
   "copyCompany": {
-    "message": "Copy company"
+    "message": "회사 복사"
   },
   "copySSN": {
-    "message": "Copy Social Security number"
+    "message": "주민등록번호 복사"
   },
   "copyPassportNumber": {
-    "message": "Copy passport number"
+    "message": "여권 번호 복사"
   },
   "copyLicenseNumber": {
-    "message": "Copy license number"
+    "message": "운전면허 번호 복사"
   },
   "autoFill": {
     "message": "자동 완성"
@@ -257,7 +254,7 @@
     "message": "More from Bitwarden"
   },
   "continueToBitwardenDotCom": {
-    "message": "Continue to bitwarden.com?"
+    "message": "bitwarden.com 으로 이동할까요?"
   },
   "bitwardenForBusiness": {
     "message": "Bitwarden for Business"
@@ -303,6 +300,24 @@
   },
   "editFolder": {
     "message": "폴더 편집"
+  },
+  "newFolder": {
+    "message": "New folder"
+  },
+  "folderName": {
+    "message": "Folder name"
+  },
+  "folderHintText": {
+    "message": "Nest a folder by adding the parent folder's name followed by a “/”. Example: Social/Forums"
+  },
+  "noFoldersAdded": {
+    "message": "No folders added"
+  },
+  "createFoldersToOrganize": {
+    "message": "Create folders to organize your vault items"
+  },
+  "deleteFolderPermanently": {
+    "message": "Are you sure you want to permanently delete this folder?"
   },
   "deleteFolder": {
     "message": "폴더 삭제"
@@ -672,6 +687,9 @@
   "totpHelperWithCapture": {
     "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
   },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
+  },
   "copyTOTP": {
     "message": "인증서 키 (TOTP) 복사"
   },
@@ -685,13 +703,13 @@
     "message": "로그인 세션이 만료되었습니다."
   },
   "logIn": {
-    "message": "Log in"
+    "message": "로그인"
   },
   "restartRegistration": {
     "message": "Restart registration"
   },
   "expiredLink": {
-    "message": "Expired link"
+    "message": "만료된 링크"
   },
   "pleaseRestartRegistrationOrTryLoggingIn": {
     "message": "Please restart registration or try logging in."
@@ -761,7 +779,7 @@
     "message": "새 URI"
   },
   "addDomain": {
-    "message": "Add domain",
+    "message": "도메인 추가",
     "description": "'Domain' here refers to an internet domain name (e.g. 'bitwarden.com') and the message in whole described the act of putting a domain value into the context."
   },
   "addedItem": {
@@ -1061,6 +1079,9 @@
   "ppremiumSignUpStorage": {
     "message": "1GB의 암호화된 파일 저장소."
   },
+  "premiumSignUpEmergency": {
+    "message": "Emergency access."
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
@@ -1082,14 +1103,29 @@
   "premiumPurchaseAlert": {
     "message": "bitwarden.com 웹 보관함에서 프리미엄 멤버십을 구입할 수 있습니다. 지금 웹 사이트를 방문하시겠습니까?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "프리미엄 사용자입니다!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Bitwarden을 지원해 주셔서 감사합니다."
   },
+  "premiumFeatures": {
+    "message": "Upgrade to premium and receive:"
+  },
   "premiumPrice": {
     "message": "이 모든 기능을 연 $PRICE$에 이용하실 수 있습니다!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "All for just $PRICE$ per year!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1803,6 +1839,29 @@
   "passwordGeneratorPolicyInEffect": {
     "message": "하나 이상의 단체 정책이 생성기 규칙에 영항을 미치고 있습니다."
   },
+  "passwordGenerator": {
+    "message": "Password generator"
+  },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "vaultTimeoutAction": {
     "message": "보관함 시간 제한 초과시 동작"
   },
@@ -1999,6 +2058,12 @@
   },
   "nativeMessagingWrongUserTitle": {
     "message": "계정이 일치하지 않음"
+  },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "Biometric unlock failed. The biometric secret key failed to unlock the vault. Please try to set up biometrics again."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "Biometric key missmatch"
   },
   "biometricsNotEnabledTitle": {
     "message": "생체 인식이 활성화되지 않음"
@@ -2246,6 +2311,24 @@
   },
   "createdSend": {
     "message": "Send 생성함",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "createdSendSuccessfully": {
+    "message": "Send created successfully!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "The Send will be available to anyone with the link for the next $DAYS$ days.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Send link copied",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
@@ -3831,10 +3914,20 @@
     "message": "Authenticator key"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Autofill options"
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website added"
@@ -3876,6 +3969,12 @@
   "autoFillOnPageLoad": {
     "message": "Autofill on page load?"
   },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "cardDetails": {
     "message": "Card details"
   },
@@ -3888,6 +3987,9 @@
       }
     }
   },
+  "enableAnimations": {
+    "message": "Enable animations"
+  },
   "addAccount": {
     "message": "Add account"
   },
@@ -3896,6 +3998,18 @@
   },
   "data": {
     "message": "Data"
+  },
+  "passkeys": {
+    "message": "Passkeys",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Passwords",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Log in with passkey",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
     "message": "Assign"
@@ -4091,6 +4205,12 @@
   "itemLocation": {
     "message": "Item Location"
   },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
   "bitwardenNewLook": {
     "message": "Bitwarden has a new look!"
   },
@@ -4099,5 +4219,14 @@
   },
   "accountActions": {
     "message": "Account actions"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Show number of login autofill suggestions on extension icon"
+  },
+  "systemDefault": {
+    "message": "System default"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "Enterprise policy requirements have been applied to this setting"
   }
 }

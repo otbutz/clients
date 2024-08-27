@@ -36,6 +36,9 @@
   "notes": {
     "message": "Jegyzetek"
   },
+  "note": {
+    "message": "Jegyzet"
+  },
   "customFields": {
     "message": "Egyedi mezők"
   },
@@ -49,22 +52,32 @@
     "message": "Hitelesítő kulcs"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Automatikus kitöltés opciók"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Webhely (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Webhely (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "A webhely hozzáadásra került."
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Webhely hozzáadása"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Webhely törlése"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Alapértelmezés ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -74,7 +87,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "$WEBSITE$ egyező érzékelés megjelenítése",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -83,7 +96,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "$WEBSITE$ egyező érzékelés elrejtése",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -92,7 +105,7 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Automatikus kitöltés oldalbetöltésnél?"
   },
   "number": {
     "message": "Szám"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "Dr."
   },
+  "cardExpiredTitle": {
+    "message": "Lejárt kártya"
+  },
+  "cardExpiredMessage": {
+    "message": "Ha megújítottuk, frissítsük a kártya adatait."
+  },
   "expirationMonth": {
     "message": "Lejárati hónap"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "A Bitwarden képes tárolni és kitölteni a kétlépcsős ellenőrző kódokat. Válasszuk a kamera ikont, hogy képernyőképet készítsünk a webhely hitelesítő QR kódjáról vagy másoljuk ki és illesszük be a kulcsot ebbe a mezőbe."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "További információ a hitelesítőkről"
   },
   "folder": {
     "message": "Mappa"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Elem megtekintése"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ megtekintése",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Új",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Mesterjelszó emlékeztető (nem kötelező)"
+  },
+  "newMasterPassHint": {
+    "message": "New master password hint (optional)"
   },
   "masterPassHintLabel": {
     "message": "Mesterjelszó emlékeztető"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "új elemet",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "új bejelentkezés",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " helyett.",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Szavak minimális száma"
   },
-  "defaultType": {
-    "message": "Alapértelmezett típus"
+  "overridePasswordTypePolicy": {
+    "message": "Jelszótípus",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Felhasználói előbeállítás"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "A mesterjelszó nem felel meg egy vagy több szervezeti szabályzatnak. A széf eléréséhez frissíteni kell a meszerjelszót. A továbblépés kijelentkeztet az aktuális munkamenetből és újra be kell jelentkezni. A többi eszközön lévő aktív munkamenetek akár egy óráig is aktívak maradhatnak."
   },
+  "automaticAppLogin": {
+    "message": "A felhasználók automatikus bejelentkezése az engedélyezett alkalmazásokhoz"
+  },
+  "automaticAppLoginDesc": {
+    "message": "A bejelentkezési űrlapok automatikusan kitöltésre és elküldésre kerülnek a konfigurált azonosság szolgáltatótól indított alkalmazásokhoz."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Azonosság szolgáltató kiszolgáló"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Adjuk meg az azonosság szolgáltató kiszolgáló webcímét. Több webcímet vesszővel elválasztva adjunk meg."
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "A szervezete frissítette a visszafejtési beállításokat. Állítsunk be egy mestarjelszót a széf eléréséhez."
   },
   "maximumVaultTimeout": {
     "message": "Széf időkifutás"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Véletlenszerű szó"
+  },
+  "usernameGenerator": {
+    "message": "Felhasználónév generátor"
+  },
+  "useThisPassword": {
+    "message": "Jelszó használata"
+  },
+  "useThisUsername": {
+    "message": "Felhasználónév használata"
+  },
+  "securePasswordGenerated": {
+    "message": "A biztonságos jelszó generálásra került! Ne felejtsük el frissíteni a jelszót a webhelyen is."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Generátor használata",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "erős egyedi jelszó létrehozásához",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Szolgáltatás"
@@ -7678,7 +7749,7 @@
     "message": "A kért eszköz jóváhagyása."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "A felhasználó beállított egy mesterjelszót a TDE kilptetés során."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Kezdjük el a Bitwarden 7 napos ingyenes próbaverzió használatát $ORG$ áron",
@@ -8077,7 +8148,7 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "Mező hozzáadása"
   },
   "items": {
     "message": "Elemek"
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "megvásárolt hely eltávolításra került."
   },
+  "fileSends": {
+    "message": "Fájl küldés"
+  },
+  "textSends": {
+    "message": "Szöveg küldés"
+  },
   "includesXMembers": {
     "message": "$COUNT$ member részére",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB kiegészítő tároló"
+  },
+  "premiumAccounts": {
+    "message": "6 prémium fiók"
+  },
+  "unlimitedSharing": {
+    "message": "Korlátlan megosztás"
+  },
+  "unlimitedCollections": {
+    "message": "Korlátlan gyűjtemény"
+  },
+  "secureDataSharing": {
+    "message": "Biztonságos adatmegosztás"
+  },
+  "eventLogMonitoring": {
+    "message": "Eseménynapló monitorozás"
+  },
+  "directoryIntegration": {
+    "message": "Könyvtár integráció"
+  },
+  "passwordLessSso": {
+    "message": "Jelszómentes SSO"
+  },
+  "accountRecovery": {
+    "message": "Fiók helyreállítás"
+  },
+  "customRoles": {
+    "message": "Egyéni szerepek"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Korlátlan titkos tároló"
+  },
+  "unlimitedUsers": {
+    "message": "Korlátlan felhasználó"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Legfeljebb 50 gépi fiók"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Legfeljebb 20 gépi fiók"
+  },
+  "current": {
+    "message": "Jelenlegi"
+  },
+  "secretsManagerSubInfo": {
+    "message": "A Titkos kód kezelő előfizetés a kiválasztott csomag alapján frissül."
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden jelszókezelő"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "A kiegészítő egyéves Jelszókezelő előfizetés a kiválasztott csomagra frissül. A díjmentes időszak lejártáig nem számítunk fel díjat."
   }
 }

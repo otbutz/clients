@@ -36,6 +36,9 @@
   "notes": {
     "message": "Poznámky"
   },
+  "note": {
+    "message": "Poznámka"
+  },
   "customFields": {
     "message": "Vlastní pole"
   },
@@ -49,22 +52,32 @@
     "message": "Ověřovací klíč"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Volby automatického vyplňování"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Webová stránka (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Webová stránka (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "Webová stránka přidána"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Přidat webovou stránku"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Smazat webovou stránku"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Výchozí ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -74,7 +87,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "Zobrazit detekci shody $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -83,7 +96,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "Skrýt detekci shody $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -92,7 +105,7 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Automaticky vyplnit při načtení stránky?"
   },
   "number": {
     "message": "Číslo"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "MUDr."
   },
+  "cardExpiredTitle": {
+    "message": "Prošlá karta"
+  },
+  "cardExpiredMessage": {
+    "message": "Pokud jste ji obnovili, aktualizujte informace o kartě"
+  },
   "expirationMonth": {
     "message": "Měsíc expirace"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden umí ukládat a vyplňovat dvoufázové ověřovací kódy. Vyberte ikonu fotoaparátu a pořiďte snímek obrazovky ověřovacího QR kódu této webové stránky nebo klíč zkopírujte a vložte do tohoto pole."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Zjistěte více o autentizátorech"
   },
   "folder": {
     "message": "Složka"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Zobrazit položku"
+  },
+  "viewItemType": {
+    "message": "Zobrazit $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Nový",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Nápověda k hlavnímu heslu (volitelné)"
+  },
+  "newMasterPassHint": {
+    "message": "Nápověda k novému hlavnímu heslu (volitelné)"
   },
   "masterPassHintLabel": {
     "message": "Nápověda k hlavnímu heslu"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "novou položku",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "nové přihlášení",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": ".",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Minimální počet slov"
   },
-  "defaultType": {
-    "message": "Výchozí typ"
+  "overridePasswordTypePolicy": {
+    "message": "Typ hesla",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Uživatelská volba"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
   },
+  "automaticAppLogin": {
+    "message": "Automaticky přihlásit uživatele pro povolené aplikace"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Přihlašovací formuláře budou automaticky vyplněny a odeslány pro aplikace spuštěné od Vašeho nakonfigurovaného poskytovatele identity."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Hostitel poskytovatele identity"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Zadejte URL hostitele poskytovatele identity. Zadejte více adres URL oddělením čárkou."
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "Vaše organizace aktualizovala možnosti dešifrování. Nastavte hlavní heslo pro přístup k Vašemu trezoru."
   },
   "maximumVaultTimeout": {
     "message": "Časový limit trezoru"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Náhodné slovo"
+  },
+  "usernameGenerator": {
+    "message": "Generátor uživatelského jména"
+  },
+  "useThisPassword": {
+    "message": "Použít toto heslo"
+  },
+  "useThisUsername": {
+    "message": "Použít toto uživatelské jméno"
+  },
+  "securePasswordGenerated": {
+    "message": "Bezpečné heslo bylo vygenerováno! Nezapomeňte také aktualizovat heslo na webu."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Použijte generátor",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "pro vytvoření silného jedinečného hesla",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Služba"
@@ -7678,7 +7749,7 @@
     "message": "Požadované schválení zařízení."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "Uživatel nastavil hlavní heslo během TDE offboardingu."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Začněte 7denní bezplatnou zkušební verzi Bitwardenu pro $ORG$",
@@ -8077,7 +8148,7 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "Přidat pole"
   },
   "items": {
     "message": "Položky"
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "zakoupení uživatelé odebráni"
   },
+  "fileSends": {
+    "message": "Sends se soubory"
+  },
+  "textSends": {
+    "message": "Sends s texty"
+  },
   "includesXMembers": {
     "message": "pro $COUNT$ členů",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB dodatečného úložiště"
+  },
+  "premiumAccounts": {
+    "message": "6 účtů Premium"
+  },
+  "unlimitedSharing": {
+    "message": "Neomezené sdílení"
+  },
+  "unlimitedCollections": {
+    "message": "Neomezené kolekce"
+  },
+  "secureDataSharing": {
+    "message": "Zabezpečené sdílení dat"
+  },
+  "eventLogMonitoring": {
+    "message": "Monitorování logů událostí"
+  },
+  "directoryIntegration": {
+    "message": "Integrace adresáře"
+  },
+  "passwordLessSso": {
+    "message": "SSO bez hesla"
+  },
+  "accountRecovery": {
+    "message": "Obnovení účtu"
+  },
+  "customRoles": {
+    "message": "Vlastní role"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Neomezené úložiště tajných klíčů"
+  },
+  "unlimitedUsers": {
+    "message": "Neomezení uživatelé"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Až 50 účtů"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Až 20 účtů"
+  },
+  "current": {
+    "message": "Aktuální"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Vaše předplatné Správce tajných klíčů bude aktualizováno na základě vybraného tarifu"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden - Správce hesel"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Vaše doplňkové roční předplatné Správce hesel bude aktualizováno na vybraný plán. Poplatek Vám bude účtován až po skončení bezplatného období."
   }
 }

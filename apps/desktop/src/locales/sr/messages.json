@@ -1174,6 +1174,9 @@
   "premiumPurchaseAlert": {
     "message": "Можете купити премијум претплату на bitwarden.com. Да ли желите да посетите веб сајт сада?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Можете да купите Премиум у подешавањима налога у веб апликацији Bitwarden."
+  },
   "premiumCurrentMember": {
     "message": "Ви сте премијум члан!"
   },
@@ -1510,8 +1513,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Додатна подешавања Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Откључати системском аутентификацијом"
+  },
   "windowsHelloConsentMessage": {
     "message": "Потврди за Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Аутентификујте се да бисте откључали Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Откључај са Touch ID"
@@ -1524,6 +1533,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Захтевај Windows Hello при покретању"
+  },
+  "autoPromptPolkit": {
+    "message": "Затражите аутентификацију система при покретању"
   },
   "autoPromptTouchId": {
     "message": "Захтевај Touch ID при покретању"
@@ -1804,6 +1816,12 @@
   "biometricsNotEnabledDesc": {
     "message": "Биометрија прегледача захтева да у поставкама прво буде омогућена биометрија desktop-а."
   },
+  "biometricsManualSetupTitle": {
+    "message": "Аутоматско подешавање није доступно"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Због начина инсталације, подршка за биометрију није могла бити аутоматски омогућена. Да ли желите да отворите документацију о томе како то да ручно урадите?"
+  },
   "personalOwnershipSubmitError": {
     "message": "Због смерница за предузећа, ограничено вам је чување предмета у вашем личном трезору. Промените опцију власништва у организацију и изаберите из доступних колекција."
   },
@@ -2014,6 +2032,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ваша главна лозинка не испуњава једну или више смерница ваше организације. Да бисте приступили сефу, морате одмах да ажурирате главну лозинку. Ако наставите, одјавићете се са ваше тренутне сесије, што захтева да се поново пријавите. Активне сесије на другим уређајима могу да остану активне до један сат."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Ваша организација је онемогућила шифровање поузданог уређаја. Поставите главну лозинку за приступ вашем трезору."
   },
   "tryAgain": {
     "message": "Покушајте поново"
@@ -3025,5 +3046,11 @@
   },
   "data": {
     "message": "Подаци"
+  },
+  "fileSends": {
+    "message": "Датотека „Send“"
+  },
+  "textSends": {
+    "message": "Текст „Send“"
   }
 }

@@ -552,7 +552,7 @@
     "message": "Gợi ý mật khẩu chính"
   },
   "joinOrganization": {
-    "message": "Join organization"
+    "message": "Tham gia tổ chức"
   },
   "finishJoiningThisOrganizationBySettingAMasterPassword": {
     "message": "Finish joining this organization by setting a master password."
@@ -871,11 +871,11 @@
     "message": "Bạn có thể thay đổi mật khẩu chính của mình trên Bitwarden bản web."
   },
   "fingerprintPhrase": {
-    "message": "Cụm từ mật khẩu",
+    "message": "Cụm vân tay",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "yourAccountsFingerprint": {
-    "message": "Cụm từ mật khẩu tài khoản của bạn",
+    "message": "Cụm vân tay tài khoản của bạn",
     "description": "A 'fingerprint phrase' is a unique word phrase (similar to a passphrase) that a user can use to authenticate their public key with another user, for the purposes of sharing."
   },
   "goToWebVault": {
@@ -1173,6 +1173,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Bạn có thể nâng cấp làm thành viên cao cấp trong kho bitwarden nền web. Bạn có muốn truy cập trang web bây giờ?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
   },
   "premiumCurrentMember": {
     "message": "Bạn là một thành viên cao cấp!"
@@ -1510,8 +1513,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Cài đặt Windows Hello bổ sung"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Xác minh cho Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Mở khóa với Touch ID"
@@ -1524,6 +1533,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Yêu cầu xác minh Windows Hello khi mở"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Yêu cầu xác minh Touch ID khi mở"
@@ -1637,7 +1649,7 @@
     "message": "Xoá vĩnh viễn"
   },
   "vaultTimeoutLogOutConfirmation": {
-    "message": "Tuỳ chọn đăng xuất sẽ đăng xuất khỏi kho sau khi hết thời gian mở kho và bạn sẽ cần đăng nhập lại để tiếp tục sử dụng. Bạn có chắc muốn sử dụng tuỳ chọn này không?"
+    "message": "Đăng xuất sẽ xóa tất cả quyền truy cập vào kho của bạn và yêu cầu xác minh trực tuyến sau khi hết thời gian chờ. Bạn có chắc chắn muốn sử dụng cài đặt này không?"
   },
   "vaultTimeoutLogOutConfirmationTitle": {
     "message": "Xác nhận hành động khi hết thời gian chờ"
@@ -1712,16 +1724,16 @@
     "message": "Mật khẩu chính bạn chọn không đáp ứng yêu cầu."
   },
   "receiveMarketingEmailsV2": {
-    "message": "Nhận lời khuyên, thông báo và cơ hội nghiên cứu từ Bitwarden trong hộp thư đến của bạn."
+    "message": "Nhận đề xuất, thông báo và cơ hội nghiên cứu từ Bitwarden trong hộp thư đến của bạn."
   },
   "unsubscribe": {
-    "message": "Huỷ đăng ký"
+    "message": "Hủy đăng ký"
   },
   "atAnyTime": {
     "message": "bất cứ lúc nào."
   },
   "byContinuingYouAgreeToThe": {
-    "message": "Bằng cách tiếp tục, bạn đồng ý"
+    "message": "Nếu tiếp tục, bạn đồng ý"
   },
   "and": {
     "message": "và"
@@ -1766,7 +1778,7 @@
     "message": "Yêu cầu xác minh để tích hợp trình duyệt"
   },
   "enableBrowserIntegrationFingerprintDesc": {
-    "message": "Tăng cường bảo mật bằng cách yêu cầu xác nhận cụm từ mật khẩu khi kết nối máy tính với trình duyệt. Việc này yêu cầu bạn phải thực hiện thao tác xác minh mỗi khi tạo kết nối mới."
+    "message": "Tăng cường bảo mật bằng cách yêu cầu xác nhận cụm vân tay khi kết nối máy tính với trình duyệt. Việc này yêu cầu bạn phải thực hiện thao tác xác minh mỗi khi tạo kết nối."
   },
   "enableHardwareAcceleration": {
     "message": "Dùng tính năng tăng tốc phần cứng"
@@ -1781,7 +1793,7 @@
     "message": "Xác minh kết nối trình duyệt"
   },
   "verifyBrowserDesc": {
-    "message": "Vui lòng đảm bảo dấu vân tay hiển thị giống hệt với dấu vân tay được hiển thị trong tiện ích mở rộng trình duyệt."
+    "message": "Vui lòng đảm bảo cụm vân tay hiển thị giống hệt với cụm vân tay được hiển thị trong tiện ích mở rộng trình duyệt."
   },
   "verifyNativeMessagingConnectionTitle": {
     "message": "$APPID$ muốn kết nối với Bitwarden",
@@ -1803,6 +1815,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Sinh trắc học trên trình duyệt yêu cầu sinh trắc học trên máy tính phải được cài đặt trước."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Do chính sách doanh nghiệp, bạn bị hạn chế lưu các mục vào kho cá nhân của mình. Thay đổi tùy chọn quyền sở hữu thành một tổ chức và chọn từ các bộ sưu tập có sẵn."
@@ -2015,6 +2033,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Mật khẩu chính của bạn không đáp ứng chính sách tổ chức của bạn. Để truy cập kho, bạn phải cập nhật mật khẩu chính của mình ngay bây giờ. Việc tiếp tục sẽ đăng xuất bạn khỏi phiên hiện tại và bắt buộc đăng nhập lại. Các phiên hoạt động trên các thiết bị khác có thể tiếp tục duy trì hoạt động trong tối đa một giờ."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Thử lại"
   },
@@ -2100,7 +2121,7 @@
     "message": "Thời gian mở kho vượt quá giới hạn do tổ chức của bạn đặt ra."
   },
   "inviteAccepted": {
-    "message": "Invitation accepted"
+    "message": "Lời mời được chấp nhận"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Đăng ký tự động"
@@ -2124,7 +2145,7 @@
     "message": "Đã xóa mật khẩu chính"
   },
   "convertOrganizationEncryptionDesc": {
-    "message": "$ORGANIZATION$ đang sử dụng SSO với khóa máy chủ tự lưu trữ. Các thành viên của tổ chức này không cần mật khẩu chính để đăng nhập.",
+    "message": "$ORGANIZATION$ đang sử dụng SSO với khóa máy chủ tự lưu trữ. Mật khẩu chính không còn cần để đăng nhập cho các thành viên của tổ chức này.",
     "placeholders": {
       "organization": {
         "content": "$1",
@@ -2429,10 +2450,10 @@
     "message": "Một thông báo đã được gửi đến thiết bị của bạn."
   },
   "fingerprintMatchInfo": {
-    "message": "Vui lòng đảm bảo rằng bạn đã mở khoá kho và cụm từ mật khẩu khớp trên thiết bị khác."
+    "message": "Vui lòng đảm bảo rằng bạn đã mở khoá kho và cụm vân tay khớp trên thiết bị khác."
   },
   "fingerprintPhraseHeader": {
-    "message": "Cụm từ mật khẩu"
+    "message": "Cụm vân tay"
   },
   "needAnotherOption": {
     "message": "Đăng nhập bằng thiết bị phải được thiết lập trong cài đặt của ứng dụng Bitwarden. Dùng cách khác?"
@@ -3025,5 +3046,11 @@
   },
   "data": {
     "message": "Dữ liệu"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
   }
 }

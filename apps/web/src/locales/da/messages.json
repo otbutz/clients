@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notater"
   },
+  "note": {
+    "message": "Notat"
+  },
   "customFields": {
     "message": "Tilpassede felter"
   },
@@ -53,6 +56,16 @@
   },
   "websiteUri": {
     "message": "Websted (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Websted (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Websted tilføjet"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "Dr."
   },
+  "cardExpiredTitle": {
+    "message": "Udløbet kort"
+  },
+  "cardExpiredMessage": {
+    "message": "Er det blevet fornyet, opdatér venligst kortoplysningerne"
+  },
   "expirationMonth": {
     "message": "Udløbsmåned"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden kan gemme og udfylde 2-trinsbekræftelseskoder. Vælg kameraikonet for at tage et skærmfoto af dette websteds godkendelses-QR-kode, eller kopiér og indsæt nøglen i dette felt."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Læs mere om autentifikatorer"
   },
   "folder": {
     "message": "Mappe"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Vis emne"
+  },
+  "viewItemType": {
+    "message": "Vis $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Nyt",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Hovedadgangskodetip (valgfri)"
+  },
+  "newMasterPassHint": {
+    "message": "Nyt hovedadgangskodetip (valgfrit)"
   },
   "masterPassHintLabel": {
     "message": "Hovedadgangskodetip"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "nyt emne",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "nyt login",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " i stedet.",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Minimum antal ord"
   },
-  "defaultType": {
-    "message": "Standard type"
+  "overridePasswordTypePolicy": {
+    "message": "Adgangskodetype",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Brugerpræference"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Din hovedadgangskode opfylder ikke et eller flere organisationspolitikkrav. For at kunne tilgå boksen skal hovedadgangskode derfor opdateres nu. Fortsættes, logges du ud af den nuværende session og vil skulle logge ind igen. Aktive sessioner på andre enheder kan forblive aktive i op til én time."
   },
+  "automaticAppLogin": {
+    "message": "Log automatisk brugere på tilladte applikationer"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Login-formularer udfyldes og indsendes automatisk for apps startet fra den opsatte identitetsudbyder."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identitetsudbydervært"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Angiv identitetsudbyderværts-URL'en. Ved flere URL'er, adskil dem med komma."
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "Organisationen har opdateret brugernes dekrypteringsmuligheder. Opsæt en hovedadgangskode for at tilgå boksen."
   },
   "maximumVaultTimeout": {
     "message": "Boks-timeout"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Tilfældigt ord"
+  },
+  "usernameGenerator": {
+    "message": "Brugernavngenerator"
+  },
+  "useThisPassword": {
+    "message": "Anvend denne adgangskode"
+  },
+  "useThisUsername": {
+    "message": "Anvend dette brugernavn"
+  },
+  "securePasswordGenerated": {
+    "message": "Sikker adgangskode genereret! Glem ikke at opdatere adgangskoden på webstedet også."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Anvend generatoren",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "til at oprette en stærk, unik adgangskode",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Tjeneste"
@@ -7678,7 +7749,7 @@
     "message": "Godkendelse af anmodet enhed."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "Bruger opsatte en hovedadgangskode under TDE-offboarding."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Start din 7-dages gratis prøveperiode af Bitwarden til $ORG$",
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "købte pladser fjernet"
   },
+  "fileSends": {
+    "message": "Fil-Sends"
+  },
+  "textSends": {
+    "message": "Tekst-Sends"
+  },
   "includesXMembers": {
     "message": "for $COUNT$ medlem",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB ekstra lagerplads"
+  },
+  "premiumAccounts": {
+    "message": "6 Premium-konti"
+  },
+  "unlimitedSharing": {
+    "message": "Ubegrænset antal delinger"
+  },
+  "unlimitedCollections": {
+    "message": "Ubegrænset antal samlinger"
+  },
+  "secureDataSharing": {
+    "message": "Sikker datadeling"
+  },
+  "eventLogMonitoring": {
+    "message": "Hændelseslogmonitorering"
+  },
+  "directoryIntegration": {
+    "message": "Mappeintegration"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Kontogenskabelse"
+  },
+  "customRoles": {
+    "message": "Tilpassede roller"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Ubegrænset hemmelighedslagring"
+  },
+  "unlimitedUsers": {
+    "message": "Ubegrænset antal brugere"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Op til 50 maskinkonti"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Op til 20 maskinkonti"
+  },
+  "current": {
+    "message": "Nuværende"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Secrets Manager-abonnementet vil opgradere baseret på den valgte plan"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Adgangskodehåndtering"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Det komplementære et års abonnement på Adgangskodehåndtering opgraderes til den valgte abonnementstype. Betaling opkræves først efter den gratis periode."
   }
 }

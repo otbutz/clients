@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "पासवर्ड सेट करके अपना खाता निर्माण पूरा करें"
   },
-  "login": {
-    "message": "Log In"
-  },
   "enterpriseSingleSignOn": {
     "message": "उद्यम एकल साइन-ऑन"
   },
@@ -303,6 +300,24 @@
   },
   "editFolder": {
     "message": "Edit Folder"
+  },
+  "newFolder": {
+    "message": "New folder"
+  },
+  "folderName": {
+    "message": "Folder name"
+  },
+  "folderHintText": {
+    "message": "Nest a folder by adding the parent folder's name followed by a “/”. Example: Social/Forums"
+  },
+  "noFoldersAdded": {
+    "message": "No folders added"
+  },
+  "createFoldersToOrganize": {
+    "message": "Create folders to organize your vault items"
+  },
+  "deleteFolderPermanently": {
+    "message": "Are you sure you want to permanently delete this folder?"
   },
   "deleteFolder": {
     "message": "Delete Folder"
@@ -671,6 +686,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
   },
   "copyTOTP": {
     "message": "Copy Authenticator key (TOTP)"
@@ -1061,6 +1079,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB of encrypted file storage."
   },
+  "premiumSignUpEmergency": {
+    "message": "Emergency access."
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Proprietary two-step login options such as YubiKey and Duo."
   },
@@ -1082,14 +1103,29 @@
   "premiumPurchaseAlert": {
     "message": "आप bitwarden.com वेब वॉल्ट पर प्रीमियम सदस्यता खरीद सकते हैं।क्या आप अब वेबसाइट पर जाना चाहते हैं?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "आप एक प्रीमियम सदस्य हैं!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Thank you for supporting bitwarden."
   },
+  "premiumFeatures": {
+    "message": "Upgrade to premium and receive:"
+  },
   "premiumPrice": {
     "message": "All for just $PRICE$ /year!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "All for just $PRICE$ per year!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1803,6 +1839,29 @@
   "passwordGeneratorPolicyInEffect": {
     "message": "एक या एक से अधिक संगठन नीतियां आपकी जनरेटर सेटिंग को प्रभावित कर रही हैं।"
   },
+  "passwordGenerator": {
+    "message": "Password generator"
+  },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "vaultTimeoutAction": {
     "message": "वॉल्ट मध्यांतर कार्रवाई"
   },
@@ -1999,6 +2058,12 @@
   },
   "nativeMessagingWrongUserTitle": {
     "message": "खाता गलत मैच"
+  },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "बायोमेट्रिक अनलॉक विफल रहा. बायोमेट्रिक गुप्त कुंजी वॉल्ट को अनलॉक करने में विफल रही. कृपया बायोमेट्रिक्स को फिर से सेट करने का प्रयास करें."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "बेमेल बायोमेट्रिक कुंजी"
   },
   "biometricsNotEnabledTitle": {
     "message": "बॉयोमीट्रिक्स सक्षम नहीं  है"
@@ -2248,6 +2313,24 @@
     "message": "नया सेंड बनाया गया",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "createdSendSuccessfully": {
+    "message": "Send created successfully!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "The Send will be available to anyone with the link for the next $DAYS$ days.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Send link copied",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "editedSend": {
     "message": "सेंड एडिट किया गया",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -2328,7 +2411,7 @@
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+    "message": "आपके संगठन ने विश्वसनीय डिवाइस एन्क्रिप्शन अक्षम कर दिया है. कृपया अपने वॉल्ट तक पहुँचने के लिए मास्टर पासवर्ड सेट करें."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "स्वचालित नामांकन"
@@ -3831,10 +3914,20 @@
     "message": "Authenticator key"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Autofill options"
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website added"
@@ -3876,6 +3969,12 @@
   "autoFillOnPageLoad": {
     "message": "Autofill on page load?"
   },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "cardDetails": {
     "message": "Card details"
   },
@@ -3888,6 +3987,9 @@
       }
     }
   },
+  "enableAnimations": {
+    "message": "Enable animations"
+  },
   "addAccount": {
     "message": "Add account"
   },
@@ -3896,6 +3998,18 @@
   },
   "data": {
     "message": "Data"
+  },
+  "passkeys": {
+    "message": "Passkeys",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Passwords",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Log in with passkey",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
     "message": "Assign"
@@ -4091,6 +4205,12 @@
   "itemLocation": {
     "message": "Item Location"
   },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
   "bitwardenNewLook": {
     "message": "बिटवार्डन का नया रूप!"
   },
@@ -4099,5 +4219,14 @@
   },
   "accountActions": {
     "message": "Account actions"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Show number of login autofill suggestions on extension icon"
+  },
+  "systemDefault": {
+    "message": "System default"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "इस सेटिंग पर एंटरप्राइज़ नीति आवश्यकताएँ लागू की गई हैं"
   }
 }

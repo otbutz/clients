@@ -36,6 +36,9 @@
   "notes": {
     "message": "Note"
   },
+  "note": {
+    "message": "Note"
+  },
   "customFields": {
     "message": "Campi personalizzati"
   },
@@ -49,10 +52,20 @@
     "message": "Authenticator key"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Autofill options"
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website added"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "Dott"
   },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "expirationMonth": {
     "message": "Mese di scadenza"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden can store and fill 2-step verification codes. Select the camera icon to take a screenshot of this website's authenticator QR code, or copy and paste the key into this field."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
   },
   "folder": {
     "message": "Cartella"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Visualizza elemento"
+  },
+  "viewItemType": {
+    "message": "View $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Nuovo",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Suggerimento per la password principale (facoltativo)"
+  },
+  "newMasterPassHint": {
+    "message": "New master password hint (optional)"
   },
   "masterPassHintLabel": {
     "message": "Suggerimento per la password principale"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "nuovo elemento",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "new login",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": ".",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Numero minimo di parole"
   },
-  "defaultType": {
-    "message": "Tipo predefinito"
+  "overridePasswordTypePolicy": {
+    "message": "Password Type",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Preferenza utente"
@@ -5322,6 +5361,18 @@
   "updateWeakMasterPasswordWarning": {
     "message": "La tua password principale non soddisfa uno o più politiche della tua organizzazione. Per accedere alla cassaforte, aggiornala ora. Procedere ti farà uscire dalla sessione corrente, richiedendoti di accedere di nuovo. Le sessioni attive su altri dispositivi potrebbero continuare a rimanere attive per un massimo di un'ora."
   },
+  "automaticAppLogin": {
+    "message": "Automatically log in users for allowed applications"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Login forms will automatically be filled and submitted for apps launched from your configured identity provider."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identity provider host"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Enter your identity provider host URL. Enter multiple URLs by separating with a comma."
+  },
   "tdeDisabledMasterPasswordRequired": {
     "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
   },
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Parola casuale"
+  },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Servizio"
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "purchased seats removed"
   },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
   "includesXMembers": {
     "message": "for $COUNT$ member",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB additional storage"
+  },
+  "premiumAccounts": {
+    "message": "6 premium accounts"
+  },
+  "unlimitedSharing": {
+    "message": "Unlimited sharing"
+  },
+  "unlimitedCollections": {
+    "message": "Unlimited collections"
+  },
+  "secureDataSharing": {
+    "message": "Secure data sharing"
+  },
+  "eventLogMonitoring": {
+    "message": "Event log monitoring"
+  },
+  "directoryIntegration": {
+    "message": "Directory integration"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Account recovery"
+  },
+  "customRoles": {
+    "message": "Custom roles"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Unlimited secrets storage"
+  },
+  "unlimitedUsers": {
+    "message": "Unlimited users"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Up to 50 machine accounts"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Up to 20 machine accounts"
+  },
+  "current": {
+    "message": "Current"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Your Secrets Manager subscription will upgrade base on the plan selected"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Password Manager"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
   }
 }

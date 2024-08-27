@@ -25,9 +25,6 @@
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Zdajte heslo na vytvorenie účtu"
   },
-  "login": {
-    "message": "Prihlásiť sa"
-  },
   "enterpriseSingleSignOn": {
     "message": "Jednotné prihlásenie pre podniky (SSO)"
   },
@@ -303,6 +300,24 @@
   },
   "editFolder": {
     "message": "Upraviť priečinok"
+  },
+  "newFolder": {
+    "message": "Nový priečinok"
+  },
+  "folderName": {
+    "message": "Názov priečinka"
+  },
+  "folderHintText": {
+    "message": "Vnorte priečinok pridaním názvu nadradeného priečinka a znaku \"/\". Príklad: Sociálne siete/Fóra"
+  },
+  "noFoldersAdded": {
+    "message": "Neboli pridané žiadne priečinky"
+  },
+  "createFoldersToOrganize": {
+    "message": "Vytvorte priečinky na usporiadanie položiek trezoru"
+  },
+  "deleteFolderPermanently": {
+    "message": "Naozaj chcete natrvalo odstrániť tento priečinok?"
   },
   "deleteFolder": {
     "message": "Odstrániť priečinok"
@@ -671,6 +686,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden umožňuje uložiť a vyplniť kódy dvojstupňového overenia. Vyberte ikonu fotoaparátu a zosnímajte obrazovku QR kódu overovacej aplikácie tejto webovej stránky alebo skopírujte a vložte kľúč do tohto poľa."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Viac informácií o overovateľoch"
   },
   "copyTOTP": {
     "message": "Kopírovať kľúč overovateľa (TOTP)"
@@ -1061,6 +1079,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB šifrovaného úložiska."
   },
+  "premiumSignUpEmergency": {
+    "message": "Núdzový prístup"
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Proprietárne možnosti dvojstupňového prihlásenia ako napríklad YubiKey a Duo."
   },
@@ -1082,14 +1103,29 @@
   "premiumPurchaseAlert": {
     "message": "Svoje prémiové členstvo môžete zakúpiť vo webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Prémiové členstvo si môžete zakúpiť v nastaveniach svojho účtu vo webovej aplikácii Bitwarden."
+  },
   "premiumCurrentMember": {
     "message": "Ste prémiovým členom!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Ďakujeme, že podporujete Bitwarden."
   },
+  "premiumFeatures": {
+    "message": "Povýšte na premium a získajte:"
+  },
   "premiumPrice": {
     "message": "Všetko len za %price% /rok!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "Všetko len za $PRICE$ ročne!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1803,6 +1839,29 @@
   "passwordGeneratorPolicyInEffect": {
     "message": "Jedno alebo viac nastavení organizácie ovplyvňujú vaše nastavenia generátora."
   },
+  "passwordGenerator": {
+    "message": "Generátor hesla"
+  },
+  "usernameGenerator": {
+    "message": "Generátor používateľského mena"
+  },
+  "useThisPassword": {
+    "message": "Použiť toto heslo"
+  },
+  "useThisUsername": {
+    "message": "Použiť toto používateľské meno"
+  },
+  "securePasswordGenerated": {
+    "message": "Bezpečné heslo vygenerované! Nezabudnite tiež aktualizovať heslo na stránke."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Použite generátor",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "na vytvorenie silného, unikátneho hesla.",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
   "vaultTimeoutAction": {
     "message": "Akcia pri vypršaní času pre trezor"
   },
@@ -1983,7 +2042,7 @@
     "message": "Aplikácia Bitwarden Desktop musí byť pred použitím odomknutia pomocou biometrických údajov spustená."
   },
   "errorEnableBiometricTitle": {
-    "message": "Nie je môžné povoliť biometriu"
+    "message": "Nie je môžné povoliť biometrické údaje"
   },
   "errorEnableBiometricDesc": {
     "message": "Akcia bola zrušená desktopovou aplikáciou"
@@ -1999,6 +2058,12 @@
   },
   "nativeMessagingWrongUserTitle": {
     "message": "Nezhoda účtu"
+  },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "Odomknutie biometrickými údajmi zlyhalo. Tajný kľúč biometrických údajov nedokázal odomknúť trezor. Skúste biometrické údaje nastaviť znova."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "Kľúč biometrických údajov sa nezhoduje"
   },
   "biometricsNotEnabledTitle": {
     "message": "Biometria nie je povolená"
@@ -2248,6 +2313,24 @@
     "message": "Send vytvorený",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "createdSendSuccessfully": {
+    "message": "Send bol úspešne vytvorený!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "Send bude k dispozícii každému s odkazom po dobu $DAYS$ dní.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Skopírovaný odkaz na Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "editedSend": {
     "message": "Send upravený",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -2328,7 +2411,7 @@
     "message": "Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
   },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+    "message": "Vaša organizácia zakázala šifrovanie dôveryhodného zariadenia. Na prístup k trezoru nastavte hlavné heslo."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrácia"
@@ -3831,22 +3914,32 @@
     "message": "Kľúč overovacej aplikácie"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Možnosti automatického vypĺňania"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Webová stránka (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Webová stránka (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "Webová stránka pridaná"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Pridať webovú stránku"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Odstrániť webovú stránku"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Predvolené ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -3856,7 +3949,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "Zobraziť spôsob mapovania $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -3865,7 +3958,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "Skryť spôsob mapovania $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -3874,7 +3967,13 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Automaticky vyplniť pri načítaní stránky?"
+  },
+  "cardExpiredTitle": {
+    "message": "Exspirovaná karta"
+  },
+  "cardExpiredMessage": {
+    "message": "Ak ste kartu obnovili, aktualizujte jej údaje"
   },
   "cardDetails": {
     "message": "Podrobnosti o karte"
@@ -3888,6 +3987,9 @@
       }
     }
   },
+  "enableAnimations": {
+    "message": "Povoliť animácie"
+  },
   "addAccount": {
     "message": "Pridať účet"
   },
@@ -3896,6 +3998,18 @@
   },
   "data": {
     "message": "Údaje"
+  },
+  "passkeys": {
+    "message": "Prístupové kľúče",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Heslá",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Prihlásiť sa s prístupovým kľúčom",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
   },
   "assign": {
     "message": "Priradiť"
@@ -4091,6 +4205,12 @@
   "itemLocation": {
     "message": "Umiestnenie položky"
   },
+  "fileSends": {
+    "message": "Sendy so súborom"
+  },
+  "textSends": {
+    "message": "Textové Sendy"
+  },
   "bitwardenNewLook": {
     "message": "Bitwarden má nový vzhľad!"
   },
@@ -4098,6 +4218,15 @@
     "message": "Automatické vypĺňanie a vyhľadávanie na karte Trezor je jednoduchšie a intuitívnejšie ako kedykoľvek predtým. Poobzerajte sa!"
   },
   "accountActions": {
-    "message": "Account actions"
+    "message": "Operácie s účtom"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Zobraziť počet odporúčaných prihlasovacích údajov na ikone rozšírenia"
+  },
+  "systemDefault": {
+    "message": "Predvolené systémom"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "Na toto nastavenie boli uplatnené požiadavky pravidiel spoločnosti"
   }
 }

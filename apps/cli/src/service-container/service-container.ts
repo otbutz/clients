@@ -699,6 +699,7 @@ export class ServiceContainer {
       this.billingAccountProfileStateService,
       this.tokenService,
       this.authService,
+      this.stateProvider,
     );
 
     this.totpService = new TotpService(this.cryptoFunctionService, this.logService);
@@ -713,6 +714,7 @@ export class ServiceContainer {
       this.collectionService,
       this.cryptoService,
       this.pinService,
+      this.accountService,
     );
 
     this.individualExportService = new IndividualVaultExportService(
@@ -732,6 +734,7 @@ export class ServiceContainer {
       this.cryptoFunctionService,
       this.collectionService,
       this.kdfConfigService,
+      this.accountService,
     );
 
     this.exportService = new VaultExportService(
@@ -772,7 +775,6 @@ export class ServiceContainer {
     const userId = (await this.stateService.getUserId()) as UserId;
     await Promise.all([
       this.eventUploadService.uploadEvents(userId as UserId),
-      this.syncService.setLastSync(new Date(0)),
       this.cryptoService.clearKeys(),
       this.cipherService.clear(userId),
       this.folderService.clear(userId),

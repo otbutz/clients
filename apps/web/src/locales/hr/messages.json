@@ -36,6 +36,9 @@
   "notes": {
     "message": "Bilješke"
   },
+  "note": {
+    "message": "Bilješka"
+  },
   "customFields": {
     "message": "Prilagođena polja"
   },
@@ -49,22 +52,32 @@
     "message": "Kôd za provjeru"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "Postavke auto-ispune"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Web stranica (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Broj URI-ja: $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "Web stranica dodana"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Dodaj web stranicu"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Izbriši web stranicu"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Zadano ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -74,7 +87,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "Prikaži otkrivanje podudaranja $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -83,7 +96,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "Sakrij otkrivanje podudaranja $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -92,7 +105,7 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Auto-ispuna kod učitavanja"
   },
   "number": {
     "message": "Broj"
@@ -176,10 +189,16 @@
     "message": "gđica."
   },
   "mx": {
-    "message": "Mx"
+    "message": "gx."
   },
   "dr": {
     "message": "dr."
+  },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
   },
   "expirationMonth": {
     "message": "Mjesec isteka"
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden može pohraniti i ispuniti kodove za dvostruku autentifikaciju. Odaberi ikonu kamere i označi QR kôd za provjeru autentičnosti ove web stranice ili kopiraj i zalijepi ključ u ovo polje."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Više o autentifikatorima"
   },
   "folder": {
     "message": "Mapa"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Prikaz stavke"
+  },
+  "viewItemType": {
+    "message": "View $ITEMTYPE$",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Novo",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Podsjetnik glavne lozinke (neobavezno)"
+  },
+  "newMasterPassHint": {
+    "message": "New master password hint (optional)"
   },
   "masterPassHintLabel": {
     "message": "Podsjetnik glavne lozinke"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "novu stavku",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "novu prijavu",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": ".",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Najmanji broj riječi"
   },
-  "defaultType": {
-    "message": "Zadana vrsta"
+  "overridePasswordTypePolicy": {
+    "message": "Vrsta lozinke",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Korisnički definirano"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Tvoja glavna lozinka ne zadovoljava pravila ove organizacije. Za pristup trezoru moraš odmah ažurirati svoju glavnu lozinku. Ako nastaviš, odjaviti ćeš se iz trenutne sesije te ćeš se morati ponovno prijaviti. Aktivne sesije na drugim uređajima mogu ostati aktivne do jedan sat."
   },
+  "automaticAppLogin": {
+    "message": "Automatski prijavi korisnike za dopuštene aplikacije"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Obrasci za prijavu će biti automatski ispunjeni i poslani za aplikacije pokrenute od strane konfiguriranog davatelja identiteta."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Poslužitelj pružatelja identiteta"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Unesi URL poslužitelja pružatelja identiteta. Više URL-ova odvoji zarezom."
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "Tvoja je organizacija ažurirala tvoje opcije dešifriranja. Postavi glavnu lozinku za pristup svom trezoru."
   },
   "maximumVaultTimeout": {
     "message": "Istek trezora"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Nasumična riječ"
+  },
+  "usernameGenerator": {
+    "message": "Generator korisničkih imena"
+  },
+  "useThisPassword": {
+    "message": "Koristi ovu lozinku"
+  },
+  "useThisUsername": {
+    "message": "Koristi ovo korisničko ime"
+  },
+  "securePasswordGenerated": {
+    "message": "Sigurna lozinka generirana! Ne zaboravi ažurirati lozinku na web stranici."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Koristi generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "za stvaranje snažne, jedinstvene lozinke",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Usluga"
@@ -7678,7 +7749,7 @@
     "message": "Zatraži odobrenje uređaja."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "Korisnik je postavio glavnu lozinku tijekom TDE offboardinga."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Pokreni besplatnih 7 dana Bitwardena za $ORG$",
@@ -8077,7 +8148,7 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "Dodaj polje"
   },
   "items": {
     "message": "Stavke"
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "kupljenih mjesta uklonjeno"
   },
+  "fileSends": {
+    "message": "Send datoteke"
+  },
+  "textSends": {
+    "message": "Send tekstovi"
+  },
   "includesXMembers": {
     "message": "za ovoliko članova: $COUNT$",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB dodatnog prostora"
+  },
+  "premiumAccounts": {
+    "message": "6 premium accounts"
+  },
+  "unlimitedSharing": {
+    "message": "Unlimited sharing"
+  },
+  "unlimitedCollections": {
+    "message": "Unlimited collections"
+  },
+  "secureDataSharing": {
+    "message": "Secure data sharing"
+  },
+  "eventLogMonitoring": {
+    "message": "Event log monitoring"
+  },
+  "directoryIntegration": {
+    "message": "Directory integration"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Account recovery"
+  },
+  "customRoles": {
+    "message": "Custom roles"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Unlimited secrets storage"
+  },
+  "unlimitedUsers": {
+    "message": "Unlimited users"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Up to 50 machine accounts"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Up to 20 machine accounts"
+  },
+  "current": {
+    "message": "Current"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Your Secrets Manager subscription will upgrade base on the plan selected"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Password Manager"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
   }
 }

@@ -1,5 +1,6 @@
 import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherRepromptType } from "@bitwarden/common/vault/enums/cipher-reprompt-type";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import AutofillPageDetails from "../../models/autofill-page-details";
 import { PageDetail } from "../../services/abstractions/autofill.service";
@@ -39,6 +40,7 @@ export type FocusedFieldData = {
   frameId?: number;
   accountCreationFieldType?: string;
   showInlineMenuAccountCreation?: boolean;
+  showPasskeys?: boolean;
 };
 
 export type InlineMenuElementPosition = {
@@ -132,6 +134,7 @@ export type OverlayPortMessage = {
   direction?: string;
   inlineMenuCipherId?: string;
   addNewCipherType?: CipherType;
+  usePasskey?: boolean;
 };
 
 export type InlineMenuCipherData = {
@@ -142,12 +145,27 @@ export type InlineMenuCipherData = {
   favorite: boolean;
   icon: WebsiteIconData;
   accountCreationFieldType?: string;
-  login?: { username: string };
+  login?: {
+    username: string;
+    passkey: {
+      rpName: string;
+      userName: string;
+    } | null;
+  };
   card?: string;
   identity?: {
     fullName: string;
     username?: string;
   };
+};
+
+export type BuildCipherDataParams = {
+  inlineMenuCipherId: string;
+  cipher: CipherView;
+  showFavicons?: boolean;
+  showInlineMenuAccountCreation?: boolean;
+  hasPasskey?: boolean;
+  identityData?: { fullName: string; username?: string };
 };
 
 export type BackgroundMessageParam = {
@@ -194,6 +212,7 @@ export type OverlayBackgroundExtensionMessageHandlers = {
   }: BackgroundOnMessageHandlerParams) => void;
   collectPageDetailsResponse: ({ message, sender }: BackgroundOnMessageHandlerParams) => void;
   unlockCompleted: ({ message }: BackgroundMessageParam) => void;
+  doFullSync: () => void;
   addedCipher: () => void;
   addEditCipherSubmitted: () => void;
   editedCipher: () => void;

@@ -643,10 +643,10 @@
     "message": "Jatka"
   },
   "enterVerificationCodeApp": {
-    "message": "Syötä 6-numeroinen todennuskoodi todennussovelluksestasi."
+    "message": "Syötä todennussovelluksesi näyttämä kuusinumeroinen todennuskoodi."
   },
   "enterVerificationCodeEmail": {
-    "message": "Syötä 6-numeroinen todennuskoodi, joka lähetettiin sähköpostitse osoitteeseen $EMAIL$.",
+    "message": "Syötä osoitteeseen $EMAIL$ lähetetty kuusinumeroinen todennuskoodi.",
     "placeholders": {
       "email": {
         "content": "$1",
@@ -676,7 +676,7 @@
     "message": "Kytke YubiKey-todennuslaitteesi tietokoneen USB-porttiin ja paina sen painiketta."
   },
   "insertU2f": {
-    "message": "Kytke todennuslaitteesi tietokoneen USB-porttiin ja jos laitteessa on painike, paina sitä."
+    "message": "Kytke suojausavaimesi tietokoneen USB-porttiin ja jos laitteessa on painike, paina sitä."
   },
   "recoveryCodeDesc": {
     "message": "Etkö pysty käyttämään kaksivaiheisen kirjautumisen todentajiasi? Poista kaikki tilillesi määritetyt todentajat käytöstä palautuskoodillasi."
@@ -692,7 +692,7 @@
     "description": "'Bitwarden Authenticator' is a product name and should not be translated."
   },
   "yubiKeyTitleV2": {
-    "message": "Yubico OTP -todennuslaite"
+    "message": "Yubico OTP -suojausavain"
   },
   "yubiKeyDesc": {
     "message": "Käytä YubiKey-todennuslaitetta tilisi avaukseen. Toimii YubiKey 4, 4 Nano, 4C sekä NEO -laitteiden kanssa."
@@ -702,14 +702,14 @@
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "duoOrganizationDesc": {
-    "message": "Vahvista organisaatiollesi Duo Securityn avulla käyttäen Duo Mobile ‑sovellusta, tekstiviestiä, puhelua tai U2F-todennuslaitetta.",
+    "message": "Vahvista organisaatiollesi Duo Securityn avulla käyttäen Duo Mobile ‑sovellusta, tekstiviestiä, puhelua tai U2F-suojausavainta.",
     "description": "'Duo Security' and 'Duo Mobile' are product names and should not be translated."
   },
   "webAuthnTitle": {
     "message": "FIDO2 WebAuthn"
   },
   "webAuthnDesc": {
-    "message": "Avaa tilisi millä tahansa WebAuthn‑yhteensopivalla todennuslaitteella."
+    "message": "Avaa tilisi millä tahansa WebAuthn‑yhteensopivalla suojausavaimella."
   },
   "emailTitle": {
     "message": "Sähköposti"
@@ -808,7 +808,7 @@
     "message": "Aloita rekisteröityminen alusta tai yritä kirjautua sisään uudelleen."
   },
   "youMayAlreadyHaveAnAccount": {
-    "message": "Sinulla saattaa olla jo tili"
+    "message": "Sinulla saattaa jo olla tili"
   },
   "logOutConfirmation": {
     "message": "Haluatko varmasti kirjautua ulos?"
@@ -916,7 +916,7 @@
     "message": "Virheellinen pääsalasana"
   },
   "twoStepLoginConfirmation": {
-    "message": "Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi todennuslaitteen, ‑sovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?"
+    "message": "Kaksivaiheinen kirjautuminen parantaa tilisi suojausta vaatimalla kirjautumisen vahvistuksen salasanan lisäksi suojausavaimen, todennussovelluksen, tekstiviestin, puhelun tai sähköpostin avulla. Voit ottaa kaksivaiheisen kirjautumisen käyttöön bitwarden.com‑verkkoholvissa. Haluatko avata sen nyt?"
   },
   "twoStepLogin": {
     "message": "Kaksivaiheinen kirjautuminen"
@@ -1173,6 +1173,9 @@
   },
   "premiumPurchaseAlert": {
     "message": "Voit ostaa Premium-jäsenyyden bitwarden.com-verkkoholvista. Haluatko käydä sivustolla nyt?"
+  },
+  "premiumPurchaseAlertV2": {
+    "message": "Voit ostaa Premiumin tiliasetuksistasi Bitwardenin verkkosovelluksen kautta."
   },
   "premiumCurrentMember": {
     "message": "Olet Premium-jäsen!"
@@ -1510,8 +1513,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Windows Hello -lisäasetukset."
   },
+  "unlockWithPolkit": {
+    "message": "Avaa järjestelmän tunnistautumisella"
+  },
   "windowsHelloConsentMessage": {
     "message": "Vahvista Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Avaa Bitwardenin lukitus tunnistautumalla."
   },
   "unlockWithTouchId": {
     "message": "Avaa Touch ID:llä"
@@ -1524,6 +1533,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Pyydä Windows Hello -todennusta käynnistettäessä"
+  },
+  "autoPromptPolkit": {
+    "message": "Pyydä järjestelmän tunnistautumista käynnistettäessä"
   },
   "autoPromptTouchId": {
     "message": "Pyydä Touch ID -todennusta käynnistettäessä"
@@ -1804,6 +1816,12 @@
   "biometricsNotEnabledDesc": {
     "message": "Biometria selaimissa edellyttää sen määritystä työpöytäsovelluksen asetuksista."
   },
+  "biometricsManualSetupTitle": {
+    "message": "Automaattinen määritys ei ole käytettävissä"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Asennustavasta johtuen Biometriatukea ei voitu ottaa käyttöön automaattisesti. Haluatko avata ohjeen tämän manuaaliseen määritykseen?"
+  },
   "personalOwnershipSubmitError": {
     "message": "Yrityskäytännön johdosta kohteiden tallennus henkilökohtaiseen holviin ei ole mahdollista. Muuta omistusasetus organisaatiolle ja valitse käytettävissä olevista kokoelmista."
   },
@@ -2014,6 +2032,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Pääsalasanasi ei täytä yhden tai useamman organisaatiokäytännön vaatimuksia ja holvin käyttämiseksi sinun on vaihdettava se nyt. Tämä uloskirjaa kaikki nykyiset istunnot pakottaen uudelleenkirjautumisen. Muiden laitteiden aktiiviset istunnot saattavat toimia vielä tunnin ajan."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Organisaatiosi on estänyt luotettavan laitesalauksen. Käytä holviasi asettamalla pääsalasana."
   },
   "tryAgain": {
     "message": "Yritä uudelleen"
@@ -2751,13 +2772,13 @@
     "message": "Siirry sisältöön"
   },
   "typePasskey": {
-    "message": "Suojausavain"
+    "message": "Pääsyavain"
   },
   "passkeyNotCopied": {
-    "message": "Suojausavainta ei kopioida"
+    "message": "Pääsyavainta ei kopioida"
   },
   "passkeyNotCopiedAlert": {
-    "message": "Suojausavain ei kopioidu kloonattuun kohteeseen. Haluatko jatkaa kloonausta?"
+    "message": "Pääsyavain ei kopioidu kloonattuun kohteeseen. Haluatko jatkaa kloonausta?"
   },
   "aliasDomain": {
     "message": "Aliaksen verkkotunnus"
@@ -2978,10 +2999,10 @@
     "message": "Ota laitteistokiihdytys käyttöön ja käynnistä sovellus uudelleen"
   },
   "removePasskey": {
-    "message": "Poista suojausavain"
+    "message": "Poista pääsyavain"
   },
   "passkeyRemoved": {
-    "message": "Suojausavain poistettiin"
+    "message": "Pääsyavain poistettiin"
   },
   "errorAssigningTargetCollection": {
     "message": "Virhe määritettäessä kohdekokoelmaa."
@@ -3025,5 +3046,11 @@
   },
   "data": {
     "message": "Tiedot"
+  },
+  "fileSends": {
+    "message": "Tiedosto-Sendit"
+  },
+  "textSends": {
+    "message": "Teksti-Sendit"
   }
 }

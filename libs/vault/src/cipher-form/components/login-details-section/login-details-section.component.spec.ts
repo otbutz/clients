@@ -125,12 +125,27 @@ describe("LoginDetailsSectionComponent", () => {
     });
   });
 
-  it("initializes 'loginDetailsForm' with generated password when creating a new cipher", async () => {
-    generationService.generateInitialPassword.mockResolvedValue("generated-password");
+  it("initializes 'loginDetailsForm' with initialValues that override any original cipher view values", async () => {
+    (cipherFormContainer.originalCipherView as CipherView) = {
+      viewPassword: true,
+      login: {
+        password: "original-password",
+        username: "original-username",
+        totp: "original-totp",
+      } as LoginView,
+    } as CipherView;
+    cipherFormContainer.config.initialValues = {
+      username: "new-username",
+      password: "new-password",
+    };
 
     await component.ngOnInit();
 
-    expect(component.loginDetailsForm.controls.password.value).toBe("generated-password");
+    expect(component.loginDetailsForm.value).toEqual({
+      username: "new-username",
+      password: "new-password",
+      totp: "original-totp",
+    });
   });
 
   describe("viewHiddenFields", () => {

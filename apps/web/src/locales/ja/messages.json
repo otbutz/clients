@@ -36,6 +36,9 @@
   "notes": {
     "message": "メモ"
   },
+  "note": {
+    "message": "メモ"
+  },
   "customFields": {
     "message": "カスタムフィールド"
   },
@@ -49,22 +52,32 @@
     "message": "認証キー"
   },
   "autofillOptions": {
-    "message": "Auto-fill options"
+    "message": "自動入力オプション"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "ウェブサイト (URI)"
+  },
+  "websiteUriCount": {
+    "message": "ウェブサイト (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "ウェブサイトを追加しました"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "ウェブサイトを追加"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "ウェブサイトを削除"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "デフォルト ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -74,7 +87,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "一致検出 $WEBSITE$を表示",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -83,7 +96,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "一致検出 $WEBSITE$を非表示",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -92,7 +105,7 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "ページ読み込み時に自動入力する"
   },
   "number": {
     "message": "番号"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "Dr"
   },
+  "cardExpiredTitle": {
+    "message": "期限切れのカード"
+  },
+  "cardExpiredMessage": {
+    "message": "カードの更新があった場合、カード情報を更新してください"
+  },
   "expirationMonth": {
     "message": "有効期限月"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden は2段階認証コードを保存・入力できます。 カメラアイコンを選択して、このウェブサイトの認証 QR コードのスクリーンショットを撮るか、キーをコピーしてこのフィールドに貼り付けてください。"
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "認証方法の詳細"
   },
   "folder": {
     "message": "フォルダー"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "アイテムの表示"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ を表示",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "新規作成",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "マスターパスワードのヒント (省略可能)"
+  },
+  "newMasterPassHint": {
+    "message": "新しいマスターパスワードのヒント (オプション)"
   },
   "masterPassHintLabel": {
     "message": "マスターパスワードのヒント"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "新しいアイテム",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "新しいログイン",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": "を作成してください。",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "文字の最小数"
   },
-  "defaultType": {
-    "message": "デフォルトのタイプ"
+  "overridePasswordTypePolicy": {
+    "message": "パスワードの種類",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "ユーザー設定"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "マスターパスワードが組織のポリシーに適合していません。保管庫にアクセスするには、今すぐマスターパスワードを更新しなければなりません。続行すると現在のセッションからログアウトし、再度ログインする必要があります。 他のデバイス上のアクティブなセッションは、最大1時間アクティブであり続けることがあります。"
   },
+  "automaticAppLogin": {
+    "message": "許可されたアプリでユーザーを自動的にログインする"
+  },
+  "automaticAppLoginDesc": {
+    "message": "ログインフォームは自動的に入力され、設定された ID プロバイダーから起動されたアプリに送信されます。"
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "ID プロバイダーホスト"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "ID プロバイダーのホスト URL を入力します。カンマで区切ると複数の URL を入力できます。"
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "組織が復号オプションを更新しました。保管庫にアクセスするにはマスターパスワードを設定してください。"
   },
   "maximumVaultTimeout": {
     "message": "保管庫のタイムアウト"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "ランダムな単語"
+  },
+  "usernameGenerator": {
+    "message": "ユーザー名生成"
+  },
+  "useThisPassword": {
+    "message": "このパスワードを使用する"
+  },
+  "useThisUsername": {
+    "message": "このユーザー名を使用する"
+  },
+  "securePasswordGenerated": {
+    "message": "安全なパスワードを生成しました! ウェブサイト上でパスワードを更新することを忘れないでください。"
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "生成機能",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "を使うと強力で一意なパスワードを作れます",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "サービス"
@@ -7678,7 +7749,7 @@
     "message": "デバイスの承認を要求しました。"
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "ユーザーは、TDE オフボーディング中にマスターパスワードを設定しました。"
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "$ORG$ 向けの Bitwarden 7日間無料トライアルを開始",
@@ -8077,7 +8148,7 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "フィールドを追加"
   },
   "items": {
     "message": "アイテム"
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "購入済みシートが削除されました"
   },
+  "fileSends": {
+    "message": "ファイル Send"
+  },
+  "textSends": {
+    "message": "テキスト Send"
+  },
   "includesXMembers": {
     "message": "$COUNT$ メンバー向け",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB の追加ストレージ"
+  },
+  "premiumAccounts": {
+    "message": "6個のプレミアムアカウント"
+  },
+  "unlimitedSharing": {
+    "message": "無制限の共有"
+  },
+  "unlimitedCollections": {
+    "message": "無制限のコレクション"
+  },
+  "secureDataSharing": {
+    "message": "セキュアなデータ共有"
+  },
+  "eventLogMonitoring": {
+    "message": "イベントログの監視"
+  },
+  "directoryIntegration": {
+    "message": "ディレクトリの統合"
+  },
+  "passwordLessSso": {
+    "message": "パスワードレス SSO"
+  },
+  "accountRecovery": {
+    "message": "アカウントの復元"
+  },
+  "customRoles": {
+    "message": "カスタムロール"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "無制限のシークレットストレージ"
+  },
+  "unlimitedUsers": {
+    "message": "無制限のユーザー数"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "最大50個のマシンアカウント"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "最大20個のマシンアカウント"
+  },
+  "current": {
+    "message": "現在"
+  },
+  "secretsManagerSubInfo": {
+    "message": "シークレットマネージャーのサブスクリプションは、選択されたプランを基準にアップグレードされます"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden パスワードマネージャー"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "1年間のパスワードマネージャーサブスクリプションは、選択したプランにアップグレードされます。無料期間が終了するまで課金されることはありません。"
   }
 }

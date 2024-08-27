@@ -68,6 +68,7 @@ export default class RuntimeBackground {
     ) => {
       const messagesWithResponse = [
         "biometricUnlock",
+        "biometricUnlockAvailable",
         "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag",
         "getInlineMenuFieldQualificationFeatureFlag",
       ];
@@ -179,7 +180,11 @@ export default class RuntimeBackground {
         }
         break;
       case "biometricUnlock": {
-        const result = await this.main.biometricUnlock();
+        const result = await this.main.biometricsService.authenticateBiometric();
+        return result;
+      }
+      case "biometricUnlockAvailable": {
+        const result = await this.main.biometricsService.isBiometricUnlockAvailable();
         return result;
       }
       case "getUseTreeWalkerApiForPageDetailsCollectionFeatureFlag": {
@@ -229,6 +234,9 @@ export default class RuntimeBackground {
         await this.main.refreshBadge();
         await this.main.refreshMenu(false);
 
+        if (await this.configService.getFeatureFlag(FeatureFlag.ExtensionRefresh)) {
+          await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
+        }
         break;
       }
       case "addToLockedVaultPendingNotifications":
@@ -248,6 +256,10 @@ export default class RuntimeBackground {
           }, 2000);
           await this.configService.ensureConfigFetched();
           await this.main.updateOverlayCiphers();
+
+          if (await this.configService.getFeatureFlag(FeatureFlag.ExtensionRefresh)) {
+            await this.autofillService.setAutoFillOnPageLoadOrgPolicy();
+          }
         }
         break;
       case "openPopup":

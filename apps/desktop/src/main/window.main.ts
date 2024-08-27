@@ -51,6 +51,7 @@ export class WindowMain {
     // Perform a hard reload of the render process by crashing it. This is suboptimal but ensures that all memory gets
     // cleared, as the process itself will be completely garbage collected.
     ipcMain.on("reload-process", async () => {
+      this.logService.info("Reloading render process");
       // User might have changed theme, ensure the window is updated.
       this.win.setBackgroundColor(await this.getBackgroundColor());
 
@@ -65,6 +66,7 @@ export class WindowMain {
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.session.clearCache();
+      this.logService.info("Render process reloaded");
     });
 
     return new Promise<void>((resolve, reject) => {
@@ -120,13 +122,15 @@ export class WindowMain {
               }
             }
 
-            this.logService.info(
-              "Disabling external memory dumps & debugger access in main process",
-            );
-            try {
-              await processisolations.disableMemoryAccess();
-            } catch (e) {
-              this.logService.error("Failed to disable memory access", e);
+            // this currently breaks the file portal, so should only be used when
+            // no files are needed but security requirements are super high https://github.com/flatpak/xdg-desktop-portal/issues/785
+            if (process.env.EXPERIMENTAL_PREVENT_DEBUGGER_MEMORY_ACCESS === "true") {
+              this.logService.info("Disabling memory dumps in main process");
+              try {
+                await processisolations.disableMemoryAccess();
+              } catch (e) {
+                this.logService.error("Failed to disable memory dumps", e);
+              }
             }
           }
 

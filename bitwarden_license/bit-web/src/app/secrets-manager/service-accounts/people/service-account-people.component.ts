@@ -6,8 +6,9 @@ import { combineLatest, Subject, switchMap, takeUntil } from "rxjs";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
+import { ServiceAccountPeopleAccessPoliciesView } from "../../models/view/access-policies/service-account-people-access-policies.view";
 import { AccessPolicySelectorService } from "../../shared/access-policies/access-policy-selector/access-policy-selector.service";
 import {
   ApItemValueType,
@@ -70,6 +71,7 @@ export class ServiceAccountPeopleComponent implements OnInit, OnDestroy {
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
     private accessPolicySelectorService: AccessPolicySelectorService,
+    private toastService: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -125,11 +127,11 @@ export class ServiceAccountPeopleComponent implements OnInit, OnDestroy {
 
       this.currentAccessPolicies = convertToAccessPolicyItemViews(peoplePoliciesViews);
 
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("machineAccountAccessUpdated"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("machineAccountAccessUpdated"),
+      });
     } catch (e) {
       this.validationService.showError(e);
       this.setSelected(this.currentAccessPolicies);
@@ -179,7 +181,7 @@ export class ServiceAccountPeopleComponent implements OnInit, OnDestroy {
   private async updateServiceAccountPeopleAccessPolicies(
     serviceAccountId: string,
     selectedPolicies: ApItemValueType[],
-  ) {
+  ): Promise<ServiceAccountPeopleAccessPoliciesView> {
     const serviceAccountPeopleView = convertToPeopleAccessPoliciesView(selectedPolicies);
     return await this.accessPolicyService.putServiceAccountPeopleAccessPolicies(
       serviceAccountId,

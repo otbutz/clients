@@ -14,6 +14,7 @@ import {
   CardComponent,
   FormFieldModule,
   IconButtonModule,
+  LinkModule,
   PopoverModule,
   SectionComponent,
   SectionHeaderComponent,
@@ -43,6 +44,7 @@ import { AutofillOptionsComponent } from "../autofill-options/autofill-options.c
     NgIf,
     PopoverModule,
     AutofillOptionsComponent,
+    LinkModule,
   ],
 })
 export class LoginDetailsSectionComponent implements OnInit {
@@ -51,6 +53,11 @@ export class LoginDetailsSectionComponent implements OnInit {
     password: [""],
     totp: [""],
   });
+
+  /**
+   * Flag indicating whether a new password has been generated for the current form.
+   */
+  newPasswordGenerated: boolean;
 
   /**
    * Whether the TOTP field can be captured from the current tab. Only available in the browser extension.
@@ -86,6 +93,10 @@ export class LoginDetailsSectionComponent implements OnInit {
       return this.cipherFormContainer.originalCipherView.viewPassword;
     }
     return true;
+  }
+
+  get initialValues() {
+    return this.cipherFormContainer.config.initialValues;
   }
 
   constructor(
@@ -132,8 +143,8 @@ export class LoginDetailsSectionComponent implements OnInit {
 
   private initFromExistingCipher(existingLogin: LoginView) {
     this.loginDetailsForm.patchValue({
-      username: existingLogin.username,
-      password: existingLogin.password,
+      username: this.initialValues?.username ?? existingLogin.username,
+      password: this.initialValues?.password ?? existingLogin.password,
       totp: existingLogin.totp,
     });
 
@@ -147,8 +158,8 @@ export class LoginDetailsSectionComponent implements OnInit {
 
   private async initNewCipher() {
     this.loginDetailsForm.patchValue({
-      username: this.cipherFormContainer.config.initialValues?.username || "",
-      password: await this.generationService.generateInitialPassword(),
+      username: this.initialValues?.username || "",
+      password: this.initialValues?.password || "",
     });
   }
 
@@ -193,6 +204,7 @@ export class LoginDetailsSectionComponent implements OnInit {
 
     if (newPassword) {
       this.loginDetailsForm.controls.password.patchValue(newPassword);
+      this.newPasswordGenerated = true;
     }
   };
 

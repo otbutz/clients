@@ -16,7 +16,7 @@ import {
   fireEvent,
   getByText,
   getAllByLabelText,
-} from "@storybook/testing-library";
+} from "@storybook/test";
 
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 
@@ -134,14 +134,14 @@ export const MenuOpen: Story = {
 
 export const DefaultDialogOpen: Story = {
   ...Default,
-  play: (context) => {
+  play: async (context) => {
     const canvas = context.canvasElement;
     const dialogButton = getByRole(canvas, "button", {
       name: "Open Dialog",
     });
 
     // workaround for userEvent not firing in FF https://github.com/testing-library/user-event/issues/1075
-    fireEvent.click(dialogButton);
+    await fireEvent.click(dialogButton);
   },
 };
 
@@ -159,14 +159,14 @@ export const PopoverOpen: Story = {
 
 export const SimpleDialogOpen: Story = {
   ...Default,
-  play: (context) => {
+  play: async (context) => {
     const canvas = context.canvasElement;
     const submitButton = getByRole(canvas, "button", {
       name: "Submit",
     });
 
     // workaround for userEvent not firing in FF https://github.com/testing-library/user-event/issues/1075
-    fireEvent.click(submitButton);
+    await fireEvent.click(submitButton);
   },
 };
 

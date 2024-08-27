@@ -36,6 +36,9 @@
   "notes": {
     "message": "Notities"
   },
+  "note": {
+    "message": "Notitie"
+  },
   "customFields": {
     "message": "Extra velden"
   },
@@ -53,6 +56,16 @@
   },
   "websiteUri": {
     "message": "Website (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
   },
   "websiteAdded": {
     "message": "Website toegevoegd"
@@ -181,6 +194,12 @@
   "dr": {
     "message": "Dr."
   },
+  "cardExpiredTitle": {
+    "message": "Verlopen kaart"
+  },
+  "cardExpiredMessage": {
+    "message": "Als je het hebt vernieuwd, werk dan de informatie van de kaart bij"
+  },
   "expirationMonth": {
     "message": "Vervalmaand"
   },
@@ -198,6 +217,9 @@
   },
   "totpHelperWithCapture": {
     "message": "Bitwarden kan tweestapsaanmeldingscodes opslaan en invullen. Selecteer het camerapictogram om een schermafbeelding van de QR-code van deze website te maken of kopieer en plak de sleutel in dit veld."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Meer informatie over authenticatoren"
   },
   "folder": {
     "message": "Map"
@@ -458,6 +480,15 @@
   },
   "viewItem": {
     "message": "Item weergeven"
+  },
+  "viewItemType": {
+    "message": "$ITEMTYPE$ weergeven",
+    "placeholders": {
+      "itemtype": {
+        "content": "$1",
+        "example": "login"
+      }
+    }
   },
   "new": {
     "message": "Nieuw",
@@ -873,6 +904,9 @@
   },
   "masterPassHint": {
     "message": "Hoofdwachtwoordhint (optioneel)"
+  },
+  "newMasterPassHint": {
+    "message": "Nieuwe hoofdwachtwoordhint (optioneel)"
   },
   "masterPassHintLabel": {
     "message": "Hoofdwachtwoordhint"
@@ -1504,6 +1538,10 @@
   "onboardingImportDataDetailsLink": {
     "message": "nieuw item",
     "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new item instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
+  },
+  "onboardingImportDataDetailsLoginLink": {
+    "message": "nieuwe login",
+    "description": "This will be part of a larger sentence, that will read like this: If you don't have any data to import, you can create a new login instead. (Optional second half: You may need to wait until your administrator confirms your organization membership.)"
   },
   "onboardingImportDataDetailsPartTwoNoOrgs": {
     "message": " aanmaken.",
@@ -4145,8 +4183,9 @@
   "minimumNumberOfWords": {
     "message": "Minimum aantal woorden"
   },
-  "defaultType": {
-    "message": "Standaardtype"
+  "overridePasswordTypePolicy": {
+    "message": "Type wachtwoord",
+    "description": "Name of the password generator policy that overrides the user's password/passphrase selection."
   },
   "userPreference": {
     "message": "Persoonlijke voorkeur"
@@ -5322,8 +5361,20 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Je hoofdwachtwoord voldoet niet aan en of meerdere oganisatiebeleidsonderdelen. Om toegang te krijgen tot de kluis, moet je je hoofdwachtwoord nu bijwerken. Doorgaan zal je huidige sessie uitloggen, waarna je opnieuw moet inloggen. Actieve sessies op andere apparaten blijven mogelijk nog een uur actief."
   },
+  "automaticAppLogin": {
+    "message": "Gebruikers automatisch inloggen voor toegestane applicaties"
+  },
+  "automaticAppLoginDesc": {
+    "message": "Inlogformulieren automatisch invullen en indienen voor apps die zijn gestart vanuit je geconfigureerde identiteitsprovider."
+  },
+  "automaticAppLoginIdpHostLabel": {
+    "message": "Identiteitsproviderhost"
+  },
+  "automaticAppLoginIdpHostDesc": {
+    "message": "Voer de host URL van je identiteitsprovider in. Voer meerdere URL's in door deze te scheiden met een komma."
+  },
   "tdeDisabledMasterPasswordRequired": {
-    "message": "Your organization has updated your decryption options. Please set a master password to access your vault."
+    "message": "Je organisatie heeft je versleutelingsopties gewijzigd. Stel een hoofdwachtwoord in om toegang te krijgen tot je kluis."
   },
   "maximumVaultTimeout": {
     "message": "Time-out van de kluis"
@@ -6048,6 +6099,26 @@
   },
   "randomWord": {
     "message": "Willekeurig woord"
+  },
+  "usernameGenerator": {
+    "message": "Gebruikersnaamgenerator"
+  },
+  "useThisPassword": {
+    "message": "Dit wachtwoord gebruiken"
+  },
+  "useThisUsername": {
+    "message": "Deze gebruikersnaam gebruiken"
+  },
+  "securePasswordGenerated": {
+    "message": "Veilig wachtwoord aangemaakt! Vergeet niet om je wachtwoord ook op de website bij te werken."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Gebruik de generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "om een sterk uniek wachtwoord te maken",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "service": {
     "message": "Dienst"
@@ -7678,7 +7749,7 @@
     "message": "Apparaatgoedkeuring gevraagd."
   },
   "tdeOffboardingPasswordSet": {
-    "message": "User set a master password during TDE offboarding."
+    "message": "Gebruiker geeft een hoofdwachtwoord ingesteld tijdens TDE-offboarding."
   },
   "startYour7DayFreeTrialOfBitwardenFor": {
     "message": "Begin je 7-daagse gratis Bitwarden-proefperiode voor $ORG$",
@@ -8794,6 +8865,12 @@
   "purchasedSeatsRemoved": {
     "message": "gekochte plaatsen verwijderd"
   },
+  "fileSends": {
+    "message": "Bestand-Sends"
+  },
+  "textSends": {
+    "message": "Tekst-Sends"
+  },
   "includesXMembers": {
     "message": "voor $COUNT$ lid",
     "placeholders": {
@@ -8880,5 +8957,56 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB extra opslagruimte"
+  },
+  "premiumAccounts": {
+    "message": "6 premium accounts"
+  },
+  "unlimitedSharing": {
+    "message": "Onbeperkt delen"
+  },
+  "unlimitedCollections": {
+    "message": "Onbeperkte collecties"
+  },
+  "secureDataSharing": {
+    "message": "Beveiligd gegevens delen"
+  },
+  "eventLogMonitoring": {
+    "message": "Eventlog monitoring"
+  },
+  "directoryIntegration": {
+    "message": "Directory-integratie"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Accountherstel"
+  },
+  "customRoles": {
+    "message": "Aangepaste rollen"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Onbeperkte opslag geheimen"
+  },
+  "unlimitedUsers": {
+    "message": "Onbeperkte gebruikers"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Tot 50 machine-accounts"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Tot 20 machine-accounts"
+  },
+  "current": {
+    "message": "Huidig"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Je Secrets Manager-abonnement zal upgraden naar het geselecteerde abonnement"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Password Manager"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
   }
 }

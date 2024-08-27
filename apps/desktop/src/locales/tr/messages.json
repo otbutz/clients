@@ -1174,6 +1174,9 @@
   "premiumPurchaseAlert": {
     "message": "Premium üyeliği bitwarden.com web kasası üzerinden satın alabilirsiniz. Şimdi siteye gitmek ister misiniz?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Bitwarden web uygulamasındaki hesap ayarlarınızdan Premium abonelik satın alabilirsiniz."
+  },
   "premiumCurrentMember": {
     "message": "Premium üyesiniz!"
   },
@@ -1510,8 +1513,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Ekstra Windows Hello ayarları"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden için doğrulayın."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Kilidi Touch ID ile aç"
@@ -1524,6 +1533,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Uygulamayı başlatırken Windows Hello doğrulaması iste"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Uygulamayı başlatırken Touch ID iste"
@@ -1804,6 +1816,12 @@
   "biometricsNotEnabledDesc": {
     "message": "Tarayıcıda biyometriyi kullanmak için önce ayarlardan masaüstü biyometrisini ayarlamanız gerekir."
   },
+  "biometricsManualSetupTitle": {
+    "message": "Automatic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
+  },
   "personalOwnershipSubmitError": {
     "message": "Bir kuruluş ilkesi nedeniyle kişisel kasanıza hesap kaydetmeniz kısıtlanmış. Sahip seçeneğini bir kuruluş olarak değiştirin ve mevcut koleksiyonlar arasından seçim yapın."
   },
@@ -2014,6 +2032,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ana parolanız kuruluş ilkelerinizi karşılamıyor. Kasanıza erişmek için ana parolanızı güncellemelisiniz. Devam ettiğinizde oturumunuz kapanacak ve yeniden oturum açmanız gerekecektir. Diğer cihazlardaki aktif oturumlar bir saate kadar aktif kalabilir."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
   },
   "tryAgain": {
     "message": "Yeniden dene"
@@ -2806,13 +2827,13 @@
     "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
   },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
-    "message": "Duo'yu başlatın ve oturum açmayı tamamlamak için adımları izleyin."
+    "message": "Duo'yu açın ve girişi tamamlamak için adımları izleyin."
   },
   "duoRequiredByOrgForAccount": {
     "message": "Hesabınız için Duo iki adımlı giriş gereklidir."
   },
   "launchDuo": {
-    "message": "Duo'yu tarayıcıda başlat"
+    "message": "Duo'yu tarayıcıda aç"
   },
   "importFormatError": {
     "message": "Veriler doğru biçimlendirilmemiş. Lütfen içe aktarma dosyanızı kontrol edin ve tekrar deneyin."
@@ -3025,5 +3046,11 @@
   },
   "data": {
     "message": "Veri"
+  },
+  "fileSends": {
+    "message": "Dosya Send'leri"
+  },
+  "textSends": {
+    "message": "Metin Send'leri"
   }
 }

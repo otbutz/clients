@@ -19,6 +19,8 @@ import { ThemeType } from "@bitwarden/common/platform/enums";
 import { ThemeStateService } from "@bitwarden/common/platform/theming/theme-state.service";
 import { ButtonModule } from "@bitwarden/components";
 
+// FIXME: remove `/apps` import from `/libs`
+// eslint-disable-next-line import/no-restricted-paths
 import { PreloadedEnglishI18nModule } from "../../../../../apps/web/src/app/core/tests";
 import { LockIcon } from "../icons";
 import { RegistrationCheckEmailIcon } from "../icons/registration-check-email.icon";
@@ -177,7 +179,10 @@ const initialData: AnonLayoutWrapperData = {
 
 const changedData: AnonLayoutWrapperData = {
   pageTitle: "enterpriseSingleSignOn",
-  pageSubtitle: "checkYourEmail",
+  pageSubtitle: {
+    subtitle: "user@email.com (non-translated)",
+    translate: false,
+  },
   pageIcon: RegistrationCheckEmailIcon,
 };
 
