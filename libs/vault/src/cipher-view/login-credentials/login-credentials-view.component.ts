@@ -19,6 +19,7 @@ import {
 } from "@bitwarden/components";
 
 import { BitTotpCountdownComponent } from "../../components/totp-countdown/totp-countdown.component";
+import { ReadOnlyCipherCardComponent } from "../read-only-cipher-card/read-only-cipher-card.component";
 
 @Component({
   selector: "app-login-credentials-view",
@@ -36,6 +37,7 @@ import { BitTotpCountdownComponent } from "../../components/totp-countdown/totp-
     BadgeModule,
     ColorPasswordModule,
     BitTotpCountdownComponent,
+    ReadOnlyCipherCardComponent,
   ],
 })
 export class LoginCredentialsViewComponent {
