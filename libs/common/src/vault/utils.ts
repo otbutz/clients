@@ -15,16 +15,23 @@ export function normalizeExpiryYearFormat(yearInput: string | number): Year | nu
   let expirationYear = yearInputIsEmpty ? null : `${yearInput}`;
 
   // Exit early if year is already formatted correctly or empty
-  if (yearInputIsEmpty || /^\d{4}$/.test(expirationYear)) {
+  if (yearInputIsEmpty || /^[1-9]{1}\d{3}$/.test(expirationYear)) {
     return expirationYear as Year;
   }
 
-  // For safety, because even input[type="number"] will allow decimals
-  expirationYear = expirationYear.replace(/[^\d]/g, "");
+  expirationYear = expirationYear
+    // For safety, because even input[type="number"] will allow decimals
+    .replace(/[^\d]/g, "")
+    // remove any leading zero padding
+    .replace(/^[0]+/, "");
+
+  if (expirationYear === "") {
+    expirationYear = null;
+  }
 
   // given the context of payment card expiry, a year character length of 3, or over 4
   // is more likely to be a mistake than an intentional value for the far past or far future.
-  if (yearInput !== null && expirationYear.length !== 4) {
+  if (expirationYear && expirationYear.length !== 4) {
     const paddedYear = ("00" + expirationYear).slice(-2);
     const currentCentury = `${new Date().getFullYear()}`.slice(0, 2);
 
