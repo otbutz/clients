@@ -8,16 +8,16 @@ import { ItemActionComponent } from "./item-action.component";
 /**
  * The class used to set the height of a bit item's inner content.
  */
-export const BitItemHeightClass = `tw-h-[52px]`;
+export const BitItemHeightClass = `tw-h-[60px]`;
 
 /**
  * The height of a bit item in pixels. Includes any margin, padding, or border. Used by the virtual scroll
  * to estimate how many items can be displayed at once and how large the virtual container should be.
  * Needs to be updated if the item height or spacing changes.
  *
- * 52px + 5.25px bottom margin + 1px border = 58.25px
+ * 60px + 6px bottom margin + 1px border = 67px
  */
-export const BitItemHeight = 58.25; //
+export const BitItemHeight = 67; //
 
 @Component({
   selector: "bit-item",

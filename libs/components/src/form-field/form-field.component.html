@@ -31,7 +31,9 @@
           [attr.for]="input.labelForId"
         >
           <ng-container *ngTemplateOutlet="labelContent"></ng-container>
-          <span *ngIf="input.required" class="tw-text-[0.625rem]"> ({{ "required" | i18n }})</span>
+          <span *ngIf="input.required" class="tw-text-[0.625rem] tw-relative tw-bottom-[-1px]">
+            ({{ "required" | i18n }})</span
+          >
         </label>
       </div>
       <div
