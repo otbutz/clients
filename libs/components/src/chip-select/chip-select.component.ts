@@ -81,6 +81,10 @@ export class ChipSelectComponent<T = unknown> implements ControlValueAccessor {
     return this.selectedOption?.icon || this.placeholderIcon;
   }
 
+  protected handleMenuClosed(): void {
+    this.renderedOptions = this.selectedOption ?? this.rootTree;
+  }
+
   protected selectOption(option: ChipSelectOption<T>, _event: MouseEvent) {
     this.selectedOption = option;
     this.onChange(option);

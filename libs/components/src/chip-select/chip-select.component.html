@@ -45,7 +45,7 @@
   </button>
 </div>
 
-<bit-menu #menu>
+<bit-menu #menu (closed)="handleMenuClosed()">
   <div *ngIf="renderedOptions" class="tw-max-h-80 tw-min-w-52 tw-max-w-80 tw-text-sm">
     <ng-container *ngIf="getParent(renderedOptions) as parent">
       <button
