@@ -6,6 +6,7 @@ import { SharedModule } from "../../shared";
 import { AddCreditDialogComponent } from "./add-credit-dialog.component";
 import { AdjustPaymentDialogV2Component } from "./adjust-payment-dialog/adjust-payment-dialog-v2.component";
 import { AdjustPaymentDialogComponent } from "./adjust-payment-dialog/adjust-payment-dialog.component";
+import { AdjustStorageDialogV2Component } from "./adjust-storage-dialog/adjust-storage-dialog-v2.component";
 import { AdjustStorageComponent } from "./adjust-storage.component";
 import { BillingHistoryComponent } from "./billing-history.component";
 import { OffboardingSurveyComponent } from "./offboarding-survey.component";
@@ -38,6 +39,7 @@ import { VerifyBankAccountComponent } from "./verify-bank-account/verify-bank-ac
     UpdateLicenseDialogComponent,
     OffboardingSurveyComponent,
     AdjustPaymentDialogV2Component,
+    AdjustStorageDialogV2Component,
   ],
   exports: [
     SharedModule,
