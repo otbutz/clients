@@ -1,12 +1,15 @@
 <div
   bitTypography="body2"
-  class="tw-inline-flex tw-items-center tw-rounded-full tw-max-w-52 tw-border-solid tw-border tw-border-text-muted"
-  [ngClass]="[
-    selectedOption
-      ? 'tw-bg-text-muted tw-text-contrast tw-gap-1'
-      : 'tw-bg-transparent tw-text-muted tw-gap-1.5',
-    focusVisibleWithin() ? 'tw-ring-2 tw-ring-primary-500 tw-ring-offset-1' : '',
-  ]"
+  class="tw-inline-flex tw-items-center tw-rounded-full tw-max-w-52 tw-border-solid tw-border"
+  [ngClass]="{
+    'tw-gap-1': selectOption,
+    'tw-gap-1.5': !selectOption,
+    'tw-bg-text-muted hover:tw-bg-secondary-700 tw-text-contrast': selectedOption && !disabled,
+    'tw-bg-transparent hover:tw-bg-background-alt tw-text-muted': !selectedOption && !disabled,
+    'tw-bg-secondary-300 tw-text-muted tw-gap-1 tw-border-transparent': disabled,
+    'tw-border-text-muted': !disabled,
+    'tw-ring-2 tw-ring-primary-700 tw-ring-offset-1': focusVisibleWithin(),
+  }"
 >
   <!-- Primary button -->
   <button
@@ -35,7 +38,7 @@
     type="button"
     [attr.aria-label]="'removeItem' | i18n: label"
     [disabled]="disabled"
-    class="tw-bg-transparent hover:tw-bg-transparent tw-outline-none tw-rounded-full tw-p-1 tw-my-1 tw-mr-1 tw-text-[inherit] tw-border-solid tw-border tw-border-text-muted hover:tw-border-text-contrast hover:disabled:tw-border-transparent tw-aspect-square tw-flex tw-items-center tw-justify-center tw-h-fit focus-visible:tw-ring-2 tw-ring-text-contrast focus-visible:hover:tw-border-transparent"
+    class="tw-bg-transparent hover:tw-bg-transparent tw-outline-none tw-rounded-full tw-p-1 tw-my-1 tw-mr-1 tw-text-[inherit] tw-border-solid tw-border tw-border-transparent hover:tw-border-text-contrast hover:disabled:tw-border-transparent tw-aspect-square tw-flex tw-items-center tw-justify-center tw-h-fit focus-visible:tw-ring-2 tw-ring-text-contrast focus-visible:hover:tw-border-transparent"
     [ngClass]="{
       'tw-cursor-not-allowed': disabled,
     }"
