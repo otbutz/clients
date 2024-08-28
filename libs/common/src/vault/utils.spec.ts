@@ -3,7 +3,7 @@ import { normalizeExpiryYearFormat } from "@bitwarden/common/vault/utils";
 function getExpiryYearValueFormats(currentCentury: string) {
   return [
     [-12, `${currentCentury}12`],
-    [0, null],
+    [0, `${currentCentury}00`],
     [2043, "2043"], // valid year with a length of four should be taken directly
     [24, `${currentCentury}24`],
     [3054, "3054"], // valid year with a length of four should be taken directly
@@ -13,8 +13,11 @@ function getExpiryYearValueFormats(currentCentury: string) {
     [undefined, null],
     ["-12", `${currentCentury}12`],
     ["", null],
-    ["0", null],
-    ["0000", null],
+    ["0", `${currentCentury}00`],
+    ["00", `${currentCentury}00`],
+    ["000", `${currentCentury}00`],
+    ["0000", `${currentCentury}00`],
+    ["00000", `${currentCentury}00`],
     ["0234234", `${currentCentury}34`],
     ["04", `${currentCentury}04`],
     ["2043", "2043"], // valid year with a length of four should be taken directly

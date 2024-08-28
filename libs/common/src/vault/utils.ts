@@ -22,8 +22,8 @@ export function normalizeExpiryYearFormat(yearInput: string | number): Year | nu
   expirationYear = expirationYear
     // For safety, because even input[type="number"] will allow decimals
     .replace(/[^\d]/g, "")
-    // remove any leading zero padding
-    .replace(/^[0]+/, "");
+    // remove any leading zero padding (leave the last leading zero if it ends the string)
+    .replace(/^[0]+(?=.)/, "");
 
   if (expirationYear === "") {
     expirationYear = null;
