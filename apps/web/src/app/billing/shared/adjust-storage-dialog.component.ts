@@ -27,9 +27,9 @@ export enum AdjustStorageDialogResult {
 }
 
 @Component({
-  templateUrl: "adjust-storage.component.html",
+  templateUrl: "adjust-storage-dialog.component.html",
 })
-export class AdjustStorageComponent {
+export class AdjustStorageDialogComponent {
   storageGbPrice: number;
   add: boolean;
   organizationId: string;
@@ -126,5 +126,5 @@ export function openAdjustStorageDialog(
   dialogService: DialogService,
   config: DialogConfig<AdjustStorageDialogData>,
 ) {
-  return dialogService.open<AdjustStorageDialogResult>(AdjustStorageComponent, config);
+  return dialogService.open<AdjustStorageDialogResult>(AdjustStorageDialogComponent, config);
 }
