@@ -4,8 +4,10 @@ import { ReactiveFormsModule } from "@angular/forms";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { safeProvider } from "@bitwarden/angular/platform/utils/safe-provider";
+import { SafeInjectionToken } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
+import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { StateProvider } from "@bitwarden/common/platform/state";
 import {
   CardComponent,
@@ -15,8 +17,15 @@ import {
   InputModule,
   SectionComponent,
   SectionHeaderComponent,
+  ToggleGroupModule,
 } from "@bitwarden/components";
-import { CredentialGeneratorService } from "@bitwarden/generator-core";
+import {
+  createRandomizer,
+  CredentialGeneratorService,
+  Randomizer,
+} from "@bitwarden/generator-core";
+
+const RANDOMIZER = new SafeInjectionToken<Randomizer>("Randomizer");
 
 /** Shared module containing generator component dependencies */
 @NgModule({
@@ -30,15 +39,21 @@ import { CredentialGeneratorService } from "@bitwarden/generator-core";
     ColorPasswordModule,
     InputModule,
     CheckboxModule,
+    ToggleGroupModule,
     SectionComponent,
     SectionHeaderComponent,
     CardComponent,
   ],
   providers: [
     safeProvider({
+      provide: RANDOMIZER,
+      useFactory: createRandomizer,
+      deps: [CryptoService],
+    }),
+    safeProvider({
       provide: CredentialGeneratorService,
       useClass: CredentialGeneratorService,
-      deps: [StateProvider, PolicyService],
+      deps: [RANDOMIZER, StateProvider, PolicyService],
     }),
   ],
   declarations: [],
