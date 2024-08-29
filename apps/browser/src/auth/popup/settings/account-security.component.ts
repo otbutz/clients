@@ -470,7 +470,7 @@ export class AccountSecurityComponent implements OnInit, OnDestroy {
 
     const biometricsPromise = async () => {
       try {
-        const result = await this.platformUtilsService.authenticateBiometric();
+        const result = await this.biometricsService.authenticateBiometric();
 
         // prevent duplicate dialog
         biometricsResponseReceived = true;
