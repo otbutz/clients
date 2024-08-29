@@ -14,6 +14,7 @@ import {
   CheckboxModule,
   ColorPasswordModule,
   FormFieldModule,
+  IconButtonModule,
   InputModule,
   SectionComponent,
   SectionHeaderComponent,
@@ -29,20 +30,21 @@ const RANDOMIZER = new SafeInjectionToken<Randomizer>("Randomizer");
 
 /** Shared module containing generator component dependencies */
 @NgModule({
-  imports: [SectionComponent, SectionHeaderComponent, CardComponent],
+  imports: [CardComponent, SectionComponent, SectionHeaderComponent],
   exports: [
+    CardComponent,
+    CheckboxModule,
+    CommonModule,
+    ColorPasswordModule,
+    FormFieldModule,
+    IconButtonModule,
+    InputModule,
     JslibModule,
     JslibServicesModule,
-    FormFieldModule,
-    CommonModule,
     ReactiveFormsModule,
-    ColorPasswordModule,
-    InputModule,
-    CheckboxModule,
-    ToggleGroupModule,
     SectionComponent,
     SectionHeaderComponent,
-    CardComponent,
+    ToggleGroupModule,
   ],
   providers: [
     safeProvider({
