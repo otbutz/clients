@@ -1,7 +1,7 @@
 import { DialogRef, DIALOG_DATA } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
+import { OrganizationUserApiService } from "@bitwarden/admin-console/common";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { DialogService, TableDataSource } from "@bitwarden/components";
@@ -21,7 +21,7 @@ export class BulkEnableSecretsManagerDialogComponent implements OnInit {
   constructor(
     public dialogRef: DialogRef,
     @Inject(DIALOG_DATA) private data: BulkEnableSecretsManagerDialogData,
-    private organizationUserService: OrganizationUserService,
+    private organizationUserApiService: OrganizationUserApiService,
     private platformUtilsService: PlatformUtilsService,
     private i18nService: I18nService,
   ) {}
@@ -31,7 +31,7 @@ export class BulkEnableSecretsManagerDialogComponent implements OnInit {
   }
 
   submit = async () => {
-    await this.organizationUserService.putOrganizationUserBulkEnableSecretsManager(
+    await this.organizationUserApiService.putOrganizationUserBulkEnableSecretsManager(
       this.data.orgId,
       this.dataSource.data.map((u) => u.id),
     );

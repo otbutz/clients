@@ -15,14 +15,14 @@ import { OrganizationUserAdminView } from "../views/organization-user-admin-view
 export class UserAdminService {
   constructor(
     private configService: ConfigService,
-    private organizationUserService: OrganizationUserApiService,
+    private organizationUserApiService: OrganizationUserApiService,
   ) {}
 
   async get(
     organizationId: string,
     organizationUserId: string,
   ): Promise<OrganizationUserAdminView | undefined> {
-    const userResponse = await this.organizationUserService.getOrganizationUser(
+    const userResponse = await this.organizationUserApiService.getOrganizationUser(
       organizationId,
       organizationUserId,
       {
@@ -47,7 +47,11 @@ export class UserAdminService {
     request.groups = user.groups;
     request.accessSecretsManager = user.accessSecretsManager;
 
-    await this.organizationUserService.putOrganizationUser(user.organizationId, user.id, request);
+    await this.organizationUserApiService.putOrganizationUser(
+      user.organizationId,
+      user.id,
+      request,
+    );
   }
 
   async invite(emails: string[], user: OrganizationUserAdminView): Promise<void> {
@@ -59,7 +63,7 @@ export class UserAdminService {
     request.groups = user.groups;
     request.accessSecretsManager = user.accessSecretsManager;
 
-    await this.organizationUserService.postOrganizationUserInvite(user.organizationId, request);
+    await this.organizationUserApiService.postOrganizationUserInvite(user.organizationId, request);
   }
 
   private async decryptMany(

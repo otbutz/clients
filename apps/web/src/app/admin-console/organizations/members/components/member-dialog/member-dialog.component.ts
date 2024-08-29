@@ -13,8 +13,8 @@ import {
   takeUntil,
 } from "rxjs";
 
+import { OrganizationUserApiService } from "@bitwarden/admin-console/common";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import {
   OrganizationUserStatusType,
   OrganizationUserType,
@@ -139,7 +139,7 @@ export class MemberDialogComponent implements OnDestroy {
     private collectionAdminService: CollectionAdminService,
     private groupService: GroupService,
     private userService: UserAdminService,
-    private organizationUserService: OrganizationUserService,
+    private organizationUserApiService: OrganizationUserApiService,
     private dialogService: DialogService,
     private accountService: AccountService,
     organizationService: OrganizationService,
@@ -487,7 +487,7 @@ export class MemberDialogComponent implements OnDestroy {
       }
     }
 
-    await this.organizationUserService.deleteOrganizationUser(
+    await this.organizationUserApiService.deleteOrganizationUser(
       this.params.organizationId,
       this.params.organizationUserId,
     );
@@ -524,7 +524,7 @@ export class MemberDialogComponent implements OnDestroy {
       }
     }
 
-    await this.organizationUserService.revokeOrganizationUser(
+    await this.organizationUserApiService.revokeOrganizationUser(
       this.params.organizationId,
       this.params.organizationUserId,
     );
@@ -543,7 +543,7 @@ export class MemberDialogComponent implements OnDestroy {
       return;
     }
 
-    await this.organizationUserService.restoreOrganizationUser(
+    await this.organizationUserApiService.restoreOrganizationUser(
       this.params.organizationId,
       this.params.organizationUserId,
     );
