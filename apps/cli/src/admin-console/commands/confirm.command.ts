@@ -1,4 +1,7 @@
-import { OrganizationUserApiService , OrganizationUserConfirmRequest } from "@bitwarden/admin-console/common";
+import {
+  OrganizationUserApiService,
+  OrganizationUserConfirmRequest,
+} from "@bitwarden/admin-console/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";

@@ -13,7 +13,11 @@ import {
   switchMap,
 } from "rxjs";
 
-import { OrganizationUserApiService , OrganizationUserConfirmRequest , OrganizationUserUserDetailsResponse } from "@bitwarden/admin-console/common";
+import {
+  OrganizationUserApiService,
+  OrganizationUserConfirmRequest,
+  OrganizationUserUserDetailsResponse,
+} from "@bitwarden/admin-console/common";
 import { UserNamePipe } from "@bitwarden/angular/pipes/user-name.pipe";
 import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";

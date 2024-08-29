@@ -1,7 +1,10 @@
 import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
 import { Component, Inject, OnInit } from "@angular/core";
 
-import { OrganizationUserApiService , OrganizationUserBulkConfirmRequest } from "@bitwarden/admin-console/common";
+import {
+  OrganizationUserApiService,
+  OrganizationUserBulkConfirmRequest,
+} from "@bitwarden/admin-console/common";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";

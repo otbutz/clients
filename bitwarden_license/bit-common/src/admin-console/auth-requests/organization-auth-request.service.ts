@@ -1,4 +1,7 @@
-import { OrganizationUserApiService , OrganizationUserResetPasswordDetailsResponse } from "@bitwarden/admin-console/common";
+import {
+  OrganizationUserApiService,
+  OrganizationUserResetPasswordDetailsResponse,
+} from "@bitwarden/admin-console/common";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";

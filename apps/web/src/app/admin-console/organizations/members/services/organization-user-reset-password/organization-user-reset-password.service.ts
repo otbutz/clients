@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 
-import { OrganizationUserApiService ,
+import {
+  OrganizationUserApiService,
   OrganizationUserResetPasswordRequest,
   OrganizationUserResetPasswordWithIdRequest,
 } from "@bitwarden/admin-console/common";

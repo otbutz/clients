@@ -1,7 +1,8 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, firstValueFrom, map } from "rxjs";
 
-import { OrganizationUserApiService ,
+import {
+  OrganizationUserApiService,
   OrganizationUserAcceptRequest,
   OrganizationUserAcceptInitRequest,
 } from "@bitwarden/admin-console/common";

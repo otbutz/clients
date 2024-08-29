@@ -1,5 +1,7 @@
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { ListResponse } from "@bitwarden/common/models/response/list.response";
+
+import { OrganizationUserApiService } from "../abstractions";
 import {
   OrganizationUserAcceptInitRequest,
   OrganizationUserAcceptRequest,
@@ -9,7 +11,7 @@ import {
   OrganizationUserResetPasswordEnrollmentRequest,
   OrganizationUserResetPasswordRequest,
   OrganizationUserUpdateRequest,
-  OrganizationUserBulkRequest
+  OrganizationUserBulkRequest,
 } from "../models/requests";
 import {
   OrganizationUserBulkPublicKeyResponse,
@@ -18,8 +20,6 @@ import {
   OrganizationUserResetPasswordDetailsResponse,
   OrganizationUserUserDetailsResponse,
 } from "../models/responses";
-
-import { OrganizationUserApiService } from '../abstractions';
 
 export class DefaultOrganizationUserApiService implements OrganizationUserApiService {
   constructor(private apiService: ApiService) {}
