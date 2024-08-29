@@ -233,12 +233,6 @@ export class VaultTimeoutInputComponent
       return { minTimeoutError: true };
     }
 
-    if (!this.exceedsMaximumTimeout) {
-      return {
-        maxTimeoutError: true,
-      };
-    }
-
     return null;
   }
 

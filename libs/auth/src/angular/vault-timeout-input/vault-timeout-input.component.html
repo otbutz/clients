@@ -23,7 +23,10 @@
   <bit-hint *ngIf="vaultTimeoutPolicy != null && !exceedsMaximumTimeout">
     {{ "vaultTimeoutPolicyInEffect" | i18n: vaultTimeoutPolicyHours : vaultTimeoutPolicyMinutes }}
   </bit-hint>
-  <small class="tw-text-danger" *ngIf="vaultTimeoutPolicy != null && exceedsMaximumTimeout">
+  <small *ngIf="!exceedsMinimumTimout" class="tw-text-danger">
+    <i class="bwi bwi-error" aria-hidden="true"></i> {{ "vaultCustomTimeoutMinimum" | i18n }}
+  </small>
+  <small class="tw-text-danger" *ngIf="exceedsMaximumTimeout">
     <i class="bwi bwi-error" aria-hidden="true"></i>
     {{
       "vaultTimeoutPolicyMaximumError" | i18n: vaultTimeoutPolicyHours : vaultTimeoutPolicyMinutes

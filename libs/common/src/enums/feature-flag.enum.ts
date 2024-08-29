@@ -38,6 +38,7 @@ export type AllowedFeatureFlagTypes = boolean | number | string;
 
 // Helper to ensure the value is treated as a boolean.
 const FALSE = false as boolean;
+const TRUE = true as boolean;
 
 /**
  * Default value for feature flags.
@@ -52,7 +53,7 @@ export const DefaultFeatureFlagValue = {
   [FeatureFlag.EnableConsolidatedBilling]: FALSE,
   [FeatureFlag.AC1795_UpdatedSubscriptionStatusSection]: FALSE,
   [FeatureFlag.EnableDeleteProvider]: FALSE,
-  [FeatureFlag.ExtensionRefresh]: FALSE,
+  [FeatureFlag.ExtensionRefresh]: TRUE,
   [FeatureFlag.PersistPopupView]: FALSE,
   [FeatureFlag.RestrictProviderAccess]: FALSE,
   [FeatureFlag.PM4154_BulkEncryptionService]: FALSE,
