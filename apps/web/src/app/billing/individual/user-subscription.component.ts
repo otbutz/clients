@@ -5,6 +5,8 @@ import { firstValueFrom, lastValueFrom } from "rxjs";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { SubscriptionResponse } from "@bitwarden/common/billing/models/response/subscription.response";
+import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
+import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
 import { FileDownloadService } from "@bitwarden/common/platform/abstractions/file-download/file-download.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
@@ -34,9 +36,13 @@ export class UserSubscriptionComponent implements OnInit {
   sub: SubscriptionResponse;
   selfHosted = false;
   cloudWebVaultUrl: string;
+  enableTimeThreshold: boolean;
 
   cancelPromise: Promise<any>;
   reinstatePromise: Promise<any>;
+  protected enableTimeThreshold$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableTimeThreshold,
+  );
 
   constructor(
     private apiService: ApiService,
@@ -49,6 +55,7 @@ export class UserSubscriptionComponent implements OnInit {
     private environmentService: EnvironmentService,
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private toastService: ToastService,
+    private configService: ConfigService,
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -56,6 +63,7 @@ export class UserSubscriptionComponent implements OnInit {
   async ngOnInit() {
     this.cloudWebVaultUrl = await firstValueFrom(this.environmentService.cloudWebVaultUrl$);
     await this.load();
+    this.enableTimeThreshold = await firstValueFrom(this.enableTimeThreshold$);
     this.firstLoaded = true;
   }
 
