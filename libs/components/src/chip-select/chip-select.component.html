@@ -4,7 +4,8 @@
   [ngClass]="{
     'tw-gap-1': selectOption,
     'tw-gap-1.5': !selectOption,
-    'tw-bg-text-muted hover:tw-bg-secondary-700 tw-text-contrast': selectedOption && !disabled,
+    'tw-bg-text-muted hover:tw-bg-secondary-700 tw-text-contrast hover:tw-border-secondary-700':
+      selectedOption && !disabled,
     'tw-bg-transparent hover:tw-bg-background-alt tw-text-muted': !selectedOption && !disabled,
     'tw-bg-secondary-300 tw-text-muted tw-gap-1 tw-border-transparent': disabled,
     'tw-border-text-muted': !disabled,
@@ -27,7 +28,7 @@
     <span class="tw-truncate">{{ label }}</span>
     <i
       *ngIf="!selectedOption"
-      class="bwi"
+      class="bwi tw-p-1"
       [ngClass]="menuTrigger.isOpen ? 'bwi-angle-up' : 'bwi-angle-down'"
     ></i>
   </button>
