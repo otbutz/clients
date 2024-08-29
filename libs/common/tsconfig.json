@@ -1,5 +1,5 @@
 {
   "extends": "../shared/tsconfig.libs",
-  "include": ["src", "spec", "./custom-matchers.d.ts"],
+  "include": ["src", "spec", "./custom-matchers.d.ts", "../admin-console/src/common/organization-user/services/requests", "../admin-console/src/common/organization-user/services/default-organization-user-api.service.ts", "../admin-console/src/common/organization-user/models/requests/organization-user-bulk.request.ts"],
   "exclude": ["node_modules", "dist"]
 }

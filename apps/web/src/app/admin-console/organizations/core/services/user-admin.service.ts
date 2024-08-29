@@ -1,11 +1,11 @@
 import { Injectable } from "@angular/core";
 
-import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import {
+  OrganizationUserApiService,
   OrganizationUserInviteRequest,
   OrganizationUserUpdateRequest,
-} from "@bitwarden/common/admin-console/abstractions/organization-user/requests";
-import { OrganizationUserDetailsResponse } from "@bitwarden/common/admin-console/abstractions/organization-user/responses";
+  OrganizationUserDetailsResponse,
+} from "@bitwarden/admin-console/common";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 
 import { CoreOrganizationModule } from "../core-organization.module";
@@ -15,7 +15,7 @@ import { OrganizationUserAdminView } from "../views/organization-user-admin-view
 export class UserAdminService {
   constructor(
     private configService: ConfigService,
-    private organizationUserService: OrganizationUserService,
+    private organizationUserService: OrganizationUserApiService,
   ) {}
 
   async get(
