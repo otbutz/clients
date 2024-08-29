@@ -8,15 +8,16 @@ import { GeneratedCredential } from "@bitwarden/generator-history";
 
 import { DependenciesModule } from "./dependencies";
 import { PassphraseSettingsComponent } from "./passphrase-settings.component";
+import { PasswordSettingsComponent } from "./password-settings.component";
 
 /** Options group for passwords */
 @Component({
   standalone: true,
-  selector: "bit-password-settings",
-  templateUrl: "password.component.html",
+  selector: "bit-password-generator",
+  templateUrl: "password-generator.component.html",
   imports: [DependenciesModule, PasswordSettingsComponent, PassphraseSettingsComponent],
 })
-export class PasswordSettingsComponent implements OnInit, OnDestroy {
+export class PasswordGeneratorComponent implements OnInit, OnDestroy {
   constructor(
     private generatorService: CredentialGeneratorService,
     private accountService: AccountService,
