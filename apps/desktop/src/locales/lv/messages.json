@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Jaunais konts ir izveidots. Tagad vari pieteikties."
   },
+  "newAccountCreated2": {
+    "message": "Jaunais konts tika izveidots."
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Tu esi pieteicies."
+  },
   "masterPassSent": {
     "message": "Mēs nosūtījām galvenās paroles norādi e-pastā."
   },
@@ -3052,5 +3058,8 @@
   },
   "textSends": {
     "message": "Teksta Send"
+  },
+  "ssoError": {
+    "message": "Netika atrasti brīvi vienotās (SSO) pieteikšanās porti."
   }
 }
