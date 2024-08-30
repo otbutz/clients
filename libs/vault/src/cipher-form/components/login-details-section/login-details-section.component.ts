@@ -6,6 +6,8 @@ import { map } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventType } from "@bitwarden/common/enums";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { Fido2CredentialView } from "@bitwarden/common/vault/models/view/fido2-credential.view";
 import { LoginView } from "@bitwarden/common/vault/models/view/login.view";
@@ -106,6 +108,7 @@ export class LoginDetailsSectionComponent implements OnInit {
     private generationService: CipherFormGenerationService,
     private auditService: AuditService,
     private toastService: ToastService,
+    private eventCollectionService: EventCollectionService,
     @Optional() private totpCaptureService?: TotpCaptureService,
   ) {
     this.cipherFormContainer.registerChildForm("loginDetails", this.loginDetailsForm);
@@ -162,6 +165,24 @@ export class LoginDetailsSectionComponent implements OnInit {
       password: this.initialValues?.password || "",
     });
   }
+
+  /** Logs Password visible event when in edit mode */
+  logPasswordVisibleEvent = async (passwordVisible: boolean) => {
+    const { mode, originalCipher } = this.cipherFormContainer.config;
+
+    const isEdit = ["edit", "partial-edit"].includes(mode);
+
+    if (!passwordVisible || !isEdit || !originalCipher) {
+      return;
+    }
+
+    await this.eventCollectionService.collect(
+      EventType.Cipher_ClientToggledPasswordVisible,
+      originalCipher.id,
+      false,
+      originalCipher.organizationId,
+    );
+  };
 
   captureTotp = async () => {
     if (!this.canCaptureTotp) {

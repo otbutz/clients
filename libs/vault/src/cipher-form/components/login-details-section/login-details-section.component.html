@@ -57,6 +57,7 @@
         *ngIf="viewHiddenFields"
         data-testid="toggle-password-visibility"
         bitPasswordInputToggle
+        (toggledChange)="logPasswordVisibleEvent($event)"
       ></button>
       <button
         type="button"
