@@ -94,7 +94,14 @@ export class Fido2AuthenticatorService implements Fido2AuthenticatorServiceAbstr
       }
 
       await userInterfaceSession.ensureUnlockedVault();
-      await this.syncService.fullSync(false);
+
+      // Avoid syncing if we did it reasonably soon as the only reason for syncing is to validate excludeCredentials
+      const lastSync = await firstValueFrom(this.syncService.activeUserLastSync$());
+      const threshold = new Date().getTime() - 1000 * 60 * 30; // 30 minutes ago
+
+      if (!lastSync || lastSync.getTime() < threshold) {
+        await this.syncService.fullSync(false);
+      }
 
       const existingCipherIds = await this.findExcludedCredentials(
         params.excludeCredentialDescriptorList,
