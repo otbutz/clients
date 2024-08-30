@@ -29,7 +29,7 @@
   </app-autofill-options-view>
 
   <!-- CARD DETAILS -->
-  <app-card-details-view *ngIf="hasCard" [card]="cipher.card"></app-card-details-view>
+  <app-card-details-view *ngIf="hasCard" [cipher]="cipher"></app-card-details-view>
 
   <!-- IDENTITY SECTIONS -->
   <app-view-identity-sections *ngIf="cipher.identity" [cipher]="cipher">

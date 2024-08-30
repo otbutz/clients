@@ -2,8 +2,10 @@ import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
+import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { EventType } from "@bitwarden/common/enums";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { CardView } from "@bitwarden/common/vault/models/view/card.view";
+import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   CardComponent,
   SectionComponent,
@@ -29,14 +31,32 @@ import {
   ],
 })
 export class CardDetailsComponent {
-  @Input() card: CardView;
+  @Input() cipher: CipherView;
 
-  constructor(private i18nService: I18nService) {}
+  constructor(
+    private i18nService: I18nService,
+    private eventCollectionService: EventCollectionService,
+  ) {}
+
+  get card() {
+    return this.cipher.card;
+  }
 
   get setSectionTitle() {
     if (this.card.brand && this.card.brand !== "Other") {
       return this.i18nService.t("cardBrandDetails", this.card.brand);
     }
     return this.i18nService.t("cardDetails");
+  }
+
+  async logCardCodeVisibleEvent(hiddenFieldVisible: boolean) {
+    if (hiddenFieldVisible) {
+      await this.eventCollectionService.collect(
+        EventType.Cipher_ClientToggledCardCodeVisible,
+        this.cipher.id,
+        false,
+        this.cipher.organizationId,
+      );
+    }
   }
 }
