@@ -39,6 +39,7 @@
           showToast
           [valueLabel]="field.name"
           [appA11yTitle]="'copyValue' | i18n"
+          (click)="logCopyEvent()"
         ></button>
       </bit-form-field>
       <bit-form-control *ngIf="field.type === fieldType.Boolean">

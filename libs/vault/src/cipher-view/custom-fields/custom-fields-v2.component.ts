@@ -70,6 +70,15 @@ export class CustomFieldV2Component implements OnInit {
     }
   }
 
+  async logCopyEvent() {
+    await this.eventCollectionService.collect(
+      EventType.Cipher_ClientCopiedHiddenField,
+      this.cipher.id,
+      false,
+      this.cipher.organizationId,
+    );
+  }
+
   private getLinkedFieldsOptionsForCipher() {
     switch (this.cipher.type) {
       case CipherType.Login:
