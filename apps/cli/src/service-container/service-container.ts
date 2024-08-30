@@ -411,7 +411,7 @@ export class ServiceContainer {
       this.kdfConfigService,
     );
 
-    this.appIdService = new AppIdService(this.globalStateProvider);
+    this.appIdService = new AppIdService(this.storageService, this.logService);
 
     const customUserAgent =
       "Bitwarden_CLI/" +
