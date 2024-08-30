@@ -24,7 +24,13 @@
       <bit-form-field *ngIf="field.type === fieldType.Hidden">
         <bit-label>{{ field.name }}</bit-label>
         <input readonly bitInput type="password" [value]="field.value" aria-readonly="true" />
-        <button bitSuffix type="button" bitIconButton bitPasswordInputToggle></button>
+        <button
+          bitSuffix
+          type="button"
+          bitIconButton
+          bitPasswordInputToggle
+          (toggledChange)="logHiddenEvent($event)"
+        ></button>
         <button
           bitIconButton="bwi-clone"
           bitSuffix
