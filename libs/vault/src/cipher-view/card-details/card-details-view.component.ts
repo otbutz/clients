@@ -50,8 +50,8 @@ export class CardDetailsComponent {
     return this.i18nService.t("cardDetails");
   }
 
-  async logCardEvent(hiddenFieldVisible: boolean, event: EventType) {
-    if (hiddenFieldVisible) {
+  async logCardEvent(conditional: boolean, event: EventType) {
+    if (conditional) {
       await this.eventCollectionService.collect(
         event,
         this.cipher.id,
