@@ -32,6 +32,7 @@ import {
 })
 export class CardDetailsComponent {
   @Input() cipher: CipherView;
+  EventType = EventType;
 
   constructor(
     private i18nService: I18nService,
@@ -49,10 +50,10 @@ export class CardDetailsComponent {
     return this.i18nService.t("cardDetails");
   }
 
-  async logCardCodeVisibleEvent(hiddenFieldVisible: boolean) {
+  async logCardEvent(hiddenFieldVisible: boolean, event: EventType) {
     if (hiddenFieldVisible) {
       await this.eventCollectionService.collect(
-        EventType.Cipher_ClientToggledCardCodeVisible,
+        event,
         this.cipher.id,
         false,
         this.cipher.organizationId,

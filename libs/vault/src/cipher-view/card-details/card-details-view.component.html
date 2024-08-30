@@ -30,6 +30,7 @@
         bitIconButton
         bitPasswordInputToggle
         data-testid="toggle-number"
+        (toggledChange)="logCardEvent($event, EventType.Cipher_ClientToggledCardNumberVisible)"
       ></button>
       <button
         bitIconButton="bwi-clone"
@@ -69,7 +70,7 @@
         bitIconButton
         bitPasswordInputToggle
         data-testid="toggle-code"
-        (toggledChange)="logCardCodeVisibleEvent($event)"
+        (toggledChange)="logCardEvent($event, EventType.Cipher_ClientToggledCardCodeVisible)"
       ></button>
       <button
         bitIconButton="bwi-clone"

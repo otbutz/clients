@@ -92,6 +92,8 @@ export class CardDetailsSectionComponent implements OnInit {
     { name: "12 - " + this.i18nService.t("december"), value: "12" },
   ];
 
+  EventType = EventType;
+
   constructor(
     private cipherFormContainer: CipherFormContainer,
     private formBuilder: FormBuilder,
@@ -153,14 +155,14 @@ export class CardDetailsSectionComponent implements OnInit {
     return this.i18nService.t("cardDetails");
   }
 
-  async logCardCodeVisibilityEvent(hiddenFieldVisible: boolean) {
+  async logCardEvent(hiddenFieldVisible: boolean, event: EventType) {
     const { mode, originalCipher } = this.cipherFormContainer.config;
 
     const isEdit = ["edit", "partial-edit"].includes(mode);
 
     if (hiddenFieldVisible && isEdit) {
       await this.eventCollectionService.collect(
-        EventType.Cipher_ClientToggledCardCodeVisible,
+        event,
         originalCipher.id,
         false,
         originalCipher.organizationId,
