@@ -2,13 +2,12 @@ import { moduleMetadata, Meta, StoryObj } from "@storybook/angular";
 
 import { SliderComponent } from "./slider.component";
 
-// Metadata configuration for the story
 export default {
   title: "Tools/Slider",
   component: SliderComponent,
   decorators: [
     moduleMetadata({
-      imports: [SliderComponent], // Include the component itself and any other necessary modules
+      imports: [SliderComponent],
     }),
   ],
   argTypes: {
@@ -27,14 +26,17 @@ export default {
 
 type Story = StoryObj<SliderComponent>;
 
-// Default story
 export const Default: Story = {
+  args: {
+    minValue: 0,
+    maxValue: 100,
+  },
+
   render: (args) => {
     return {
       props: {
         ...args,
       },
-      template: `<tools-slider></tools-slider>`,
     };
   },
 };

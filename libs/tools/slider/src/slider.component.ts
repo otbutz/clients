@@ -1,5 +1,12 @@
 import { CommonModule } from "@angular/common";
-import { AfterViewInit, Component, ViewEncapsulation } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Input,
+  ViewChild,
+  ViewEncapsulation,
+} from "@angular/core";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 
@@ -11,18 +18,16 @@ import { JslibModule } from "@bitwarden/angular/jslib.module";
   encapsulation: ViewEncapsulation.None,
 })
 export class SliderComponent implements AfterViewInit {
-  maxValue = 1000;
-  minValue = 0;
+  @Input() minValue = 0;
+  @Input() maxValue: number;
 
-  constructor() {}
+  @ViewChild("rangeSlider", { static: true }) sliderEl!: ElementRef<HTMLInputElement>;
 
   ngAfterViewInit() {
-    const sliderEl = document.querySelector("#rangeSlider") as HTMLElement;
-
-    sliderEl.addEventListener("input", (event: InputEvent) => {
+    this.sliderEl.nativeElement.addEventListener("input", (event: InputEvent) => {
       const tempValue = Number((event.target as HTMLInputElement).value);
       const progress = (tempValue / this.maxValue) * 100;
-      sliderEl.style.background = `linear-gradient(to right, rgb(var(--color-primary-600)) ${progress}%, rgb(var(--color-secondary-100)) ${progress}%)`;
+      this.sliderEl.nativeElement.style.background = `linear-gradient(to right, rgb(var(--color-primary-600)) ${progress}%, rgb(var(--color-secondary-100)) ${progress}%)`;
     });
   }
 }

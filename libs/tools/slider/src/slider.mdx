@@ -1,0 +1,15 @@
+import { Controls, Meta, Primary } from "@storybook/addon-docs";
+
+import * as stories from "./slider.stories";
+
+<Meta of={stories} />
+
+# Slider
+
+This component is custom styled `input[type=range]` (ie. slider) input to allow users to easily
+choose a numeric value by manipulating a thumb along a track with a defined min and max values.
+Keyboard input is also supported when the element is in focus.
+
+<Primary />
+
+<Controls include={["minValue", "maxValue"]} />
