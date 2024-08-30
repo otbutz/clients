@@ -11,7 +11,7 @@ import { Fido2ContentScript } from "../enums/fido2-content-script.enum";
 
   const script = globalContext.document.createElement("script");
   script.src = chrome.runtime.getURL(Fido2ContentScript.PageScript);
-  script.addEventListener("load", () => script.remove());
+  script.addEventListener("load", () => globalThis.setTimeout(() => script?.remove(), 5000));
 
   const scriptInsertionPoint =
     globalContext.document.head || globalContext.document.documentElement;
