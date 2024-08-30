@@ -307,6 +307,18 @@ export function nodeIsFormElement(node: Node): node is HTMLFormElement {
   return nodeIsElement(node) && elementIsFormElement(node);
 }
 
+export function nodeIsTypeSubmitElement(node: Node): node is HTMLElement {
+  return nodeIsElement(node) && getPropertyOrAttribute(node as HTMLElement, "type") === "submit";
+}
+
+export function nodeIsButtonElement(node: Node): node is HTMLButtonElement {
+  return (
+    nodeIsElement(node) &&
+    (elementIsInstanceOf<HTMLButtonElement>(node, "button") ||
+      getPropertyOrAttribute(node as HTMLElement, "type") === "button")
+  );
+}
+
 /**
  * Returns a boolean representing the attribute value of an element.
  *
@@ -354,5 +366,13 @@ export function throttle(callback: (_args: any) => any, limit: number) {
       waitingDelay = true;
       globalThis.setTimeout(() => (waitingDelay = false), limit);
     }
+  };
+}
+
+export function debounce(callback: (_args: any) => any, delay: number) {
+  let timeout: NodeJS.Timeout;
+  return function (...args: unknown[]) {
+    clearTimeout(timeout);
+    timeout = globalThis.setTimeout(() => callback.apply(this, args), delay);
   };
 }

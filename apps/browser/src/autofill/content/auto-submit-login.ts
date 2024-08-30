@@ -6,7 +6,13 @@ import { CollectAutofillContentService } from "../services/collect-autofill-cont
 import DomElementVisibilityService from "../services/dom-element-visibility.service";
 import { DomQueryService } from "../services/dom-query.service";
 import InsertAutofillContentService from "../services/insert-autofill-content.service";
-import { elementIsInputElement, nodeIsFormElement, sendExtensionMessage } from "../utils";
+import {
+  elementIsInputElement,
+  nodeIsButtonElement,
+  nodeIsFormElement,
+  nodeIsTypeSubmitElement,
+  sendExtensionMessage,
+} from "../utils";
 
 (function (globalContext) {
   const domQueryService = new DomQueryService();
@@ -194,16 +200,19 @@ import { elementIsInputElement, nodeIsFormElement, sendExtensionMessage } from "
     element: HTMLElement,
     lastFieldIsPasswordInput = false,
   ): boolean {
-    const genericSubmitElement = domQueryService.deepQueryElements<HTMLButtonElement>(
+    const genericSubmitElement = domQueryService.query<HTMLButtonElement>(
       element,
       "[type='submit']",
+      (node: Node) => nodeIsTypeSubmitElement(node),
     );
     if (genericSubmitElement[0]) {
       clickSubmitElement(genericSubmitElement[0], lastFieldIsPasswordInput);
       return true;
     }
 
-    const buttons = domQueryService.deepQueryElements<HTMLButtonElement>(element, "button");
+    const buttons = domQueryService.query<HTMLButtonElement>(element, "button", (node: Node) =>
+      nodeIsButtonElement(node),
+    );
     for (let i = 0; i < buttons.length; i++) {
       if (isLoginButton(buttons[i])) {
         clickSubmitElement(buttons[i], lastFieldIsPasswordInput);
@@ -273,20 +282,11 @@ import { elementIsInputElement, nodeIsFormElement, sendExtensionMessage } from "
    * Gets all form elements on the page.
    */
   function getAutofillFormElements(): HTMLFormElement[] {
-    const formElements: HTMLFormElement[] = [];
-    domQueryService.queryAllTreeWalkerNodes(
+    return domQueryService.query<HTMLFormElement>(
       globalContext.document.documentElement,
-      (node: Node) => {
-        if (nodeIsFormElement(node)) {
-          formElements.push(node);
-          return true;
-        }
-
-        return false;
-      },
+      "form",
+      (node: Node) => nodeIsFormElement(node),
     );
-
-    return formElements;
   }
 
   /**

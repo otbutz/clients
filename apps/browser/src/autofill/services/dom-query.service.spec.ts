@@ -26,9 +26,10 @@ describe("DomQueryService", () => {
       form.appendChild(input);
       shadowRoot.appendChild(form);
 
-      const formFieldElements = domQueryService.deepQueryElements(
+      const formFieldElements = domQueryService.query(
         shadowRoot,
         "input",
+        (element: Element) => element.tagName === "INPUT",
         mutationObserver,
       );
 
@@ -47,9 +48,10 @@ describe("DomQueryService", () => {
       shadowRoot2.appendChild(form);
       shadowRoot1.appendChild(root2);
 
-      const formFieldElements = domQueryService.deepQueryElements(
+      const formFieldElements = domQueryService.query(
         shadowRoot1,
         "input",
+        (element: Element) => element.tagName === "INPUT",
         mutationObserver,
       );
 
@@ -70,8 +72,9 @@ describe("DomQueryService", () => {
       shadowRoot2.appendChild(form);
       shadowRoot1.appendChild(root2);
 
-      const formFieldElements = domQueryService.queryAllTreeWalkerNodes(
+      const formFieldElements = domQueryService.query(
         shadowRoot1,
+        "input",
         (element: Element) => element.tagName === "INPUT",
         mutationObserver,
       );
