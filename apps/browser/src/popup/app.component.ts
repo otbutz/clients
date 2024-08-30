@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnDestroy, OnInit, inject } from "@angular/core";
 import { NavigationEnd, Router, RouterOutlet } from "@angular/router";
 import { Subject, takeUntil, firstValueFrom, concatMap, filter, tap } from "rxjs";
 
@@ -20,7 +20,7 @@ import {
   ToastService,
 } from "@bitwarden/components";
 
-import { BrowserApi } from "../platform/browser/browser-api";
+import { PopupViewCacheService } from "../platform/popup/view-cache/popup-view-cache.service";
 import { initPopupClosedListener } from "../platform/services/popup-view-cache-background.service";
 import { BrowserSendStateService } from "../tools/popup/services/browser-send-state.service";
 import { VaultBrowserStateService } from "../vault/services/vault-browser-state.service";
@@ -37,6 +37,8 @@ import { DesktopSyncVerificationDialogComponent } from "./components/desktop-syn
   </div>`,
 })
 export class AppComponent implements OnInit, OnDestroy {
+  private viewCacheService = inject(PopupViewCacheService);
+
   private lastActivity: Date;
   private activeUserId: UserId;
   private recordActivitySubject = new Subject<void>();
@@ -64,6 +66,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
     initPopupClosedListener();
+    await this.viewCacheService.init();
 
     // Component states must not persist between closing and reopening the popup, otherwise they become dead objects
     // Clear them aggressively to make sure this doesn't occur
@@ -124,16 +127,6 @@ export class AppComponent implements OnInit, OnDestroy {
             this.showNativeMessagingFingerprintDialog(msg);
           } else if (msg.command === "showToast") {
             this.toastService._showToast(msg);
-          } else if (msg.command === "reloadProcess") {
-            const forceWindowReload =
-              this.platformUtilsService.isSafari() ||
-              this.platformUtilsService.isFirefox() ||
-              this.platformUtilsService.isOpera();
-            // Wait to make sure background has reloaded first.
-            window.setTimeout(
-              () => BrowserApi.reloadExtension(forceWindowReload ? window : null),
-              2000,
-            );
           } else if (msg.command === "reloadPopup") {
             // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
             // eslint-disable-next-line @typescript-eslint/no-floating-promises

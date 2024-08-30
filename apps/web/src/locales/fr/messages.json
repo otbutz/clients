@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Indice du mot de passe principal (facultatif)"
   },
+  "newMasterPassHint": {
+    "message": "Indice du nouveau mot de passe principal (facultatif)"
+  },
   "masterPassHintLabel": {
     "message": "Indice du mot de passe principal"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "Votre nouveau compte a été créé ! Vous pouvez maintenant vous authentifier."
+  },
+  "newAccountCreated2": {
+    "message": "Votre nouveau compte a été créé !"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Vous avez été connecté!"
   },
   "trialAccountCreated": {
     "message": "Compte créé avec succès."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Voir le Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "L'utilisateur de Bitwarden qui a créé ce Send a choisi de masquer son adresse électronique. Vous devriez vous assurer que vous faites confiance à la source de ce lien avant d'utiliser ou de télécharger son contenu.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB de stockage additionnel"
+  },
+  "premiumAccounts": {
+    "message": "6 comptes premium"
+  },
+  "unlimitedSharing": {
+    "message": "Partage illimité"
+  },
+  "unlimitedCollections": {
+    "message": "Collections illimitées"
+  },
+  "secureDataSharing": {
+    "message": "Partage sécurisé de données"
+  },
+  "eventLogMonitoring": {
+    "message": "Surveillance du journal des événements"
+  },
+  "directoryIntegration": {
+    "message": "Intégration des répertoires"
+  },
+  "passwordLessSso": {
+    "message": "SSO sans mot de passe"
+  },
+  "accountRecovery": {
+    "message": "Récupération de compte"
+  },
+  "customRoles": {
+    "message": "Rôles personnalisés"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Stockage illimité des secrets"
+  },
+  "unlimitedUsers": {
+    "message": "Utillisateurs illimités"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Jusqu'à 50 comptes machines"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Jusqu'à 20 comptes de machine"
+  },
+  "current": {
+    "message": "Actuel"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Votre abonnement au Secrets Manager sera mis à niveau selon le plan sélectionné"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Gestionnaire de Mots de Passe Bitwarden"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Votre abonnement complémentaire d'un an au Gestionnaire de Mots de Passe sera mis à niveau au plan sélectionné. Vous ne serez pas chargé avant la fin de votre période gratuite."
+  },
+  "publicApi": {
+    "message": "API publique",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Du contenu supplémentaire est disponible"
   }
 }

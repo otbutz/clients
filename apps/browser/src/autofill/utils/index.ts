@@ -105,7 +105,11 @@ export async function sendExtensionMessage(
   command: string,
   options: Record<string, any> = {},
 ): Promise<any> {
-  if (typeof browser !== "undefined") {
+  if (
+    typeof browser !== "undefined" &&
+    typeof browser.runtime !== "undefined" &&
+    typeof browser.runtime.sendMessage !== "undefined"
+  ) {
     return browser.runtime.sendMessage({ command, ...options });
   }
 
@@ -346,7 +350,7 @@ export function getPropertyOrAttribute(element: HTMLElement, attributeName: stri
  * @param callback - The callback function to throttle.
  * @param limit - The time in milliseconds to throttle the callback.
  */
-export function throttle(callback: () => void, limit: number) {
+export function throttle(callback: (_args: any) => any, limit: number) {
   let waitingDelay = false;
   return function (...args: unknown[]) {
     if (!waitingDelay) {

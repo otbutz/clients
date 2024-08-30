@@ -32,7 +32,7 @@ import {
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
 import { Policy } from "@bitwarden/common/admin-console/models/domain/policy";
 import { OrganizationKeysRequest } from "@bitwarden/common/admin-console/models/request/organization-keys.request";
-import { BillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/billilng-api.service.abstraction";
+import { BillingApiServiceAbstraction } from "@bitwarden/common/billing/abstractions/billing-api.service.abstraction";
 import { isNotSelfUpgradable, ProductTierType } from "@bitwarden/common/billing/enums";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
@@ -269,8 +269,8 @@ export class MembersComponent extends BaseMembersComponent<OrganizationUserView>
     return collectionMap;
   }
 
-  deleteUser(id: string): Promise<void> {
-    return this.organizationUserService.deleteOrganizationUser(this.organization.id, id);
+  removeUser(id: string): Promise<void> {
+    return this.organizationUserService.removeOrganizationUser(this.organization.id, id);
   }
 
   revokeUser(id: string): Promise<void> {

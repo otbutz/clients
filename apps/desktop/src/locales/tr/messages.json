@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Yeni hesabınız oluşturuldu! Şimdi giriş yapabilirsiniz."
   },
+  "newAccountCreated2": {
+    "message": "Yeni hesabınız oluşturuldu."
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Oturum açtınız."
+  },
   "masterPassSent": {
     "message": "Size ana parolanızın ipucunu içeren bir e-posta gönderdik."
   },
@@ -1817,7 +1823,7 @@
     "message": "Tarayıcıda biyometriyi kullanmak için önce ayarlardan masaüstü biyometrisini ayarlamanız gerekir."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3052,5 +3058,8 @@
   },
   "textSends": {
     "message": "Metin Send'leri"
+  },
+  "ssoError": {
+    "message": "SSO girişi için açık port bulunamadı."
   }
 }

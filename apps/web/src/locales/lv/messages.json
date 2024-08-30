@@ -52,10 +52,10 @@
     "message": "Authenticator key"
   },
   "autofillOptions": {
-    "message": "Autofill options"
+    "message": "Automātiskās aizpildes iespējas"
   },
   "websiteUri": {
-    "message": "Website (URI)"
+    "message": "Tīmekļvietne (URI)"
   },
   "websiteUriCount": {
     "message": "Tīmekļvietne (URI) $COUNT$",
@@ -68,16 +68,16 @@
     }
   },
   "websiteAdded": {
-    "message": "Website added"
+    "message": "Tīmekļvietne pievienota"
   },
   "addWebsite": {
-    "message": "Add website"
+    "message": "Pievient tīmekļvietni"
   },
   "deleteWebsite": {
-    "message": "Delete website"
+    "message": "Izdzēst tīmekļvietni"
   },
   "defaultLabel": {
-    "message": "Default ($VALUE$)",
+    "message": "Noklusējums ($VALUE$)",
     "description": "A label that indicates the default value for a field with the current default value in parentheses.",
     "placeholders": {
       "value": {
@@ -87,7 +87,7 @@
     }
   },
   "showMatchDetection": {
-    "message": "Show match detection $WEBSITE$",
+    "message": "Rādīt atbilstības noteikšanu $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -96,7 +96,7 @@
     }
   },
   "hideMatchDetection": {
-    "message": "Hide match detection $WEBSITE$",
+    "message": "Paslēpt atbilstības noteikšanu $WEBSITE$",
     "placeholders": {
       "website": {
         "content": "$1",
@@ -105,7 +105,7 @@
     }
   },
   "autoFillOnPageLoad": {
-    "message": "Autofill on page load?"
+    "message": "Automātiski aizpildīt lapas ielādes brīdī?"
   },
   "number": {
     "message": "Numurs"
@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Galvenās paroles norāde (nav nepieciešama)"
   },
+  "newMasterPassHint": {
+    "message": "Jauna galvenās paroles norāde (pēc izvēles)"
+  },
   "masterPassHintLabel": {
     "message": "Galvenās paroles norāde"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "Jaunais konts ir izveidots. Tagad vari pieteikties."
+  },
+  "newAccountCreated2": {
+    "message": "Jaunais konts tika izveidots."
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Tu esi pieteicies."
   },
   "trialAccountCreated": {
     "message": "Konts tika veiksmīgi izveidots."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Apskatīt Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Bitwarden lietotājs, kurš izveidoja šo Send, ir izvēlējies slēpt savu e-pasta adresi. Ir jāpārliecinās par šīs saites avota uzticamību, pirms saturs tiek izmantots vai lejupielādēts.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8145,7 +8158,7 @@
     }
   },
   "addField": {
-    "message": "Add field"
+    "message": "Pievienot lauku"
   },
   "items": {
     "message": "Vienumi"
@@ -8887,10 +8900,10 @@
     }
   },
   "optionalOnPremHosting": {
-    "message": "Optional on-premises hosting"
+    "message": "Iespēja mitināt savā serverī"
   },
   "upgradeFreeOrganization": {
-    "message": "Upgrade your $NAME$ organization ",
+    "message": "Uzlabo savu $NAME$ apvienību ",
     "placeholders": {
       "name": {
         "content": "$1",
@@ -8899,10 +8912,10 @@
     }
   },
   "includeSsoAuthenticationMessage": {
-    "message": "SSO Authentication"
+    "message": "SSO autentifikācija"
   },
   "familiesPlanInvLimitReachedManageBilling": {
-    "message": "Families organizations may have up to $SEATCOUNT$ members. Upgrade to a paid plan to invite more members.",
+    "message": "Ģimeņu apvienībās var būt līdz $SEATCOUNT$ dalībniekiem. Jāpāriet uz maksas plānu, lai uzaicinātu vairāk dalībnieku.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -8911,7 +8924,7 @@
     }
   },
   "familiesPlanInvLimitReachedNoManageBilling": {
-    "message": "Families organizations may have up to $SEATCOUNT$ members. Contact your organization owner to upgrade.",
+    "message": "Ģiemņu apvienībās var būt līdz $SEATCOUNT$ dalībniekiem. Jāsazinās ar apvienības īpašnieku, lai pārietu uz maksas plānu.",
     "placeholders": {
       "seatcount": {
         "content": "$1",
@@ -8920,7 +8933,7 @@
     }
   },
   "upgradePlan": {
-    "message": "Upgrade your plan to invite more members and gain access to additional Bitwarden features"
+    "message": "Uzlabo savu plānu, lai uzaicinātu vairāk dalībnieku un iegūtu piekļuvi papildu Bitwarden iespējām"
   },
   "upgradeDiscount": {
     "message": "Ietaupi $AMOUNT$%",
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB papildu krātuves"
+  },
+  "premiumAccounts": {
+    "message": "6 \"Premium\" konti"
+  },
+  "unlimitedSharing": {
+    "message": "Neierobežota kopīgošana"
+  },
+  "unlimitedCollections": {
+    "message": "Neierobežoti krājumu skaits"
+  },
+  "secureDataSharing": {
+    "message": "Droša datu kopīgošana"
+  },
+  "eventLogMonitoring": {
+    "message": "Notikumu žurnāla pārraudzīšana"
+  },
+  "directoryIntegration": {
+    "message": "Directory integration"
+  },
+  "passwordLessSso": {
+    "message": "Bezparoles vienotā pieteikšanās (SSO)"
+  },
+  "accountRecovery": {
+    "message": "Konta atkopšana"
+  },
+  "customRoles": {
+    "message": "Pielāgotas lomas"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Neierobežota noslēpumu krātuve"
+  },
+  "unlimitedUsers": {
+    "message": "Neierobežots lietotāju skaits"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Līdz 50 mašīnu kontu"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Līdz 20 mašīnu kontu"
+  },
+  "current": {
+    "message": "Current"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Noslēpumu pārvaldnieka abonements tiks uzlabots atbilstoši izvēlētajam plānam"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden paroļu pārvaldnieks"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Bezmaksas viena gada Paroļu pārvaldnieka abonements tiks uzlabots uz izvēlēto plānu. Maksa netiks ieturēta līdz bezmaksas izmantošanas laika beigām."
+  },
+  "publicApi": {
+    "message": "Publiskais API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Ir pieejams papildu saturs"
   }
 }

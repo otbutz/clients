@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Hovedadgangskodetip (valgfri)"
   },
+  "newMasterPassHint": {
+    "message": "Nyt hovedadgangskodetip (valgfrit)"
+  },
   "masterPassHintLabel": {
     "message": "Hovedadgangskodetip"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "Din nye konto er oprettet! Du kan nu logge ind."
+  },
+  "newAccountCreated2": {
+    "message": "Din nye konto er oprettet!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Du er blevet logget ind!"
   },
   "trialAccountCreated": {
     "message": "Konto oprettet."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Vis Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Bitwarden-brugeren, der oprettede denne Send, har valgt at skjule sin e-mailadresse. Du bør sikre dig, at du stoler på kilden til dette link, inden dets indhold downloades/benyttes.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB ekstra lagerplads"
+  },
+  "premiumAccounts": {
+    "message": "6 Premium-konti"
+  },
+  "unlimitedSharing": {
+    "message": "Ubegrænset antal delinger"
+  },
+  "unlimitedCollections": {
+    "message": "Ubegrænset antal samlinger"
+  },
+  "secureDataSharing": {
+    "message": "Sikker datadeling"
+  },
+  "eventLogMonitoring": {
+    "message": "Hændelseslogmonitorering"
+  },
+  "directoryIntegration": {
+    "message": "Mappeintegration"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Kontogenskabelse"
+  },
+  "customRoles": {
+    "message": "Tilpassede roller"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Ubegrænset hemmelighedslagring"
+  },
+  "unlimitedUsers": {
+    "message": "Ubegrænset antal brugere"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Op til 50 maskinkonti"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Op til 20 maskinkonti"
+  },
+  "current": {
+    "message": "Nuværende"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Secrets Manager-abonnementet vil opgradere baseret på den valgte plan"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Adgangskodehåndtering"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Det komplementære et års abonnement på Adgangskodehåndtering opgraderes til den valgte abonnementstype. Betaling opkræves først efter den gratis periode."
+  },
+  "publicApi": {
+    "message": "Offentlig API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Yderligere indhold er tilgængeligt"
   }
 }

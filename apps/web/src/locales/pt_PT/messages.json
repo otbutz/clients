@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Dica da palavra-passe mestra (opcional)"
   },
+  "newMasterPassHint": {
+    "message": "Nova dica da palavra-passe mestra (opcional)"
+  },
   "masterPassHintLabel": {
     "message": "Dica da palavra-passe mestra"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "A sua nova conta foi criada! Pode agora iniciar sessão."
+  },
+  "newAccountCreated2": {
+    "message": "A sua nova conta foi criada!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Iniciou sessão!"
   },
   "trialAccountCreated": {
     "message": "Conta criada com sucesso."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Ver Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "O utilizador Bitwarden que criou este Send optou por ocultar o seu endereço de e-mail. Deve certificar-se de que confia na fonte deste link antes de utilizar ou descarregar o seu conteúdo.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB de armazenamento adicional"
+  },
+  "premiumAccounts": {
+    "message": "6 contas Premium"
+  },
+  "unlimitedSharing": {
+    "message": "Partilha ilimitada"
+  },
+  "unlimitedCollections": {
+    "message": "Coleções ilimitadas"
+  },
+  "secureDataSharing": {
+    "message": "Partilha segura de dados"
+  },
+  "eventLogMonitoring": {
+    "message": "Monitorização do registo de eventos"
+  },
+  "directoryIntegration": {
+    "message": "Integração de diretórios"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Recuperação de contas"
+  },
+  "customRoles": {
+    "message": "Papéis personalizados"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Armazenamento ilimitado de segredos"
+  },
+  "unlimitedUsers": {
+    "message": "Utilizadores ilimitados"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Até 50 contas automáticas"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Até 20 contas automáticas"
+  },
+  "current": {
+    "message": "Atual"
+  },
+  "secretsManagerSubInfo": {
+    "message": "A sua subscrição do Gestor de Segredos será atualizada com base no plano selecionado"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden - Gestor de Palavras-passe"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "A sua subscrição complementar de um ano do Gestor de Palavras-passe será atualizada para o plano selecionado. Não será cobrado até que o período de cortesia termine."
+  },
+  "publicApi": {
+    "message": "API pública",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Estão disponíveis conteúdos adicionais"
   }
 }
