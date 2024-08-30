@@ -50,6 +50,7 @@ import { AutofillOptionsComponent } from "../autofill-options/autofill-options.c
   ],
 })
 export class LoginDetailsSectionComponent implements OnInit {
+  EventType = EventType;
   loginDetailsForm = this.formBuilder.group({
     username: [""],
     password: [""],
@@ -166,8 +167,8 @@ export class LoginDetailsSectionComponent implements OnInit {
     });
   }
 
-  /** Logs Password visible event when in edit mode */
-  logPasswordVisibleEvent = async (passwordVisible: boolean) => {
+  /** Logs the givin event when in edit mode */
+  logVisibleEvent = async (passwordVisible: boolean, event: EventType) => {
     const { mode, originalCipher } = this.cipherFormContainer.config;
 
     const isEdit = ["edit", "partial-edit"].includes(mode);
@@ -177,7 +178,7 @@ export class LoginDetailsSectionComponent implements OnInit {
     }
 
     await this.eventCollectionService.collect(
-      EventType.Cipher_ClientToggledPasswordVisible,
+      event,
       originalCipher.id,
       false,
       originalCipher.organizationId,
