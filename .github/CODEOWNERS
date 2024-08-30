@@ -100,8 +100,8 @@ apps/desktop/src/services/native-message-handler.service.ts @bitwarden/team-auto
 ## Component Library ##
 .storybook @bitwarden/team-design-system
 libs/components @bitwarden/team-design-system
-apps/browser/src/platform/popup/layout @bitwarden/team-design-system 
-apps/web/src/app/layouts @bitwarden/team-design-system 
+apps/browser/src/platform/popup/layout @bitwarden/team-design-system
+apps/web/src/app/layouts @bitwarden/team-design-system
 
 ## Desktop native module ##
 apps/desktop/desktop_native @bitwarden/team-platform-dev
@@ -121,3 +121,6 @@ apps/browser/store/locales/en
 apps/cli/src/locales/en/messages.json
 apps/desktop/src/locales/en/messages.json
 apps/web/src/locales/en/messages.json
+
+## SSH agent temporary co-codeowner
+apps/desktop/desktop_native/core/src/ssh_agent @bitwarden/team-platform-dev @bitwarden/wg-ssh-keys

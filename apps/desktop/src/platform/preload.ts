@@ -1,3 +1,4 @@
+import { sshagent as ssh } from "desktop_native/napi";
 import { ipcRenderer } from "electron";
 
 import { DeviceType } from "@bitwarden/common/enums";
@@ -71,6 +72,27 @@ const clipboard = {
   write: (message: ClipboardWriteMessage) => ipcRenderer.invoke("clipboard.write", message),
 };
 
+const sshagent = {
+  setKeys: (keys: { name: string; privateKey: string; uuid: string }[]): Promise<void> =>
+    ipcRenderer.invoke("sshagent.setkeys", keys),
+  signRequestResponse: async (id: number, accepted: boolean) => {
+    await ipcRenderer.invoke("sshagent.signrequestresponse", { id: id, accepted: accepted });
+  },
+  generateKey: async (keyAlgorithm: string) => {
+    return await ipcRenderer.invoke("sshagent.generatekey", { keyAlgorithm: keyAlgorithm });
+  },
+  lock: async () => {
+    return await ipcRenderer.invoke("sshagent.lock");
+  },
+  importKey: async (key: string, password: string): Promise<ssh.SshKeyImportResult> => {
+    const res = await ipcRenderer.invoke("sshagent.importkey", {
+      privateKey: key,
+      password: password,
+    });
+    return res;
+  },
+};
+
 const powermonitor = {
   isLockMonitorAvailable: (): Promise<boolean> =>
     ipcRenderer.invoke("powermonitor.isLockMonitorAvailable"),
@@ -130,6 +152,8 @@ export default {
   isFlatpak: isFlatpak(),
   isSnapStore: isSnapStore(),
   reloadProcess: () => ipcRenderer.send("reload-process"),
+  focusWindow: () => ipcRenderer.send("window-focus"),
+  hideWindow: () => ipcRenderer.send("window-hide"),
   log: (level: LogLevelType, message?: any, ...optionalParams: any[]) =>
     ipcRenderer.invoke("ipc.log", { level, message, optionalParams }),
 
@@ -175,6 +199,7 @@ export default {
   passwords,
   biometric,
   clipboard,
+  sshagent,
   powermonitor,
   nativeMessaging,
   crypto,

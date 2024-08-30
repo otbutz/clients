@@ -1,7 +1,18 @@
 import { DatePipe } from "@angular/common";
-import { Component, NgZone, OnChanges, OnInit, OnDestroy, ViewChild } from "@angular/core";
+import {
+  Component,
+  NgZone,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ViewContainerRef,
+} from "@angular/core";
 import { NgForm } from "@angular/forms";
+import { sshagent } from "desktop_native/napi";
 
+import { ModalRef } from "@bitwarden/angular/components/modal/modal.ref";
+import { ModalService } from "@bitwarden/angular/services/modal.service";
 import { AddEditComponent as BaseAddEditComponent } from "@bitwarden/angular/vault/components/add-edit.component";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
@@ -18,8 +29,12 @@ import { SendApiService } from "@bitwarden/common/tools/send/services/send-api.s
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { FolderService } from "@bitwarden/common/vault/abstractions/folder/folder.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { CipherType } from "@bitwarden/common/vault/enums";
+import { SSHKeyData } from "@bitwarden/common/vault/models/data/ssh-key.data";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
+
+import { SSHGeneratorComponent } from "../../../app/tools/sshkey-generator.component";
 
 const BroadcasterSubscriptionId = "AddEditComponent";
 
@@ -30,6 +45,9 @@ const BroadcasterSubscriptionId = "AddEditComponent";
 export class AddEditComponent extends BaseAddEditComponent implements OnInit, OnChanges, OnDestroy {
   @ViewChild("form")
   private form: NgForm;
+  @ViewChild("sshGenerator", { read: ViewContainerRef, static: true })
+  sshGeneratorModalRef: ViewContainerRef;
+  private modal: ModalRef = null;
   showPrivateKey = false;
 
   constructor(
@@ -52,6 +70,8 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
     dialogService: DialogService,
     datePipe: DatePipe,
     configService: ConfigService,
+    private modalService: ModalService,
+    private toastService: ToastService,
   ) {
     super(
       cipherService,
@@ -138,6 +158,72 @@ export class AddEditComponent extends BaseAddEditComponent implements OnInit, On
     this.platformUtilsService.launchUri(
       "https://bitwarden.com/help/managing-items/#protect-individual-items",
     );
+  }
+
+  async generateSSHKey() {
+    this.modalService.closeAll();
+
+    const [modal, childComponent] = await this.modalService.openViewRef(
+      SSHGeneratorComponent,
+      this.sshGeneratorModalRef,
+      (comp) => {},
+    );
+    this.modal = modal;
+
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    childComponent.onSelected.subscribe((value: SSHKeyData) => {
+      this.modal.close();
+      this.cipher.sshKey.privateKey = value.privateKey;
+      this.cipher.sshKey.publicKey = value.publicKey;
+      this.cipher.sshKey.keyFingerprint = value.keyFingerprint;
+    });
+
+    // eslint-disable-next-line rxjs-angular/prefer-takeuntil
+    this.modal.onClosed.subscribe(() => {
+      this.modal = null;
+    });
+  }
+
+  async pasteSSHKey() {
+    const key = await this.platformUtilsService.readFromClipboard();
+    const parsedKey = await ipc.platform.sshagent.importKey(key, "");
+    if (parsedKey == null || parsedKey.status == sshagent.SSHKeyImportStatus.ParsingError) {
+      this.toastService.showToast({
+        variant: "error",
+        title: "",
+        message: this.i18nService.t("invalidSSHKey"),
+      });
+      return;
+    } else if (
+      parsedKey.status == sshagent.SSHKeyImportStatus.PasswordRequired ||
+      parsedKey.status == sshagent.SSHKeyImportStatus.WrongPassword
+    ) {
+      this.toastService.showToast({
+        variant: "error",
+        title: "",
+        message: this.i18nService.t("sshKeyPasswordUnsupported"),
+      });
+      return;
+    } else {
+      this.cipher.sshKey.privateKey = parsedKey.sshKey.privateKey;
+      this.cipher.sshKey.publicKey = parsedKey.sshKey.publicKey;
+      this.cipher.sshKey.keyFingerprint = parsedKey.sshKey.keyFingerprint;
+      this.toastService.showToast({
+        variant: "success",
+        title: "",
+        message: this.i18nService.t("sshKeyPasted"),
+      });
+    }
+  }
+
+  async typeChange() {
+    if (this.cipher.type == CipherType.SSHKey) {
+      await this.generateSSHKey();
+    }
+  }
+
+  truncateString(value: string, length: number) {
+    return value.length > length ? value.substring(0, length) + "..." : value;
   }
 
   togglePrivateKey() {

@@ -42,12 +42,42 @@ export namespace clipboards {
   export function read(): Promise<string>
   export function write(text: string, password: boolean): Promise<void>
 }
+export namespace sshagent {
+  export interface PrivateKey {
+    privateKey: string
+    name: string
+    uuid: string
+  }
+  export interface SshKey {
+    privateKey: string
+    publicKey: string
+    keyAlgorithm: string
+    keyFingerprint: string
+  }
+  export const enum SSHKeyImportStatus {
+    Success = 0,
+    PasswordRequired = 1,
+    WrongPassword = 2,
+    ParsingError = 3
+  }
+  export interface SshKeyImportResult {
+    status: SSHKeyImportStatus
+    sshKey?: SshKey
+  }
+  export function serve(callback: (err: Error | null, arg: string) => any): Promise<SshAgentState>
+  export function stop(agentState: SshAgentState): void
+  export function setKeys(agentState: SshAgentState, newKeys: Array<PrivateKey>): void
+  export function lock(agentState: SshAgentState): void
+  export function importKey(encodedKey: string, password: string): SshKeyImportResult
+  export function generateKeypair(keyAlgorithm: string): Promise<SshKey>
+  export type SSHAgentState = SshAgentState
+    export class SshAgentState {   }
+}
 export namespace processisolations {
   export function disableCoredumps(): Promise<void>
   export function isCoreDumpingDisabled(): Promise<boolean>
   export function disableMemoryAccess(): Promise<void>
 }
-
 export namespace powermonitors {
   export function onLock(callback: (err: Error | null, ) => any): Promise<void>
   export function isLockMonitorAvailable(): Promise<boolean>
