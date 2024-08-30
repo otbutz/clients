@@ -1,4 +1,11 @@
-import { Component, HostListener, Input, booleanAttribute, signal } from "@angular/core";
+import {
+  Component,
+  HostBinding,
+  HostListener,
+  Input,
+  booleanAttribute,
+  signal,
+} from "@angular/core";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 
 import { compareValues } from "../../../common/src/platform/misc/compare-values";
@@ -60,6 +67,11 @@ export class ChipSelectComponent<T = unknown> implements ControlValueAccessor {
   @HostListener("focusout")
   onFocusOut() {
     this.focusVisibleWithin.set(false);
+  }
+
+  @HostBinding("class")
+  get classList() {
+    return ["tw-inline-block"];
   }
 
   /** Tree constructed from `this.options` */

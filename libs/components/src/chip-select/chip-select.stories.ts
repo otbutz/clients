@@ -44,6 +44,47 @@ export const Default: Story = {
         placeholderText="Folder"
         placeholderIcon="bwi-folder"
         [options]="options"
+      ></bit-chip-select>
+      <bit-chip-select
+        placeholderText="Folder"
+        placeholderIcon="bwi-folder"
+        [options]="options"
+        [ngModel]="value"
+      ></bit-chip-select>
+    `,
+  }),
+  args: {
+    options: [
+      {
+        label: "Foo",
+        value: "foo",
+        icon: "bwi-folder",
+      },
+      {
+        label: "Bar",
+        value: "bar",
+        icon: "bwi-exclamation-triangle tw-text-danger",
+      },
+      {
+        label: "Baz",
+        value: "baz",
+        disabled: true,
+      },
+    ],
+    value: "foo",
+  },
+};
+
+export const MenuOpen: Story = {
+  render: (args) => ({
+    props: {
+      ...args,
+    },
+    template: /* html */ `
+      <bit-chip-select
+        placeholderText="Folder"
+        placeholderIcon="bwi-folder"
+        [options]="options"
         [ngModel]="value"
       ></bit-chip-select>
     `,
