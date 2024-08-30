@@ -31,6 +31,7 @@
       "@bitwarden/node/*": ["../../libs/node/src/*"],
       "@bitwarden/platform": ["../../libs/platform/src"],
       "@bitwarden/send-ui": ["../../libs/tools/send/send-ui/src"],
+      "@bitwarden/slider": ["../../libs/tools/slider/src"],
       "@bitwarden/vault": ["../../libs/vault/src"]
     },
     "useDefineForClassFields": false

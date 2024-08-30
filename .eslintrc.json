@@ -288,6 +288,12 @@
       }
     },
     {
+      "files": ["libs/tools/slider/src/**/*.ts"],
+      "rules": {
+        "no-restricted-imports": ["error", { "patterns": ["@bitwarden/slider/*", "src/**/*"] }]
+      }
+    },
+    {
       "files": ["libs/tools/send/send-ui/src/**/*.ts"],
       "rules": {
         "no-restricted-imports": ["error", { "patterns": ["@bitwarden/send-ui/*", "src/**/*"] }]

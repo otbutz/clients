@@ -1,9 +1,9 @@
 @import "./reset.css";
 
-/** 
-  Note that the value of the *-600 colors is currently equivalent to the value 
+/**
+  Note that the value of the *-600 colors is currently equivalent to the value
   of the *-500 variant of that color. This is a temporary change to make BW-42
-  updates easier. 
+  updates easier.
 
   TODO remove comment when the color palette portion of BW-42 is completed.
 */
@@ -178,11 +178,12 @@
 
 @import "./popover/popover.component.css";
 @import "./search/search.component.css";
+@import "../../tools/slider/src/slider.component.css";
 
 @import "./toast/toast.tokens.css";
 @import "./toast/toastr.css";
 
-/** 
+/**
  * tw-break-words does not work with table cells:
  * https://github.com/tailwindlabs/tailwindcss/issues/835
  */
@@ -190,7 +191,7 @@ td.tw-break-words {
   overflow-wrap: anywhere;
 }
 
-/** 
+/**
  * tw-list-none hides summary arrow in Firefox & Chrome but not Safari:
  * https://github.com/tailwindlabs/tailwindcss/issues/924#issuecomment-915509785
  */
@@ -199,7 +200,7 @@ summary.tw-list-none::-webkit-details-marker {
   display: none;
 }
 
-/** 
+/**
  * Arbitrary values can't be used with `text-align`:
  * https://github.com/tailwindlabs/tailwindcss/issues/802#issuecomment-849013311
  */

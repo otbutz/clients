@@ -10,6 +10,7 @@ import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abs
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { SyncService } from "@bitwarden/common/platform/sync";
 import { IconModule } from "@bitwarden/components";
+import { SliderComponent } from "@bitwarden/slider";
 
 import { PasswordManagerLogo } from "./password-manager-logo";
 import { WebLayoutModule } from "./web-layout.module";
@@ -18,7 +19,7 @@ import { WebLayoutModule } from "./web-layout.module";
   selector: "app-user-layout",
   templateUrl: "user-layout.component.html",
   standalone: true,
-  imports: [CommonModule, RouterModule, JslibModule, WebLayoutModule, IconModule],
+  imports: [CommonModule, RouterModule, JslibModule, WebLayoutModule, IconModule, SliderComponent],
 })
 export class UserLayoutComponent implements OnInit {
   protected readonly logo = PasswordManagerLogo;
