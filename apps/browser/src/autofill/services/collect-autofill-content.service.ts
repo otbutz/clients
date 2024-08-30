@@ -1035,6 +1035,7 @@ export class CollectAutofillContentService implements CollectAutofillContentServ
         (walkerNode: Node) =>
           nodeIsFormElement(walkerNode) || this.isNodeFormFieldElement(walkerNode),
         this.mutationObserver,
+        true,
       );
 
       if (autofillElements.length) {

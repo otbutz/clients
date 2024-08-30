@@ -30,14 +30,16 @@ export class DomQueryService implements DomQueryServiceInterface {
    * @param queryString - The query string to match elements against
    * @param treeWalkerFilter - The filter callback to use for the treeWalker query
    * @param mutationObserver - The MutationObserver to use for observing shadow roots
+   * @param forceDeepQueryAttempt - Whether to force a deep query attempt
    */
   query<T>(
     root: Document | ShadowRoot | Element,
     queryString: string,
     treeWalkerFilter: CallableFunction,
     mutationObserver?: MutationObserver,
+    forceDeepQueryAttempt?: boolean,
   ): T[] {
-    if (this.shouldUseTreeWalkerStrategy()) {
+    if (!forceDeepQueryAttempt && this.shouldUseTreeWalkerStrategy()) {
       return this.queryAllTreeWalkerNodes<T>(root, treeWalkerFilter, mutationObserver);
     }
 
