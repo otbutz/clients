@@ -97,4 +97,13 @@ export class LoginCredentialsViewComponent {
   setTotpCopyCode(e: TotpCodeValues) {
     this.totpCodeCopyObj = e;
   }
+
+  async logCopyEvent() {
+    await this.eventCollectionService.collect(
+      EventType.Cipher_ClientCopiedPassword,
+      this.cipher.id,
+      false,
+      this.cipher.organizationId,
+    );
+  }
 }
