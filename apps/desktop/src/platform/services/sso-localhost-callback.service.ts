@@ -18,10 +18,10 @@ export class SSOLocalhostCallbackService {
     private messagingService: MessageSender,
   ) {
     ipcMain.handle("openSsoPrompt", async (event, { codeChallenge, state }) => {
-      const { ssoCode } = await this.openSsoPrompt(codeChallenge, state);
+      const { ssoCode, recvState } = await this.openSsoPrompt(codeChallenge, state);
       this.messagingService.send("ssoCallback", {
         code: ssoCode,
-        state: state,
+        state: recvState,
         redirectUri: this.ssoRedirectUri,
       });
     });
@@ -30,7 +30,7 @@ export class SSOLocalhostCallbackService {
   private async openSsoPrompt(
     codeChallenge: string,
     state: string,
-  ): Promise<{ ssoCode: string; orgIdentifier: string }> {
+  ): Promise<{ ssoCode: string; recvState: string }> {
     const env = await firstValueFrom(this.environmentService.environment$);
 
     return new Promise((resolve, reject) => {
@@ -46,8 +46,10 @@ export class SSOLocalhostCallbackService {
         const urlString = "http://localhost" + req.url;
         const url = new URL(urlString);
         const code = url.searchParams.get("code");
+        if (code == null) {
+          return;
+        }
         const receivedState = url.searchParams.get("state");
-        const orgIdentifier = this.getOrgIdentifierFromState(receivedState);
         res.setHeader("Content-Type", "text/html");
         if (code != null && receivedState != null && this.checkState(receivedState, state)) {
           res.writeHead(200);
@@ -60,7 +62,7 @@ export class SSOLocalhostCallbackService {
           callbackServer.close(() =>
             resolve({
               ssoCode: code,
-              orgIdentifier: orgIdentifier,
+              recvState: receivedState,
             }),
           );
         } else {
