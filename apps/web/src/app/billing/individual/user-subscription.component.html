@@ -57,7 +57,7 @@
               : "-"
           }}
         </dd>
-        <dd *ngIf="!enableTimeThreshold">
+        <dd *ngIf="enableTimeThreshold">
           {{
             nextInvoice
               ? (sub.subscription.periodEndDate | date: "mediumDate") +
