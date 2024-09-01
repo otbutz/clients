@@ -9046,5 +9046,8 @@
   },
   "additionalContentAvailable": {
     "message": "Additional content is available"
+  },
+  "editAccess": {
+    "message": "Edit access"
   }
 }
