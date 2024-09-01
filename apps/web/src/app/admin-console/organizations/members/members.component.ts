@@ -271,8 +271,8 @@ export class MembersComponent extends BaseMembersComponent<OrganizationUserView>
     return collectionMap;
   }
 
-  deleteUser(id: string): Promise<void> {
-    return this.organizationUserApiService.deleteOrganizationUser(this.organization.id, id);
+  removeUser(id: string): Promise<void> {
+    return this.organizationUserApiService.removeOrganizationUser(this.organization.id, id);
   }
 
   revokeUser(id: string): Promise<void> {

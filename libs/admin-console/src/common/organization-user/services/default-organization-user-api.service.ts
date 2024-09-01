@@ -274,7 +274,7 @@ export class DefaultOrganizationUserApiService implements OrganizationUserApiSer
     );
   }
 
-  deleteOrganizationUser(organizationId: string, id: string): Promise<any> {
+  removeOrganizationUser(organizationId: string, id: string): Promise<any> {
     return this.apiService.send(
       "DELETE",
       "/organizations/" + organizationId + "/users/" + id,
@@ -284,7 +284,7 @@ export class DefaultOrganizationUserApiService implements OrganizationUserApiSer
     );
   }
 
-  async deleteManyOrganizationUsers(
+  async removeManyOrganizationUsers(
     organizationId: string,
     ids: string[],
   ): Promise<ListResponse<OrganizationUserBulkResponse>> {
