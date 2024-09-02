@@ -11,6 +11,11 @@ pub mod server;
 /// https://developer.chrome.com/docs/extensions/develop/concepts/native-messaging#native-messaging-host-protocol
 pub const NATIVE_MESSAGING_BUFFER_SIZE: usize = 1024 * 1024;
 
+/// The maximum number of messages that can be buffered in a channel.
+/// This number is more or less arbitrary and can be adjusted as needed,
+/// but ideally the messages should be processed as quickly as possible.
+pub const MESSAGE_CHANNEL_BUFFER: usize = 32;
+
 /// Resolve the path to the IPC socket.
 pub fn path(name: &str) -> std::path::PathBuf {
     #[cfg(target_os = "windows")]

@@ -201,7 +201,7 @@ pub mod ipc {
     pub struct IpcMessage {
         pub client_id: u32,
         pub kind: IpcMessageType,
-        pub message: String,
+        pub message: Option<String>,
     }
 
     impl From<Message> for IpcMessage {

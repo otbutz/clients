@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use desktop_core::ipc::NATIVE_MESSAGING_BUFFER_SIZE;
+use desktop_core::ipc::{MESSAGE_CHANNEL_BUFFER, NATIVE_MESSAGING_BUFFER_SIZE};
 use futures::{SinkExt, StreamExt};
 use log::*;
 use tokio_util::codec::LengthDelimitedCodec;
@@ -58,26 +58,25 @@ async fn main() {
 
     info!("Starting Bitwarden IPC Proxy.");
 
-    /*
-    Different browsers send different arguments when the app starts:
+    // Different browsers send different arguments when the app starts:
+    //
+    // Firefox:
+    // - The complete path to the app manifest. (in the form `/Users/<user>/Library/.../Mozilla/NativeMessagingHosts/com.8bit.bitwarden.json`)
+    // - (in Firefox 55+) the ID (as given in the manifest.json) of the add-on that started it (in the form `{[UUID]}`).
+    //
+    // Chrome on Windows:
+    // - Origin of the extension that started it (in the form `chrome-extension://[ID]`).
+    // - Handle to the Chrome native window that started the app.
+    //
+    // Chrome on Linux and Mac:
+    // - Origin of the extension that started it (in the form `chrome-extension://[ID]`).
 
-    Firefox:
-        - The complete path to the app manifest. (in the form `/Users/<user>/Library/.../Mozilla/NativeMessagingHosts/com.8bit.bitwarden.json`)
-        - (in Firefox 55+) the ID (as given in the manifest.json) of the add-on that started it (in the form `{[UUID]}`).
-
-    Chrome on Windows:
-        - Origin of the extension that started it (in the form `chrome-extension://[ID]`).
-        - Handle to the Chrome native window that started the app.
-
-    Chrome on Linux and Mac:
-        Origin of the extension that started it (in the form `chrome-extension://[ID]`).
-    */
     let args: Vec<_> = std::env::args().skip(1).collect();
     info!("Process args: {:?}", args);
 
     // Setup two channels, one for sending messages to the desktop application (`out`) and one for receiving messages from the desktop application (`in`)
-    let (in_send, in_recv) = tokio::sync::mpsc::channel(32);
-    let (out_send, mut out_recv) = tokio::sync::mpsc::channel(32);
+    let (in_send, in_recv) = tokio::sync::mpsc::channel(MESSAGE_CHANNEL_BUFFER);
+    let (out_send, mut out_recv) = tokio::sync::mpsc::channel(MESSAGE_CHANNEL_BUFFER);
 
     let mut handle = tokio::spawn(desktop_core::ipc::client::connect(
         sock_path, out_send, in_recv,
@@ -108,7 +107,7 @@ async fn main() {
                         stdout.send(msg.into()).await.unwrap();
                     }
                     None => {
-                        // Channel closed, exit.
+                        info!("Channel closed, exiting.");
                         break;
                     }
                 }
@@ -128,7 +127,7 @@ async fn main() {
                         break;
                     }
                     None => {
-                        // EOF, exit.
+                        info!("Received EOF, exiting.");
                         break;
                     }
                 }
@@ -136,6 +135,4 @@ async fn main() {
 
         }
     }
-
-    info!("Exiting.");
 }

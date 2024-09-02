@@ -53,6 +53,9 @@ async fn connect_inner(
 
     info!("Connected to {}", path.display());
 
+    // This `connected` and the latter `disconnected` messages are the only ones that
+    // are sent from the Rust IPC code and not just forwarded from the desktop app.
+    // As it's only two, we hardcode the JSON values to avoid pulling in a JSON library.
     send.send("{\"command\":\"connected\"}".to_owned()).await?;
 
     let mut buffer = vec![0; NATIVE_MESSAGING_BUFFER_SIZE];
@@ -78,12 +81,10 @@ async fn connect_inner(
                 match res {
                     Err(e) => {
                         error!("Error reading from IPC server: {e}");
-                        send.send("{\"command\":\"disconnected\"}".to_owned()).await?;
                         break;
                     }
                     Ok(0) => {
                         info!("Connection closed");
-                        send.send("{\"command\":\"disconnected\"}".to_owned()).await?;
                         break;
                     }
                     Ok(n) => {
@@ -94,6 +95,8 @@ async fn connect_inner(
             }
         }
     }
+
+    let _ = send.send("{\"command\":\"disconnected\"}".to_owned()).await;
 
     Ok(())
 }

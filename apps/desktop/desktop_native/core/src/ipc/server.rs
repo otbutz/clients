@@ -11,13 +11,14 @@ use tokio::{
 };
 use tokio_util::sync::CancellationToken;
 
-use super::NATIVE_MESSAGING_BUFFER_SIZE;
+use super::{MESSAGE_CHANNEL_BUFFER, NATIVE_MESSAGING_BUFFER_SIZE};
 
 #[derive(Debug)]
 pub struct Message {
     pub client_id: u32,
     pub kind: MessageType,
-    pub message: String,
+    // This value should be Some for MessageType::Message and None for the rest
+    pub message: Option<String>,
 }
 
 #[derive(Debug)]
@@ -55,7 +56,8 @@ impl Server {
 
         // This broadcast channel is used for sending messages to all connected clients, and so the sender
         // will be stored in the server while the receiver will be cloned and passed to each client handler.
-        let (server_to_clients_send, server_to_clients_recv) = broadcast::channel::<String>(32);
+        let (server_to_clients_send, server_to_clients_recv) =
+            broadcast::channel::<String>(MESSAGE_CHANNEL_BUFFER);
 
         // This cancellation token allows us to cleanly stop the server and all the spawned
         // tasks without having to wait on all the pending tasks finalizing first
@@ -160,7 +162,7 @@ async fn handle_connection(
         .send(Message {
             client_id,
             kind: MessageType::Connected,
-            message: "Connected".to_owned(),
+            message: None,
         })
         .await?;
 
@@ -197,7 +199,7 @@ async fn handle_connection(
                         client_to_server_send.send(Message {
                             client_id,
                             kind: MessageType::Disconnected,
-                            message: "Disconnected".to_owned(),
+                            message: None,
                         }).await?;
                         break;
                     },
@@ -207,7 +209,7 @@ async fn handle_connection(
                         client_to_server_send.send(Message {
                             client_id,
                             kind: MessageType::Disconnected,
-                            message: "Disconnected".to_owned(),
+                            message: None,
                         }).await?;
                         break;
                     },
@@ -217,7 +219,7 @@ async fn handle_connection(
                         client_to_server_send.send(Message {
                             client_id,
                             kind: MessageType::Message,
-                            message: msg.to_string(),
+                            message: Some(msg.to_string()),
                         }).await?;
                     },
 
