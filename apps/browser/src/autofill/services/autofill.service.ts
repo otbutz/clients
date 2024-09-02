@@ -1454,6 +1454,110 @@ export default class AutofillService implements AutofillServiceInterface {
   }
 
   /**
+   * Attempt to parse year and month parts of a combined expiry date value. Used when no
+   * other information about the format is available.
+   *
+   * @param {string} combinedExpiryValue
+   * @return {*}  {([string | null, string | null])}
+   * @memberof AutofillService
+   */
+  parseYearMonthExpiry(combinedExpiryValue: string): [string | null, string | null] {
+    let parsedYear = null;
+    let parsedMonth = null;
+
+    const expiryDateDelimitersPattern =
+      "\\" + CreditCardAutoFillConstants.CardExpiryDateDelimiters.join("\\");
+    const delimiterPattern = new RegExp(`[${expiryDateDelimitersPattern}]`, "g");
+    const irrelevantExpiryCharactersPattern = new RegExp(
+      // "or digits" to ensure numbers are removed from guidance pattern, which aren't covered by ^\w
+      `[^\\d${expiryDateDelimitersPattern}]`,
+      "g",
+    );
+    const monthPattern = "(([1]{1}[0-2]{1})|(0?[1-9]{1}))";
+    const monthPatternExpression = new RegExp(`^${monthPattern}$`);
+    // Because we're dealing with expiry dates, we assume the year will be in current or next century
+    const fullYearPattern = "2[0-1]{1}[0-9]{2}";
+    const fullYearPatternExpression = new RegExp(fullYearPattern, "g");
+
+    let sanitizedValue = combinedExpiryValue.trim().replace(irrelevantExpiryCharactersPattern, "");
+    const delimiter = sanitizedValue.match(delimiterPattern)?.[0];
+
+    const dateParts = sanitizedValue.split(delimiter);
+
+    if (dateParts.length < 1) {
+      return [null, null];
+    }
+
+    const sanitizedFirstPart = dateParts[0]?.replace(irrelevantExpiryCharactersPattern, "") || "";
+    const sanitizedSecondPart = dateParts[1]?.replace(irrelevantExpiryCharactersPattern, "") || "";
+
+    // If there is only one date part, no delimiter was found in the passed value
+    if (dateParts.length === 1) {
+      // If the value is over 5-characters long, it likely has a full year format in it
+      if (dateParts[0].length > 4) {
+        // e.g.
+        // "052024",
+        // "202405",
+        // "20245",
+        // "52024",
+        const [year, month] = dateParts[0]
+          .split(new RegExp(`(?=${fullYearPattern})|(?<=${fullYearPattern})`, "g"))
+          .sort((current, next) => (current.length > next.length ? -1 : 1));
+        parsedYear = year;
+        parsedMonth = month;
+      } else {
+        // e.g.
+        // "0524",
+        // "2405",
+        // "245",
+      }
+    } else {
+      // If a 4-digit value is found, it can't be month
+      if (/^[1-9]{1}\d{3}$/g.test(sanitizedFirstPart)) {
+        parsedYear = sanitizedFirstPart;
+        parsedMonth = sanitizedSecondPart;
+      } else if (/^[1-9]{1}\d{3}$/g.test(sanitizedSecondPart)) {
+        parsedYear = sanitizedSecondPart;
+        parsedMonth = sanitizedFirstPart;
+      } else if (
+        /\d{2}/.test(sanitizedFirstPart) &&
+        !monthPatternExpression.test(sanitizedFirstPart)
+      ) {
+        // If it's a two digit value that doesn't match against month pattern, assume it's a year
+        parsedYear = sanitizedFirstPart;
+        parsedMonth = sanitizedSecondPart;
+      } else if (
+        /\d{2}/.test(sanitizedSecondPart) &&
+        !monthPatternExpression.test(sanitizedSecondPart)
+      ) {
+        // If it's a two digit value that doesn't match against month pattern, assume it's a year
+        parsedYear = sanitizedSecondPart;
+        parsedMonth = sanitizedFirstPart;
+      } else {
+        // values are too ambiguous (e.g. "12/09"); for the most part, a month-looking value
+        // likely is, at the time of writing (year 2024)
+        parsedMonth = sanitizedSecondPart;
+        parsedYear = sanitizedFirstPart;
+
+        if (monthPatternExpression.test(sanitizedFirstPart)) {
+          parsedMonth = sanitizedFirstPart;
+          parsedYear = sanitizedSecondPart;
+        }
+      }
+    }
+
+    // @TODO use share year normalization utility
+    const nomalizedParsedYear = "20" + ("00" + parsedYear?.replace(/^[0]+(?=.)/, "")).slice(-2);
+    const nomalizedParsedMonth = parsedMonth?.replace(/^0+/, "").slice(0, 2);
+
+    // set "empty" values to null
+    parsedYear = nomalizedParsedYear?.length ? nomalizedParsedYear : null;
+    parsedMonth = nomalizedParsedMonth?.length ? nomalizedParsedMonth : null;
+
+    return [parsedYear, parsedMonth];
+  }
+
+  /**
    * Generates the autofill script for the specified page details and identify cipher item.
    * @param {AutofillScript} fillScript
    * @param {AutofillPageDetails} pageDetails

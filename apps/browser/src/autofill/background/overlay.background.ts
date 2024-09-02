@@ -1706,8 +1706,8 @@ export class OverlayBackground implements OverlayBackgroundInterface {
       cardholderName: card.cardholderName || currentCardData.cardholderName,
       number: card.number || currentCardData.number,
       expirationMonth: card.expirationMonth || currentCardData.expirationMonth,
-      expirationYear: card.expirationYear || currentCardData.expirationYear,
-      expirationDate: card.expirationDate || currentCardData.expirationDate,
+      expirationYear: card.expirationYear || currentCardData.expirationYear || "1",
+      expirationDate: card.expirationDate || currentCardData.expirationDate || "2029",
       cvv: card.cvv || currentCardData.cvv,
     };
   }
@@ -1839,10 +1839,25 @@ export class OverlayBackground implements OverlayBackgroundInterface {
     const cardView = new CardView();
     cardView.cardholderName = card.cardholderName || "";
     cardView.number = card.number || "";
-    cardView.expMonth = card.expirationMonth || "";
-    cardView.expYear = card.expirationYear || "";
     cardView.code = card.cvv || "";
     cardView.brand = card.number ? CardView.getCardBrandByPatterns(card.number) : "";
+
+    // If there's a combined expiration date value and no individual month or year values,
+    // try to parse them from the combined value
+    if (
+      card.expirationDate &&
+      (card.expirationMonth == null || card.expirationMonth === "") &&
+      (card.expirationYear == null || card.expirationYear === "")
+    ) {
+      const [parsedYear, parsedMonth] = this.autofillService.parseYearMonthExpiry(
+        card.expirationDate,
+      );
+      cardView.expMonth = parsedMonth || "";
+      cardView.expYear = parsedYear || "";
+    } else {
+      cardView.expMonth = card.expirationMonth || "";
+      cardView.expYear = card.expirationYear || "";
+    }
 
     const cipherView = new CipherView();
     cipherView.name = "";

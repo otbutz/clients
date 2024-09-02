@@ -3073,6 +3073,63 @@ describe("AutofillService", () => {
     });
   });
 
+  const combinedDateTestValues = [
+    "05 2024",
+    "05 24",
+    "05-2024",
+    "05-24",
+    "05.2024",
+    "05.24",
+    "05/2024",
+    "05/24",
+    "052024",
+    "0524",
+    "2024 05",
+    "2024 5",
+    "2024-05",
+    "2024-5",
+    "2024.05",
+    "2024.5",
+    "2024/05",
+    "2024/5",
+    "202405",
+    "20245",
+    "24 05",
+    "24 5",
+    "24-05",
+    "24-5",
+    "24.05",
+    "24.5",
+    "24/05",
+    "24/5",
+    "2405",
+    "245",
+    "5 2024",
+    "5 24",
+    "5-2024",
+    "5-24",
+    "5.2024",
+    "5.24",
+    "5/2024",
+    "5/24",
+    "52024",
+    "524",
+    " 2024   05 ",
+  ];
+  // extra cases
+  // "",
+  // "1/2/3/4",
+  const expectedParsedValue = ["2024", "5"];
+  describe("parseYearMonthExpiry", () => {
+    combinedDateTestValues.forEach((combinedDate) => {
+      it(`returns an expiration year value of "2024" and month value of "5" when a value of "${combinedDate}" is passed`, () => {
+        expect(autofillService.parseYearMonthExpiry(combinedDate)).toStrictEqual(
+          expectedParsedValue,
+        );
+      });
+    });
+  });
+
   describe("inUntrustedIframe", () => {
     it("returns a false value if the passed pageUrl is equal to the options tabUrl", async () => {
       const pageUrl = "https://www.example.com";

@@ -86,4 +86,6 @@ export abstract class AutofillService {
   ) => Promise<string | null>;
   setAutoFillOnPageLoadOrgPolicy: () => Promise<void>;
   isPasswordRepromptRequired: (cipher: CipherView, tab: chrome.tabs.Tab) => Promise<boolean>;
+  // @TODO move to vault util
+  parseYearMonthExpiry: (combinedDate: string) => [year: string | null, month: string | null];
 }
