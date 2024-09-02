@@ -108,7 +108,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       disabled: true,
     }),
     enableHardwareAcceleration: true,
-    allowScreenshots: true,
+    allowScreenshots: false,
     enableDuckDuckGoBrowserIntegration: false,
     theme: [null as ThemeType | null],
     locale: [null as string | null],
