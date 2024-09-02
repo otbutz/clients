@@ -8,6 +8,7 @@ import {
   FolderWithIdExport,
 } from "@bitwarden/common/models/export";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { OrganizationId } from "@bitwarden/common/types/guid";
@@ -31,6 +32,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
 
   protected constructor(
     protected cryptoService: CryptoService,
+    protected encryptService: EncryptService,
     protected i18nService: I18nService,
     protected cipherService: CipherService,
     protected pinService: PinServiceAbstraction,
@@ -62,7 +64,7 @@ export class BitwardenJsonImporter extends BaseImporter implements Importer {
     if (results.encKeyValidation_DO_NOT_EDIT != null) {
       const orgKey = await this.cryptoService.getOrgKey(this.organizationId);
       const encKeyValidation = new EncString(results.encKeyValidation_DO_NOT_EDIT);
-      const encKeyValidationDecrypt = await this.cryptoService.decryptToUtf8(
+      const encKeyValidationDecrypt = await this.encryptService.decryptToUtf8(
         encKeyValidation,
         orgKey,
       );

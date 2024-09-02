@@ -478,6 +478,7 @@ const safeProviders: SafeProvider[] = [
     useClass: FolderService,
     deps: [
       CryptoServiceAbstraction,
+      EncryptService,
       I18nServiceAbstraction,
       CipherServiceAbstraction,
       StateProvider,
@@ -521,7 +522,7 @@ const safeProviders: SafeProvider[] = [
   safeProvider({
     provide: CollectionServiceAbstraction,
     useClass: CollectionService,
-    deps: [CryptoServiceAbstraction, I18nServiceAbstraction, StateProvider],
+    deps: [CryptoServiceAbstraction, EncryptService, I18nServiceAbstraction, StateProvider],
   }),
   safeProvider({
     provide: EnvironmentService,
@@ -774,6 +775,7 @@ const safeProviders: SafeProvider[] = [
       I18nServiceAbstraction,
       CollectionServiceAbstraction,
       CryptoServiceAbstraction,
+      EncryptService,
       PinServiceAbstraction,
       AccountServiceAbstraction,
     ],
@@ -786,8 +788,10 @@ const safeProviders: SafeProvider[] = [
       CipherServiceAbstraction,
       PinServiceAbstraction,
       CryptoServiceAbstraction,
+      EncryptService,
       CryptoFunctionServiceAbstraction,
       KdfConfigServiceAbstraction,
+      AccountServiceAbstraction,
     ],
   }),
   safeProvider({
@@ -798,6 +802,7 @@ const safeProviders: SafeProvider[] = [
       ApiServiceAbstraction,
       PinServiceAbstraction,
       CryptoServiceAbstraction,
+      EncryptService,
       CryptoFunctionServiceAbstraction,
       CollectionServiceAbstraction,
       KdfConfigServiceAbstraction,

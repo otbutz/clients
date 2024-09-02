@@ -273,7 +273,7 @@ describe("Cipher Service", () => {
       cryptoService.makeCipherKey.mockReturnValue(
         Promise.resolve(new SymmetricCryptoKey(makeStaticByteArray(64)) as CipherKey),
       );
-      cryptoService.encrypt.mockImplementation(encryptText);
+      encryptService.encrypt.mockImplementation(encryptText);
 
       jest.spyOn(cipherService as any, "getAutofillOnPageLoadDefault").mockResolvedValue(true);
     });

@@ -106,13 +106,12 @@ describe("Send", () => {
     send.disabled = false;
     send.hideEmail = true;
 
+    const encryptService = mock<EncryptService>();
     const cryptoService = mock<CryptoService>();
-    cryptoService.decryptToBytes
+    encryptService.decryptToBytes
       .calledWith(send.key, null)
       .mockResolvedValue(makeStaticByteArray(32));
     cryptoService.makeSendKey.mockResolvedValue("cryptoKey" as any);
-
-    const encryptService = mock<EncryptService>();
 
     (window as any).bitwardenContainerService = new ContainerService(cryptoService, encryptService);
 

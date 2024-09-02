@@ -73,9 +73,10 @@ export class Send extends Domain {
     const model = new SendView(this);
 
     const cryptoService = Utils.getContainerService().getCryptoService();
+    const encryptService = Utils.getContainerService().getEncryptService();
 
     try {
-      model.key = await cryptoService.decryptToBytes(this.key, null);
+      model.key = await encryptService.decryptToBytes(this.key, null);
       model.cryptoKey = await cryptoService.makeSendKey(model.key);
     } catch (e) {
       // TODO: error?

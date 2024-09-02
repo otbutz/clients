@@ -244,7 +244,7 @@ export class CipherService implements CipherServiceAbstraction {
         key,
       ).then(async () => {
         if (model.key != null) {
-          attachment.key = await this.cryptoService.encrypt(model.key.key, key);
+          attachment.key = await this.encryptService.encrypt(model.key.key, key);
         }
         encAttachments.push(attachment);
       });
@@ -1349,7 +1349,8 @@ export class CipherService implements CipherServiceAbstraction {
     }
 
     const encBuf = await EncArrayBuffer.fromResponse(attachmentResponse);
-    const decBuf = await this.cryptoService.decryptFromBytes(encBuf, null);
+    const userKey = await this.cryptoService.getUserKeyWithLegacySupport();
+    const decBuf = await this.encryptService.decryptToBytes(encBuf, userKey);
 
     let encKey: UserKey | OrgKey;
     encKey = await this.cryptoService.getOrgKey(organizationId);
@@ -1413,7 +1414,7 @@ export class CipherService implements CipherServiceAbstraction {
           .then(() => {
             const modelProp = (model as any)[map[theProp] || theProp];
             if (modelProp && modelProp !== "") {
-              return self.cryptoService.encrypt(modelProp, key);
+              return self.encryptService.encrypt(modelProp, key);
             }
             return null;
           })
@@ -1459,7 +1460,7 @@ export class CipherService implements CipherServiceAbstraction {
               key,
             );
             const uriHash = await this.encryptService.hash(model.login.uris[i].uri, "sha256");
-            loginUri.uriChecksum = await this.cryptoService.encrypt(uriHash, key);
+            loginUri.uriChecksum = await this.encryptService.encrypt(uriHash, key);
             cipher.login.uris.push(loginUri);
           }
         }
@@ -1486,8 +1487,8 @@ export class CipherService implements CipherServiceAbstraction {
                 },
                 key,
               );
-              domainKey.counter = await this.cryptoService.encrypt(String(viewKey.counter), key);
-              domainKey.discoverable = await this.cryptoService.encrypt(
+              domainKey.counter = await this.encryptService.encrypt(String(viewKey.counter), key);
+              domainKey.discoverable = await this.encryptService.encrypt(
                 String(viewKey.discoverable),
                 key,
               );
