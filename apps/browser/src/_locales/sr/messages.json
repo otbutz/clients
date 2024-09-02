@@ -384,16 +384,56 @@
     "message": "Минимална дужина лозинке"
   },
   "uppercase": {
-    "message": "Велика слова (A-Z)"
+    "message": "Велика слова (A-Z)",
+    "description": "deprecated. Use uppercaseLabel instead."
   },
   "lowercase": {
-    "message": "Мала слова (a-z)"
+    "message": "Мала слова (a-z)",
+    "description": "deprecated. Use lowercaseLabel instead."
   },
   "numbers": {
-    "message": "Цифре (0-9)"
+    "message": "Цифре (0-9)",
+    "description": "deprecated. Use numbersLabel instead."
   },
   "specialCharacters": {
-    "message": "Специјална слова (!@#$%^&*)"
+    "message": "Специјална слова (!@#$%^&*)",
+    "description": "deprecated. Use specialCharactersLabel instead."
+  },
+  "include": {
+    "message": "Укључити",
+    "description": "Card header for password generator include block"
+  },
+  "uppercaseDescription": {
+    "message": "Укључити велика слова",
+    "description": "Tooltip for the password generator uppercase character checkbox"
+  },
+  "uppercaseLabel": {
+    "message": "А-Ш",
+    "description": "Label for the password generator uppercase character checkbox"
+  },
+  "lowercaseDescription": {
+    "message": "Укључити мала слова",
+    "description": "Full description for the password generator lowercase character checkbox"
+  },
+  "lowercaseLabel": {
+    "message": "а-ш",
+    "description": "Label for the password generator lowercase character checkbox"
+  },
+  "numbersDescription": {
+    "message": "Укључит ибројеве",
+    "description": "Full description for the password generator numbers checkbox"
+  },
+  "numbersLabel": {
+    "message": "0-9",
+    "description": "Label for the password generator numbers checkbox"
+  },
+  "specialCharactersDescription": {
+    "message": "Укључити специјална слова",
+    "description": "Full description for the password generator special characters checkbox"
+  },
+  "specialCharactersLabel": {
+    "message": "!@#$%^&*",
+    "description": "Label for the password generator special characters checkbox"
   },
   "numWords": {
     "message": "Број речи"
@@ -415,7 +455,12 @@
     "message": "Минимално специјалних знакова"
   },
   "avoidAmbChar": {
-    "message": "Избегавај двосмислене карактере"
+    "message": "Избегавај двосмислене карактере",
+    "description": "deprecated. Use avoidAmbiguous instead."
+  },
+  "avoidAmbiguous": {
+    "message": "Избегавај двосмислене карактере",
+    "description": "Label for the avoid ambiguous characters checkbox."
   },
   "searchVault": {
     "message": "Претражи сеф"
@@ -637,6 +682,12 @@
   },
   "newAccountCreated": {
     "message": "Ваш налог је креиран! Сада се можете пријавити."
+  },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
   },
   "youSuccessfullyLoggedIn": {
     "message": "Успешно сте се пријавили"
@@ -1080,7 +1131,7 @@
     "message": "1ГБ шифровано складиште за прилоге."
   },
   "premiumSignUpEmergency": {
-    "message": "Emergency access."
+    "message": "Хитан приступ."
   },
   "premiumSignUpTwoStepOptions": {
     "message": "Приоритарне опције пријаве у два корака као што су YubiKey и Duo."
@@ -1104,7 +1155,7 @@
     "message": "Можете купити премијум претплату на bitwarden.com. Да ли желите да посетите веб сајт сада?"
   },
   "premiumPurchaseAlertV2": {
-    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+    "message": "Можете да купите Премиум у подешавањима налога у веб апликацији Bitwarden."
   },
   "premiumCurrentMember": {
     "message": "Ви сте премијум члан!"
@@ -1113,7 +1164,7 @@
     "message": "Хвала Вам за подршку Bitwarden-а."
   },
   "premiumFeatures": {
-    "message": "Upgrade to premium and receive:"
+    "message": "Надоградите на премиум и добијте:"
   },
   "premiumPrice": {
     "message": "Све за само $PRICE$ годишње!",
@@ -1125,7 +1176,7 @@
     }
   },
   "premiumPriceV2": {
-    "message": "All for just $PRICE$ per year!",
+    "message": "Све то за само $PRICE$ годишње!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -2083,6 +2134,12 @@
   "biometricsNotUnlockedDesc": {
     "message": "Откључајте овог корисника у десктоп апликацији и покушајте поново."
   },
+  "biometricsNotAvailableTitle": {
+    "message": "Биометријско откључавање није доступно"
+  },
+  "biometricsNotAvailableDesc": {
+    "message": "Биометријско откључавање тренутно није доступно. Покушајте поново касније."
+  },
   "biometricsFailedTitle": {
     "message": "Биометрија није успела"
   },
@@ -2314,7 +2371,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "createdSendSuccessfully": {
-    "message": "Send created successfully!",
+    "message": "Send је успешно направљен!",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendAvailability": {
@@ -2328,7 +2385,7 @@
     }
   },
   "sendLinkCopied": {
-    "message": "Send link copied",
+    "message": "Send линк је копиран",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "editedSend": {
@@ -3639,8 +3696,16 @@
     "message": "Акредитиви су успешно сачувани!",
     "description": "Notification message for when saving credentials has succeeded."
   },
+  "passwordSaved": {
+    "message": "Лозинка је сачувана!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
   "updateCipherAttemptSuccess": {
     "message": "Акредитиви су успешно ажурирани!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "passwordUpdated": {
+    "message": "Лозинка је ажурирана!",
     "description": "Notification message for when updating credentials has succeeded."
   },
   "saveCipherAttemptFailed": {
@@ -3970,10 +4035,10 @@
     "message": "Ауто-попуњавање при учитавању странице?"
   },
   "cardExpiredTitle": {
-    "message": "Expired card"
+    "message": "Картица је истекла"
   },
   "cardExpiredMessage": {
-    "message": "If you've renewed it, update the card's information"
+    "message": "Ако сте је обновили, ажурирајте податке о картици"
   },
   "cardDetails": {
     "message": "Детаљи картице"
@@ -3986,6 +4051,9 @@
         "example": "Visa"
       }
     }
+  },
+  "enableAnimations": {
+    "message": "Омогући анимације"
   },
   "addAccount": {
     "message": "Додај налог"
@@ -4225,5 +4293,8 @@
   },
   "enterprisePolicyRequirementsApplied": {
     "message": "Захтеви политике предузећа су примењени на ово подешавање"
+  },
+  "additionalContentAvailable": {
+    "message": "Additional content is available"
   }
 }

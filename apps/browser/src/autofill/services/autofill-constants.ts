@@ -38,6 +38,7 @@ export class AutoFillConstants {
     "mfacode",
     "otc",
     "otc-code",
+    "otp",
     "otp-code",
     "otpcode",
     "pin",
@@ -811,3 +812,21 @@ export class IdentityAutoFillConstants {
     saskatchewan: "SK",
   };
 }
+
+export const SubmitLoginButtonNames: string[] = [
+  "login",
+  "signin",
+  "submit",
+  "continue",
+  "next",
+  "go",
+];
+
+export const SubmitChangePasswordButtonNames: string[] = [
+  "change",
+  "save",
+  "savepassword",
+  "updatepassword",
+  "changepassword",
+  "resetpassword",
+];

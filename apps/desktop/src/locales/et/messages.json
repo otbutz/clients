@@ -603,6 +603,12 @@
   "newAccountCreated": {
     "message": "Sinu konto on loodud! Võid nüüd sisse logida."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "Ülemparooli vihje saadeti Sinu e-postile."
   },
@@ -1817,7 +1823,7 @@
     "message": "Selleks, et kasutada biomeetriat brauseris, peab selle esmalt Bitwardeni töölaua rakenduse seadetes sisse lülitama."
   },
   "biometricsManualSetupTitle": {
-    "message": "Autometic setup not available"
+    "message": "Automatic setup not available"
   },
   "biometricsManualSetupDesc": {
     "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
@@ -3052,5 +3058,8 @@
   },
   "textSends": {
     "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

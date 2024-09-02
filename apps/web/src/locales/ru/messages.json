@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Подсказка к мастер-паролю (необяз.)"
   },
+  "newMasterPassHint": {
+    "message": "Новая подсказка для мастер-пароля (необязательно)"
+  },
   "masterPassHintLabel": {
     "message": "Подсказка к мастер-паролю"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "Ваш аккаунт создан! Теперь вы можете войти в систему."
+  },
+  "newAccountCreated2": {
+    "message": "Ваш новый аккаунт создан!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Вы авторизовались!"
   },
   "trialAccountCreated": {
     "message": "Аккаунт успешно создан."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Просмотр Send",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "Пользователь Bitwarden, создавший эту Send, решил скрыть свой адрес email. Вы должны убедиться, что доверяете источнику этой ссылки, прежде чем использовать или скачивать ее содержимое.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "Дополнительное место в хранилище"
+  },
+  "premiumAccounts": {
+    "message": "6 Премиум-аккаунтов"
+  },
+  "unlimitedSharing": {
+    "message": "Делитесь без ограничений"
+  },
+  "unlimitedCollections": {
+    "message": "Неограниченное количество коллекций"
+  },
+  "secureDataSharing": {
+    "message": "Защищенный обмен данными"
+  },
+  "eventLogMonitoring": {
+    "message": "Мониторинг журнала событий"
+  },
+  "directoryIntegration": {
+    "message": "Интеграция с доменами"
+  },
+  "passwordLessSso": {
+    "message": "SSO без пароля"
+  },
+  "accountRecovery": {
+    "message": "Восстановление аккаунта"
+  },
+  "customRoles": {
+    "message": "Пользовательские роли"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Неограниченное хранилище секретов"
+  },
+  "unlimitedUsers": {
+    "message": "Неограниченное количество пользователей"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "До 50 машинных аккаунтов"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "До 20 машинных аккаунтов"
+  },
+  "current": {
+    "message": "Текущий"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Ваша подписка на Менеджер секретов будет обновляться в зависимости от выбранного тарифа"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden - Менеджер паролей"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Ваш дополнительный год подписки на Менеджер паролей обновится до выбранный тарифа. Плата не будет взиматься до окончания бесплатного периода."
+  },
+  "publicApi": {
+    "message": "Публичный API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Дополнительный контент доступен"
   }
 }

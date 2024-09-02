@@ -905,6 +905,9 @@
   "masterPassHint": {
     "message": "Hoofdwachtwoordhint (optioneel)"
   },
+  "newMasterPassHint": {
+    "message": "Nieuwe hoofdwachtwoordhint (optioneel)"
+  },
   "masterPassHintLabel": {
     "message": "Hoofdwachtwoordhint"
   },
@@ -960,6 +963,12 @@
   },
   "newAccountCreated": {
     "message": "Je nieuwe account is aangemaakt! Je kunt nu inloggen."
+  },
+  "newAccountCreated2": {
+    "message": "Je nieuwe account is aangemaakt!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Je bent ingelogd!"
   },
   "trialAccountCreated": {
     "message": "Account succesvol aangemaakt."
@@ -4980,6 +4989,10 @@
       }
     }
   },
+  "viewSend": {
+    "message": "Send weergeven",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "viewSendHiddenEmailWarning": {
     "message": "De Bitwarden-gebruiker die deze Send heeft gemaakt heeft ervoor gekozen het e-mailadres te verbergen. Je moet je ervan verzekeren dat je de bron van deze link vertrouwt voordat je de inhoud gebruikt of downloadt.",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -8954,5 +8967,63 @@
   },
   "additionalStorageGbMessage": {
     "message": "GB extra opslagruimte"
+  },
+  "premiumAccounts": {
+    "message": "6 premium accounts"
+  },
+  "unlimitedSharing": {
+    "message": "Onbeperkt delen"
+  },
+  "unlimitedCollections": {
+    "message": "Onbeperkte collecties"
+  },
+  "secureDataSharing": {
+    "message": "Beveiligd gegevens delen"
+  },
+  "eventLogMonitoring": {
+    "message": "Eventlog monitoring"
+  },
+  "directoryIntegration": {
+    "message": "Directory-integratie"
+  },
+  "passwordLessSso": {
+    "message": "PasswordLess SSO"
+  },
+  "accountRecovery": {
+    "message": "Accountherstel"
+  },
+  "customRoles": {
+    "message": "Aangepaste rollen"
+  },
+  "unlimitedSecretsStorage": {
+    "message": "Onbeperkte opslag geheimen"
+  },
+  "unlimitedUsers": {
+    "message": "Onbeperkte gebruikers"
+  },
+  "UpTo50MachineAccounts": {
+    "message": "Tot 50 machine-accounts"
+  },
+  "UpTo20MachineAccounts": {
+    "message": "Tot 20 machine-accounts"
+  },
+  "current": {
+    "message": "Huidig"
+  },
+  "secretsManagerSubInfo": {
+    "message": "Je Secrets Manager-abonnement zal upgraden naar het geselecteerde abonnement"
+  },
+  "bitwardenPasswordManager": {
+    "message": "Bitwarden Password Manager"
+  },
+  "secretsManagerWithFreePasswordManagerInfo": {
+    "message": "Your complementary one year Password Manager subscription will upgrade to the selected plan. You will not be charged until the complimentary period is over."
+  },
+  "publicApi": {
+    "message": "Openbare API",
+    "description": "The text, 'API', is an acronymn and should not be translated."
+  },
+  "additionalContentAvailable": {
+    "message": "Extra inhoud beschikbaar"
   }
 }

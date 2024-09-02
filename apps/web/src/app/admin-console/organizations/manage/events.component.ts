@@ -14,6 +14,7 @@ import { FileDownloadService } from "@bitwarden/common/platform/abstractions/fil
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
+import { ToastService } from "@bitwarden/components";
 
 import { EventService } from "../../../core";
 import { EventExportService } from "../../../tools/event-export";
@@ -22,6 +23,7 @@ import { BaseEventsComponent } from "../../common/base.events.component";
 const EVENT_SYSTEM_USER_TO_TRANSLATION: Record<EventSystemUser, string> = {
   [EventSystemUser.SCIM]: null, // SCIM acronym not able to be translated so just display SCIM
   [EventSystemUser.DomainVerification]: "domainVerification",
+  [EventSystemUser.PublicApi]: "publicApi",
 };
 
 @Component({
@@ -50,6 +52,7 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
     private organizationUserService: OrganizationUserService,
     private providerService: ProviderService,
     fileDownloadService: FileDownloadService,
+    toastService: ToastService,
   ) {
     super(
       eventService,
@@ -58,6 +61,7 @@ export class EventsComponent extends BaseEventsComponent implements OnInit, OnDe
       platformUtilsService,
       logService,
       fileDownloadService,
+      toastService,
     );
   }
 
