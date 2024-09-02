@@ -73,9 +73,16 @@ export class LoginCredentialsViewComponent {
   }
 
   async getPremium() {
+    /**
+     * Use the messaging service to trigger the upgrade organization dialog in the web vault.
+     */
     this.messagingService.send("upgradeOrganization", {
       organizationId: this.cipher.organizationId,
     });
+
+    /**
+     * Use the router to trigger the upgrade organization overlay in the browser extension.
+     */
     await this.router.navigate(["/premium"]);
   }
 
