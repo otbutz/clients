@@ -122,7 +122,6 @@ async fn main() {
                         in_send.send(m).await.unwrap();
                     }
                     Some(Err(e)) => {
-                        // Unexpected error, exit.
                         error!("Error parsing input: {}", e);
                         break;
                     }
