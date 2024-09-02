@@ -35,18 +35,12 @@ export class SSOLocalhostCallbackService {
 
     return new Promise((resolve, reject) => {
       const callbackServer = http.createServer((req, res) => {
-        // after 5 minutes, close the server
-        setTimeout(
-          () => {
-            callbackServer.close(() => reject());
-          },
-          5 * 60 * 1000,
-        );
-
         const urlString = "http://localhost" + req.url;
         const url = new URL(urlString);
         const code = url.searchParams.get("code");
         if (code == null) {
+          res.writeHead(404);
+          res.end("not found");
           return;
         }
         const receivedState = url.searchParams.get("state");
@@ -76,6 +70,7 @@ export class SSOLocalhostCallbackService {
           callbackServer.close(() => reject());
         }
       });
+
       let foundPort = false;
       const webUrl = env.getWebVaultUrl();
       for (let port = 8065; port <= 8070; port++) {
@@ -104,6 +99,14 @@ export class SSOLocalhostCallbackService {
       if (!foundPort) {
         reject();
       }
+
+      // after 5 minutes, close the server
+      setTimeout(
+        () => {
+          callbackServer.close(() => reject());
+        },
+        5 * 60 * 1000,
+      );
     });
   }
 
