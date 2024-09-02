@@ -6,6 +6,7 @@ import { Observable, shareReplay } from "rxjs";
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 import {
   CardComponent,
@@ -59,6 +60,7 @@ export class LoginCredentialsViewComponent {
     private billingAccountProfileStateService: BillingAccountProfileStateService,
     private router: Router,
     private i18nService: I18nService,
+    protected messagingService: MessagingService,
   ) {}
 
   get fido2CredentialCreationDateValue(): string {
@@ -71,6 +73,9 @@ export class LoginCredentialsViewComponent {
   }
 
   async getPremium() {
+    this.messagingService.send("upgradeOrganization", {
+      organizationId: this.cipher.organizationId,
+    });
     await this.router.navigate(["/premium"]);
   }
 
