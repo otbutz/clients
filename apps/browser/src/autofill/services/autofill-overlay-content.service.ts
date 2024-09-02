@@ -7,13 +7,19 @@ import {
   EVENTS,
   AutofillOverlayVisibility,
   AUTOFILL_OVERLAY_HANDLE_REPOSITION,
+  AUTOFILL_TRIGGER_FORM_FIELD_SUBMIT,
 } from "@bitwarden/common/autofill/constants";
+import { CipherType } from "@bitwarden/common/vault/enums";
 
 import {
   FocusedFieldData,
+  NewCardCipherData,
+  NewIdentityCipherData,
+  NewLoginCipherData,
   SubFrameOffsetData,
 } from "../background/abstractions/overlay.background";
 import { AutofillExtensionMessage } from "../content/abstractions/autofill-init";
+import { AutofillFieldQualifier, AutofillFieldQualifierType } from "../enums/autofill-field.enums";
 import {
   AutofillOverlayElement,
   MAX_SUB_FRAME_DEPTH,
@@ -24,6 +30,7 @@ import AutofillPageDetails from "../models/autofill-page-details";
 import { ElementWithOpId, FillableFormFieldElement, FormFieldElement } from "../types";
 import {
   elementIsFillableFormField,
+  elementIsSelectElement,
   getAttributeBoolean,
   sendExtensionMessage,
   throttle,
@@ -32,9 +39,11 @@ import {
 import {
   AutofillOverlayContentExtensionMessageHandlers,
   AutofillOverlayContentService as AutofillOverlayContentServiceInterface,
+  NotificationFormFieldData,
   OpenAutofillInlineMenuOptions,
   SubFrameDataFromWindowMessage,
 } from "./abstractions/autofill-overlay-content.service";
+import { DomQueryService } from "./abstractions/dom-query.service";
 import { InlineMenuFieldQualificationService } from "./abstractions/inline-menu-field-qualifications.service";
 import { AutoFillConstants } from "./autofill-constants";
 
@@ -43,9 +52,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   inlineMenuVisibility: number;
   private readonly findTabs = tabbable;
   private readonly sendExtensionMessage = sendExtensionMessage;
-  private formFieldElements: Set<ElementWithOpId<FormFieldElement>> = new Set([]);
+  private formFieldElements: Map<ElementWithOpId<FormFieldElement>, AutofillField> = new Map();
   private hiddenFormFieldElements: WeakMap<ElementWithOpId<FormFieldElement>, AutofillField> =
     new WeakMap();
+  private formElements: Set<HTMLFormElement> = new Set();
+  private submitElements: Set<HTMLElement> = new Set();
+  private fieldsWithSubmitElements: WeakMap<FillableFormFieldElement, HTMLElement> = new WeakMap();
   private ignoredFieldTypes: Set<string> = new Set(AutoFillConstants.ExcludedInlineMenuTypes);
   private userFilledFields: Record<string, FillableFormFieldElement> = {};
   private authStatus: AuthenticationStatus;
@@ -57,7 +69,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   private eventHandlersMemo: { [key: string]: EventListener } = {};
   private readonly extensionMessageHandlers: AutofillOverlayContentExtensionMessageHandlers = {
     openAutofillInlineMenu: ({ message }) => this.openInlineMenu(message),
-    addNewVaultItemFromOverlay: () => this.addNewVaultItem(),
+    addNewVaultItemFromOverlay: ({ message }) => this.addNewVaultItem(message),
     blurMostRecentlyFocusedField: () => this.blurMostRecentlyFocusedField(),
     unsetMostRecentlyFocusedField: () => this.unsetMostRecentlyFocusedField(),
     checkIsMostRecentlyFocusedFieldWithinViewport: () =>
@@ -73,9 +85,62 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     checkMostRecentlyFocusedFieldHasValue: () => this.mostRecentlyFocusedFieldHasValue(),
     setupRebuildSubFrameOffsetsListeners: () => this.setupRebuildSubFrameOffsetsListeners(),
     destroyAutofillInlineMenuListeners: () => this.destroy(),
+    getFormFieldDataForNotification: () => this.handleGetFormFieldDataForNotificationMessage(),
+  };
+  private readonly cardFieldQualifiers: Record<string, CallableFunction> = {
+    [AutofillFieldQualifier.cardholderName]:
+      this.inlineMenuFieldQualificationService.isFieldForCardholderName,
+    [AutofillFieldQualifier.cardNumber]:
+      this.inlineMenuFieldQualificationService.isFieldForCardNumber,
+    [AutofillFieldQualifier.cardExpirationMonth]:
+      this.inlineMenuFieldQualificationService.isFieldForCardExpirationMonth,
+    [AutofillFieldQualifier.cardExpirationYear]:
+      this.inlineMenuFieldQualificationService.isFieldForCardExpirationYear,
+    [AutofillFieldQualifier.cardExpirationDate]:
+      this.inlineMenuFieldQualificationService.isFieldForCardExpirationDate,
+    [AutofillFieldQualifier.cardCvv]: this.inlineMenuFieldQualificationService.isFieldForCardCvv,
+  };
+  private readonly identityFieldQualifiers: Record<string, CallableFunction> = {
+    [AutofillFieldQualifier.identityTitle]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityTitle,
+    [AutofillFieldQualifier.identityFirstName]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityFirstName,
+    [AutofillFieldQualifier.identityMiddleName]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityMiddleName,
+    [AutofillFieldQualifier.identityLastName]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityLastName,
+    [AutofillFieldQualifier.identityFullName]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityFullName,
+    [AutofillFieldQualifier.identityAddress1]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityAddress1,
+    [AutofillFieldQualifier.identityAddress2]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityAddress2,
+    [AutofillFieldQualifier.identityAddress3]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityAddress3,
+    [AutofillFieldQualifier.identityCity]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityCity,
+    [AutofillFieldQualifier.identityState]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityState,
+    [AutofillFieldQualifier.identityPostalCode]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityPostalCode,
+    [AutofillFieldQualifier.identityCountry]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityCountry,
+    [AutofillFieldQualifier.identityCompany]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityCompany,
+    [AutofillFieldQualifier.identityPhone]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityPhone,
+    [AutofillFieldQualifier.identityEmail]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityEmail,
+    [AutofillFieldQualifier.identityUsername]:
+      this.inlineMenuFieldQualificationService.isFieldForIdentityUsername,
+    [AutofillFieldQualifier.newPassword]:
+      this.inlineMenuFieldQualificationService.isNewPasswordField,
   };
 
-  constructor(private inlineMenuFieldQualificationService: InlineMenuFieldQualificationService) {}
+  constructor(
+    private domQueryService: DomQueryService,
+    private inlineMenuFieldQualificationService: InlineMenuFieldQualificationService,
+  ) {}
 
   /**
    * Initializes the autofill overlay content service by setting up the mutation observers.
@@ -106,7 +171,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    * @param autofillFieldData - Autofill field data captured from the form field element.
    * @param pageDetails - The collected page details from the tab.
    */
-  async setupInlineMenu(
+  async setupOverlayListeners(
     formFieldElement: ElementWithOpId<FormFieldElement>,
     autofillFieldData: AutofillField,
     pageDetails: AutofillPageDetails,
@@ -122,7 +187,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       return;
     }
 
-    await this.setupInlineMenuOnQualifiedField(formFieldElement);
+    await this.setupOverlayListenersOnQualifiedField(formFieldElement, autofillFieldData);
   }
 
   /**
@@ -194,19 +259,61 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    * Formats any found user filled fields for a login cipher and sends a message
    * to the background script to add a new cipher.
    */
-  async addNewVaultItem() {
-    if (!(await this.isInlineMenuListVisible())) {
+  async addNewVaultItem({ addNewCipherType }: AutofillExtensionMessage) {
+    const command = "autofillOverlayAddNewVaultItem";
+    const password =
+      this.userFilledFields["newPassword"]?.value || this.userFilledFields["password"]?.value;
+
+    if (addNewCipherType === CipherType.Login) {
+      const login: NewLoginCipherData = {
+        username: this.userFilledFields["username"]?.value || "",
+        password: password || "",
+        uri: globalThis.document.URL,
+        hostname: globalThis.document.location.hostname,
+      };
+
+      void this.sendExtensionMessage(command, { addNewCipherType, login });
+
       return;
     }
 
-    const login = {
-      username: this.userFilledFields["username"]?.value || "",
-      password: this.userFilledFields["password"]?.value || "",
-      uri: globalThis.document.URL,
-      hostname: globalThis.document.location.hostname,
-    };
+    if (addNewCipherType === CipherType.Card) {
+      const card: NewCardCipherData = {
+        cardholderName: this.userFilledFields["cardholderName"]?.value || "",
+        number: this.userFilledFields["cardNumber"]?.value || "",
+        expirationMonth: this.userFilledFields["cardExpirationMonth"]?.value || "",
+        expirationYear: this.userFilledFields["cardExpirationYear"]?.value || "",
+        expirationDate: this.userFilledFields["cardExpirationDate"]?.value || "",
+        cvv: this.userFilledFields["cardCvv"]?.value || "",
+      };
 
-    void this.sendExtensionMessage("autofillOverlayAddNewVaultItem", { login });
+      void this.sendExtensionMessage(command, { addNewCipherType, card });
+
+      return;
+    }
+
+    if (addNewCipherType === CipherType.Identity) {
+      const identity: NewIdentityCipherData = {
+        title: this.userFilledFields["identityTitle"]?.value || "",
+        firstName: this.userFilledFields["identityFirstName"]?.value || "",
+        middleName: this.userFilledFields["identityMiddleName"]?.value || "",
+        lastName: this.userFilledFields["identityLastName"]?.value || "",
+        fullName: this.userFilledFields["identityFullName"]?.value || "",
+        address1: this.userFilledFields["identityAddress1"]?.value || "",
+        address2: this.userFilledFields["identityAddress2"]?.value || "",
+        address3: this.userFilledFields["identityAddress3"]?.value || "",
+        city: this.userFilledFields["identityCity"]?.value || "",
+        state: this.userFilledFields["identityState"]?.value || "",
+        postalCode: this.userFilledFields["identityPostalCode"]?.value || "",
+        country: this.userFilledFields["identityCountry"]?.value || "",
+        company: this.userFilledFields["identityCompany"]?.value || "",
+        phone: this.userFilledFields["identityPhone"]?.value || "",
+        email: this.userFilledFields["identityEmail"]?.value || "",
+        username: this.userFilledFields["identityUsername"]?.value || "",
+      };
+
+      void this.sendExtensionMessage(command, { addNewCipherType, identity });
+    }
   }
 
   /**
@@ -240,7 +347,12 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
 
     const indexOffset = direction === RedirectFocusDirection.Previous ? -1 : 1;
     const redirectFocusElement = this.focusableElements[focusedElementIndex + indexOffset];
-    redirectFocusElement?.focus();
+    if (redirectFocusElement) {
+      redirectFocusElement.focus();
+      return;
+    }
+
+    this.focusMostRecentlyFocusedField();
   }
 
   /**
@@ -253,19 +365,24 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   private setupFormFieldElementEventListeners(formFieldElement: ElementWithOpId<FormFieldElement>) {
     this.removeCachedFormFieldEventListeners(formFieldElement);
 
-    formFieldElement.addEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
-    formFieldElement.addEventListener(EVENTS.KEYUP, this.handleFormFieldKeyupEvent);
     formFieldElement.addEventListener(
       EVENTS.INPUT,
       this.handleFormFieldInputEvent(formFieldElement),
     );
     formFieldElement.addEventListener(
-      EVENTS.CLICK,
-      this.handleFormFieldClickEvent(formFieldElement),
-    );
-    formFieldElement.addEventListener(
       EVENTS.FOCUS,
       this.handleFormFieldFocusEvent(formFieldElement),
+    );
+
+    if (elementIsSelectElement(formFieldElement)) {
+      return;
+    }
+
+    formFieldElement.addEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
+    formFieldElement.addEventListener(EVENTS.KEYUP, this.handleFormFieldKeyupEvent);
+    formFieldElement.addEventListener(
+      EVENTS.CLICK,
+      this.handleFormFieldClickEvent(formFieldElement),
     );
   }
 
@@ -289,6 +406,214 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       delete this.eventHandlersMemo[memoIndex];
     }
   }
+
+  /**
+   * Sets up listeners on the submit button that triggers a submission of the field's form.
+   *
+   * @param formFieldElement - The form field element to set up the submit button listeners for.
+   * @param autofillFieldData - Autofill field data captured from the form field element.
+   */
+  private setupFormSubmissionEventListeners(
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+    autofillFieldData: AutofillField,
+  ) {
+    if (
+      !elementIsFillableFormField(formFieldElement) ||
+      autofillFieldData.filledByCipherType === CipherType.Card
+    ) {
+      return;
+    }
+
+    if (autofillFieldData.form) {
+      this.setupSubmitListenerOnFieldWithForms(formFieldElement);
+      return;
+    }
+
+    this.setupSubmitListenerOnFormlessField(formFieldElement);
+  }
+
+  /**
+   * Sets up the submit listener on the form field element that contains a form element.
+   * Will establish on submit event listeners on the form element and click listeners on
+   * the submit button element that triggers the submission of the form.
+   *
+   * @param formFieldElement - The form field element to set up the submit listener for.
+   */
+  private setupSubmitListenerOnFieldWithForms(formFieldElement: FillableFormFieldElement) {
+    const formElement = formFieldElement.form;
+    if (formElement && !this.formElements.has(formElement)) {
+      this.formElements.add(formElement);
+      formElement.addEventListener(EVENTS.SUBMIT, this.handleFormFieldSubmitEvent);
+
+      const closesSubmitButton = this.findSubmitButton(formElement);
+      this.setupSubmitButtonEventListeners(closesSubmitButton);
+    }
+  }
+
+  /**
+   * Sets up the submit listener on the form field element that does not contain a form element.
+   * Will establish a submit button event listener on the closest formless submit button element.
+   *
+   * @param formFieldElement - The form field element to set up the submit listener for.
+   */
+  private setupSubmitListenerOnFormlessField(formFieldElement: FillableFormFieldElement) {
+    if (formFieldElement && !this.fieldsWithSubmitElements.has(formFieldElement)) {
+      const closesSubmitButton = this.findClosestFormlessSubmitButton(formFieldElement);
+      this.setupSubmitButtonEventListeners(closesSubmitButton);
+    }
+  }
+
+  /**
+   * Finds the closest formless submit button element to the form field element.
+   *
+   * @param formFieldElement - The form field element to find the closest formless submit button for.
+   */
+  private findClosestFormlessSubmitButton(
+    formFieldElement: FillableFormFieldElement,
+  ): HTMLElement | null {
+    let currentElement: HTMLElement = formFieldElement;
+
+    while (currentElement && currentElement.tagName !== "HTML") {
+      const submitButton = this.findSubmitButton(currentElement);
+      if (submitButton) {
+        this.formFieldElements.forEach((_, element) => {
+          if (currentElement.contains(element)) {
+            this.fieldsWithSubmitElements.set(element as FillableFormFieldElement, submitButton);
+          }
+        });
+
+        return submitButton;
+      }
+
+      if (!currentElement.parentElement && currentElement.getRootNode() instanceof ShadowRoot) {
+        currentElement = (currentElement.getRootNode() as ShadowRoot).host as any;
+        continue;
+      }
+
+      currentElement = currentElement.parentElement;
+    }
+
+    return null;
+  }
+
+  /**
+   * Finds the submit button element within the provided element. Will attempt to find a generic
+   * submit element before attempting to find a button or button-like element.
+   *
+   * @param element - The element to find the submit button within.
+   */
+  private findSubmitButton(element: HTMLElement): HTMLElement | null {
+    const genericSubmitElement = this.querySubmitButtonElement(element, "[type='submit']");
+    if (genericSubmitElement) {
+      return genericSubmitElement;
+    }
+
+    const submitButtonElement = this.querySubmitButtonElement(element, "button, [type='button']");
+    if (submitButtonElement) {
+      return submitButtonElement;
+    }
+  }
+
+  /**
+   * Queries the provided element for a submit button element using the provided selector.
+   *
+   * @param element - The element to query for a submit button.
+   * @param selector - The selector to use to query the element for a submit button.
+   */
+  private querySubmitButtonElement(element: HTMLElement, selector: string) {
+    const submitButtonElements = this.domQueryService.deepQueryElements<HTMLButtonElement>(
+      element,
+      selector,
+    );
+    for (let index = 0; index < submitButtonElements.length; index++) {
+      const submitElement = submitButtonElements[index];
+      if (this.isElementSubmitButton(submitElement)) {
+        return submitElement;
+      }
+    }
+  }
+
+  /**
+   * Determines if the provided element is a submit button element.
+   *
+   * @param element - The element to determine if it is a submit button.
+   */
+  private isElementSubmitButton(element: HTMLElement) {
+    return (
+      this.inlineMenuFieldQualificationService.isElementLoginSubmitButton(element) ||
+      this.inlineMenuFieldQualificationService.isElementChangePasswordSubmitButton(element)
+    );
+  }
+
+  /**
+   * Sets up the event listeners that trigger an indication that a form has been submitted.
+   *
+   * @param submitButton - The submit button element to set up the event listeners for.
+   */
+  private setupSubmitButtonEventListeners = (submitButton: HTMLElement) => {
+    if (!submitButton || this.submitElements.has(submitButton)) {
+      return;
+    }
+
+    this.submitElements.add(submitButton);
+
+    const handler = this.useEventHandlersMemo(
+      throttle(this.handleSubmitButtonInteraction, 150),
+      AUTOFILL_TRIGGER_FORM_FIELD_SUBMIT,
+    );
+    submitButton.addEventListener(EVENTS.KEYUP, handler);
+    globalThis.document.addEventListener(EVENTS.CLICK, handler);
+    globalThis.document.addEventListener(EVENTS.MOUSEUP, handler);
+  };
+
+  /**
+   * Handles click and keyup events that trigger behavior for a submit button element.
+   *
+   * @param event - The event that triggered the submit button interaction.
+   */
+  private handleSubmitButtonInteraction = (event: PointerEvent) => {
+    if (
+      !this.submitElements.has(event.target as HTMLElement) ||
+      (event.type === "keyup" &&
+        !["Enter", "Space"].includes((event as unknown as KeyboardEvent).code))
+    ) {
+      return;
+    }
+
+    this.handleFormFieldSubmitEvent();
+  };
+
+  /**
+   * Handles the repositioning of the autofill overlay when the form is submitted.
+   */
+  private handleFormFieldSubmitEvent = () => {
+    void this.sendExtensionMessage("formFieldSubmitted", this.getFormFieldDataForNotification());
+  };
+
+  /**
+   * Handles capturing the form field data for a notification message. Is triggered from the
+   * background script when a POST request is encountered. Will not trigger this behavior
+   * in the case where the user is still typing in the field.
+   */
+  private handleGetFormFieldDataForNotificationMessage = async () => {
+    if (await this.isFieldCurrentlyFocused()) {
+      return;
+    }
+
+    return this.getFormFieldDataForNotification();
+  };
+
+  /**
+   * Returns the form field data used for add login and change password notifications.
+   */
+  private getFormFieldDataForNotification = (): NotificationFormFieldData => {
+    return {
+      uri: globalThis.document.URL,
+      username: this.userFilledFields["username"]?.value || "",
+      password: this.userFilledFields["password"]?.value || "",
+      newPassword: this.userFilledFields["newPassword"]?.value || "",
+    };
+  };
 
   /**
    * Helper method that facilitates registration of an event handler to a form field element.
@@ -333,7 +658,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    *
    * @param event - The keyup event.
    */
-  private handleFormFieldKeyupEvent = async (event: KeyboardEvent) => {
+  private handleFormFieldKeyupEvent = async (event: globalThis.KeyboardEvent) => {
     const eventCode = event.code;
     if (eventCode === "Escape") {
       void this.sendExtensionMessage("closeAutofillInlineMenu", {
@@ -400,6 +725,9 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     }
 
     this.storeModifiedFormElement(formFieldElement);
+    if (elementIsSelectElement(formFieldElement)) {
+      return;
+    }
 
     if (await this.hideInlineMenuListOnFilledField(formFieldElement)) {
       void this.sendExtensionMessage("closeAutofillInlineMenu", {
@@ -425,12 +753,98 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       void this.updateMostRecentlyFocusedField(formFieldElement);
     }
 
-    if (formFieldElement.type === "password") {
-      this.userFilledFields.password = formFieldElement;
+    const autofillFieldData = this.formFieldElements.get(formFieldElement);
+    if (!autofillFieldData) {
       return;
     }
 
-    this.userFilledFields.username = formFieldElement;
+    if (!autofillFieldData.fieldQualifier) {
+      switch (autofillFieldData.filledByCipherType) {
+        case CipherType.Login:
+          this.qualifyUserFilledLoginField(autofillFieldData);
+          break;
+        case CipherType.Card:
+          this.qualifyUserFilledCardField(autofillFieldData);
+          break;
+        case CipherType.Identity:
+          this.qualifyUserFilledIdentityField(autofillFieldData);
+          break;
+      }
+    }
+
+    this.storeQualifiedUserFilledField(formFieldElement, autofillFieldData);
+  }
+
+  /**
+   * Handles qualifying the user field login field to be used when adding a new vault item.
+   *
+   * @param autofillFieldData - Autofill field data captured from the form field element.
+   */
+  private qualifyUserFilledLoginField(autofillFieldData: AutofillField) {
+    if (autofillFieldData.type === "password") {
+      autofillFieldData.fieldQualifier = AutofillFieldQualifier.password;
+      return;
+    }
+
+    autofillFieldData.fieldQualifier = AutofillFieldQualifier.username;
+  }
+
+  /**
+   * Handles qualifying the user field card field to be used when adding a new vault item.
+   *
+   * @param autofillFieldData - Autofill field data captured from the form field element.
+   */
+  private qualifyUserFilledCardField(autofillFieldData: AutofillField) {
+    for (const [fieldQualifier, fieldQualifierFunction] of Object.entries(
+      this.cardFieldQualifiers,
+    )) {
+      if (fieldQualifierFunction(autofillFieldData)) {
+        autofillFieldData.fieldQualifier = fieldQualifier as AutofillFieldQualifierType;
+        return;
+      }
+    }
+  }
+
+  /**
+   *  Handles qualifying the user field identity field to be used when adding a new vault item.
+   *
+   * @param autofillFieldData - Autofill field data captured from the form field element.
+   */
+  private qualifyUserFilledIdentityField(autofillFieldData: AutofillField) {
+    for (const [fieldQualifier, fieldQualifierFunction] of Object.entries(
+      this.identityFieldQualifiers,
+    )) {
+      if (fieldQualifierFunction(autofillFieldData)) {
+        autofillFieldData.fieldQualifier = fieldQualifier as AutofillFieldQualifierType;
+        return;
+      }
+    }
+  }
+
+  /**
+   * Stores the qualified user filled filed to allow for referencing its value when adding a new vault item.
+   *
+   * @param formFieldElement - The form field element that triggered the input event.
+   * @param autofillFieldData - Autofill field data captured from the form field element.
+   */
+  private storeQualifiedUserFilledField(
+    formFieldElement: ElementWithOpId<FillableFormFieldElement>,
+    autofillFieldData: AutofillField,
+  ) {
+    if (!autofillFieldData.fieldQualifier) {
+      return;
+    }
+
+    const clonedNode = formFieldElement.cloneNode() as FillableFormFieldElement;
+    const identityLoginFields: AutofillFieldQualifierType[] = [
+      AutofillFieldQualifier.identityUsername,
+      AutofillFieldQualifier.identityEmail,
+    ];
+    if (identityLoginFields.includes(autofillFieldData.fieldQualifier)) {
+      this.userFilledFields[AutofillFieldQualifier.username] = clonedNode;
+    }
+
+    this.userFilledFields[autofillFieldData.fieldQualifier] = clonedNode;
   }
 
   /**
@@ -483,16 +897,25 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       return;
     }
 
+    if (elementIsSelectElement(formFieldElement)) {
+      await this.sendExtensionMessage("closeAutofillInlineMenu", {
+        forceCloseInlineMenu: true,
+      });
+      return;
+    }
+
     await this.sendExtensionMessage("updateIsFieldCurrentlyFocused", {
       isFieldCurrentlyFocused: true,
     });
     const initiallyFocusedField = this.mostRecentlyFocusedField;
     await this.updateMostRecentlyFocusedField(formFieldElement);
 
+    const hideInlineMenuListOnFilledField = await this.hideInlineMenuListOnFilledField(
+      formFieldElement as FillableFormFieldElement,
+    );
     if (
       this.inlineMenuVisibility === AutofillOverlayVisibility.OnButtonClick ||
-      (initiallyFocusedField !== this.mostRecentlyFocusedField &&
-        (await this.hideInlineMenuListOnFilledField(formFieldElement as FillableFormFieldElement)))
+      (initiallyFocusedField !== this.mostRecentlyFocusedField && hideInlineMenuListOnFilledField)
     ) {
       await this.sendExtensionMessage("closeAutofillInlineMenu", {
         overlayElement: AutofillOverlayElement.List,
@@ -500,7 +923,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       });
     }
 
-    if (await this.hideInlineMenuListOnFilledField(formFieldElement as FillableFormFieldElement)) {
+    if (hideInlineMenuListOnFilledField) {
       this.updateInlineMenuButtonPosition();
       return;
     }
@@ -560,7 +983,11 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   private async updateMostRecentlyFocusedField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
   ) {
-    if (!formFieldElement || !elementIsFillableFormField(formFieldElement)) {
+    if (
+      !formFieldElement ||
+      !elementIsFillableFormField(formFieldElement) ||
+      elementIsSelectElement(formFieldElement)
+    ) {
       return;
     }
 
@@ -568,9 +995,27 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     const { paddingRight, paddingLeft } = globalThis.getComputedStyle(formFieldElement);
     const { width, height, top, left } =
       await this.getMostRecentlyFocusedFieldRects(formFieldElement);
+    const autofillFieldData = this.formFieldElements.get(formFieldElement);
+    let accountCreationFieldType = null;
+    if (
+      (autofillFieldData?.showInlineMenuAccountCreation ||
+        autofillFieldData?.filledByCipherType === CipherType.Login) &&
+      this.inlineMenuFieldQualificationService.isUsernameField(autofillFieldData)
+    ) {
+      accountCreationFieldType = this.inlineMenuFieldQualificationService.isEmailField(
+        autofillFieldData,
+      )
+        ? "email"
+        : autofillFieldData.type;
+    }
+
     this.focusedFieldData = {
       focusedFieldStyles: { paddingRight, paddingLeft },
       focusedFieldRects: { width, height, top, left },
+      filledByCipherType: autofillFieldData?.filledByCipherType,
+      showInlineMenuAccountCreation: autofillFieldData?.showInlineMenuAccountCreation,
+      showPasskeys: !!autofillFieldData?.showPasskeys,
+      accountCreationFieldType,
     };
 
     await this.sendExtensionMessage("updateFocusedFieldData", {
@@ -648,10 +1093,46 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       return true;
     }
 
-    return !this.inlineMenuFieldQualificationService.isFieldForLoginForm(
-      autofillFieldData,
-      pageDetails,
-    );
+    if (
+      this.inlineMenuFieldQualificationService.isFieldForLoginForm(autofillFieldData, pageDetails)
+    ) {
+      autofillFieldData.filledByCipherType = CipherType.Login;
+      autofillFieldData.showPasskeys = autofillFieldData.autoCompleteType.includes("webauthn");
+      return false;
+    }
+
+    if (
+      this.inlineMenuFieldQualificationService.isFieldForCreditCardForm(
+        autofillFieldData,
+        pageDetails,
+      )
+    ) {
+      autofillFieldData.filledByCipherType = CipherType.Card;
+      return false;
+    }
+
+    if (
+      this.inlineMenuFieldQualificationService.isFieldForAccountCreationForm(
+        autofillFieldData,
+        pageDetails,
+      )
+    ) {
+      autofillFieldData.filledByCipherType = CipherType.Identity;
+      autofillFieldData.showInlineMenuAccountCreation = true;
+      return false;
+    }
+
+    if (
+      this.inlineMenuFieldQualificationService.isFieldForIdentityForm(
+        autofillFieldData,
+        pageDetails,
+      )
+    ) {
+      autofillFieldData.filledByCipherType = CipherType.Identity;
+      return false;
+    }
+
+    return true;
   }
 
   /**
@@ -688,6 +1169,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   ) {
     this.hiddenFormFieldElements.set(formFieldElement, autofillFieldData);
     formFieldElement.addEventListener(EVENTS.FOCUS, this.handleHiddenFieldFocusEvent);
+    formFieldElement.addEventListener(EVENTS.INPUT, this.handleHiddenFieldInputEvent);
   }
 
   /**
@@ -698,6 +1180,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    */
   private removeHiddenFieldFallbackListener(formFieldElement: ElementWithOpId<FormFieldElement>) {
     formFieldElement.removeEventListener(EVENTS.FOCUS, this.handleHiddenFieldFocusEvent);
+    formFieldElement.removeEventListener(EVENTS.INPUT, this.handleHiddenFieldInputEvent);
     this.hiddenFormFieldElements.delete(formFieldElement);
   }
 
@@ -709,12 +1192,36 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    */
   private handleHiddenFieldFocusEvent = (event: FocusEvent) => {
     const formFieldElement = event.target as ElementWithOpId<FormFieldElement>;
+    this.handleHiddenElementFallbackEvent(formFieldElement);
+  };
+
+  /**
+   * Handles an input event on a hidden field. When triggered, the inline menu is set up on the
+   * field. We also capture the input value for the field to facilitate presentation of the value
+   * for the field in the notification bar.
+   *
+   * @param event - The input event.
+   */
+  private handleHiddenFieldInputEvent = async (event: InputEvent) => {
+    const formFieldElement = event.target as ElementWithOpId<FormFieldElement>;
+    this.handleHiddenElementFallbackEvent(formFieldElement);
+    await this.triggerFormFieldInput(formFieldElement);
+  };
+
+  /**
+   * Handles updating the hidden element when a fallback event is triggered.
+   *
+   * @param formFieldElement - The form field element that triggered the focus event.
+   */
+  private handleHiddenElementFallbackEvent = (
+    formFieldElement: ElementWithOpId<FormFieldElement>,
+  ) => {
     const autofillFieldData = this.hiddenFormFieldElements.get(formFieldElement);
     if (autofillFieldData) {
       autofillFieldData.readonly = getAttributeBoolean(formFieldElement, "disabled");
       autofillFieldData.disabled = getAttributeBoolean(formFieldElement, "disabled");
       autofillFieldData.viewable = true;
-      void this.setupInlineMenuOnQualifiedField(formFieldElement);
+      void this.setupOverlayListenersOnQualifiedField(formFieldElement, autofillFieldData);
     }
 
     this.removeHiddenFieldFallbackListener(formFieldElement);
@@ -724,11 +1231,13 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    * Sets up the inline menu on a qualified form field element.
    *
    * @param formFieldElement - The form field element to set up the inline menu on.
+   * @param autofillFieldData - Autofill field data captured from the form field element.
    */
-  private async setupInlineMenuOnQualifiedField(
+  private async setupOverlayListenersOnQualifiedField(
     formFieldElement: ElementWithOpId<FormFieldElement>,
+    autofillFieldData: AutofillField,
   ) {
-    this.formFieldElements.add(formFieldElement);
+    this.formFieldElements.set(formFieldElement, autofillFieldData);
 
     if (!this.mostRecentlyFocusedField) {
       await this.updateMostRecentlyFocusedField(formFieldElement);
@@ -739,6 +1248,7 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
     }
 
     this.setupFormFieldElementEventListeners(formFieldElement);
+    this.setupFormSubmissionEventListeners(formFieldElement, autofillFieldData);
 
     if (
       globalThis.document.hasFocus() &&
@@ -809,6 +1319,13 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
    */
   private async isInlineMenuListVisible() {
     return (await this.sendExtensionMessage("checkIsAutofillInlineMenuListVisible")) === true;
+  }
+
+  /**
+   * Checks if the field is currently focused within the top frame.
+   */
+  private async isFieldCurrentlyFocused() {
+    return (await this.sendExtensionMessage("checkIsFieldCurrentlyFocused")) === true;
   }
 
   /**
@@ -1166,10 +1683,10 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
       focusedFieldRectsTop + this.focusedFieldData?.focusedFieldRects?.height;
     const viewportHeight = globalThis.innerHeight + globalThis.scrollY;
     return (
-      focusedFieldRectsTop &&
-      focusedFieldRectsTop > 0 &&
+      !globalThis.isNaN(focusedFieldRectsTop) &&
+      focusedFieldRectsTop >= 0 &&
       focusedFieldRectsTop < viewportHeight &&
-      focusedFieldRectsBottom < viewportHeight
+      focusedFieldRectsBottom <= viewportHeight
     );
   }
 
@@ -1198,12 +1715,18 @@ export class AutofillOverlayContentService implements AutofillOverlayContentServ
   destroy() {
     this.clearFocusInlineMenuListTimeout();
     this.clearCloseInlineMenuOnRedirectTimeout();
-    this.formFieldElements.forEach((formFieldElement) => {
+    this.formFieldElements.forEach((_autofillField, formFieldElement) => {
       this.removeCachedFormFieldEventListeners(formFieldElement);
       formFieldElement.removeEventListener(EVENTS.BLUR, this.handleFormFieldBlurEvent);
       formFieldElement.removeEventListener(EVENTS.KEYUP, this.handleFormFieldKeyupEvent);
       this.formFieldElements.delete(formFieldElement);
     });
+    Object.keys(this.userFilledFields).forEach((key) => {
+      if (this.userFilledFields[key]) {
+        delete this.userFilledFields[key];
+      }
+    });
+    this.userFilledFields = null;
     globalThis.removeEventListener(EVENTS.MESSAGE, this.handleWindowMessageEvent);
     globalThis.document.removeEventListener(
       EVENTS.VISIBILITYCHANGE,

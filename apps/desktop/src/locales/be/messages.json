@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Налады"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "Ваш уліковы запіс створаны! Цяпер вы можаце ўвайсці ў яго."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "Мы адправілі вам на электронную пошту падказку да асноўнага пароля."
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "Патрабуецца праверачны код."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "Памылковы праверачны код"
@@ -788,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Тэрмін дзеяння вашага сеансу завяршыўся."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "Вы сапраўды хочаце выйсці?"
@@ -1153,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "Вы можаце купіць прэміяльны статус на bitwarden.com. Перайсці на вэб-сайт зараз?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "У вас прэміяльны статус!"
   },
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Дадатковыя налады Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Праверыць на Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Разблакіраваць з Touch ID"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Пытацца пра Windows Hello пры запуску"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Пытацца пра Touch ID пры запуску"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Ваш новы асноўны пароль не адпавядае патрабаванням палітыкі."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -1782,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Для актывацыі біяметрыі ў браўзеры неабходна спачатку ўключыць яе ў наладах праграмы для камп'ютара."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "У адпаведнасці з палітыкай прадпрыемства вам забаронена захоўваць элементы ў асабістым сховішчы. Змяніце параметры ўласнасці на арганізацыю і выберыце з даступных калекцый."
@@ -1994,6 +2039,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Ваш асноўны пароль не адпавядае адной або некалькім палітыкам арганізацыі. Для атрымання доступу да сховішча, вы павінны абнавіць яго. Працягваючы, вы выйдзіце з бягучага сеанса і вам неабходна будзе ўвайсці паўторна. Актыўныя сеансы на іншых прыладах могуць заставацца актыўнымі на працягу адной гадзіны."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Час чакання вашага сховішча перавышае дазволеныя абмежаванні, якія прызначыла ваша арганізацыя."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Аўтаматычная рэгістрацыя"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Launch Duo and follow the steps to finish logging in."
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
-  "importDestination": {
-    "message": "Import destination"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Learn about your import options"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

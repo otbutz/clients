@@ -1,13 +1,13 @@
 import { mock } from "jest-mock-extended";
 import { of } from "rxjs";
 
+import { IntegrationId } from "@bitwarden/common/tools/integration";
 import { UserId } from "@bitwarden/common/types/guid";
 import {
   GeneratorService,
   DefaultPassphraseGenerationOptions,
   DefaultPasswordGenerationOptions,
-  DisabledPassphraseGeneratorPolicy,
-  DisabledPasswordGeneratorPolicy,
+  Policies,
   PassphraseGenerationOptions,
   PassphraseGeneratorPolicy,
   PasswordGenerationOptions,
@@ -38,7 +38,7 @@ const PasswordGeneratorOptionsEvaluator = policies.PasswordGeneratorOptionsEvalu
 
 function createPassphraseGenerator(
   options: PassphraseGenerationOptions = {},
-  policy: PassphraseGeneratorPolicy = DisabledPassphraseGeneratorPolicy,
+  policy: PassphraseGeneratorPolicy = Policies.Passphrase.disabledValue,
 ) {
   let savedOptions = options;
   const generator = mock<GeneratorService<PassphraseGenerationOptions, PassphraseGeneratorPolicy>>({
@@ -63,7 +63,7 @@ function createPassphraseGenerator(
 
 function createPasswordGenerator(
   options: PasswordGenerationOptions = {},
-  policy: PasswordGeneratorPolicy = DisabledPasswordGeneratorPolicy,
+  policy: PasswordGeneratorPolicy = Policies.Password.disabledValue,
 ) {
   let savedOptions = options;
   const generator = mock<GeneratorService<PasswordGenerationOptions, PasswordGeneratorPolicy>>({
@@ -185,7 +185,7 @@ describe("LegacyPasswordGenerationService", () => {
       const navigation = createNavigationGenerator({
         type: "passphrase",
         username: "word",
-        forwarder: "simplelogin",
+        forwarder: "simplelogin" as IntegrationId,
       });
       const accountService = mockAccountServiceWith(SomeUser);
       const generator = new LegacyPasswordGenerationService(
@@ -269,7 +269,7 @@ describe("LegacyPasswordGenerationService", () => {
       const navigation = createNavigationGenerator(
         {},
         {
-          defaultType: "password",
+          overridePasswordType: "password",
         },
       );
       const generator = new LegacyPasswordGenerationService(
@@ -283,7 +283,7 @@ describe("LegacyPasswordGenerationService", () => {
       const [, policy] = await generator.getOptions();
 
       expect(policy).toEqual({
-        defaultType: "password",
+        overridePasswordType: "password",
         minLength: 20,
         numberCount: 10,
         specialCount: 11,
@@ -401,7 +401,7 @@ describe("LegacyPasswordGenerationService", () => {
       const navigation = createNavigationGenerator(
         {},
         {
-          defaultType: "password",
+          overridePasswordType: "password",
         },
       );
       const generator = new LegacyPasswordGenerationService(
@@ -415,7 +415,7 @@ describe("LegacyPasswordGenerationService", () => {
       const [, policy] = await generator.enforcePasswordGeneratorPoliciesOnOptions({});
 
       expect(policy).toEqual({
-        defaultType: "password",
+        overridePasswordType: "password",
         minLength: 20,
         numberCount: 10,
         specialCount: 11,
@@ -496,7 +496,7 @@ describe("LegacyPasswordGenerationService", () => {
       const navigation = createNavigationGenerator({
         type: "password",
         username: "forwarded",
-        forwarder: "firefoxrelay",
+        forwarder: "firefoxrelay" as IntegrationId,
       });
       const accountService = mockAccountServiceWith(SomeUser);
       const generator = new LegacyPasswordGenerationService(

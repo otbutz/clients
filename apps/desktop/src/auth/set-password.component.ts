@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { SetPasswordComponent as BaseSetPasswordComponent } from "@bitwarden/angular/auth/components/set-password.component";
@@ -14,6 +14,7 @@ import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth
 import { SsoLoginServiceAbstraction } from "@bitwarden/common/auth/abstractions/sso-login.service.abstraction";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -21,7 +22,7 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 const BroadcasterSubscriptionId = "SetPasswordComponent";
@@ -30,7 +31,7 @@ const BroadcasterSubscriptionId = "SetPasswordComponent";
   selector: "app-set-password",
   templateUrl: "set-password.component.html",
 })
-export class SetPasswordComponent extends BaseSetPasswordComponent implements OnDestroy {
+export class SetPasswordComponent extends BaseSetPasswordComponent implements OnInit, OnDestroy {
   constructor(
     accountService: AccountService,
     masterPasswordService: InternalMasterPasswordServiceAbstraction,
@@ -54,6 +55,8 @@ export class SetPasswordComponent extends BaseSetPasswordComponent implements On
     ssoLoginService: SsoLoginServiceAbstraction,
     dialogService: DialogService,
     kdfConfigService: KdfConfigService,
+    encryptService: EncryptService,
+    toastService: ToastService,
   ) {
     super(
       accountService,
@@ -76,6 +79,8 @@ export class SetPasswordComponent extends BaseSetPasswordComponent implements On
       ssoLoginService,
       dialogService,
       kdfConfigService,
+      encryptService,
+      toastService,
     );
   }
 

@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Podešavanja"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "Vaš novi nalog je kreiran! Sada se možete prijaviti."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "Poslali smo vam email sa podsjetnikom na glavnu lozinku."
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "Potreban je verifikacioni kod."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "The authentication was cancelled or took too long. Please try again."
   },
   "invalidVerificationCode": {
     "message": "Invalid verification code"
@@ -788,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Vaša sesija je istekla."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "Jeste li sigurni da se želite odjaviti?"
@@ -1153,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "Premium članstvo možete kupiti u trezoru na internet strani bitwarden.com. Da li želite da posjetite internet lokaciju sada?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "Vi ste premijum član!"
   },
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Additional Windows Hello settings"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verifikuj za Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Otključaj sa Touch ID"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Ask for Windows Hello on app start"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Ask for Touch ID on app start"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Your new master password does not meet the policy requirements."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -1782,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Browser biometrics requires desktop biometrics to be set up in the settings first."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections."
@@ -1994,6 +2039,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Your vault timeout exceeds the restrictions set by your organization."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatic enrollment"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Error connecting with the Duo service. Use a different two-step login method or contact Duo for assistance."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Launch Duo and follow the steps to finish logging in."
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
-  "importDestination": {
-    "message": "Import destination"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Learn about your import options"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

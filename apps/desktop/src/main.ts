@@ -32,14 +32,16 @@ import { PowerMonitorMain } from "./main/power-monitor.main";
 import { TrayMain } from "./main/tray.main";
 import { UpdaterMain } from "./main/updater.main";
 import { WindowMain } from "./main/window.main";
-import { BiometricsService, BiometricsServiceAbstraction } from "./platform/main/biometric/index";
+import { BiometricsService, DesktopBiometricsService } from "./platform/main/biometric/index";
 import { ClipboardMain } from "./platform/main/clipboard.main";
 import { DesktopCredentialStorageListener } from "./platform/main/desktop-credential-storage-listener";
 import { MainCryptoFunctionService } from "./platform/main/main-crypto-function.service";
 import { DesktopSettingsService } from "./platform/services/desktop-settings.service";
 import { ElectronLogMainService } from "./platform/services/electron-log.main.service";
 import { ElectronStorageService } from "./platform/services/electron-storage.service";
+import { EphemeralValueStorageService } from "./platform/services/ephemeral-value-storage.main.service";
 import { I18nMainService } from "./platform/services/i18n.main.service";
+import { SSOLocalhostCallbackService } from "./platform/services/sso-localhost-callback.service";
 import { ElectronMainMessagingService } from "./services/electron-main-messaging.service";
 import { isMacAppStore } from "./utils";
 
@@ -62,7 +64,7 @@ export class Main {
   menuMain: MenuMain;
   powerMonitorMain: PowerMonitorMain;
   trayMain: TrayMain;
-  biometricsService: BiometricsServiceAbstraction;
+  biometricsService: DesktopBiometricsService;
   nativeMessagingMain: NativeMessagingMain;
   clipboardMain: ClipboardMain;
   desktopAutofillSettingsService: DesktopAutofillSettingsService;
@@ -109,7 +111,10 @@ export class Main {
       this.storageService,
       this.memoryStorageForStateProviders,
     );
-    const globalStateProvider = new DefaultGlobalStateProvider(storageServiceProvider);
+    const globalStateProvider = new DefaultGlobalStateProvider(
+      storageServiceProvider,
+      this.logService,
+    );
 
     this.i18nService = new I18nMainService("en", "./locales/", globalStateProvider);
 
@@ -130,6 +135,7 @@ export class Main {
     const singleUserStateProvider = new DefaultSingleUserStateProvider(
       storageServiceProvider,
       stateEventRegistrarService,
+      this.logService,
     );
 
     const activeUserStateProvider = new DefaultActiveUserStateProvider(
@@ -184,7 +190,7 @@ export class Main {
       });
     });
 
-    this.powerMonitorMain = new PowerMonitorMain(this.messagingService);
+    this.powerMonitorMain = new PowerMonitorMain(this.messagingService, this.logService);
     this.menuMain = new MenuMain(
       this.i18nService,
       this.messagingService,
@@ -221,6 +227,9 @@ export class Main {
 
     this.clipboardMain = new ClipboardMain();
     this.clipboardMain.init();
+
+    new EphemeralValueStorageService();
+    new SSOLocalhostCallbackService(this.environmentService, this.messagingService);
   }
 
   bootstrap() {
@@ -257,13 +266,21 @@ export class Main {
         if (browserIntegrationEnabled || ddgIntegrationEnabled) {
           // Re-register the native messaging host integrations on startup, in case they are not present
           if (browserIntegrationEnabled) {
-            this.nativeMessagingMain.generateManifests().catch(this.logService.error);
+            this.nativeMessagingMain
+              .generateManifests()
+              .catch((err) => this.logService.error("Error while generating manifests", err));
           }
           if (ddgIntegrationEnabled) {
-            this.nativeMessagingMain.generateDdgManifests().catch(this.logService.error);
+            this.nativeMessagingMain
+              .generateDdgManifests()
+              .catch((err) => this.logService.error("Error while generating DDG manifests", err));
           }
 
-          this.nativeMessagingMain.listen().catch(this.logService.error);
+          this.nativeMessagingMain
+            .listen()
+            .catch((err) =>
+              this.logService.error("Error while starting native message listener", err),
+            );
         }
 
         app.removeAsDefaultProtocolClient("bitwarden");

@@ -11,8 +11,8 @@
     "output": "dist",
     "app": "build"
   },
-  "afterPack": "scripts/after-pack.js",
   "afterSign": "scripts/after-sign.js",
+  "afterPack": "scripts/after-pack.js",
   "asarUnpack": ["**/*.node"],
   "files": [
     "**/*",
@@ -25,7 +25,7 @@
     "**/node_modules/argon2/package.json",
     "**/node_modules/argon2/build/Release/argon2.node"
   ],
-  "electronVersion": "31.2.0",
+  "electronVersion": "32.0.1",
   "generateUpdatesFilesForAllChannels": true,
   "publish": {
     "provider": "generic",
@@ -76,10 +76,10 @@
     "extraFiles": [
       {
         "from": "desktop_native/dist/desktop_proxy.${platform}-${arch}",
-        "to": "Resources/desktop_proxy"
+        "to": "MacOS/desktop_proxy"
       }
     ],
-    "binaries": ["Contents/Resources/desktop_proxy"],
+    "signIgnore": ["MacOS/desktop_proxy"],
     "target": ["dmg", "zip"]
   },
   "win": {
@@ -249,7 +249,7 @@
     "autoStart": true,
     "base": "core22",
     "confinement": "strict",
-    "plugs": ["default", "password-manager-service"],
+    "plugs": ["default", "network", "network-bind", "password-manager-service"],
     "stagePackages": ["default"]
   },
   "protocols": [

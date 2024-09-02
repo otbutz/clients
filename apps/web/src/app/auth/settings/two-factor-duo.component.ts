@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
-import { Component, EventEmitter, Inject, Output } from "@angular/core";
+import { Component, EventEmitter, Inject, OnInit, Output } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -11,7 +11,7 @@ import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { TwoFactorBaseComponent } from "./two-factor-base.component";
 
@@ -19,7 +19,7 @@ import { TwoFactorBaseComponent } from "./two-factor-base.component";
   selector: "app-two-factor-duo",
   templateUrl: "two-factor-duo.component.html",
 })
-export class TwoFactorDuoComponent extends TwoFactorBaseComponent {
+export class TwoFactorDuoComponent extends TwoFactorBaseComponent implements OnInit {
   @Output() onChangeStatus: EventEmitter<boolean> = new EventEmitter();
 
   type = TwoFactorProviderType.Duo;
@@ -40,6 +40,7 @@ export class TwoFactorDuoComponent extends TwoFactorBaseComponent {
     dialogService: DialogService,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
+    protected toastService: ToastService,
   ) {
     super(
       apiService,
@@ -48,6 +49,7 @@ export class TwoFactorDuoComponent extends TwoFactorBaseComponent {
       logService,
       userVerificationService,
       dialogService,
+      toastService,
     );
   }
 

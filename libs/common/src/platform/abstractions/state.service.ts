@@ -56,22 +56,8 @@ export abstract class StateService<T extends Account = Account> {
    * @deprecated For migration purposes only, use setUserKeyAuto instead
    */
   setCryptoMasterKeyAuto: (value: string, options?: StorageOptions) => Promise<void>;
-  /**
-   * @deprecated For migration purposes only, use getUserKeyBiometric instead
-   */
-  getCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<string>;
-  /**
-   * @deprecated For migration purposes only, use hasUserKeyBiometric instead
-   */
-  hasCryptoMasterKeyBiometric: (options?: StorageOptions) => Promise<boolean>;
-  /**
-   * @deprecated For migration purposes only, use setUserKeyBiometric instead
-   */
-  setCryptoMasterKeyBiometric: (value: BiometricKey, options?: StorageOptions) => Promise<void>;
   getDuckDuckGoSharedKey: (options?: StorageOptions) => Promise<string>;
   setDuckDuckGoSharedKey: (value: string, options?: StorageOptions) => Promise<void>;
   getIsAuthenticated: (options?: StorageOptions) => Promise<boolean>;
-  getLastSync: (options?: StorageOptions) => Promise<string>;
-  setLastSync: (value: string, options?: StorageOptions) => Promise<void>;
   getUserId: (options?: StorageOptions) => Promise<string>;
 }

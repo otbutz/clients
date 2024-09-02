@@ -17,11 +17,20 @@ import {
 } from "@bitwarden/angular/services/injection-tokens";
 import { JslibServicesModule } from "@bitwarden/angular/services/jslib-services.module";
 import { ModalService as ModalServiceAbstraction } from "@bitwarden/angular/services/modal.service";
-import { RegistrationFinishService as RegistrationFinishServiceAbstraction } from "@bitwarden/auth/angular";
+import {
+  SetPasswordJitService,
+  RegistrationFinishService as RegistrationFinishServiceAbstraction,
+} from "@bitwarden/auth/angular";
+import { InternalUserDecryptionOptionsServiceAbstraction } from "@bitwarden/auth/common";
+import { ApiService } from "@bitwarden/common/abstractions/api.service";
+import { OrganizationApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/organization/organization-api.service.abstraction";
+import { OrganizationUserService } from "@bitwarden/common/admin-console/abstractions/organization-user/organization-user.service";
 import { PolicyApiServiceAbstraction } from "@bitwarden/common/admin-console/abstractions/policy/policy-api.service.abstraction";
 import { PolicyService } from "@bitwarden/common/admin-console/abstractions/policy/policy.service.abstraction";
 import { AccountApiService as AccountApiServiceAbstraction } from "@bitwarden/common/auth/abstractions/account-api.service";
 import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
+import { KdfConfigService } from "@bitwarden/common/auth/abstractions/kdf-config.service";
+import { InternalMasterPasswordServiceAbstraction } from "@bitwarden/common/auth/abstractions/master-password.service.abstraction";
 import { ClientType } from "@bitwarden/common/enums";
 import { CryptoService as CryptoServiceAbstraction } from "@bitwarden/common/platform/abstractions/crypto.service";
 import { EnvironmentService } from "@bitwarden/common/platform/abstractions/environment.service";
@@ -29,8 +38,8 @@ import { FileDownloadService } from "@bitwarden/common/platform/abstractions/fil
 import { I18nService as I18nServiceAbstraction } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService as PlatformUtilsServiceAbstraction } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { AbstractStorageService } from "@bitwarden/common/platform/abstractions/storage.service";
+import { BiometricsService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { ThemeType } from "@bitwarden/common/platform/enums";
 import { MemoryStorageService } from "@bitwarden/common/platform/services/memory-storage.service";
 // eslint-disable-next-line import/no-restricted-paths -- Implementation for memory storage
@@ -41,6 +50,7 @@ import { StorageServiceProvider } from "@bitwarden/common/platform/services/stor
 import { GlobalStateProvider, StateProvider } from "@bitwarden/common/platform/state";
 import { MemoryStorageService as MemoryStorageServiceForStateProviders } from "@bitwarden/common/platform/state/storage/memory-storage.service";
 /* eslint-enable import/no-restricted-paths -- Implementation for memory storage */
+import { WindowStorageService } from "@bitwarden/common/platform/storage/window-storage.service";
 import {
   DefaultThemeStateService,
   ThemeStateService,
@@ -48,21 +58,20 @@ import {
 import { VaultTimeout, VaultTimeoutStringType } from "@bitwarden/common/types/vault-timeout.type";
 
 import { PolicyListService } from "../admin-console/core/policy-list.service";
-import { WebRegistrationFinishService } from "../auth";
+import { WebSetPasswordJitService, WebRegistrationFinishService } from "../auth";
 import { AcceptOrganizationInviteService } from "../auth/organization-invite/accept-organization.service";
 import { HtmlStorageService } from "../core/html-storage.service";
 import { I18nService } from "../core/i18n.service";
+import { WebBiometricsService } from "../platform/web-biometric.service";
 import { WebEnvironmentService } from "../platform/web-environment.service";
 import { WebMigrationRunner } from "../platform/web-migration-runner";
 import { WebStorageServiceProvider } from "../platform/web-storage-service.provider";
-import { WindowStorageService } from "../platform/window-storage.service";
 import { CollectionAdminService } from "../vault/core/collection-admin.service";
 
 import { EventService } from "./event.service";
 import { InitService } from "./init.service";
 import { ModalService } from "./modal.service";
 import { RouterService } from "./router.service";
-import { StateService as WebStateService } from "./state";
 import { WebFileDownloadService } from "./web-file-download.service";
 import { WebPlatformUtilsService } from "./web-platform-utils.service";
 
@@ -126,11 +135,6 @@ const safeProviders: SafeProvider[] = [
     useClass: ModalService,
     useAngularDecorators: true,
   }),
-  safeProvider(WebStateService),
-  safeProvider({
-    provide: StateService,
-    useExisting: WebStateService,
-  }),
   safeProvider({
     provide: FileDownloadService,
     useClass: WebFileDownloadService,
@@ -162,6 +166,11 @@ const safeProviders: SafeProvider[] = [
     deps: [WINDOW, StateProvider, AccountService],
   }),
   safeProvider({
+    provide: BiometricsService,
+    useClass: WebBiometricsService,
+    deps: [],
+  }),
+  safeProvider({
     provide: ThemeStateService,
     useFactory: (globalStateProvider: GlobalStateProvider) =>
       // Web chooses to have Light as the default theme
@@ -182,6 +191,20 @@ const safeProviders: SafeProvider[] = [
       PolicyApiServiceAbstraction,
       LogService,
       PolicyService,
+    ],
+  }),
+  safeProvider({
+    provide: SetPasswordJitService,
+    useClass: WebSetPasswordJitService,
+    deps: [
+      ApiService,
+      CryptoServiceAbstraction,
+      I18nServiceAbstraction,
+      KdfConfigService,
+      InternalMasterPasswordServiceAbstraction,
+      OrganizationApiServiceAbstraction,
+      OrganizationUserService,
+      InternalUserDecryptionOptionsServiceAbstraction,
     ],
   }),
 ];

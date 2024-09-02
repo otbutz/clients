@@ -16,7 +16,7 @@ import { ConfigService } from "@bitwarden/common/platform/abstractions/config/co
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import {
   AdjustStorageDialogResult,
@@ -28,6 +28,7 @@ import {
 } from "../shared/offboarding-survey.component";
 
 import { BillingSyncApiKeyComponent } from "./billing-sync-api-key.component";
+import { ChangePlanDialogResultType, openChangePlanDialog } from "./change-plan-dialog.component";
 import { DownloadLicenceDialogComponent } from "./download-license.component";
 import { ManageBilling } from "./icons/manage-billing.icon";
 import { SecretsManagerSubscriptionOptions } from "./sm-adjust-subscription.component";
@@ -50,8 +51,9 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   locale: string;
   showUpdatedSubscriptionStatusSection$: Observable<boolean>;
   manageBillingFromProviderPortal = ManageBilling;
-  isProviderManaged = false;
+  isManagedByConsolidatedBillingMSP = false;
   enableTimeThreshold: boolean;
+  preSelectedProductTier: ProductTierType = ProductTierType.Free;
 
   protected readonly teamsStarter = ProductTierType.TeamsStarter;
 
@@ -65,6 +67,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     FeatureFlag.EnableTimeThreshold,
   );
 
+  protected EnableUpgradePasswordManagerSub$ = this.configService.getFeatureFlag$(
+    FeatureFlag.EnableUpgradePasswordManagerSub,
+  );
+
   constructor(
     private apiService: ApiService,
     private platformUtilsService: PlatformUtilsService,
@@ -76,6 +82,7 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     private dialogService: DialogService,
     private configService: ConfigService,
     private providerService: ProviderService,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -83,6 +90,13 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.changePlan();
+      const productTierTypeStr = this.route.snapshot.queryParamMap.get("productTierType");
+      if (productTierTypeStr != null) {
+        const productTier = Number(productTierTypeStr);
+        if (Object.values(ProductTierType).includes(productTier as ProductTierType)) {
+          this.preSelectedProductTier = productTier;
+        }
+      }
     }
 
     this.route.params
@@ -118,10 +132,10 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     if (this.userOrg.canViewSubscription) {
       const enableConsolidatedBilling = await firstValueFrom(this.enableConsolidatedBilling$);
       const provider = await this.providerService.get(this.userOrg.providerId);
-      this.isProviderManaged =
+      this.isManagedByConsolidatedBillingMSP =
         enableConsolidatedBilling &&
         this.userOrg.hasProvider &&
-        provider.providerStatus == ProviderStatusType.Billable;
+        provider?.providerStatus == ProviderStatusType.Billable;
 
       this.sub = await this.organizationApiService.getSubscription(this.organizationId);
       this.lineItems = this.sub?.subscription?.items;
@@ -331,6 +345,13 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
     );
   }
 
+  shownSelfHost(): boolean {
+    return (
+      this.sub?.plan.productTier !== ProductTierType.Teams &&
+      this.sub?.plan.productTier !== ProductTierType.Free
+    );
+  }
+
   cancelSubscription = async () => {
     const reference = openOffboardingSurvey(this.dialogService, {
       data: {
@@ -365,7 +386,11 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
     try {
       await this.organizationApiService.reinstate(this.organizationId);
-      this.platformUtilsService.showToast("success", null, this.i18nService.t("reinstated"));
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("reinstated"),
+      });
       // FIXME: Verify that this floating promise is intentional. If it is, add an explanatory comment and ensure there is proper error handling.
       // eslint-disable-next-line @typescript-eslint/no-floating-promises
       this.load();
@@ -375,7 +400,26 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
   };
 
   async changePlan() {
-    this.showChangePlan = !this.showChangePlan;
+    const EnableUpgradePasswordManagerSub = await firstValueFrom(
+      this.EnableUpgradePasswordManagerSub$,
+    );
+    if (EnableUpgradePasswordManagerSub) {
+      const reference = openChangePlanDialog(this.dialogService, {
+        data: {
+          organizationId: this.organizationId,
+          subscription: this.sub,
+          productTierType: this.userOrg.productTierType,
+        },
+      });
+
+      const result = await lastValueFrom(reference.closed);
+
+      if (result === ChangePlanDialogResultType.Submitted) {
+        await this.load();
+      }
+    } else {
+      this.showChangePlan = !this.showChangePlan;
+    }
   }
 
   closeChangePlan() {
@@ -443,11 +487,11 @@ export class OrganizationSubscriptionCloudComponent implements OnInit, OnDestroy
 
     try {
       await this.apiService.deleteRemoveSponsorship(this.organizationId);
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("removeSponsorshipSuccess"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("removeSponsorshipSuccess"),
+      });
       await this.load();
     } catch (e) {
       this.logService.error(e);

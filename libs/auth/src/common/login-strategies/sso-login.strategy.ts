@@ -255,6 +255,7 @@ export class SsoLoginStrategy extends LoginStrategy {
         await this.authRequestService.setKeysAfterDecryptingSharedMasterKeyAndHash(
           adminAuthReqResponse,
           adminAuthReqStorable.privateKey,
+          userId,
         );
       } else {
         // if masterPasswordHash is null, we will always receive authReqResponse.key
@@ -262,6 +263,7 @@ export class SsoLoginStrategy extends LoginStrategy {
         await this.authRequestService.setUserKeyAfterDecryptingSharedUserKey(
           adminAuthReqResponse,
           adminAuthReqStorable.privateKey,
+          userId,
         );
       }
 
@@ -296,16 +298,20 @@ export class SsoLoginStrategy extends LoginStrategy {
 
     if (!deviceKey || !encDevicePrivateKey || !encUserKey) {
       if (!deviceKey) {
-        await this.logService.warning("Unable to set user key due to missing device key.");
+        this.logService.warning("Unable to set user key due to missing device key.");
+      } else if (!encDevicePrivateKey || !encUserKey) {
+        // Tell the server that we have a device key, but received no decryption keys
+        await this.deviceTrustService.recordDeviceTrustLoss();
       }
       if (!encDevicePrivateKey) {
-        await this.logService.warning(
+        this.logService.warning(
           "Unable to set user key due to missing encrypted device private key.",
         );
       }
       if (!encUserKey) {
-        await this.logService.warning("Unable to set user key due to missing encrypted user key.");
+        this.logService.warning("Unable to set user key due to missing encrypted user key.");
       }
+
       return;
     }
 
@@ -317,7 +323,7 @@ export class SsoLoginStrategy extends LoginStrategy {
     );
 
     if (userKey) {
-      await this.cryptoService.setUserKey(userKey);
+      await this.cryptoService.setUserKey(userKey, userId);
     }
   }
 
@@ -333,7 +339,7 @@ export class SsoLoginStrategy extends LoginStrategy {
     }
 
     const userKey = await this.masterPasswordService.decryptUserKeyWithMasterKey(masterKey);
-    await this.cryptoService.setUserKey(userKey);
+    await this.cryptoService.setUserKey(userKey, userId);
   }
 
   protected override async setPrivateKey(

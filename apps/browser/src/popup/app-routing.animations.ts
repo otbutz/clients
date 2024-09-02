@@ -177,6 +177,9 @@ export const routerTransition = trigger("routerTransition", [
   transition("tabs => account-security", inSlideLeft),
   transition("account-security => tabs", outSlideRight),
 
+  transition("tabs => assign-collections", inSlideLeft),
+  transition("assign-collections => tabs", outSlideRight),
+
   // Vault settings
   transition("tabs => vault-settings", inSlideLeft),
   transition("vault-settings => tabs", outSlideRight),
@@ -195,6 +198,9 @@ export const routerTransition = trigger("routerTransition", [
 
   transition("vault-settings => sync", inSlideLeft),
   transition("sync => vault-settings", outSlideRight),
+
+  transition("vault-settings => trash", inSlideLeft),
+  transition("trash => vault-settings", outSlideRight),
 
   // Appearance settings
   transition("tabs => appearance", inSlideLeft),

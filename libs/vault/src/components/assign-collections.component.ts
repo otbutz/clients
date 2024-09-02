@@ -1,10 +1,20 @@
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from "@angular/core";
+import {
+  AfterViewInit,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import {
   Observable,
   Subject,
   combineLatest,
+  firstValueFrom,
   map,
   shareReplay,
   switchMap,
@@ -13,14 +23,14 @@ import {
 } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
-import { PluralizePipe } from "@bitwarden/angular/pipes/pluralize.pipe";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { OrganizationUserStatusType } from "@bitwarden/common/admin-console/enums";
 import { Organization } from "@bitwarden/common/admin-console/models/domain/organization";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { ConfigService } from "@bitwarden/common/platform/abstractions/config/config.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
-import { CipherId, CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
+import { CipherId, CollectionId, OrganizationId, UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
@@ -28,6 +38,7 @@ import { CollectionView } from "@bitwarden/common/vault/models/view/collection.v
 import {
   AsyncActionsModule,
   BitSubmitDirective,
+  ButtonComponent,
   ButtonModule,
   DialogModule,
   FormFieldModule,
@@ -80,17 +91,16 @@ const MY_VAULT_ID = "MyVault";
     DialogModule,
   ],
 })
-export class AssignCollectionsComponent implements OnInit {
+export class AssignCollectionsComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild(BitSubmitDirective)
   private bitSubmit: BitSubmitDirective;
 
   @Input() params: CollectionAssignmentParams;
 
-  @Output()
-  formLoading = new EventEmitter<boolean>();
-
-  @Output()
-  formDisabled = new EventEmitter<boolean>();
+  /**
+   * Submit button instance that will be disabled or marked as loading when the form is submitting.
+   */
+  @Input() submitBtn?: ButtonComponent;
 
   @Output()
   editableItemCountChange = new EventEmitter<number>();
@@ -123,24 +133,38 @@ export class AssignCollectionsComponent implements OnInit {
           setTimeout(() => {
             this.formGroup.patchValue({ selectedOrg: orgs[0].id });
             this.setFormValidators();
+
+            // Disable the org selector if there is only one organization
+            if (orgs.length === 1) {
+              this.formGroup.controls.selectedOrg.disable();
+            }
           });
         }
       }),
     );
 
   protected transferWarningText = (orgName: string, itemsCount: number) => {
-    const pluralizedItems = this.pluralizePipe.transform(itemsCount, "item", "items");
-    return orgName
-      ? this.i18nService.t("personalItemsWithOrgTransferWarning", pluralizedItems, orgName)
-      : this.i18nService.t("personalItemsTransferWarning", pluralizedItems);
+    const haveOrgName = !!orgName;
+
+    if (itemsCount > 1 && haveOrgName) {
+      return this.i18nService.t("personalItemsWithOrgTransferWarningPlural", itemsCount, orgName);
+    }
+    if (itemsCount > 1 && !haveOrgName) {
+      return this.i18nService.t("personalItemsTransferWarningPlural", itemsCount);
+    }
+    if (itemsCount === 1 && haveOrgName) {
+      return this.i18nService.t("personalItemWithOrgTransferWarningSingular", orgName);
+    }
+    return this.i18nService.t("personalItemTransferWarningSingular");
   };
 
   private editableItems: CipherView[] = [];
   // Get the selected organization ID. If the user has not selected an organization from the form,
   // fallback to use the organization ID from the params.
   private get selectedOrgId(): OrganizationId {
-    return this.formGroup.value.selectedOrg || this.params.organizationId;
+    return this.formGroup.getRawValue().selectedOrg || this.params.organizationId;
   }
+  private activeUserId: UserId;
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -150,14 +174,17 @@ export class AssignCollectionsComponent implements OnInit {
     private organizationService: OrganizationService,
     private collectionService: CollectionService,
     private formBuilder: FormBuilder,
-    private pluralizePipe: PluralizePipe,
     private toastService: ToastService,
+    private accountService: AccountService,
   ) {}
 
   async ngOnInit() {
-    const v1FCEnabled = await this.configService.getFeatureFlag(FeatureFlag.FlexibleCollectionsV1);
     const restrictProviderAccess = await this.configService.getFeatureFlag(
       FeatureFlag.RestrictProviderAccess,
+    );
+
+    this.activeUserId = await firstValueFrom(
+      this.accountService.activeAccount$.pipe(map((a) => a?.id)),
     );
 
     const onlyPersonalItems = this.params.ciphers.every((c) => c.organizationId == null);
@@ -166,7 +193,7 @@ export class AssignCollectionsComponent implements OnInit {
       this.showOrgSelector = true;
     }
 
-    await this.initializeItems(this.selectedOrgId, v1FCEnabled, restrictProviderAccess);
+    await this.initializeItems(this.selectedOrgId, restrictProviderAccess);
 
     if (this.selectedOrgId && this.selectedOrgId !== MY_VAULT_ID) {
       await this.handleOrganizationCiphers();
@@ -177,11 +204,19 @@ export class AssignCollectionsComponent implements OnInit {
 
   ngAfterViewInit(): void {
     this.bitSubmit.loading$.pipe(takeUntil(this.destroy$)).subscribe((loading) => {
-      this.formLoading.emit(loading);
+      if (!this.submitBtn) {
+        return;
+      }
+
+      this.submitBtn.loading = loading;
     });
 
     this.bitSubmit.disabled$.pipe(takeUntil(this.destroy$)).subscribe((disabled) => {
-      this.formDisabled.emit(disabled);
+      if (!this.submitBtn) {
+        return;
+      }
+
+      this.submitBtn.disabled = disabled;
     });
   }
 
@@ -304,11 +339,7 @@ export class AssignCollectionsComponent implements OnInit {
     }
   }
 
-  private async initializeItems(
-    organizationId: OrganizationId,
-    v1FCEnabled: boolean,
-    restrictProviderAccess: boolean,
-  ) {
+  private async initializeItems(organizationId: OrganizationId, restrictProviderAccess: boolean) {
     this.totalItemCount = this.params.ciphers.length;
 
     // If organizationId is not present or organizationId is MyVault, then all ciphers are considered personal items
@@ -323,7 +354,7 @@ export class AssignCollectionsComponent implements OnInit {
     const org = await this.organizationService.get(organizationId);
     this.orgName = org.name;
 
-    this.editableItems = org.canEditAllCiphers(v1FCEnabled, restrictProviderAccess)
+    this.editableItems = org.canEditAllCiphers(restrictProviderAccess)
       ? this.params.ciphers
       : this.params.ciphers.filter((c) => c.edit);
 
@@ -397,13 +428,14 @@ export class AssignCollectionsComponent implements OnInit {
       shareableCiphers,
       organizationId,
       selectedCollectionIds,
+      this.activeUserId,
     );
 
     this.toastService.showToast({
       variant: "success",
       title: null,
       message: this.i18nService.t(
-        "movedItemsToOrg",
+        shareableCiphers.length === 1 ? "itemMovedToOrg" : "itemsMovedToOrg",
         this.orgName ?? this.i18nService.t("organization"),
       ),
     });
@@ -437,7 +469,7 @@ export class AssignCollectionsComponent implements OnInit {
   private async updateAssignedCollections(cipherView: CipherView) {
     const { collections } = this.formGroup.getRawValue();
     cipherView.collectionIds = collections.map((i) => i.id as CollectionId);
-    const cipher = await this.cipherService.encrypt(cipherView);
+    const cipher = await this.cipherService.encrypt(cipherView, this.activeUserId);
     await this.cipherService.saveCollectionsWithServer(cipher);
   }
 }

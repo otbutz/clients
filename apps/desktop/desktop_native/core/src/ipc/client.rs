@@ -1,4 +1,7 @@
-use std::time::Duration;
+use std::{
+    path::{Path, PathBuf},
+    time::Duration,
+};
 
 use interprocess::local_socket::{
     tokio::{prelude::*, Stream},
@@ -10,7 +13,10 @@ use tokio::{
     time::sleep,
 };
 
+use crate::ipc::NATIVE_MESSAGING_BUFFER_SIZE;
+
 pub async fn connect(
+    path: PathBuf,
     send: tokio::sync::mpsc::Sender<String>,
     mut recv: tokio::sync::mpsc::Receiver<String>,
 ) {
@@ -18,7 +24,7 @@ pub async fn connect(
     let mut connection_failures = 0;
 
     loop {
-        match connect_inner(&send, &mut recv).await {
+        match connect_inner(&path, &send, &mut recv).await {
             Ok(()) => return,
             Err(e) => {
                 connection_failures += 1;
@@ -36,11 +42,10 @@ pub async fn connect(
 }
 
 async fn connect_inner(
+    path: &Path,
     send: &tokio::sync::mpsc::Sender<String>,
     recv: &mut tokio::sync::mpsc::Receiver<String>,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    let path = super::path("bitwarden");
-
     info!("Attempting to connect to {}", path.display());
 
     let name = path.as_os_str().to_fs_name::<GenericFilePath>()?;
@@ -48,34 +53,38 @@ async fn connect_inner(
 
     info!("Connected to {}", path.display());
 
+    // This `connected` and the latter `disconnected` messages are the only ones that
+    // are sent from the Rust IPC code and not just forwarded from the desktop app.
+    // As it's only two, we hardcode the JSON values to avoid pulling in a JSON library.
     send.send("{\"command\":\"connected\"}".to_owned()).await?;
 
-    let mut buffer = vec![0; 8192];
+    let mut buffer = vec![0; NATIVE_MESSAGING_BUFFER_SIZE];
 
     // Listen to IPC messages
     loop {
         tokio::select! {
-            // Send messages to the IPC server
+            // Forward messages to the IPC server
             msg = recv.recv() => {
                 match msg {
                     Some(msg) => {
                         conn.write_all(msg.as_bytes()).await?;
                     }
-                    None => break,
+                    None => {
+                        info!("Client channel closed");
+                        break;
+                    },
                 }
             },
 
-            // Read messages from the IPC server
+            // Forward messages from the IPC server
             res = conn.read(&mut buffer[..]) => {
                 match res {
                     Err(e) => {
                         error!("Error reading from IPC server: {e}");
-                        send.send("{\"command\":\"disconnected\"}".to_owned()).await?;
                         break;
                     }
                     Ok(0) => {
                         info!("Connection closed");
-                        send.send("{\"command\":\"disconnected\"}".to_owned()).await?;
                         break;
                     }
                     Ok(n) => {
@@ -86,6 +95,8 @@ async fn connect_inner(
             }
         }
     }
+
+    let _ = send.send("{\"command\":\"disconnected\"}".to_owned()).await;
 
     Ok(())
 }

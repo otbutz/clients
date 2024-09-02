@@ -13,10 +13,12 @@ import {
   DomainSettingsService,
 } from "@bitwarden/common/autofill/services/domain-settings.service";
 import { InlineMenuVisibilitySetting } from "@bitwarden/common/autofill/types";
+import { NeverDomains } from "@bitwarden/common/models/domain/domain-service";
 import {
   EnvironmentService,
   Region,
 } from "@bitwarden/common/platform/abstractions/environment.service";
+import { Fido2ClientService } from "@bitwarden/common/platform/abstractions/fido2/fido2-client.service.abstraction";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { ThemeType } from "@bitwarden/common/platform/enums";
@@ -32,6 +34,7 @@ import { UserId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CipherRepromptType, CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
+import { Fido2CredentialView } from "@bitwarden/common/vault/models/view/fido2-credential.view";
 
 import { BrowserApi } from "../../platform/browser/browser-api";
 import { BrowserPlatformUtilsService } from "../../platform/services/platform-utils/browser-platform-utils.service";
@@ -43,11 +46,11 @@ import {
 } from "../enums/autofill-overlay.enum";
 import { AutofillService } from "../services/abstractions/autofill.service";
 import {
-  createChromeTabMock,
   createAutofillPageDetailsMock,
-  createPortSpyMock,
+  createChromeTabMock,
   createFocusedFieldDataMock,
   createPageDetailMock,
+  createPortSpyMock,
 } from "../spec/autofill-mocks";
 import {
   flushPromises,
@@ -73,6 +76,7 @@ describe("OverlayBackground", () => {
   let accountService: FakeAccountService;
   let fakeStateProvider: FakeStateProvider;
   let showFaviconsMock$: BehaviorSubject<boolean>;
+  let neverDomainsMock$: BehaviorSubject<NeverDomains>;
   let domainSettingsService: DomainSettingsService;
   let logService: MockProxy<LogService>;
   let cipherService: MockProxy<CipherService>;
@@ -85,6 +89,8 @@ describe("OverlayBackground", () => {
   let autofillSettingsService: MockProxy<AutofillSettingsService>;
   let i18nService: MockProxy<I18nService>;
   let platformUtilsService: MockProxy<BrowserPlatformUtilsService>;
+  let availableAutofillCredentialsMock$: BehaviorSubject<Fido2CredentialView[]>;
+  let fido2ClientService: MockProxy<Fido2ClientService>;
   let selectedThemeMock$: BehaviorSubject<ThemeType>;
   let themeStateService: MockProxy<ThemeStateService>;
   let overlayBackground: OverlayBackground;
@@ -129,8 +135,10 @@ describe("OverlayBackground", () => {
     accountService = mockAccountServiceWith(mockUserId);
     fakeStateProvider = new FakeStateProvider(accountService);
     showFaviconsMock$ = new BehaviorSubject(true);
+    neverDomainsMock$ = new BehaviorSubject({});
     domainSettingsService = new DefaultDomainSettingsService(fakeStateProvider);
     domainSettingsService.showFavicons$ = showFaviconsMock$;
+    domainSettingsService.neverDomains$ = neverDomainsMock$;
     logService = mock<LogService>();
     cipherService = mock<CipherService>();
     autofillService = mock<AutofillService>();
@@ -151,6 +159,10 @@ describe("OverlayBackground", () => {
     autofillSettingsService.inlineMenuVisibility$ = inlineMenuVisibilityMock$;
     i18nService = mock<I18nService>();
     platformUtilsService = mock<BrowserPlatformUtilsService>();
+    availableAutofillCredentialsMock$ = new BehaviorSubject([]);
+    fido2ClientService = mock<Fido2ClientService>({
+      availableAutofillCredentials$: (_tabId) => availableAutofillCredentialsMock$,
+    });
     selectedThemeMock$ = new BehaviorSubject(ThemeType.Light);
     themeStateService = mock<ThemeStateService>();
     themeStateService.selectedTheme$ = selectedThemeMock$;
@@ -164,6 +176,7 @@ describe("OverlayBackground", () => {
       autofillSettingsService,
       i18nService,
       platformUtilsService,
+      fido2ClientService,
       themeStateService,
     );
     portKeyForTabSpy = overlayBackground["portKeyForTab"];
@@ -176,8 +189,12 @@ describe("OverlayBackground", () => {
         parentFrameId: getFrameCounter,
       });
     });
-    tabsSendMessageSpy = jest.spyOn(BrowserApi, "tabSendMessage");
-    tabSendMessageDataSpy = jest.spyOn(BrowserApi, "tabSendMessageData");
+    tabsSendMessageSpy = jest
+      .spyOn(BrowserApi, "tabSendMessage")
+      .mockImplementation(() => Promise.resolve());
+    tabSendMessageDataSpy = jest
+      .spyOn(BrowserApi, "tabSendMessageData")
+      .mockImplementation(() => Promise.resolve());
     sendMessageSpy = jest.spyOn(BrowserApi, "sendMessage");
     getTabFromCurrentWindowIdSpy = jest.spyOn(BrowserApi, "getTabFromCurrentWindowId");
     getTabSpy = jest.spyOn(BrowserApi, "getTab");
@@ -319,8 +336,10 @@ describe("OverlayBackground", () => {
   });
 
   describe("removing pageDetails", () => {
-    it("removes the page details and port key for a specific tab from the pageDetailsForTab object", () => {
+    it("removes the page details and port key for a specific tab from the pageDetailsForTab object", async () => {
+      await initOverlayElementPorts();
       const tabId = 1;
+      portKeyForTabSpy[tabId] = "portKey";
       sendMockExtensionMessage(
         { command: "collectPageDetailsResponse", details: createAutofillPageDetailsMock() },
         mock<chrome.runtime.MessageSender>({ tab: createChromeTabMock({ id: tabId }), frameId: 1 }),
@@ -524,10 +543,13 @@ describe("OverlayBackground", () => {
           });
 
           it("skips updating the position of either inline menu element if a field is not currently focused", async () => {
-            sendMockExtensionMessage({
-              command: "updateIsFieldCurrentlyFocused",
-              isFieldCurrentlyFocused: false,
-            });
+            sendMockExtensionMessage(
+              {
+                command: "updateIsFieldCurrentlyFocused",
+                isFieldCurrentlyFocused: false,
+              },
+              mock<chrome.runtime.MessageSender>({ frameId: 20 }),
+            );
 
             sendMockExtensionMessage({ command: "triggerAutofillOverlayReposition" }, sender);
             await flushUpdateInlineMenuPromises();
@@ -690,23 +712,62 @@ describe("OverlayBackground", () => {
   describe("updating the overlay ciphers", () => {
     const url = "https://jest-testing-website.com";
     const tab = createChromeTabMock({ url });
-    const cipher1 = mock<CipherView>({
+    const loginCipher1 = mock<CipherView>({
       id: "id-1",
       localData: { lastUsedDate: 222 },
       name: "name-1",
       type: CipherType.Login,
-      login: { username: "username-1", uri: url },
+      login: { username: "username-1", password: "password", uri: url },
     });
-    const cipher2 = mock<CipherView>({
+    const cardCipher = mock<CipherView>({
       id: "id-2",
       localData: { lastUsedDate: 222 },
       name: "name-2",
       type: CipherType.Card,
       card: { subTitle: "subtitle-2" },
     });
+    const loginCipher2 = mock<CipherView>({
+      id: "id-3",
+      localData: { lastUsedDate: 222 },
+      name: "name-3",
+      type: CipherType.Login,
+      login: { username: "username-3", uri: url },
+    });
+    const identityCipher = mock<CipherView>({
+      id: "id-4",
+      localData: { lastUsedDate: 222 },
+      name: "name-4",
+      type: CipherType.Identity,
+      identity: {
+        username: "username",
+        firstName: "Test",
+        lastName: "User",
+        email: "email@example.com",
+      },
+    });
+    const passkeyCipher = mock<CipherView>({
+      id: "id-5",
+      localData: { lastUsedDate: 222 },
+      name: "name-5",
+      type: CipherType.Login,
+      login: {
+        username: "username-5",
+        password: "password",
+        uri: url,
+        fido2Credentials: [
+          mock<Fido2CredentialView>({
+            credentialId: "credential-id",
+            rpName: "credential-name",
+            userName: "credential-username",
+            rpId: "jest-testing-website.com",
+          }),
+        ],
+      },
+    });
 
-    beforeEach(() => {
+    beforeEach(async () => {
       activeAccountStatusMock$.next(AuthenticationStatus.Unlocked);
+      await initOverlayElementPorts();
     });
 
     it("skips updating the overlay ciphers if the user's auth status is not unlocked", async () => {
@@ -735,7 +796,7 @@ describe("OverlayBackground", () => {
 
     it("closes the inline menu on the focused field's tab if current tab is different", async () => {
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       const previousTab = mock<chrome.tabs.Tab>({ id: 15 });
       overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({ tabId: 15 });
@@ -750,38 +811,121 @@ describe("OverlayBackground", () => {
       );
     });
 
-    it("queries all ciphers for the given url, sort them by last used, and format them for usage in the overlay", async () => {
+    it("queries all cipher types, sorts them by last used, and formats them for usage in the overlay", async () => {
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
 
       await overlayBackground.updateOverlayCiphers();
+
+      expect(BrowserApi.getTabFromCurrentWindowId).toHaveBeenCalled();
+      expect(cipherService.getAllDecryptedForUrl).toHaveBeenCalledWith(url, [
+        CipherType.Card,
+        CipherType.Identity,
+      ]);
+      expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+      expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
+        new Map([
+          ["inline-menu-cipher-0", cardCipher],
+          ["inline-menu-cipher-1", loginCipher1],
+        ]),
+      );
+    });
+
+    it("queries only login ciphers when not updating all cipher types", async () => {
+      overlayBackground["cardAndIdentityCiphers"] = new Set([]);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher2, loginCipher1]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+
+      await overlayBackground.updateOverlayCiphers(false);
 
       expect(BrowserApi.getTabFromCurrentWindowId).toHaveBeenCalled();
       expect(cipherService.getAllDecryptedForUrl).toHaveBeenCalledWith(url);
       expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
       expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
         new Map([
-          ["inline-menu-cipher-0", cipher2],
-          ["inline-menu-cipher-1", cipher1],
+          ["inline-menu-cipher-0", loginCipher1],
+          ["inline-menu-cipher-1", loginCipher2],
+        ]),
+      );
+    });
+
+    it("queries all cipher types when the card and identity ciphers set is not built when only updating login ciphers", async () => {
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+
+      await overlayBackground.updateOverlayCiphers(false);
+
+      expect(BrowserApi.getTabFromCurrentWindowId).toHaveBeenCalled();
+      expect(cipherService.getAllDecryptedForUrl).toHaveBeenCalledWith(url, [
+        CipherType.Card,
+        CipherType.Identity,
+      ]);
+      expect(cipherService.sortCiphersByLastUsedThenName).toHaveBeenCalled();
+      expect(overlayBackground["inlineMenuCiphers"]).toStrictEqual(
+        new Map([
+          ["inline-menu-cipher-0", cardCipher],
+          ["inline-menu-cipher-1", loginCipher1],
         ]),
       );
     });
 
     it("posts an `updateOverlayListCiphers` message to the overlay list port, and send a `updateAutofillInlineMenuListCiphers` message to the tab indicating that the list of ciphers is populated", async () => {
-      overlayBackground["inlineMenuListPort"] = mock<chrome.runtime.Port>();
-      cipherService.getAllDecryptedForUrl.mockResolvedValue([cipher1, cipher2]);
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({ tabId: tab.id });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1]);
       cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
       getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
 
       await overlayBackground.updateOverlayCiphers();
 
-      expect(overlayBackground["inlineMenuListPort"].postMessage).toHaveBeenCalledWith({
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
         command: "updateAutofillInlineMenuListCiphers",
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
         ciphers: [
           {
-            card: cipher2.card.subTitle,
-            favorite: cipher2.favorite,
+            accountCreationFieldType: undefined,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            id: "inline-menu-cipher-0",
+            login: {
+              username: "username-1",
+              passkey: null,
+            },
+            name: "name-1",
+            reprompt: loginCipher1.reprompt,
+            type: CipherType.Login,
+          },
+        ],
+      });
+    });
+
+    it("updates the inline menu list with card ciphers", async () => {
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Card,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, cardCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
+        ciphers: [
+          {
+            accountCreationFieldType: undefined,
+            favorite: cardCipher.favorite,
             icon: {
               fallbackImage: "",
               icon: "bwi-credit-card",
@@ -789,29 +933,319 @@ describe("OverlayBackground", () => {
               imageEnabled: true,
             },
             id: "inline-menu-cipher-0",
-            login: null,
-            name: "name-2",
-            reprompt: cipher2.reprompt,
-            type: 3,
+            card: cardCipher.card.subTitle,
+            name: cardCipher.name,
+            reprompt: cardCipher.reprompt,
+            type: CipherType.Card,
           },
+        ],
+      });
+    });
+
+    describe("updating ciphers for an account creation inline menu", () => {
+      it("updates the ciphers with a list of identity ciphers that contain a username", async () => {
+        overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+          tabId: tab.id,
+          accountCreationFieldType: "text",
+          showInlineMenuAccountCreation: true,
+        });
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([identityCipher, cardCipher]);
+        cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+        getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+        await overlayBackground.updateOverlayCiphers();
+
+        expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+          command: "updateAutofillInlineMenuListCiphers",
+          showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
+          ciphers: [
+            {
+              accountCreationFieldType: "text",
+              favorite: identityCipher.favorite,
+              icon: {
+                fallbackImage: "",
+                icon: "bwi-id-card",
+                image: undefined,
+                imageEnabled: true,
+              },
+              id: "inline-menu-cipher-1",
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
+              type: CipherType.Identity,
+              identity: {
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.username,
+              },
+            },
+          ],
+        });
+      });
+
+      it("appends any found login ciphers to the list of identity ciphers", async () => {
+        overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+          tabId: tab.id,
+          accountCreationFieldType: "text",
+          showInlineMenuAccountCreation: true,
+        });
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, identityCipher]);
+        cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+        getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+        await overlayBackground.updateOverlayCiphers();
+
+        expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+          command: "updateAutofillInlineMenuListCiphers",
+          showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
+          ciphers: [
+            {
+              accountCreationFieldType: "text",
+              favorite: identityCipher.favorite,
+              icon: {
+                fallbackImage: "",
+                icon: "bwi-id-card",
+                image: undefined,
+                imageEnabled: true,
+              },
+              id: "inline-menu-cipher-0",
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
+              type: CipherType.Identity,
+              identity: {
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.username,
+              },
+            },
+            {
+              accountCreationFieldType: "text",
+              favorite: loginCipher1.favorite,
+              icon: {
+                fallbackImage: "images/bwi-globe.png",
+                icon: "bwi-globe",
+                image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+                imageEnabled: true,
+              },
+              id: "inline-menu-cipher-1",
+              login: {
+                username: loginCipher1.login.username,
+                passkey: null,
+              },
+              name: loginCipher1.name,
+              reprompt: loginCipher1.reprompt,
+              type: CipherType.Login,
+            },
+          ],
+        });
+      });
+
+      it("skips any identity ciphers that do not contain a username or an email address", async () => {
+        overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+          tabId: tab.id,
+          accountCreationFieldType: "email",
+          showInlineMenuAccountCreation: true,
+        });
+        const identityCipherWithoutUsername = mock<CipherView>({
+          id: "id-5",
+          localData: { lastUsedDate: 222 },
+          name: "name-5",
+          type: CipherType.Identity,
+          identity: {
+            username: "",
+            email: "",
+          },
+        });
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([
+          identityCipher,
+          identityCipherWithoutUsername,
+        ]);
+        cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+        getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+        await overlayBackground.updateOverlayCiphers();
+
+        expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+          command: "updateAutofillInlineMenuListCiphers",
+          showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
+          ciphers: [
+            {
+              accountCreationFieldType: "email",
+              favorite: identityCipher.favorite,
+              icon: {
+                fallbackImage: "",
+                icon: "bwi-id-card",
+                image: undefined,
+                imageEnabled: true,
+              },
+              id: "inline-menu-cipher-1",
+              name: identityCipher.name,
+              reprompt: identityCipher.reprompt,
+              type: CipherType.Identity,
+              identity: {
+                fullName: `${identityCipher.identity.firstName} ${identityCipher.identity.lastName}`,
+                username: identityCipher.identity.email,
+              },
+            },
+          ],
+        });
+      });
+
+      it("does not add the identity ciphers if the field is for a password field", async () => {
+        overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+          tabId: tab.id,
+          accountCreationFieldType: "password",
+          showInlineMenuAccountCreation: true,
+        });
+        cipherService.getAllDecryptedForUrl.mockResolvedValue([identityCipher]);
+        cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+        getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+        await overlayBackground.updateOverlayCiphers();
+
+        expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+          command: "updateAutofillInlineMenuListCiphers",
+          showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
+          ciphers: [],
+        });
+      });
+    });
+
+    it("adds available passkey ciphers to the inline menu", async () => {
+      availableAutofillCredentialsMock$.next(passkeyCipher.login.fido2Credentials);
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Login,
+        showPasskeys: true,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        ciphers: [
           {
-            card: null,
-            favorite: cipher1.favorite,
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
             icon: {
               fallbackImage: "images/bwi-globe.png",
               icon: "bwi-globe",
               image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
               imageEnabled: true,
             },
-            id: "inline-menu-cipher-1",
+            accountCreationFieldType: undefined,
             login: {
-              username: "username-1",
+              username: passkeyCipher.login.username,
+              passkey: {
+                rpName: passkeyCipher.login.fido2Credentials[0].rpName,
+                userName: passkeyCipher.login.fido2Credentials[0].userName,
+              },
             },
-            name: "name-1",
-            reprompt: cipher1.reprompt,
-            type: 1,
+          },
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: null,
+            },
+          },
+          {
+            id: "inline-menu-cipher-1",
+            name: loginCipher1.name,
+            type: CipherType.Login,
+            reprompt: loginCipher1.reprompt,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: loginCipher1.login.username,
+              passkey: null,
+            },
           },
         ],
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: true,
+      });
+    });
+
+    it("does not add a passkey to the inline menu when its rpId is part of the neverDomains exclusion list", async () => {
+      availableAutofillCredentialsMock$.next(passkeyCipher.login.fido2Credentials);
+      overlayBackground["focusedFieldData"] = createFocusedFieldDataMock({
+        tabId: tab.id,
+        filledByCipherType: CipherType.Login,
+      });
+      cipherService.getAllDecryptedForUrl.mockResolvedValue([loginCipher1, passkeyCipher]);
+      cipherService.sortCiphersByLastUsedThenName.mockReturnValue(-1);
+      getTabFromCurrentWindowIdSpy.mockResolvedValueOnce(tab);
+      neverDomainsMock$.next({ "jest-testing-website.com": null });
+
+      await overlayBackground.updateOverlayCiphers();
+
+      expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+        command: "updateAutofillInlineMenuListCiphers",
+        ciphers: [
+          {
+            id: "inline-menu-cipher-0",
+            name: passkeyCipher.name,
+            type: CipherType.Login,
+            reprompt: passkeyCipher.reprompt,
+            favorite: passkeyCipher.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: passkeyCipher.login.username,
+              passkey: null,
+            },
+          },
+          {
+            id: "inline-menu-cipher-1",
+            name: loginCipher1.name,
+            type: CipherType.Login,
+            reprompt: loginCipher1.reprompt,
+            favorite: loginCipher1.favorite,
+            icon: {
+              fallbackImage: "images/bwi-globe.png",
+              icon: "bwi-globe",
+              image: "https://icons.bitwarden.com//jest-testing-website.com/icon.png",
+              imageEnabled: true,
+            },
+            accountCreationFieldType: undefined,
+            login: {
+              username: loginCipher1.login.username,
+              passkey: null,
+            },
+          },
+        ],
+        showInlineMenuAccountCreation: false,
+        showPasskeysLabels: false,
       });
     });
   });
@@ -866,10 +1300,16 @@ describe("OverlayBackground", () => {
       let openAddEditVaultItemPopoutSpy: jest.SpyInstance;
 
       beforeEach(() => {
-        sender = mock<chrome.runtime.MessageSender>({ tab: { id: 1 } });
+        jest.useFakeTimers();
+        sender = mock<chrome.runtime.MessageSender>({
+          tab: { id: 1 },
+          url: "https://top-frame-test.com",
+          frameId: 0,
+        });
         openAddEditVaultItemPopoutSpy = jest
           .spyOn(overlayBackground as any, "openAddEditVaultItemPopout")
           .mockImplementation();
+        overlayBackground["currentAddNewItemData"] = { sender, addNewCipherType: CipherType.Login };
       });
 
       it("will not open the add edit popout window if the message does not have a login cipher provided", () => {
@@ -879,10 +1319,13 @@ describe("OverlayBackground", () => {
         expect(openAddEditVaultItemPopoutSpy).not.toHaveBeenCalled();
       });
 
-      it("will open the add edit popout window after creating a new cipher", async () => {
+      it("resets the currentAddNewItemData to null when a cipher view is not successfully created", async () => {
+        jest.spyOn(overlayBackground as any, "buildLoginCipherView").mockReturnValue(null);
+
         sendMockExtensionMessage(
           {
             command: "autofillOverlayAddNewVaultItem",
+            addNewCipherType: CipherType.Login,
             login: {
               uri: "https://tacos.com",
               hostname: "",
@@ -892,11 +1335,372 @@ describe("OverlayBackground", () => {
           },
           sender,
         );
+        jest.advanceTimersByTime(100);
+        await flushPromises();
+
+        expect(overlayBackground["currentAddNewItemData"]).toBeNull();
+      });
+
+      it("will open the add edit popout window after creating a new cipher", async () => {
+        sendMockExtensionMessage(
+          {
+            command: "autofillOverlayAddNewVaultItem",
+            addNewCipherType: CipherType.Login,
+            login: {
+              uri: "https://tacos.com",
+              hostname: "",
+              username: "username",
+              password: "password",
+            },
+          },
+          sender,
+        );
+        jest.advanceTimersByTime(100);
         await flushPromises();
 
         expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
         expect(sendMessageSpy).toHaveBeenCalledWith("inlineAutofillMenuRefreshAddEditCipher");
         expect(openAddEditVaultItemPopoutSpy).toHaveBeenCalled();
+      });
+
+      it("creates a new card cipher", async () => {
+        overlayBackground["currentAddNewItemData"].addNewCipherType = CipherType.Card;
+
+        sendMockExtensionMessage(
+          {
+            command: "autofillOverlayAddNewVaultItem",
+            addNewCipherType: CipherType.Card,
+            card: {
+              cardholderName: "cardholderName",
+              number: "4242424242424242",
+              expirationMonth: "12",
+              expirationYear: "2025",
+              expirationDate: "12/25",
+              cvv: "123",
+            },
+          },
+          sender,
+        );
+        jest.advanceTimersByTime(100);
+        await flushPromises();
+
+        expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
+        expect(sendMessageSpy).toHaveBeenCalledWith("inlineAutofillMenuRefreshAddEditCipher");
+        expect(openAddEditVaultItemPopoutSpy).toHaveBeenCalled();
+      });
+
+      describe("creating a new identity cipher", () => {
+        beforeEach(() => {
+          overlayBackground["currentAddNewItemData"].addNewCipherType = CipherType.Identity;
+        });
+
+        it("populates an identity cipher view and creates it", async () => {
+          sendMockExtensionMessage(
+            {
+              command: "autofillOverlayAddNewVaultItem",
+              addNewCipherType: CipherType.Identity,
+              identity: {
+                title: "title",
+                firstName: "firstName",
+                middleName: "middleName",
+                lastName: "lastName",
+                fullName: "fullName",
+                address1: "address1",
+                address2: "address2",
+                address3: "address3",
+                city: "city",
+                state: "state",
+                postalCode: "postalCode",
+                country: "country",
+                company: "company",
+                phone: "phone",
+                email: "email",
+                username: "username",
+              },
+            },
+            sender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
+          expect(sendMessageSpy).toHaveBeenCalledWith("inlineAutofillMenuRefreshAddEditCipher");
+          expect(openAddEditVaultItemPopoutSpy).toHaveBeenCalled();
+        });
+
+        it("saves the first name based on the full name value", async () => {
+          sendMockExtensionMessage(
+            {
+              command: "autofillOverlayAddNewVaultItem",
+              addNewCipherType: CipherType.Identity,
+              identity: {
+                firstName: "",
+                lastName: "",
+                fullName: "fullName",
+              },
+            },
+            sender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
+        });
+
+        it("saves the first and middle names based on the full name value", async () => {
+          sendMockExtensionMessage(
+            {
+              command: "autofillOverlayAddNewVaultItem",
+              addNewCipherType: CipherType.Identity,
+              identity: {
+                firstName: "",
+                lastName: "",
+                fullName: "firstName middleName",
+              },
+            },
+            sender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
+        });
+
+        it("saves the first, middle, and last names based on the full name value", async () => {
+          sendMockExtensionMessage(
+            {
+              command: "autofillOverlayAddNewVaultItem",
+              addNewCipherType: CipherType.Identity,
+              identity: {
+                firstName: "",
+                lastName: "",
+                fullName: "firstName middleName lastName",
+              },
+            },
+            sender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(cipherService.setAddEditCipherInfo).toHaveBeenCalled();
+        });
+      });
+
+      describe("pulling cipher data from multiple frames of a tab", () => {
+        let subFrameSender: MockProxy<chrome.runtime.MessageSender>;
+        let secondSubFrameSender: MockProxy<chrome.runtime.MessageSender>;
+        const command = "autofillOverlayAddNewVaultItem";
+
+        beforeEach(() => {
+          subFrameSender = mock<chrome.runtime.MessageSender>({ tab: sender.tab, frameId: 2 });
+          secondSubFrameSender = mock<chrome.runtime.MessageSender>({
+            tab: sender.tab,
+            frameId: 3,
+          });
+        });
+
+        it("combines the login cipher data from all frames", async () => {
+          const buildLoginCipherViewSpy = jest.spyOn(
+            overlayBackground as any,
+            "buildLoginCipherView",
+          );
+          const addNewCipherType = CipherType.Login;
+          const topLevelLoginCipherData = {
+            uri: "https://top-frame-test.com",
+            hostname: "top-frame-test.com",
+            username: "",
+            password: "",
+          };
+          const loginCipherData = {
+            uri: "https://tacos.com",
+            hostname: "tacos.com",
+            username: "username",
+            password: "",
+          };
+          const subFrameLoginCipherData = {
+            uri: "https://tacos.com",
+            hostname: "tacos.com",
+            username: "",
+            password: "password",
+          };
+
+          sendMockExtensionMessage(
+            { command, addNewCipherType, login: topLevelLoginCipherData },
+            sender,
+          );
+          sendMockExtensionMessage(
+            { command, addNewCipherType, login: loginCipherData },
+            subFrameSender,
+          );
+          sendMockExtensionMessage(
+            { command, addNewCipherType, login: subFrameLoginCipherData },
+            secondSubFrameSender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(buildLoginCipherViewSpy).toHaveBeenCalledWith({
+            uri: "https://top-frame-test.com",
+            hostname: "top-frame-test.com",
+            username: "username",
+            password: "password",
+          });
+        });
+
+        it("sets the uri to the subframe of a tab if the login data is complete", async () => {
+          const buildLoginCipherViewSpy = jest.spyOn(
+            overlayBackground as any,
+            "buildLoginCipherView",
+          );
+          const addNewCipherType = CipherType.Login;
+          const loginCipherData = {
+            uri: "https://tacos.com",
+            hostname: "tacos.com",
+            username: "username",
+            password: "password",
+          };
+          const topLevelLoginCipherData = {
+            uri: "https://top-frame-test.com",
+            hostname: "top-frame-test.com",
+            username: "",
+            password: "",
+          };
+
+          sendMockExtensionMessage(
+            { command, addNewCipherType, login: loginCipherData },
+            subFrameSender,
+          );
+          sendMockExtensionMessage(
+            { command, addNewCipherType, login: topLevelLoginCipherData },
+            sender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(buildLoginCipherViewSpy).toHaveBeenCalledWith({
+            uri: "https://tacos.com",
+            hostname: "tacos.com",
+            username: "username",
+            password: "password",
+          });
+        });
+
+        it("combines the card cipher data from all frames", async () => {
+          const buildCardCipherViewSpy = jest.spyOn(
+            overlayBackground as any,
+            "buildCardCipherView",
+          );
+          overlayBackground["currentAddNewItemData"].addNewCipherType = CipherType.Card;
+          const addNewCipherType = CipherType.Card;
+          const cardCipherData = {
+            cardholderName: "cardholderName",
+            number: "",
+            expirationMonth: "",
+            expirationYear: "",
+            expirationDate: "12/25",
+            cvv: "123",
+          };
+          const subFrameCardCipherData = {
+            cardholderName: "",
+            number: "4242424242424242",
+            expirationMonth: "12",
+            expirationYear: "2025",
+            expirationDate: "",
+            cvv: "",
+          };
+
+          sendMockExtensionMessage({ command, addNewCipherType, card: cardCipherData }, sender);
+          sendMockExtensionMessage(
+            { command, addNewCipherType, card: subFrameCardCipherData },
+            subFrameSender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(buildCardCipherViewSpy).toHaveBeenCalledWith({
+            cardholderName: "cardholderName",
+            number: "4242424242424242",
+            expirationMonth: "12",
+            expirationYear: "2025",
+            expirationDate: "12/25",
+            cvv: "123",
+          });
+        });
+
+        it("combines the identity cipher data from all frames", async () => {
+          const buildIdentityCipherViewSpy = jest.spyOn(
+            overlayBackground as any,
+            "buildIdentityCipherView",
+          );
+          overlayBackground["currentAddNewItemData"].addNewCipherType = CipherType.Identity;
+          const addNewCipherType = CipherType.Identity;
+          const identityCipherData = {
+            title: "title",
+            firstName: "firstName",
+            middleName: "middleName",
+            lastName: "",
+            fullName: "",
+            address1: "address1",
+            address2: "address2",
+            address3: "address3",
+            city: "city",
+            state: "state",
+            postalCode: "postalCode",
+            country: "country",
+            company: "company",
+            phone: "phone",
+            email: "email",
+            username: "username",
+          };
+          const subFrameIdentityCipherData = {
+            title: "",
+            firstName: "",
+            middleName: "",
+            lastName: "lastName",
+            fullName: "fullName",
+            address1: "",
+            address2: "",
+            address3: "",
+            city: "",
+            state: "",
+            postalCode: "",
+            country: "",
+            company: "",
+            phone: "",
+            email: "",
+            username: "",
+          };
+
+          sendMockExtensionMessage(
+            { command, addNewCipherType, identity: identityCipherData },
+            sender,
+          );
+          sendMockExtensionMessage(
+            { command, addNewCipherType, identity: subFrameIdentityCipherData },
+            subFrameSender,
+          );
+          jest.advanceTimersByTime(100);
+          await flushPromises();
+
+          expect(buildIdentityCipherViewSpy).toHaveBeenCalledWith({
+            title: "title",
+            firstName: "firstName",
+            middleName: "middleName",
+            lastName: "lastName",
+            fullName: "fullName",
+            address1: "address1",
+            address2: "address2",
+            address3: "address3",
+            city: "city",
+            state: "state",
+            postalCode: "postalCode",
+            country: "country",
+            company: "company",
+            phone: "phone",
+            email: "email",
+            username: "username",
+          });
+        });
       });
     });
 
@@ -928,8 +1732,9 @@ describe("OverlayBackground", () => {
 
       it("returns true if the overlay login ciphers are populated", async () => {
         overlayBackground["inlineMenuCiphers"] = new Map([
-          ["inline-menu-cipher-0", mock<CipherView>()],
+          ["inline-menu-cipher-0", mock<CipherView>({ type: CipherType.Login })],
         ]);
+        await overlayBackground["getInlineMenuCipherData"]();
 
         sendMockExtensionMessage(
           { command: "checkIsInlineMenuCiphersPopulated" },
@@ -972,6 +1777,94 @@ describe("OverlayBackground", () => {
           { command: "unsetMostRecentlyFocusedField" },
           { frameId: firstSender.frameId },
         );
+      });
+
+      it("triggers an update of the identity ciphers present on a login field", async () => {
+        await initOverlayElementPorts();
+        activeAccountStatusMock$.next(AuthenticationStatus.Unlocked);
+        const tab = createChromeTabMock({ id: 2 });
+        overlayBackground["focusedFieldData"] = createFocusedFieldDataMock();
+        overlayBackground["isInlineMenuButtonVisible"] = true;
+        const sender = mock<chrome.runtime.MessageSender>({ tab, frameId: 100 });
+        const focusedFieldData = createFocusedFieldDataMock({
+          tabId: tab.id,
+          frameId: sender.frameId,
+          showInlineMenuAccountCreation: true,
+        });
+
+        sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData }, sender);
+        await flushPromises();
+
+        expect(listPortSpy.postMessage).toHaveBeenCalledWith({
+          command: "updateAutofillInlineMenuListCiphers",
+          ciphers: [],
+          showInlineMenuAccountCreation: true,
+          showPasskeysLabels: false,
+        });
+      });
+
+      it("triggers an update of the inline menu ciphers when the new focused field's cipher type does not equal the previous focused field's cipher type", async () => {
+        const updateOverlayCiphersSpy = jest.spyOn(overlayBackground, "updateOverlayCiphers");
+        const tab = createChromeTabMock({ id: 2 });
+        const sender = mock<chrome.runtime.MessageSender>({ tab, frameId: 100 });
+        const focusedFieldData = createFocusedFieldDataMock({
+          tabId: tab.id,
+          frameId: sender.frameId,
+          filledByCipherType: CipherType.Login,
+        });
+        sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData }, sender);
+        await flushPromises();
+
+        const newFocusedFieldData = createFocusedFieldDataMock({
+          tabId: tab.id,
+          frameId: sender.frameId,
+          filledByCipherType: CipherType.Card,
+        });
+        sendMockExtensionMessage(
+          { command: "updateFocusedFieldData", focusedFieldData: newFocusedFieldData },
+          sender,
+        );
+        await flushPromises();
+
+        expect(updateOverlayCiphersSpy).toHaveBeenCalled();
+      });
+    });
+
+    describe("updateIsFieldCurrentlyFocused message handler", () => {
+      it("skips updating the isFiledCurrentlyFocused value when the focused field data is populated and the sender frame id does not equal the focused field's frame id", async () => {
+        const focusedFieldData = createFocusedFieldDataMock();
+        sendMockExtensionMessage(
+          { command: "updateFocusedFieldData", focusedFieldData },
+          mock<chrome.runtime.MessageSender>({ tab: { id: 1 }, frameId: 10 }),
+        );
+        overlayBackground["isFieldCurrentlyFocused"] = true;
+
+        sendMockExtensionMessage(
+          { command: "updateIsFieldCurrentlyFocused", isFieldCurrentlyFocused: false },
+          mock<chrome.runtime.MessageSender>({ tab: { id: 1 }, frameId: 20 }),
+        );
+        await flushPromises();
+
+        expect(overlayBackground["isFieldCurrentlyFocused"]).toBe(true);
+      });
+    });
+
+    describe("updateIsFieldCurrentlyFocused message handler", () => {
+      it("skips updating the isFiledCurrentlyFocused value when the focused field data is populated and the sender frame id does not equal the focused field's frame id", async () => {
+        const focusedFieldData = createFocusedFieldDataMock();
+        sendMockExtensionMessage(
+          { command: "updateFocusedFieldData", focusedFieldData },
+          mock<chrome.runtime.MessageSender>({ tab: { id: 1 }, frameId: 10 }),
+        );
+        overlayBackground["isFieldCurrentlyFocused"] = true;
+
+        sendMockExtensionMessage(
+          { command: "updateIsFieldCurrentlyFocused", isFieldCurrentlyFocused: false },
+          mock<chrome.runtime.MessageSender>({ tab: { id: 1 }, frameId: 20 }),
+        );
+        await flushPromises();
+
+        expect(overlayBackground["isFieldCurrentlyFocused"]).toBe(true);
       });
     });
 
@@ -1402,6 +2295,25 @@ describe("OverlayBackground", () => {
         });
       });
 
+      describe("getAutofillInlineMenuPosition", () => {
+        it("returns the current inline menu position", async () => {
+          overlayBackground["inlineMenuPosition"] = {
+            button: { left: 1, top: 2, width: 3, height: 4 },
+          };
+
+          sendMockExtensionMessage(
+            { command: "getAutofillInlineMenuPosition" },
+            mock<chrome.runtime.MessageSender>(),
+            sendResponse,
+          );
+          await flushPromises();
+
+          expect(sendResponse).toHaveBeenCalledWith({
+            button: { left: 1, top: 2, width: 3, height: 4 },
+          });
+        });
+      });
+
       it("triggers a debounced reposition of the inline menu if the sender frame has a `null` sub frame offsets value", async () => {
         jest.useFakeTimers();
         const focusedFieldData = createFocusedFieldDataMock();
@@ -1413,7 +2325,6 @@ describe("OverlayBackground", () => {
         overlayBackground["subFrameOffsetsForTab"][focusedFieldData.tabId] = new Map([
           [focusedFieldData.frameId, null],
         ]);
-        tabsSendMessageSpy.mockImplementation();
         jest.spyOn(overlayBackground as any, "updateInlineMenuPositionAfterRepositionEvent");
 
         sendMockExtensionMessage(
@@ -1663,7 +2574,6 @@ describe("OverlayBackground", () => {
     describe("autofillInlineMenuButtonClicked message handler", () => {
       it("opens the unlock vault popout if the user auth status is not unlocked", async () => {
         activeAccountStatusMock$.next(AuthenticationStatus.Locked);
-        tabsSendMessageSpy.mockImplementation();
 
         sendPortMessage(buttonMessageConnectorSpy, {
           command: "autofillInlineMenuButtonClicked",
@@ -1864,7 +2774,6 @@ describe("OverlayBackground", () => {
     describe("unlockVault message handler", () => {
       it("opens the unlock vault popout", async () => {
         activeAccountStatusMock$.next(AuthenticationStatus.Locked);
-        tabsSendMessageSpy.mockImplementation();
 
         sendPortMessage(listMessageConnectorSpy, { command: "unlockVault", portKey });
         await flushPromises();
@@ -1923,7 +2832,7 @@ describe("OverlayBackground", () => {
         expect(autofillService.doAutoFill).not.toHaveBeenCalled();
       });
 
-      it("auto-fills the selected cipher and move it to the top of the front of the ciphers map", async () => {
+      it("autofills the selected cipher and move it to the top of the front of the ciphers map", async () => {
         const cipher1 = mock<CipherView>({ id: "inline-menu-cipher-1" });
         const cipher2 = mock<CipherView>({ id: "inline-menu-cipher-2" });
         const cipher3 = mock<CipherView>({ id: "inline-menu-cipher-3" });
@@ -1990,6 +2899,41 @@ describe("OverlayBackground", () => {
 
         expect(copyToClipboardSpy).toHaveBeenCalledWith("totp-code");
       });
+
+      it("triggers passkey authentication through mediated conditional UI", async () => {
+        const fido2Credential = mock<Fido2CredentialView>({ credentialId: "credential-id" });
+        const cipher1 = mock<CipherView>({
+          id: "inline-menu-cipher-1",
+          login: {
+            username: "username1",
+            password: "password1",
+            fido2Credentials: [fido2Credential],
+          },
+        });
+        overlayBackground["inlineMenuCiphers"] = new Map([["inline-menu-cipher-1", cipher1]]);
+        const pageDetailsForTab = {
+          frameId: sender.frameId,
+          tab: sender.tab,
+          details: pageDetails,
+        };
+        overlayBackground["pageDetailsForTab"][sender.tab.id] = new Map([
+          [sender.frameId, pageDetailsForTab],
+        ]);
+        autofillService.isPasswordRepromptRequired.mockResolvedValue(false);
+
+        sendPortMessage(listMessageConnectorSpy, {
+          command: "fillAutofillInlineMenuCipher",
+          inlineMenuCipherId: "inline-menu-cipher-1",
+          usePasskey: true,
+          portKey,
+        });
+        await flushPromises();
+
+        expect(fido2ClientService.autofillCredential).toHaveBeenCalledWith(
+          sender.tab.id,
+          fido2Credential.credentialId,
+        );
+      });
     });
 
     describe("addNewVaultItem message handler", () => {
@@ -2009,14 +2953,17 @@ describe("OverlayBackground", () => {
         sendMockExtensionMessage({ command: "updateFocusedFieldData", focusedFieldData }, sender);
         await flushPromises();
 
-        sendPortMessage(listMessageConnectorSpy, { command: "addNewVaultItem", portKey });
+        sendPortMessage(listMessageConnectorSpy, {
+          command: "addNewVaultItem",
+          portKey,
+          addNewCipherType: CipherType.Login,
+        });
         await flushPromises();
 
-        expect(tabsSendMessageSpy).toHaveBeenCalledWith(
-          sender.tab,
-          { command: "addNewVaultItemFromOverlay" },
-          { frameId: sender.frameId },
-        );
+        expect(tabsSendMessageSpy).toHaveBeenCalledWith(sender.tab, {
+          command: "addNewVaultItemFromOverlay",
+          addNewCipherType: CipherType.Login,
+        });
       });
     });
 
@@ -2093,6 +3040,22 @@ describe("OverlayBackground", () => {
         expect(listPortSpy.postMessage).toHaveBeenCalledWith({
           command: "updateAutofillInlineMenuPosition",
           styles: { height: "100px" },
+        });
+      });
+
+      it("updates the inline menu position property's list height value", () => {
+        overlayBackground["inlineMenuPosition"] = {
+          list: { height: 50, top: 1, left: 2, width: 3 },
+        };
+
+        sendPortMessage(listMessageConnectorSpy, {
+          command: "updateAutofillInlineMenuListHeight",
+          styles: { height: "100px" },
+          portKey,
+        });
+
+        expect(overlayBackground["inlineMenuPosition"]).toStrictEqual({
+          list: { height: 100, top: 1, left: 2, width: 3 },
         });
       });
     });

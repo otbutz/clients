@@ -1,13 +1,14 @@
 import { DatePipe, Location } from "@angular/common";
-import { ChangeDetectorRef, Component, NgZone } from "@angular/core";
+import { ChangeDetectorRef, Component, NgZone, OnInit, OnDestroy } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject, firstValueFrom, takeUntil, Subscription } from "rxjs";
-import { first } from "rxjs/operators";
+import { first, map } from "rxjs/operators";
 
 import { ViewComponent as BaseViewComponent } from "@bitwarden/angular/vault/components/view.component";
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
 import { AuditService } from "@bitwarden/common/abstractions/audit.service";
 import { EventCollectionService } from "@bitwarden/common/abstractions/event/event-collection.service";
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { TokenService } from "@bitwarden/common/auth/abstractions/token.service";
 import { BillingAccountProfileStateService } from "@bitwarden/common/billing/abstractions/account/billing-account-profile-state.service";
 import { BroadcasterService } from "@bitwarden/common/platform/abstractions/broadcaster.service";
@@ -27,10 +28,10 @@ import { LoginUriView } from "@bitwarden/common/vault/models/view/login-uri.view
 import { DialogService } from "@bitwarden/components";
 import { PasswordRepromptService } from "@bitwarden/vault";
 
+import { BrowserFido2UserInterfaceSession } from "../../../../autofill/fido2/services/browser-fido2-user-interface.service";
 import { AutofillService } from "../../../../autofill/services/abstractions/autofill.service";
 import { BrowserApi } from "../../../../platform/browser/browser-api";
 import BrowserPopupUtils from "../../../../platform/popup/browser-popup-utils";
-import { BrowserFido2UserInterfaceSession } from "../../../fido2/browser-fido2-user-interface.service";
 import { fido2PopoutSessionData$ } from "../../utils/fido2-popout-session-data";
 import { closeViewVaultItemPopout, VaultPopoutType } from "../../utils/vault-popout-window";
 
@@ -52,7 +53,7 @@ type LoadAction = typeof AUTOFILL_ID | typeof SHOW_AUTOFILL_BUTTON | CopyAction;
   selector: "app-vault-view",
   templateUrl: "view.component.html",
 })
-export class ViewComponent extends BaseViewComponent {
+export class ViewComponent extends BaseViewComponent implements OnInit, OnDestroy {
   showAttachments = true;
   pageDetails: any[] = [];
   tab: any;
@@ -97,6 +98,7 @@ export class ViewComponent extends BaseViewComponent {
     fileDownloadService: FileDownloadService,
     dialogService: DialogService,
     datePipe: DatePipe,
+    accountService: AccountService,
     billingAccountProfileStateService: BillingAccountProfileStateService,
   ) {
     super(
@@ -120,6 +122,7 @@ export class ViewComponent extends BaseViewComponent {
       fileDownloadService,
       dialogService,
       datePipe,
+      accountService,
       billingAccountProfileStateService,
     );
   }
@@ -267,7 +270,10 @@ export class ViewComponent extends BaseViewComponent {
       this.cipher.login.uris.push(loginUri);
 
       try {
-        const cipher: Cipher = await this.cipherService.encrypt(this.cipher);
+        const activeUserId = await firstValueFrom(
+          this.accountService.activeAccount$.pipe(map((a) => a?.id)),
+        );
+        const cipher: Cipher = await this.cipherService.encrypt(this.cipher, activeUserId);
         await this.cipherService.updateWithServer(cipher);
         this.platformUtilsService.showToast(
           "success",

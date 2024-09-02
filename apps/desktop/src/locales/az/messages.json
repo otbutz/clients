@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Ana parol ipucusu"
   },
+  "joinOrganization": {
+    "message": "Təşkilata qoşul"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Bu ana parol təyin edərək bu təşkilata qoşulmağı tamamlayın."
+  },
   "settings": {
     "message": "Ayarlar"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "Yeni hesabınız yaradıldı! İndi giriş edə bilərsiniz."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "masterPassSent": {
     "message": "Ana parol məsləhətini ehtiva edən bir e-poçt göndərdik."
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "Doğrulama kodu tələb olunur."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Kimlik doğrulama ləğv edildi və ya çox uzun çəkdi. Lütfən yenidən sınayın."
   },
   "invalidVerificationCode": {
     "message": "Yararsız doğrulama kodu"
@@ -788,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Seansın müddəti bitdi."
+  },
+  "restartRegistration": {
+    "message": "Qeydiyyatı yenidən başlat"
+  },
+  "expiredLink": {
+    "message": "Vaxtı bitmiş keçid"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Lütfən qeydiyyatı yenidən başladın və ya giriş etməyə çalışın."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Artıq bir hesabınız ola bilər"
   },
   "logOutConfirmation": {
     "message": "Çıxış etmək istədiyinizə əminsiniz?"
@@ -1153,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "Premium üzvlüyü bitwarden.com veb anbarında satın ala bilərsiniz. İndi saytı ziyarət etmək istəyirsiniz?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Bitwarden veb tətbiqindəki hesab ayarlarınızda Premium satın ala bilərsiniz."
+  },
   "premiumCurrentMember": {
     "message": "Premium üzvsünüz!"
   },
@@ -1396,7 +1426,7 @@
     "description": "ex. Register as an accessibility user at hcaptcha.com"
   },
   "copyPasteLink": {
-    "message": "E-poçtunuza göndərilən bağlantını kopyalayıb aşağıda yapışdırın"
+    "message": "E-poçtunuza göndərilən keçidi kopyalayıb aşağıda yapışdırın"
   },
   "enterhCaptchaUrl": {
     "message": "hCaptcha əlçatımlılıq çərəzini yükləmək üçün ünvanı daxil edin",
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Əlavə Windows Hello ayarları"
   },
+  "unlockWithPolkit": {
+    "message": "Sistem kimlik doğrulaması ilə kilidi aç"
+  },
   "windowsHelloConsentMessage": {
     "message": "Bitwarden üçün doğrula."
+  },
+  "polkitConsentMessage": {
+    "message": "Bitwarden kilidini açmaq üçün kimliyi doğrula."
   },
   "unlockWithTouchId": {
     "message": "Touch ID kilidini aç"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Açılışda Windows Hello-nu soruşun"
+  },
+  "autoPromptPolkit": {
+    "message": "Açılışda sistem kimlik doğrulamasını tələb et"
   },
   "autoPromptTouchId": {
     "message": "Açılışda Touch ID-ni soruşun"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Yeni ana parolunuz siyasət tələblərini qarşılamır."
   },
-  "receiveMarketingEmails": {
-    "message": "Elanlar, məsləhətlər və araşdırma fürsətləri üçün Bitwarden-dən e-poçt alın."
+  "receiveMarketingEmailsV2": {
+    "message": "Bitwarden-in tövsiyə, elan və araşdırma imkanlarını gələn qutunuzda əldə edin."
   },
   "unsubscribe": {
     "message": "Abunəlikdən çıx"
@@ -1783,6 +1822,12 @@
   "biometricsNotEnabledDesc": {
     "message": "Brauzer biometrikləri, əvvəlcə ayarlarda masaüstü biometriklərinin qurulmasını tələb edir."
   },
+  "biometricsManualSetupTitle": {
+    "message": "Avtomatik quraşdırma mövcud deyil"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Quraşdırma üsuluna görə, biometrik dəstəyi avtomatik fəallaşdırıla bilmədi. Bunun necə manual edildiyi ilə bağlı sənədləşdirmələri açmaq istəyirsiniz?"
+  },
   "personalOwnershipSubmitError": {
     "message": "Müəssisə Siyasətinə görə, elementləri şəxsi anbarınızda saxlamağınız məhdudlaşdırılıb. Sahiblik seçimini təşkilat olaraq dəyişdirin və mövcud kolleksiyalar arasından seçim edin."
   },
@@ -1857,11 +1902,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLink": {
-    "message": "\"Send\" bağlantısı",
+    "message": "\"Send\" keçidi",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "sendLinkLabel": {
-    "message": "\"Send\" bağlantısı",
+    "message": "\"Send\" keçidi",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "textHiddenByDefault": {
@@ -1917,11 +1962,11 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLinkToClipboard": {
-    "message": "Send bağlantısını lövhəyə kopyala",
+    "message": "Send keçidini lövhəyə kopyala",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copySendLinkOnSave": {
-    "message": "Saxladıqdan sonra bu \"Send\"in paylaşma bağlantısını lövhəmə kopyala."
+    "message": "Saxladıqdan sonra bu \"Send\"in paylaşma keçidini lövhəmə kopyala."
   },
   "sendDisabled": {
     "message": "Send sıradan çıxarıldı",
@@ -1932,7 +1977,7 @@
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
   "copyLink": {
-    "message": "Bağlantını kopyala"
+    "message": "Keçidi kopyala"
   },
   "disabled": {
     "message": "Sıradan çıxarıldı"
@@ -1993,6 +2038,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Ana parolunuz təşkilatınızdakı siyasətlərdən birinə və ya bir neçəsinə uyğun gəlmir. Anbara müraciət üçün ana parolunuzu indi güncəlləməlisiniz. Davam etsəniz, hazırkı seansdan çıxış etmiş və təkrar giriş etməli olacaqsınız. Digər cihazlardakı aktiv seanslar bir saata qədər aktiv qalmağa davam edə bilər."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Təşkilatınız, güvənli cihaz şifrələməsini sıradan çıxartdı. Anbarınıza müraciət etmək üçün lütfən ana parol təyin edin."
   },
   "tryAgain": {
     "message": "Yenidən sına"
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Anbar vaxt bitişi, təşkilatınız tərəfindən ayarlanan məhdudiyyətləri aşır."
+  },
+  "inviteAccepted": {
+    "message": "Dəvət qəbul edildi"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Avtomatik qeydiyyat"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Duo xidmətinə bağlanarkən xəta baş verdi. Fərqli iki addımlı giriş üsulu istifadə edin və ya kömək üçün Duo ilə əlaqə saxlayın."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Duo-nu başladın və giriş prosesini tamamlamaq üçün addımları izləyin."
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Yararsız fayl parolu, lütfən xaricə köçürmə faylını yaradarkən daxil etdiyiniz parolu istifadə edin."
   },
-  "importDestination": {
-    "message": "Hədəfi daxilə köçür"
+  "destination": {
+    "message": "Hədəf"
   },
   "learnAboutImportOptions": {
     "message": "Daxilə köçürmə seçimlərinizi öyrənin"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "Fayl \"Send\"ləri"
+  },
+  "textSends": {
+    "message": "Mətn \"Send\"ləri"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

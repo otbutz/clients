@@ -95,7 +95,7 @@
     "message": "Heslo"
   },
   "passphrase": {
-    "message": "Heslo"
+    "message": "Prístupová fráza"
   },
   "editItem": {
     "message": "Upraviť položku"
@@ -367,7 +367,7 @@
     "message": "Naozaj chcete odstrániť túto položku?"
   },
   "deletedItem": {
-    "message": "Položka odstránená"
+    "message": "Položka bola presunutá do koša"
   },
   "overwritePasswordConfirmation": {
     "message": "Naozaj chcete prepísať aktuálne heslo?"
@@ -445,13 +445,13 @@
     "message": "Vyhnúť sa zameniteľným znakom"
   },
   "searchCollection": {
-    "message": "Vyhľadať zbierku"
+    "message": "Hľadať v zbierke"
   },
   "searchFolder": {
-    "message": "Search folder"
+    "message": "Hľadať v priečinku"
   },
   "searchFavorites": {
-    "message": "Search favorites"
+    "message": "Hľadať v obľúbených"
   },
   "searchType": {
     "message": "Search type",
@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Nápoveda pre hlavné heslo"
   },
+  "joinOrganization": {
+    "message": "Pripojte sa k organizácii"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Dokončite pripojenie k tejto organizácii nastavením hlavného hesla."
+  },
   "settings": {
     "message": "Nastavenia"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "Váš nový účet bol vytvorený! Teraz sa môžete prihlásiť."
   },
+  "newAccountCreated2": {
+    "message": "Váš nový účet bol vytvorený!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Boli ste prihlásený!"
+  },
   "masterPassSent": {
     "message": "Emailom sme vám poslali nápoveď k hlavnému heslu."
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "Overovací kód je povinný."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Overenie bolo zrušené alebo trvalo príliš dlho. Skúste to znova."
   },
   "invalidVerificationCode": {
     "message": "Neplatný verifikačný kód"
@@ -686,7 +701,7 @@
     "message": "Bezpečnostný kľúč Yubico OTP"
   },
   "yubiKeyDesc": {
-    "message": "Použiť YubiKey pre prístup k vášmu účtu. Pracuje s YubiKey 4, 4 Nano, 4C a s NEO zariadeniami."
+    "message": "Použiť YubiKey na prístup k vášmu účtu. Pracuje s YubiKey 4, 4 Nano, 4C a s NEO zariadeniami."
   },
   "duoDescV2": {
     "message": "Zadajte kód vygenerovaný aplikáciou Duo Security.",
@@ -757,7 +772,7 @@
     "message": "URL adresa servera pre oznámenia"
   },
   "iconsUrl": {
-    "message": "URL servera ikôn"
+    "message": "URL servera ikon"
   },
   "environmentSaved": {
     "message": "URL prostredia boli uložené."
@@ -788,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Platnosť prihlásenia vypršala."
+  },
+  "restartRegistration": {
+    "message": "Zopakovať registráciu"
+  },
+  "expiredLink": {
+    "message": "Platnosť odkazu vypršala"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Prosím, zopakujte registráciu alebo sa pokúste prihlásiť."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Možno už máte účet"
   },
   "logOutConfirmation": {
     "message": "Naozaj sa chcete odhlásiť?"
@@ -1071,7 +1098,7 @@
     "message": "Reštartovať pre dokončenie aktualizácie"
   },
   "restartToUpdateDesc": {
-    "message": "Verzia $VERSION_NUM$ je pripravená na inštaláciu. Je nutné reštartovať aplikáciu, aby sa inštalácia mohla dokončiť. Chcete ju reŝtartovať a aktualizovať teraz?",
+    "message": "Verzia $VERSION_NUM$ je pripravená na inštaláciu. Je nutné reštartovať aplikáciu, aby sa inštalácia mohla dokončiť. Chcete ju reštartovať a aktualizovať teraz?",
     "placeholders": {
       "version_num": {
         "content": "$1",
@@ -1153,11 +1180,14 @@
   "premiumPurchaseAlert": {
     "message": "Svoje prémiové členstvo môžete zakúpiť vo webovom trezore bitwarden.com. Chcete navštíviť túto stránku teraz?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Prémiové členstvo si môžete zakúpiť v nastaveniach svojho účtu vo webovej aplikácii Bitwarden."
+  },
   "premiumCurrentMember": {
     "message": "Ste prémiovým členom!"
   },
   "premiumCurrentMemberThanks": {
-    "message": "Ďakujeme za podporu Bitwarden."
+    "message": "Ďakujeme za podporu Bitwardenu."
   },
   "premiumPrice": {
     "message": "Všetko len za $PRICE$/rok!",
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Ďalšie nastavenia Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Odomknúť systémovým overením"
+  },
   "windowsHelloConsentMessage": {
     "message": "Overiť sa pre Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Overením odomknete Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Odomknúť s Touch ID"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Pri spustení požiadať o Windows Hello"
+  },
+  "autoPromptPolkit": {
+    "message": "Pri spustení požiadať o systémové overenie"
   },
   "autoPromptTouchId": {
     "message": "Pri spustení požiadať o Touch ID"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavné heslo nespĺňa pravidlá."
   },
-  "receiveMarketingEmails": {
-    "message": "Dostávať e-maily od Bitwardenu s oznámeniami, radami a možnosťami výskumu."
+  "receiveMarketingEmailsV2": {
+    "message": "Dostávajte do schránky rady, oznámenia a príležitosti na výskum od spoločnosti Bitwarden."
   },
   "unsubscribe": {
     "message": "Odhlásiť sa z odberu"
@@ -1782,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometria prehliadača vyžaduje, aby bola najskôr v nastaveniach povolená biometria počítača."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatické nastavenie nie je k dispozícii"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Vzhľadom na spôsob inštalácie nebolo možné automaticky povoliť podporu biometrie. Chcete otvoriť dokumentáciu, ako to urobiť manuálne?"
   },
   "personalOwnershipSubmitError": {
     "message": "Z dôvodu podnikovej politiky máte obmedzené ukladanie položiek do osobného trezora. Zmeňte možnosť vlastníctvo na organizáciu a vyberte si z dostupných zbierok."
@@ -1994,6 +2039,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavné heslo nespĺňa jednu alebo viacero podmienok vašej organizácie. Ak chcete získať prístup k trezoru, musíte teraz aktualizovať svoje hlavné heslo. Pokračovaním sa odhlásite z aktuálnej relácie a budete sa musieť znova prihlásiť. Aktívne relácie na iných zariadeniach môžu zostať aktívne až jednu hodinu."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Vaša organizácia zakázala šifrovanie dôveryhodného zariadenia. Na prístup k trezoru nastavte hlavné heslo."
+  },
   "tryAgain": {
     "message": "Skúsiť znova"
   },
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Časový limit vášho trezora prekračuje obmedzenia nastavené vašou organizáciou."
+  },
+  "inviteAccepted": {
+    "message": "Pozvánka prijatá"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrácia"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Chyba pri pripájaní k službe Duo. Použite inú metódu dvojstupňového prihlásenia alebo kontaktujte Duo a požiadajte o pomoc."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Spustite DuO a postupujte podľa pokynov na dokončenie prihlásenia."
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Neplatné heslo súboru, použite heslo, ktoré ste zadali pri vytváraní exportného súboru."
   },
-  "importDestination": {
-    "message": "Cieľ importu"
+  "destination": {
+    "message": "Cieľ"
   },
   "learnAboutImportOptions": {
     "message": "Zistiť viac o možnostiach importu"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Údaje"
+  },
+  "fileSends": {
+    "message": "Sendy so súborom"
+  },
+  "textSends": {
+    "message": "Textové Sendy"
+  },
+  "ssoError": {
+    "message": "Pre prihlásenie SSO sa nepodarilo nájsť žiadne voľné porty."
   }
 }

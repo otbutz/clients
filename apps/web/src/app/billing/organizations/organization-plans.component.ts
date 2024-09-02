@@ -37,10 +37,11 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { SymmetricCryptoKey } from "@bitwarden/common/platform/models/domain/symmetric-crypto-key";
 import { OrgKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
+import { ToastService } from "@bitwarden/components";
 
 import { OrganizationCreateModule } from "../../admin-console/organizations/create/organization-create.module";
 import { BillingSharedModule, secretsManagerSubscribeFormFactory } from "../shared";
-import { PaymentComponent } from "../shared/payment.component";
+import { PaymentComponent } from "../shared/payment/payment.component";
 import { TaxInfoComponent } from "../shared/tax-info.component";
 
 interface OnSuccessArgs {
@@ -95,6 +96,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
   private _plan = PlanType.Free;
   @Input() providerId?: string;
+  @Input() preSelectedProductTier?: ProductTierType;
   @Output() onSuccess = new EventEmitter<OnSuccessArgs>();
   @Output() onCanceled = new EventEmitter<void>();
   @Output() onTrialBillingSuccess = new EventEmitter();
@@ -149,6 +151,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private organizationApiService: OrganizationApiServiceAbstraction,
     private providerApiService: ProviderApiServiceAbstraction,
+    private toastService: ToastService,
   ) {
     this.selfHosted = platformUtilsService.isSelfHost();
   }
@@ -186,6 +189,7 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
 
     if (this.hasProvider) {
       this.formGroup.controls.businessOwned.setValue(true);
+      this.formGroup.controls.clientOwnerEmail.addValidators(Validators.required);
       this.changedOwnedBusiness();
       this.provider = await this.providerApiService.getProvider(this.providerId);
       const providerDefaultPlan = this.passwordManagerPlans.find(
@@ -209,6 +213,9 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
         this.singleOrgPolicyAppliesToActiveUser = policyAppliesToActiveUser;
       });
 
+    if (this.preSelectedProductTier != null && this.productTier < this.preSelectedProductTier) {
+      this.productTier = this.preSelectedProductTier;
+    }
     if (!this.selfHosted) {
       this.changedProduct();
     }
@@ -549,9 +556,11 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
   }
 
   submit = async () => {
-    if (!this.taxComponent?.taxFormGroup.valid && this.taxComponent?.taxFormGroup.touched) {
-      this.taxComponent?.taxFormGroup.markAllAsTouched();
-      return;
+    if (this.taxComponent) {
+      if (!this.taxComponent?.taxFormGroup.valid) {
+        this.taxComponent?.taxFormGroup.markAllAsTouched();
+        return;
+      }
     }
 
     if (this.singleOrgPolicyBlock) {
@@ -575,18 +584,18 @@ export class OrganizationPlansComponent implements OnInit, OnDestroy {
           orgId = await this.createCloudHosted(key, collectionCt, orgKeys, orgKey[1]);
         }
 
-        this.platformUtilsService.showToast(
-          "success",
-          this.i18nService.t("organizationCreated"),
-          this.i18nService.t("organizationReadyToGo"),
-        );
+        this.toastService.showToast({
+          variant: "success",
+          title: this.i18nService.t("organizationCreated"),
+          message: this.i18nService.t("organizationReadyToGo"),
+        });
       } else {
         orgId = await this.updateOrganization(orgId);
-        this.platformUtilsService.showToast(
-          "success",
-          null,
-          this.i18nService.t("organizationUpgraded"),
-        );
+        this.toastService.showToast({
+          variant: "success",
+          title: null,
+          message: this.i18nService.t("organizationUpgraded"),
+        });
       }
 
       await this.apiService.refreshIdentityToken();

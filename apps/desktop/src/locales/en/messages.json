@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Master password hint"
   },
+  "joinOrganization": {
+    "message": "Join organization"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Finish joining this organization by setting a master password."
+  },
   "settings": {
     "message": "Settings"
   },
@@ -596,6 +602,12 @@
   },
   "newAccountCreated": {
     "message": "Your new account has been created! You may now log in."
+  },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
   },
   "masterPassSent": {
     "message": "We've sent you an email with your master password hint."
@@ -732,10 +744,10 @@
   "selfHostedBaseUrlHint": {
     "message": "Specify the base URL of your on-premises hosted Bitwarden installation. Example: https://bitwarden.company.com"
   },
-  "selfHostedCustomEnvHeader" :{
+  "selfHostedCustomEnvHeader": {
     "message": "For advanced configuration, you can specify the base URL of each service independently."
   },
-  "selfHostedEnvFormInvalid" :{
+  "selfHostedEnvFormInvalid": {
     "message": "You must add either the base Server URL or at least one custom environment."
   },
   "customEnvironment": {
@@ -791,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Your login session has expired."
+  },
+  "restartRegistration": {
+    "message": "Restart registration"
+  },
+  "expiredLink": {
+    "message": "Expired link"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Please restart registration or try logging in."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "You may already have an account"
   },
   "logOutConfirmation": {
     "message": "Are you sure you want to log out?"
@@ -1156,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "You can purchase premium membership on the bitwarden.com web vault. Do you want to visit the website now?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "You are a premium member!"
   },
@@ -1258,10 +1285,10 @@
       }
     }
   },
-  "errorRefreshingAccessToken":{
+  "errorRefreshingAccessToken": {
     "message": "Access Token Refresh Error"
   },
-  "errorRefreshingAccessTokenDesc":{
+  "errorRefreshingAccessTokenDesc": {
     "message": "No refresh token or API keys found. Please try logging out and logging back in."
   },
   "help": {
@@ -1368,7 +1395,7 @@
   },
   "exportPasswordDescription": {
     "message": "This password will be used to export and import this file"
-  },  
+  },
   "accountRestrictedOptionDescription": {
     "message": "Use your account encryption key, derived from your account's username and Master Password, to encrypt the export and restrict import to only the current Bitwarden account."
   },
@@ -1492,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Additional Windows Hello settings"
   },
+  "unlockWithPolkit": {
+    "message": "Unlock with system authentication"
+  },
   "windowsHelloConsentMessage": {
     "message": "Verify for Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Authenticate to unlock Bitwarden."
   },
   "unlockWithTouchId": {
     "message": "Unlock with Touch ID"
@@ -1506,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Ask for Windows Hello on app start"
+  },
+  "autoPromptPolkit": {
+    "message": "Ask for system authentication on launch"
   },
   "autoPromptTouchId": {
     "message": "Ask for Touch ID on app start"
@@ -1638,7 +1674,7 @@
     "message": "Your organization requires you to set a master password.",
     "description": "Used as a card title description on the set password page to explain why the user is there"
   },
-  "verificationRequired" : {
+  "verificationRequired": {
     "message": "Verification required",
     "description": "Default title for the user verification dialog."
   },
@@ -1693,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Your new master password does not meet the policy requirements."
   },
-  "receiveMarketingEmails": {
-    "message": "Get emails from Bitwarden for announcements, advice, and research opportunities."
+  "receiveMarketingEmailsV2": {
+    "message": "Get advice, announcements, and research opportunities from Bitwarden in your inbox."
   },
   "unsubscribe": {
     "message": "Unsubscribe"
@@ -1785,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Browser biometrics requires desktop biometrics to be set up in the settings first."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatic setup not available"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Due to the installation method, biometrics support could not be automatically enabled. Would you like to open the documentation on how to do this manually?"
   },
   "personalOwnershipSubmitError": {
     "message": "Due to an enterprise policy, you are restricted from saving items to your individual vault. Change the ownership option to an organization and choose from available collections."
@@ -1997,6 +2039,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Your master password does not meet one or more of your organization policies. In order to access the vault, you must update your master password now. Proceeding will log you out of your current session, requiring you to log back in. Active sessions on other devices may continue to remain active for up to one hour."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
+  },
   "tryAgain": {
     "message": "Try again"
   },
@@ -2080,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Your vault timeout exceeds the restrictions set by your organization."
+  },
+  "inviteAccepted": {
+    "message": "Invitation accepted"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatic enrollment"
@@ -2805,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Invalid file password, please use the password you entered when you created the export file."
   },
-  "importDestination": {
-    "message": "Import destination"
+  "destination": {
+    "message": "Destination"
   },
   "learnAboutImportOptions": {
     "message": "Learn about your import options"
@@ -3001,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "ssoError": {
+    "message": "No free ports could be found for the sso login."
   }
 }

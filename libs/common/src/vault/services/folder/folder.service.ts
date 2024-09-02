@@ -111,12 +111,12 @@ export class FolderService implements InternalFolderServiceAbstraction {
     });
   }
 
-  async replace(folders: { [id: string]: FolderData }): Promise<void> {
+  async replace(folders: { [id: string]: FolderData }, userId: UserId): Promise<void> {
     if (!folders) {
       return;
     }
 
-    await this.encryptedFoldersState.update(() => {
+    await this.stateProvider.getUser(userId, FOLDER_ENCRYPTED_FOLDERS).update(() => {
       const newFolders: Record<string, FolderData> = { ...folders };
       return newFolders;
     });
@@ -137,16 +137,14 @@ export class FolderService implements InternalFolderServiceAbstraction {
         return;
       }
 
-      if (typeof id === "string") {
-        if (folders[id] == null) {
-          return;
+      const folderIdsToDelete = Array.isArray(id) ? id : [id];
+
+      folderIdsToDelete.forEach((id) => {
+        if (folders[id] != null) {
+          delete folders[id];
         }
-        delete folders[id];
-      } else {
-        (id as string[]).forEach((i) => {
-          delete folders[i];
-        });
-      }
+      });
+
       return folders;
     });
 

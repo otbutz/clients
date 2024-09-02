@@ -6,7 +6,7 @@ import { biometrics, passwords } from "@bitwarden/desktop-napi";
 
 import { WindowMain } from "../../../main/window.main";
 
-import { OsBiometricService } from "./biometrics.service.abstraction";
+import { OsBiometricService } from "./desktop.biometrics.service";
 
 const KEY_WITNESS_SUFFIX = "_witness";
 const WITNESS_VALUE = "known key";
@@ -214,4 +214,14 @@ export default class BiometricWindowsMain implements OsBiometricService {
       clientKeyPartB64,
     };
   }
+
+  async osBiometricsNeedsSetup() {
+    return false;
+  }
+
+  async osBiometricsCanAutoSetup(): Promise<boolean> {
+    return false;
+  }
+
+  async osBiometricsSetup(): Promise<void> {}
 }

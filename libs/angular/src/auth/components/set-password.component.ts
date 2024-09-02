@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom, of } from "rxjs";
 import { filter, first, switchMap, tap } from "rxjs/operators";
@@ -21,6 +21,7 @@ import { DEFAULT_KDF_CONFIG } from "@bitwarden/common/auth/models/domain/kdf-con
 import { SetPasswordRequest } from "@bitwarden/common/auth/models/request/set-password.request";
 import { KeysRequest } from "@bitwarden/common/models/request/keys.request";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
+import { EncryptService } from "@bitwarden/common/platform/abstractions/encrypt.service";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { MessagingService } from "@bitwarden/common/platform/abstractions/messaging.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
@@ -31,13 +32,13 @@ import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { UserId } from "@bitwarden/common/types/guid";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
 @Directive()
-export class SetPasswordComponent extends BaseChangePasswordComponent {
+export class SetPasswordComponent extends BaseChangePasswordComponent implements OnInit {
   syncLoading = true;
   showPassword = false;
   hint = "";
@@ -72,6 +73,8 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
     private ssoLoginService: SsoLoginServiceAbstraction,
     dialogService: DialogService,
     kdfConfigService: KdfConfigService,
+    private encryptService: EncryptService,
+    protected toastService: ToastService,
   ) {
     super(
       i18nService,
@@ -85,6 +88,7 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       kdfConfigService,
       masterPasswordService,
       accountService,
+      toastService,
     );
   }
 
@@ -135,7 +139,11 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       )
       .subscribe({
         error: () => {
-          this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+          this.toastService.showToast({
+            variant: "error",
+            title: null,
+            message: this.i18nService.t("errorOccurred"),
+          });
         },
       });
   }
@@ -160,7 +168,23 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
       // Existing JIT provisioned user in a MP encryption org setting first password
       // Users in this state will not already have a user asymmetric key pair so must create it for them
       // We don't want to re-create the user key pair if the user already has one (TDE user case)
-      newKeyPair = await this.cryptoService.makeKeyPair(userKey[0]);
+
+      // in case we have a local private key, and are not sure whether it has been posted to the server, we post the local private key instead of generating a new one
+      const existingUserPrivateKey = (await firstValueFrom(
+        this.cryptoService.userPrivateKey$(this.userId),
+      )) as Uint8Array;
+      const existingUserPublicKey = await firstValueFrom(
+        this.cryptoService.userPublicKey$(this.userId),
+      );
+      if (existingUserPrivateKey != null && existingUserPublicKey != null) {
+        const existingUserPublicKeyB64 = Utils.fromBufferToB64(existingUserPublicKey);
+        newKeyPair = [
+          existingUserPublicKeyB64,
+          await this.encryptService.encrypt(existingUserPrivateKey, userKey[0]),
+        ];
+      } else {
+        newKeyPair = await this.cryptoService.makeKeyPair(userKey[0]);
+      }
       keysRequest = new KeysRequest(newKeyPair[0], newKeyPair[1].encryptedString);
     }
 
@@ -219,7 +243,11 @@ export class SetPasswordComponent extends BaseChangePasswordComponent {
         this.router.navigate([this.successRoute]);
       }
     } catch {
-      this.platformUtilsService.showToast("error", null, this.i18nService.t("errorOccurred"));
+      this.toastService.showToast({
+        variant: "error",
+        title: null,
+        message: this.i18nService.t("errorOccurred"),
+      });
     }
   }
 

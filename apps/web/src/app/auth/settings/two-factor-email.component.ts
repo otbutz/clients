@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogConfig, DialogRef } from "@angular/cdk/dialog";
-import { Component, EventEmitter, Inject, Output } from "@angular/core";
+import { Component, EventEmitter, Inject, OnInit, Output } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
 import { firstValueFrom, map } from "rxjs";
 
@@ -14,7 +14,7 @@ import { AuthResponse } from "@bitwarden/common/auth/types/auth-response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { TwoFactorBaseComponent } from "./two-factor-base.component";
 
@@ -23,7 +23,7 @@ import { TwoFactorBaseComponent } from "./two-factor-base.component";
   templateUrl: "two-factor-email.component.html",
   outputs: ["onUpdated"],
 })
-export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
+export class TwoFactorEmailComponent extends TwoFactorBaseComponent implements OnInit {
   @Output() onChangeStatus: EventEmitter<boolean> = new EventEmitter();
   type = TwoFactorProviderType.Email;
   sentEmail: string;
@@ -45,6 +45,7 @@ export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
     dialogService: DialogService,
     private formBuilder: FormBuilder,
     private dialogRef: DialogRef,
+    protected toastService: ToastService,
   ) {
     super(
       apiService,
@@ -53,6 +54,7 @@ export class TwoFactorEmailComponent extends TwoFactorBaseComponent {
       logService,
       userVerificationService,
       dialogService,
+      toastService,
     );
   }
   get token() {

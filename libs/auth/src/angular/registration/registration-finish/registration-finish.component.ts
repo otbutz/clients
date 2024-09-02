@@ -1,14 +1,20 @@
 import { CommonModule } from "@angular/common";
 import { Component, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Params, Router, RouterModule } from "@angular/router";
-import { Subject, takeUntil } from "rxjs";
+import { EMPTY, Subject, from, switchMap, takeUntil, tap } from "rxjs";
 
 import { JslibModule } from "@bitwarden/angular/jslib.module";
 import { MasterPasswordPolicyOptions } from "@bitwarden/common/admin-console/models/domain/master-password-policy-options";
+import { AccountApiService } from "@bitwarden/common/auth/abstractions/account-api.service";
+import { RegisterVerificationEmailClickedRequest } from "@bitwarden/common/auth/models/request/registration/register-verification-email-clicked.request";
+import { HttpStatusCode } from "@bitwarden/common/enums";
+import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
+import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { ValidationService } from "@bitwarden/common/platform/abstractions/validation.service";
 import { ToastService } from "@bitwarden/components";
 
+import { LoginStrategyServiceAbstraction, PasswordLoginCredentials } from "../../../common";
 import { InputPasswordComponent } from "../../input-password/input-password.component";
 import { PasswordInputResult } from "../../input-password/password-input-result";
 
@@ -41,39 +47,56 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
     private i18nService: I18nService,
     private registrationFinishService: RegistrationFinishService,
     private validationService: ValidationService,
+    private accountApiService: AccountApiService,
+    private loginStrategyService: LoginStrategyServiceAbstraction,
+    private logService: LogService,
   ) {}
 
   async ngOnInit() {
     this.listenForQueryParamChanges();
     this.masterPasswordPolicyOptions =
       await this.registrationFinishService.getMasterPasswordPolicyOptsFromOrgInvite();
-    this.loading = false;
   }
 
   private listenForQueryParamChanges() {
-    this.activatedRoute.queryParams.pipe(takeUntil(this.destroy$)).subscribe((qParams: Params) => {
-      if (qParams.email != null && qParams.email.indexOf("@") > -1) {
-        this.email = qParams.email;
-      }
+    this.activatedRoute.queryParams
+      .pipe(
+        tap((qParams: Params) => {
+          if (qParams.email != null && qParams.email.indexOf("@") > -1) {
+            this.email = qParams.email;
+          }
 
-      if (qParams.token != null) {
-        this.emailVerificationToken = qParams.token;
-      }
+          if (qParams.token != null) {
+            this.emailVerificationToken = qParams.token;
+          }
+        }),
+        switchMap((qParams: Params) => {
+          if (
+            qParams.fromEmail &&
+            qParams.fromEmail === "true" &&
+            this.email &&
+            this.emailVerificationToken
+          ) {
+            return from(
+              this.registerVerificationEmailClicked(this.email, this.emailVerificationToken),
+            );
+          } else {
+            // org invite flow
+            this.loading = false;
+            return EMPTY;
+          }
+        }),
 
-      if (qParams.fromEmail && qParams.fromEmail === "true") {
-        this.toastService.showToast({
-          title: null,
-          message: this.i18nService.t("emailVerifiedV2"),
-          variant: "success",
-        });
-      }
-    });
+        takeUntil(this.destroy$),
+      )
+      .subscribe();
   }
 
   async handlePasswordFormSubmit(passwordInputResult: PasswordInputResult) {
     this.submitting = true;
+    let captchaBypassToken: string = null;
     try {
-      await this.registrationFinishService.finishRegistration(
+      captchaBypassToken = await this.registrationFinishService.finishRegistration(
         this.email,
         passwordInputResult,
         this.emailVerificationToken,
@@ -84,14 +107,79 @@ export class RegistrationFinishComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Show acct created toast
     this.toastService.showToast({
       variant: "success",
       title: null,
-      message: this.i18nService.t("newAccountCreated"),
+      message: this.i18nService.t("newAccountCreated2"),
     });
 
+    // login with the new account
+    try {
+      const credentials = new PasswordLoginCredentials(
+        this.email,
+        passwordInputResult.password,
+        captchaBypassToken,
+        null,
+      );
+
+      await this.loginStrategyService.logIn(credentials);
+
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("youHaveBeenLoggedIn"),
+      });
+
+      await this.router.navigate(["/vault"]);
+    } catch (e) {
+      // If login errors, redirect to login page per product. Don't show error
+      this.logService.error("Error logging in after registration: ", e.message);
+      await this.router.navigate(["/login"], { queryParams: { email: this.email } });
+    }
     this.submitting = false;
-    await this.router.navigate(["/login"], { queryParams: { email: this.email } });
+  }
+
+  private async registerVerificationEmailClicked(email: string, emailVerificationToken: string) {
+    const request = new RegisterVerificationEmailClickedRequest(email, emailVerificationToken);
+
+    try {
+      const result = await this.accountApiService.registerVerificationEmailClicked(request);
+
+      if (result == null) {
+        this.toastService.showToast({
+          title: null,
+          message: this.i18nService.t("emailVerifiedV2"),
+          variant: "success",
+        });
+        this.loading = false;
+      }
+    } catch (e) {
+      await this.handleRegisterVerificationEmailClickedError(e);
+      this.loading = false;
+    }
+  }
+
+  private async handleRegisterVerificationEmailClickedError(e: unknown) {
+    if (e instanceof ErrorResponse) {
+      const errorResponse = e as ErrorResponse;
+      switch (errorResponse.statusCode) {
+        case HttpStatusCode.BadRequest: {
+          if (errorResponse.message.includes("Expired link")) {
+            await this.router.navigate(["/signup-link-expired"]);
+          } else {
+            this.validationService.showError(errorResponse);
+          }
+
+          break;
+        }
+        default:
+          this.validationService.showError(errorResponse);
+          break;
+      }
+    } else {
+      this.validationService.showError(e);
+    }
   }
 
   ngOnDestroy(): void {

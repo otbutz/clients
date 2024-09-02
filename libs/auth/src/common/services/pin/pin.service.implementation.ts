@@ -292,6 +292,34 @@ export class PinService implements PinServiceAbstraction {
     return (await this.getPinLockType(userId)) !== "DISABLED";
   }
 
+  async isPinDecryptionAvailable(userId: UserId): Promise<boolean> {
+    this.validateUserId(userId, "Cannot determine if decryption of user key via PIN is available.");
+
+    const pinLockType = await this.getPinLockType(userId);
+
+    switch (pinLockType) {
+      case "DISABLED":
+        return false;
+      case "PERSISTENT":
+        // The above getPinLockType call ensures that we have either a PinKeyEncryptedUserKey or OldPinKeyEncryptedMasterKey set.
+        return true;
+      case "EPHEMERAL": {
+        // The above getPinLockType call ensures that we have a UserKeyEncryptedPin set.
+        // However, we must additively check to ensure that we have a set PinKeyEncryptedUserKeyEphemeral b/c otherwise
+        // we cannot take a PIN, derive a PIN key, and decrypt the ephemeral UserKey.
+        const pinKeyEncryptedUserKeyEphemeral =
+          await this.getPinKeyEncryptedUserKeyEphemeral(userId);
+        return Boolean(pinKeyEncryptedUserKeyEphemeral);
+      }
+
+      default: {
+        // Compile-time check for exhaustive switch
+        const _exhaustiveCheck: never = pinLockType;
+        throw new Error(`Unexpected pinLockType: ${_exhaustiveCheck}`);
+      }
+    }
+  }
+
   async decryptUserKeyWithPin(pin: string, userId: UserId): Promise<UserKey | null> {
     this.validateUserId(userId, "Cannot decrypt user key with PIN.");
 
@@ -404,9 +432,6 @@ export class PinService implements PinServiceAbstraction {
     await this.setUserKeyEncryptedPin(userKeyEncryptedPin, userId);
 
     await this.clearOldPinKeyEncryptedMasterKey(userId);
-
-    // This also clears the old Biometrics key since the new Biometrics key will be created when the user key is set.
-    await this.stateService.setCryptoMasterKeyBiometric(null, { userId: userId });
 
     return userKey;
   }

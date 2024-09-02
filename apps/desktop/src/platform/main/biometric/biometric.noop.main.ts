@@ -1,4 +1,4 @@
-import { OsBiometricService } from "./biometrics.service.abstraction";
+import { OsBiometricService } from "./desktop.biometrics.service";
 
 export default class NoopBiometricsService implements OsBiometricService {
   constructor() {}
@@ -8,6 +8,16 @@ export default class NoopBiometricsService implements OsBiometricService {
   async osSupportsBiometric(): Promise<boolean> {
     return false;
   }
+
+  async osBiometricsNeedsSetup(): Promise<boolean> {
+    return false;
+  }
+
+  async osBiometricsCanAutoSetup(): Promise<boolean> {
+    return false;
+  }
+
+  async osBiometricsSetup(): Promise<void> {}
 
   async getBiometricKey(
     service: string,

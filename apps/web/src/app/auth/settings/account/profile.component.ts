@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { Subject, takeUntil } from "rxjs";
 
@@ -8,7 +8,7 @@ import { ProfileResponse } from "@bitwarden/common/models/response/profile.respo
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 import { ChangeAvatarDialogComponent } from "./change-avatar-dialog.component";
 
@@ -16,7 +16,7 @@ import { ChangeAvatarDialogComponent } from "./change-avatar-dialog.component";
   selector: "app-profile",
   templateUrl: "profile.component.html",
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
   loading = true;
   profile: ProfileResponse;
   fingerprintMaterial: string;
@@ -33,6 +33,7 @@ export class ProfileComponent implements OnInit {
     private platformUtilsService: PlatformUtilsService,
     private stateService: StateService,
     private dialogService: DialogService,
+    private toastService: ToastService,
   ) {}
 
   async ngOnInit() {
@@ -62,11 +63,12 @@ export class ProfileComponent implements OnInit {
   }
 
   submit = async () => {
-    const request = new UpdateProfileRequest(
-      this.formGroup.get("name").value,
-      this.profile.masterPasswordHint,
-    );
+    const request = new UpdateProfileRequest(this.formGroup.get("name").value);
     await this.apiService.putProfile(request);
-    this.platformUtilsService.showToast("success", null, this.i18nService.t("accountUpdated"));
+    this.toastService.showToast({
+      variant: "success",
+      title: null,
+      message: this.i18nService.t("accountUpdated"),
+    });
   };
 }

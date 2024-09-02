@@ -1,5 +1,5 @@
 import { DIALOG_DATA, DialogConfig } from "@angular/cdk/dialog";
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, OnInit } from "@angular/core";
 import { FormArray, FormBuilder, FormControl, FormGroup } from "@angular/forms";
 
 import { ApiService } from "@bitwarden/common/abstractions/api.service";
@@ -24,7 +24,7 @@ interface Key {
   selector: "app-two-factor-yubikey",
   templateUrl: "two-factor-yubikey.component.html",
 })
-export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
+export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent implements OnInit {
   type = TwoFactorProviderType.Yubikey;
   keys: Key[];
   anyKeyHasNfc = false;
@@ -55,7 +55,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
     userVerificationService: UserVerificationService,
     dialogService: DialogService,
     private formBuilder: FormBuilder,
-    private toastService: ToastService,
+    protected toastService: ToastService,
   ) {
     super(
       apiService,
@@ -64,6 +64,7 @@ export class TwoFactorYubiKeyComponent extends TwoFactorBaseComponent {
       logService,
       userVerificationService,
       dialogService,
+      toastService,
     );
   }
 

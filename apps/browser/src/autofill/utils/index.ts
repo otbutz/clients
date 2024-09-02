@@ -104,16 +104,24 @@ export function buildSvgDomElement(svgString: string, ariaHidden = true): HTMLEl
 export async function sendExtensionMessage(
   command: string,
   options: Record<string, any> = {},
-): Promise<any | void> {
-  return new Promise((resolve) => {
+): Promise<any> {
+  if (
+    typeof browser !== "undefined" &&
+    typeof browser.runtime !== "undefined" &&
+    typeof browser.runtime.sendMessage !== "undefined"
+  ) {
+    return browser.runtime.sendMessage({ command, ...options });
+  }
+
+  return new Promise((resolve) =>
     chrome.runtime.sendMessage(Object.assign({ command }, options), (response) => {
       if (chrome.runtime.lastError) {
-        // Do nothing
+        resolve(null);
       }
 
       resolve(response);
-    });
-  });
+    }),
+  );
 }
 
 /**
@@ -342,7 +350,7 @@ export function getPropertyOrAttribute(element: HTMLElement, attributeName: stri
  * @param callback - The callback function to throttle.
  * @param limit - The time in milliseconds to throttle the callback.
  */
-export function throttle(callback: () => void, limit: number) {
+export function throttle(callback: (_args: any) => any, limit: number) {
   let waitingDelay = false;
   return function (...args: unknown[]) {
     if (!waitingDelay) {

@@ -321,21 +321,20 @@ export class NativeMessagingMain {
   }
 
   private binaryPath() {
+    const ext = process.platform === "win32" ? ".exe" : "";
+
     if (isDev()) {
-      return path.join(this.appPath, "..", "desktop_native", "target", "debug", "desktop_proxy");
+      return path.join(
+        this.appPath,
+        "..",
+        "desktop_native",
+        "target",
+        "debug",
+        `desktop_proxy${ext}`,
+      );
     }
 
-    switch (process.platform) {
-      case "darwin": {
-        // exePath is <path-to-app>/Bitwarden.app/Contents/MacOS/Bitwarden"
-        return path.join(path.dirname(this.exePath), "..", "Resources", "desktop_proxy");
-      }
-      case "win32": {
-        return path.join(path.dirname(this.exePath), "desktop_proxy.exe");
-      }
-      default:
-        return path.join(path.dirname(this.exePath), "desktop_proxy");
-    }
+    return path.join(path.dirname(this.exePath), `desktop_proxy${ext}`);
   }
 
   private getRegeditInstance() {

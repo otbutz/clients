@@ -1,6 +1,6 @@
 import { DialogModule } from "@angular/cdk/dialog";
 import { CommonModule } from "@angular/common";
-import { Component, EventEmitter, Inject, Output } from "@angular/core";
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from "@angular/core";
 import { ReactiveFormsModule, FormsModule } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { firstValueFrom } from "rxjs";
@@ -21,6 +21,7 @@ import {
   TypographyModule,
   FormFieldModule,
   AsyncActionsModule,
+  ToastService,
 } from "@bitwarden/components";
 
 @Component({
@@ -41,7 +42,7 @@ import {
   ],
   providers: [I18nPipe],
 })
-export class TwoFactorAuthWebAuthnComponent {
+export class TwoFactorAuthWebAuthnComponent implements OnInit, OnDestroy {
   @Output() token = new EventEmitter<string>();
 
   webAuthnReady = false;
@@ -56,6 +57,7 @@ export class TwoFactorAuthWebAuthnComponent {
     protected environmentService: EnvironmentService,
     protected twoFactorService: TwoFactorService,
     protected route: ActivatedRoute,
+    private toastService: ToastService,
   ) {
     this.webAuthnSupported = this.platformUtilsService.supportsWebAuthn(win);
 
@@ -85,11 +87,11 @@ export class TwoFactorAuthWebAuthnComponent {
           this.token.emit(token);
         },
         (error: string) => {
-          this.platformUtilsService.showToast(
-            "error",
-            this.i18nService.t("errorOccurred"),
-            this.i18nService.t("webauthnCancelOrTimeout"),
-          );
+          this.toastService.showToast({
+            variant: "error",
+            title: this.i18nService.t("errorOccurred"),
+            message: this.i18nService.t("webauthnCancelOrTimeout"),
+          });
         },
         (info: string) => {
           if (info === "ready") {

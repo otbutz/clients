@@ -13,6 +13,9 @@
   "loginOrCreateNewAccount": {
     "message": "Zaloguj się lub utwórz nowe konto, aby uzyskać dostęp do Twojego bezpiecznego sejfu."
   },
+  "inviteAccepted": {
+    "message": "Zaproszenie zostało zaakceptowane"
+  },
   "createAccount": {
     "message": "Utwórz konto"
   },
@@ -21,9 +24,6 @@
   },
   "finishCreatingYourAccountBySettingAPassword": {
     "message": "Ukończ tworzenie konta poprzez ustawienie hasła"
-  },
-  "login": {
-    "message": "Zaloguj się"
   },
   "enterpriseSingleSignOn": {
     "message": "Logowanie jednokrotne"
@@ -68,6 +68,12 @@
   "masterPassHint": {
     "message": "Podpowiedź do hasła głównego (opcjonalnie)"
   },
+  "joinOrganization": {
+    "message": "Dołącz do organizacji"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Zakończ dołączanie do tej organizacji przez ustawienie hasła głównego."
+  },
   "tab": {
     "message": "Karta"
   },
@@ -106,6 +112,21 @@
   },
   "copySecurityCode": {
     "message": "Kopiuj kod zabezpieczający"
+  },
+  "copyName": {
+    "message": "Kopiuj nazwę"
+  },
+  "copyCompany": {
+    "message": "Kopiuj firmę"
+  },
+  "copySSN": {
+    "message": "Kopiuj numer PESEL"
+  },
+  "copyPassportNumber": {
+    "message": "Kopiuj numer paszportu"
+  },
+  "copyLicenseNumber": {
+    "message": "Kopiuj numer licencji"
   },
   "autoFill": {
     "message": "Autouzupełnianie"
@@ -150,7 +171,7 @@
     "message": "Zaloguj się do sejfu"
   },
   "autoFillInfo": {
-    "message": "Brak dostępnych danych logowania do autouzupełnienia dla obecnej karty przeglądarki."
+    "message": "Brak danych logowania do użycia przez autouzupełnienie na obecnej karcie przeglądarki."
   },
   "addLogin": {
     "message": "Dodaj dane logowania"
@@ -280,6 +301,24 @@
   "editFolder": {
     "message": "Edytuj folder"
   },
+  "newFolder": {
+    "message": "New folder"
+  },
+  "folderName": {
+    "message": "Folder name"
+  },
+  "folderHintText": {
+    "message": "Nest a folder by adding the parent folder's name followed by a “/”. Example: Social/Forums"
+  },
+  "noFoldersAdded": {
+    "message": "No folders added"
+  },
+  "createFoldersToOrganize": {
+    "message": "Create folders to organize your vault items"
+  },
+  "deleteFolderPermanently": {
+    "message": "Are you sure you want to permanently delete this folder?"
+  },
   "deleteFolder": {
     "message": "Usuń folder"
   },
@@ -345,16 +384,56 @@
     "message": "Minimalna długość hasła"
   },
   "uppercase": {
-    "message": "Wielkie litery (A-Z)"
+    "message": "Wielkie litery (A-Z)",
+    "description": "deprecated. Use uppercaseLabel instead."
   },
   "lowercase": {
-    "message": "Małe litery (a-z)"
+    "message": "Małe litery (a-z)",
+    "description": "deprecated. Use lowercaseLabel instead."
   },
   "numbers": {
-    "message": "Cyfry (0-9)"
+    "message": "Cyfry (0-9)",
+    "description": "deprecated. Use numbersLabel instead."
   },
   "specialCharacters": {
-    "message": "Znaki specjalne (!@#$%^&*)"
+    "message": "Znaki specjalne (!@#$%^&*)",
+    "description": "deprecated. Use specialCharactersLabel instead."
+  },
+  "include": {
+    "message": "Include",
+    "description": "Card header for password generator include block"
+  },
+  "uppercaseDescription": {
+    "message": "Include uppercase characters",
+    "description": "Tooltip for the password generator uppercase character checkbox"
+  },
+  "uppercaseLabel": {
+    "message": "A-Z",
+    "description": "Label for the password generator uppercase character checkbox"
+  },
+  "lowercaseDescription": {
+    "message": "Include lowercase characters",
+    "description": "Full description for the password generator lowercase character checkbox"
+  },
+  "lowercaseLabel": {
+    "message": "a-z",
+    "description": "Label for the password generator lowercase character checkbox"
+  },
+  "numbersDescription": {
+    "message": "Include numbers",
+    "description": "Full description for the password generator numbers checkbox"
+  },
+  "numbersLabel": {
+    "message": "0-9",
+    "description": "Label for the password generator numbers checkbox"
+  },
+  "specialCharactersDescription": {
+    "message": "Include special characters",
+    "description": "Full description for the password generator special characters checkbox"
+  },
+  "specialCharactersLabel": {
+    "message": "!@#$%^&*",
+    "description": "Label for the password generator special characters checkbox"
   },
   "numWords": {
     "message": "Liczba słów"
@@ -376,7 +455,12 @@
     "message": "Minimalna liczba znaków specjalnych"
   },
   "avoidAmbChar": {
-    "message": "Unikaj niejednoznacznych znaków"
+    "message": "Unikaj niejednoznacznych znaków",
+    "description": "deprecated. Use avoidAmbiguous instead."
+  },
+  "avoidAmbiguous": {
+    "message": "Avoid ambiguous characters",
+    "description": "Label for the avoid ambiguous characters checkbox."
   },
   "searchVault": {
     "message": "Szukaj w sejfie"
@@ -509,7 +593,7 @@
     "message": "Zablokuj"
   },
   "lockAll": {
-    "message": "Zablokuj wszystko"
+    "message": "Zablokuj wszystkie"
   },
   "immediately": {
     "message": "Natychmiast"
@@ -599,6 +683,12 @@
   "newAccountCreated": {
     "message": "Konto zostało utworzone! Teraz możesz się zalogować."
   },
+  "newAccountCreated2": {
+    "message": "Your new account has been created!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "You have been logged in!"
+  },
   "youSuccessfullyLoggedIn": {
     "message": "Zalogowałeś się pomyślnie"
   },
@@ -610,6 +700,9 @@
   },
   "verificationCodeRequired": {
     "message": "Kod weryfikacyjny jest wymagany."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Uwierzytelnianie zostało anulowane lub trwało zbyt długo. Spróbuj ponownie."
   },
   "invalidVerificationCode": {
     "message": "Kod weryfikacyjny jest nieprawidłowy"
@@ -636,6 +729,18 @@
   "totpCapture": {
     "message": "Zeskanuj kod QR z bieżącej strony"
   },
+  "totpHelperTitle": {
+    "message": "Spraw, aby dwuetapowa weryfikacja była bezproblemowa"
+  },
+  "totpHelper": {
+    "message": "Bitwarden może przechowywać i wypełniać kody weryfikacyjne. Skopiuj i wklej klucz do tego pola."
+  },
+  "totpHelperWithCapture": {
+    "message": "Bitwarden może przechowywać i wypełniać kody weryfikacyjne. Wybierz ikonę aparatu, aby zrobić zrzut ekranu z kodem QR lub skopiuj i wklej klucz do tego pola."
+  },
+  "learnMoreAboutAuthenticators": {
+    "message": "Learn more about authenticators"
+  },
   "copyTOTP": {
     "message": "Kopiuj klucz uwierzytelniający (TOTP)"
   },
@@ -647,6 +752,21 @@
   },
   "loginExpired": {
     "message": "Twoja sesja wygasła."
+  },
+  "logIn": {
+    "message": "Zaloguj się"
+  },
+  "restartRegistration": {
+    "message": "Zrestartuj rejestrację"
+  },
+  "expiredLink": {
+    "message": "Link wygasł"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Zrestartuj rejestrację lub spróbuj się zalogować."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Możesz mieć już konto"
   },
   "logOutConfirmation": {
     "message": "Czy na pewno chcesz się wylogować?"
@@ -709,6 +829,10 @@
   "newUri": {
     "message": "Nowy URI"
   },
+  "addDomain": {
+    "message": "Dodaj domenę",
+    "description": "'Domain' here refers to an internet domain name (e.g. 'bitwarden.com') and the message in whole described the act of putting a domain value into the context."
+  },
   "addedItem": {
     "message": "Element został dodany"
   },
@@ -749,17 +873,26 @@
   "enableAddLoginNotification": {
     "message": "Poproś o dodanie danych logowania"
   },
+  "vaultSaveOptionsTitle": {
+    "message": "Zapisz do ustawień sejfu"
+  },
   "addLoginNotificationDesc": {
     "message": "\"Dodaj powiadomienia logowania\" automatycznie wyświetla monit o zapisanie nowych danych logowania do sejfu przy każdym pierwszym logowaniu."
   },
   "addLoginNotificationDescAlt": {
     "message": "Poproś o dodanie elementu, jeśli nie zostanie znaleziony w Twoim sejfie. Dotyczy wszystkich zalogowanych kont."
   },
+  "showCardsInVaultView": {
+    "message": "Pokaż karty jako sugestie autouzupełniania w widoku sejfu"
+  },
   "showCardsCurrentTab": {
     "message": "Pokaż karty na stronie głównej"
   },
   "showCardsCurrentTabDesc": {
     "message": "Pokaż elementy karty na stronie głównej, aby ułatwić autouzupełnianie."
+  },
+  "showIdentitiesInVaultView": {
+    "message": "Show identifies as Autofill suggestions on Vault view"
   },
   "showIdentitiesCurrentTab": {
     "message": "Pokaż tożsamości na stronie głównej"
@@ -822,7 +955,7 @@
   },
   "defaultUriMatchDetection": {
     "message": "Domyślne wykrywanie dopasowania",
-    "description": "Default URI match detection for auto-fill."
+    "description": "Default URI match detection for autofill."
   },
   "defaultUriMatchDetectionDesc": {
     "message": "Wybierz domyślny sposób wykrywania dopasowania adresów dla czynności takich jak autouzupełnianie."
@@ -997,6 +1130,9 @@
   "ppremiumSignUpStorage": {
     "message": "1 GB miejsca na zaszyfrowane załączniki."
   },
+  "premiumSignUpEmergency": {
+    "message": "Emergency access."
+  },
   "premiumSignUpTwoStepOptions": {
     "message": "Własnościowe opcje logowania dwuetapowego, takie jak YubiKey i Duo."
   },
@@ -1018,14 +1154,29 @@
   "premiumPurchaseAlert": {
     "message": "Konto Premium możesz zakupić na stronie sejfu bitwarden.com. Czy chcesz otworzyć tę stronę?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "You can purchase Premium from your account settings on the Bitwarden web app."
+  },
   "premiumCurrentMember": {
     "message": "Posiadasz konto Premium!"
   },
   "premiumCurrentMemberThanks": {
     "message": "Dziękujemy za wspieranie Bitwarden."
   },
+  "premiumFeatures": {
+    "message": "Upgrade to Premium and receive:"
+  },
   "premiumPrice": {
     "message": "Wszystko to jedynie za $PRICE$ /rok!",
+    "placeholders": {
+      "price": {
+        "content": "$1",
+        "example": "$10"
+      }
+    }
+  },
+  "premiumPriceV2": {
+    "message": "All for just $PRICE$ per year!",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1191,9 +1342,18 @@
   },
   "showAutoFillMenuOnFormFields": {
     "message": "Pokaż menu autouzupełniania na polach formularza",
-    "description": "Represents the message for allowing the user to enable the auto-fill overlay"
+    "description": "Represents the message for allowing the user to enable the autofill overlay"
   },
-  "showAutoFillMenuOnFormFieldsDescAlt": {
+  "autofillSuggestionsSectionTitle": {
+    "message": "Sugestie autouzupełniania"
+  },
+  "showInlineMenuLabel": {
+    "message": "Pokaż sugestie autouzupełniania na polach formularza"
+  },
+  "showInlineMenuOnIconSelectionLabel": {
+    "message": "Wyświetlaj sugestie kiedy ikona jest zaznaczona"
+  },
+  "showInlineMenuOnFormFieldsDescAlt": {
     "message": "Dotyczy wszystkich zalogowanych kont."
   },
   "turnOffBrowserBuiltInPasswordManagerSettings": {
@@ -1214,14 +1374,33 @@
     "message": "Gdy wybrano ikonę autouzupełniania",
     "description": "Overlay appearance select option for showing the field on click of the overlay icon"
   },
+  "enableAutoFillOnPageLoadSectionTitle": {
+    "message": "Włącz autouzupełnianie po załadowaniu strony"
+  },
   "enableAutoFillOnPageLoad": {
     "message": "Włącz autouzupełnianie po załadowaniu strony"
   },
   "enableAutoFillOnPageLoadDesc": {
     "message": "Jeśli zostanie wykryty formularz logowania, automatycznie uzupełnij dane logowania po załadowaniu strony."
   },
+  "autofillOnPageLoadWarning": {
+    "message": "$OPENTAG$Ostrzeżenie:$CLOSETAG$ Niebezpieczne witryny są w stanie wykorzystać autouzupełnianie przy wczytywaniu strony.",
+    "placeholders": {
+      "openTag": {
+        "content": "$1",
+        "example": "<b>"
+      },
+      "closeTag": {
+        "content": "$2",
+        "example": "</b>"
+      }
+    }
+  },
   "experimentalFeature": {
     "message": "Zaatakowane lub niezaufane witryny internetowe mogą wykorzystać funkcję autouzupełniania podczas wczytywania strony, aby wyrządzić szkody."
+  },
+  "learnMoreAboutAutofillOnPageLoadLinkText": {
+    "message": "Dowiedz się więcej o ryzyku"
   },
   "learnMoreAboutAutofill": {
     "message": "Dowiedz się więcej o autouzupełnianiu"
@@ -1250,8 +1429,14 @@
   "commandOpenSidebar": {
     "message": "Otwórz sejf na pasku bocznym"
   },
-  "commandAutofillDesc": {
-    "message": "Autouzupełnianie korzysta z ostatnio używanych danych logowania na tej stronie."
+  "commandAutofillLoginDesc": {
+    "message": "Autouzupełnianie korzysta z ostatnio używanych danych logowania na tej stronie"
+  },
+  "commandAutofillCardDesc": {
+    "message": "Autouzupełnianie korzysta z ostatnio używanych danych karty na tej stronie"
+  },
+  "commandAutofillIdentityDesc": {
+    "message": "Autouzupełnianie korzysta z ostatnio używanej tożsamości na tej stronie"
   },
   "commandGeneratePasswordDesc": {
     "message": "Wygeneruj nowe losowe hasło i skopiuj je do schowka."
@@ -1282,6 +1467,9 @@
   },
   "cfTypeBoolean": {
     "message": "Wartość logiczna"
+  },
+  "cfTypeCheckbox": {
+    "message": "Pole wyboru"
   },
   "cfTypeLinked": {
     "message": "Powiązane pole",
@@ -1554,6 +1742,10 @@
     "message": "Domena podstawowa",
     "description": "Domain name. Ex. website.com"
   },
+  "baseDomainOptionRecommended": {
+    "message": "Domena podstawowa (rekomendowana)",
+    "description": "Domain name. Ex. website.com"
+  },
   "domainName": {
     "message": "Nazwa domeny",
     "description": "Domain name. Ex. website.com"
@@ -1574,11 +1766,11 @@
   },
   "matchDetection": {
     "message": "Wykrywanie dopasowania",
-    "description": "URI match detection for auto-fill."
+    "description": "URI match detection for autofill."
   },
   "defaultMatchDetection": {
     "message": "Domyślne wykrywanie dopasowania",
-    "description": "Default URI match detection for auto-fill."
+    "description": "Default URI match detection for autofill."
   },
   "toggleOptions": {
     "message": "Zmień opcje"
@@ -1697,6 +1889,29 @@
   },
   "passwordGeneratorPolicyInEffect": {
     "message": "Co najmniej jedna zasada organizacji wpływa na ustawienia generatora."
+  },
+  "passwordGenerator": {
+    "message": "Password generator"
+  },
+  "usernameGenerator": {
+    "message": "Username generator"
+  },
+  "useThisPassword": {
+    "message": "Use this password"
+  },
+  "useThisUsername": {
+    "message": "Use this username"
+  },
+  "securePasswordGenerated": {
+    "message": "Secure password generated! Don't forget to also update your password on the website."
+  },
+  "useGeneratorHelpTextPartOne": {
+    "message": "Use the generator",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
+  },
+  "useGeneratorHelpTextPartTwo": {
+    "message": "to create a strong unique password",
+    "description": "This will be used as part of a larger sentence, broken up to include the generator icon. The full sentence will read 'Use the generator [GENERATOR_ICON] to create a strong unique password'"
   },
   "vaultTimeoutAction": {
     "message": "Sposób blokowania sejfu"
@@ -1820,8 +2035,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Nowe hasło główne nie spełnia wymaganych zasad."
   },
-  "receiveMarketingEmails": {
-    "message": "Otrzymuj e-maile od Bitwarden z ogłoszeniami, poradami i badaniami."
+  "receiveMarketingEmailsV2": {
+    "message": "Uzyskaj poradę, ogłoszenia i możliwości badawcze od Bitwarden w swojej skrzynce odbiorczej."
   },
   "unsubscribe": {
     "message": "Anuluj subskrypcję"
@@ -1895,6 +2110,12 @@
   "nativeMessagingWrongUserTitle": {
     "message": "Konto jest niezgodne"
   },
+  "nativeMessagingWrongUserKeyDesc": {
+    "message": "Odblokowanie biometryczne nie powiodło się. Sekretny klucz biometryczny nie odblokował sejfu. Spróbuj skonfigurować biometrię ponownie."
+  },
+  "nativeMessagingWrongUserKeyTitle": {
+    "message": "Klucz biometryczny jest niepoprawny"
+  },
   "biometricsNotEnabledTitle": {
     "message": "Dane biometryczne są wyłączone"
   },
@@ -1912,6 +2133,12 @@
   },
   "biometricsNotUnlockedDesc": {
     "message": "Odblokuj tego użytkownika w aplikacji desktopowej i spróbuj ponownie."
+  },
+  "biometricsNotAvailableTitle": {
+    "message": "Biometric unlock unavailable"
+  },
+  "biometricsNotAvailableDesc": {
+    "message": "Biometric unlock is currently unavailable. Please try again later."
   },
   "biometricsFailedTitle": {
     "message": "Dane biometryczne są błędne"
@@ -1940,6 +2167,10 @@
   "personalOwnershipPolicyInEffectImports": {
     "message": "Polityka organizacji zablokowała importowanie elementów do Twojego sejfu."
   },
+  "domainsTitle": {
+    "message": "Domeny",
+    "description": "A category title describing the concept of web domains"
+  },
   "excludedDomains": {
     "message": "Wykluczone domeny"
   },
@@ -1949,14 +2180,26 @@
   "excludedDomainsDescAlt": {
     "message": "Aplikacja Bitwarden nie będzie proponować zapisywania danych logowania dla tych domen dla wszystkich zalogowanych kont. Musisz odświeżyć stronę, aby zastosowywać zmiany."
   },
+  "websiteItemLabel": {
+    "message": "Strona internetowa $number$ (URI)",
+    "placeholders": {
+      "number": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
   "excludedDomainsInvalidDomain": {
     "message": "$DOMAIN$ nie jest prawidłową nazwą domeny",
     "placeholders": {
       "domain": {
         "content": "$1",
-        "example": "google.com"
+        "example": "duckduckgo.com"
       }
     }
+  },
+  "excludedDomainsSavedSuccess": {
+    "message": "Zmiany w wykluczonych domenach zapisane"
   },
   "send": {
     "message": "Wyślij",
@@ -1992,6 +2235,9 @@
   },
   "passwordProtected": {
     "message": "Chroniona hasłem"
+  },
+  "copyLink": {
+    "message": "Kopiuj link"
   },
   "copySendLink": {
     "message": "Kopiuj link wysyłki",
@@ -2124,6 +2370,24 @@
     "message": "Wysyłka została utworzona",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
   },
+  "createdSendSuccessfully": {
+    "message": "Send created successfully!",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendAvailability": {
+    "message": "The Send will be available to anyone with the link for the next $DAYS$ days.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated.",
+    "placeholders": {
+      "days": {
+        "content": "$1",
+        "example": "5"
+      }
+    }
+  },
+  "sendLinkCopied": {
+    "message": "Send link copied",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "editedSend": {
     "message": "Wysyłka została zapisana",
     "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
@@ -2202,6 +2466,9 @@
   },
   "updateWeakMasterPasswordWarning": {
     "message": "Twoje hasło główne nie spełnia jednej lub kilku zasad organizacji. Aby uzyskać dostęp do sejfu, musisz teraz zaktualizować swoje hasło główne. Kontynuacja wyloguje Cię z bieżącej sesji, wymagając zalogowania się ponownie. Aktywne sesje na innych urządzeniach mogą pozostać aktywne przez maksymalnie jedną godzinę."
+  },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Your organization has disabled trusted device encryption. Please set a master password to access your vault."
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatyczne rejestrowanie użytkowników"
@@ -2653,13 +2920,22 @@
   "autofillSettings": {
     "message": "Ustawienia autouzupełniania"
   },
+  "autofillKeyboardShortcutSectionTitle": {
+    "message": "Skrót autouzupełniania"
+  },
+  "autofillKeyboardShortcutUpdateLabel": {
+    "message": "Zmień skrót"
+  },
+  "autofillKeyboardManagerShortcutsLabel": {
+    "message": "Zarządzaj skrótami"
+  },
   "autofillShortcut": {
     "message": "Skrót klawiaturowy autouzupełniania"
   },
-  "autofillShortcutNotSet": {
+  "autofillLoginShortcutNotSet": {
     "message": "Skrót autouzupełniania nie jest ustawiony. Zmień to w ustawieniach przeglądarki."
   },
-  "autofillShortcutText": {
+  "autofillLoginShortcutText": {
     "message": "Skrót autouzupełniania to: $COMMAND$. Zmień to w ustawieniach przeglądarki.",
     "placeholders": {
       "command": {
@@ -2762,6 +3038,14 @@
   "deviceTrusted": {
     "message": "Zaufano urządzeniu"
   },
+  "sendsNoItemsTitle": {
+    "message": "Brak aktywnych wysyłek",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
+  "sendsNoItemsMessage": {
+    "message": "Użyj wysyłki, aby bezpiecznie dzielić się zaszyfrowanymi informacjami ze wszystkimi.",
+    "description": "'Send' is a noun and the name of a feature called 'Bitwarden Send'. It should not be translated."
+  },
   "inputRequired": {
     "message": "Dane wejściowe są wymagane."
   },
@@ -2835,6 +3119,18 @@
       }
     }
   },
+  "singleFieldNeedsAttention": {
+    "message": "1 pole wymaga Twojej uwagi."
+  },
+  "multipleFieldsNeedAttention": {
+    "message": "Pola wymagające Twojej uwagi: $COUNT$.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
   "selectPlaceholder": {
     "message": "-- Wybierz --"
   },
@@ -2903,11 +3199,11 @@
   },
   "passwordRepromptDisabledAutofillOnPageLoad": {
     "message": "Elementy z pytaniem o hasło głównege nie mogą być automatycznie wypełniane przy wczytywaniu strony. Automatyczne wypełnianie po wczytywania strony zostało wyłączone.",
-    "description": "Toast message for describing that master password re-prompt cannot be auto-filled on page load."
+    "description": "Toast message for describing that master password re-prompt cannot be autofilled on page load."
   },
   "autofillOnPageLoadSetToDefault": {
     "message": "Automatyczne wypełnianie przy wczytywaniu strony zostało ustawione, aby używać ustawień domyślnych.",
-    "description": "Toast message for informing the user that auto-fill on page load has been set to the default setting."
+    "description": "Toast message for informing the user that autofill on page load has been set to the default setting."
   },
   "turnOffMasterPasswordPromptToEditField": {
     "message": "Wyłącz prośbę o podanie hasła głównego, aby edytować to pole",
@@ -2935,9 +3231,17 @@
     "message": "Odblokuj swoje konto, aby wyświetlić pasujące elementy",
     "description": "Text to display in overlay when the account is locked."
   },
+  "unlockYourAccountToViewAutofillSuggestions": {
+    "message": "Odblokuj swoje konto, aby zobaczyć sugestie autouzupełniania",
+    "description": "Text to display in overlay when the account is locked."
+  },
   "unlockAccount": {
     "message": "Odblokuj konto",
     "description": "Button text to display in overlay when the account is locked."
+  },
+  "unlockAccountAria": {
+    "message": "Odblokuj swoje konto, otwiera się w nowym oknie",
+    "description": "Screen reader text (aria-label) for unlock account button in overlay"
   },
   "fillCredentialsFor": {
     "message": "Wypełnij dane logowania dla",
@@ -2958,6 +3262,30 @@
   "addNewVaultItem": {
     "message": "Dodaj nowy element do sejfu",
     "description": "Screen reader text (aria-label) for new item button in overlay"
+  },
+  "newLogin": {
+    "message": "Nowe dane logowania",
+    "description": "Button text to display within inline menu when there are no matching items on a login field"
+  },
+  "addNewLoginItemAria": {
+    "message": "Dodaj nowe dane logowania do sejfu, otwiera się w nowym oknie",
+    "description": "Screen reader text (aria-label) for new login button within inline menu"
+  },
+  "newCard": {
+    "message": "Nowa karta",
+    "description": "Button text to display within inline menu when there are no matching items on a credit card field"
+  },
+  "addNewCardItemAria": {
+    "message": "Dodaj nową kartę do sejfu, otwiera się w nowym oknie",
+    "description": "Screen reader text (aria-label) for new card button within inline menu"
+  },
+  "newIdentity": {
+    "message": "Nowa tożsamość",
+    "description": "Button text to display within inline menu when there are no matching items on an identity field"
+  },
+  "addNewIdentityItemAria": {
+    "message": "Dodaj nową tożsamość do sejfu, otwiera się w nowym oknie",
+    "description": "Screen reader text (aria-label) for new identity button within inline menu"
   },
   "bitwardenOverlayMenuAvailable": {
     "message": "Dostępne menu autouzupełniania Bitwarden. Naciśnij przycisk strzałki w dół, aby wybrać.",
@@ -3045,6 +3373,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Wystąpił błąd podczas połączenia z usługą Duo. Aby uzyskać pomoc, użyj innej metody dwustopniowego logowania lub skontaktuj się z Duo."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Uruchom DUO i wykonaj kroki, aby zakończyć logowanie."
   },
@@ -3072,8 +3403,8 @@
   "invalidFilePassword": {
     "message": "Hasło do pliku jest nieprawidłowe. Użyj hasła które podano przy tworzeniu pliku eksportu."
   },
-  "importDestination": {
-    "message": "Miejsce docelowe importu"
+  "destination": {
+    "message": "Miejsce docelowe"
   },
   "learnAboutImportOptions": {
     "message": "Dowiedz się więcej o opcjach importu"
@@ -3305,13 +3636,37 @@
     "placeholders": {
       "domain": {
         "content": "$1",
-        "example": "google.com"
+        "example": "duckduckgo.com"
       }
     }
   },
   "commonImportFormats": {
     "message": "Popularne formaty",
     "description": "Label indicating the most common import formats"
+  },
+  "confirmContinueToBrowserSettingsTitle": {
+    "message": "Kontynuować do ustawień przeglądarki?",
+    "description": "Title for dialog which asks if the user wants to proceed to a relevant browser settings page"
+  },
+  "confirmContinueToHelpCenter": {
+    "message": "Kontynuować do centrum pomocy?",
+    "description": "Title for dialog which asks if the user wants to proceed to a relevant Help Center page"
+  },
+  "confirmContinueToHelpCenterPasswordManagementContent": {
+    "message": "Zmień ustawienia autouzupełniania przeglądarki i zarządzania hasłami.",
+    "description": "Body content for dialog which asks if the user wants to proceed to the Help Center's page about browser password management settings"
+  },
+  "confirmContinueToHelpCenterKeyboardShortcutsContent": {
+    "message": "Możesz przeglądać i ustawiać skróty klawiaturowe rozszerzeń w ustawieniach przeglądarki.",
+    "description": "Body content for dialog which asks if the user wants to proceed to the Help Center's page about browser keyboard shortcut settings"
+  },
+  "confirmContinueToBrowserPasswordManagementSettingsContent": {
+    "message": "Zmień ustawienia autouzupełniania przeglądarki i zarządzania hasłami.",
+    "description": "Body content for dialog which asks if the user wants to proceed to the browser's password management settings page"
+  },
+  "confirmContinueToBrowserKeyboardShortcutSettingsContent": {
+    "message": "Możesz przeglądać i ustawiać skróty klawiaturowe rozszerzeń w ustawieniach przeglądarki.",
+    "description": "Body content for dialog which asks if the user wants to proceed to the browser's keyboard shortcut settings page"
   },
   "overrideDefaultBrowserAutofillTitle": {
     "message": "Czy Bitwarden ma być domyślnym menadżerem haseł?",
@@ -3341,8 +3696,16 @@
     "message": "Pomyślnie zapisano dane logowania!",
     "description": "Notification message for when saving credentials has succeeded."
   },
+  "passwordSaved": {
+    "message": "Password saved!",
+    "description": "Notification message for when saving credentials has succeeded."
+  },
   "updateCipherAttemptSuccess": {
     "message": "Pomyślnie zaktualizowano dane logowania!",
+    "description": "Notification message for when updating credentials has succeeded."
+  },
+  "passwordUpdated": {
+    "message": "Password updated!",
     "description": "Notification message for when updating credentials has succeeded."
   },
   "saveCipherAttemptFailed": {
@@ -3425,7 +3788,7 @@
   },
   "autofillTitle": {
     "message": "Autouzupełnij - $ITEMNAME$",
-    "description": "Title for a button that auto-fills a login item.",
+    "description": "Title for a button that autofills a login item.",
     "placeholders": {
       "itemname": {
         "content": "$1",
@@ -3436,8 +3799,8 @@
   "noValuesToCopy": {
     "message": "Brak wartości do skopiowania"
   },
-  "assignCollections": {
-    "message": "Przypisz kolekcje"
+  "assignToCollections": {
+    "message": "Przypisz do kolekcji"
   },
   "copyEmail": {
     "message": "Skopiuj e-mail"
@@ -3605,6 +3968,78 @@
       }
     }
   },
+  "cardNumberEndsWith": {
+    "message": "numer karty kończy się",
+    "description": "Used within the inline menu to provide an aria description when users are attempting to fill a card cipher."
+  },
+  "loginCredentials": {
+    "message": "Dane logowania"
+  },
+  "authenticatorKey": {
+    "message": "Klucz uwierzytelniający"
+  },
+  "autofillOptions": {
+    "message": "Opcje autouzupełniania"
+  },
+  "websiteUri": {
+    "message": "Strona internetowa (URI)"
+  },
+  "websiteUriCount": {
+    "message": "Website (URI) $COUNT$",
+    "description": "Label for an input field that contains a website URI. The input field is part of a list of fields, and the count indicates the position of the field in the list.",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "3"
+      }
+    }
+  },
+  "websiteAdded": {
+    "message": "Strona dodana"
+  },
+  "addWebsite": {
+    "message": "Dodaj stronę internetową"
+  },
+  "deleteWebsite": {
+    "message": "Usuń stronę internetową"
+  },
+  "defaultLabel": {
+    "message": "Domyślnie ($VALUE$)",
+    "description": "A label that indicates the default value for a field with the current default value in parentheses.",
+    "placeholders": {
+      "value": {
+        "content": "$1",
+        "example": "Base domain"
+      }
+    }
+  },
+  "showMatchDetection": {
+    "message": "Show match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "hideMatchDetection": {
+    "message": "Hide match detection $WEBSITE$",
+    "placeholders": {
+      "website": {
+        "content": "$1",
+        "example": "https://example.com"
+      }
+    }
+  },
+  "autoFillOnPageLoad": {
+    "message": "Włącz autouzupełnianie po załadowaniu strony?"
+  },
+  "cardExpiredTitle": {
+    "message": "Expired card"
+  },
+  "cardExpiredMessage": {
+    "message": "If you've renewed it, update the card's information"
+  },
   "cardDetails": {
     "message": "Szczegóły karty"
   },
@@ -3617,7 +4052,249 @@
       }
     }
   },
+  "enableAnimations": {
+    "message": "Enable animations"
+  },
   "addAccount": {
-    "message": "Add account"
+    "message": "Dodaj konto"
+  },
+  "loading": {
+    "message": "Wczytywanie"
+  },
+  "data": {
+    "message": "Dane"
+  },
+  "passkeys": {
+    "message": "Passkeys",
+    "description": "A section header for a list of passkeys."
+  },
+  "passwords": {
+    "message": "Passwords",
+    "description": "A section header for a list of passwords."
+  },
+  "logInWithPasskeyAriaLabel": {
+    "message": "Log in with passkey",
+    "description": "ARIA label for the inline menu button that logs in with a passkey."
+  },
+  "assign": {
+    "message": "Przypisz"
+  },
+  "bulkCollectionAssignmentDialogDescriptionSingular": {
+    "message": "Tylko członkowie organizacji z dostępem do tych kolekcji będą mogli zobaczyć ten element."
+  },
+  "bulkCollectionAssignmentDialogDescriptionPlural": {
+    "message": "Tylko członkowie organizacji z dostępem do tych kolekcji będą mogli zobaczyć te elementy."
+  },
+  "bulkCollectionAssignmentWarning": {
+    "message": "Wybrałeś $TOTAL_COUNT$ elementów. Nie możesz zaktualizować $READONLY_COUNT$ elementów, ponieważ nie masz uprawnień do edycji.",
+    "placeholders": {
+      "total_count": {
+        "content": "$1",
+        "example": "10"
+      },
+      "readonly_count": {
+        "content": "$2"
+      }
+    }
+  },
+  "addField": {
+    "message": "Dodaj pole"
+  },
+  "add": {
+    "message": "Dodaj"
+  },
+  "fieldType": {
+    "message": "Typ pola"
+  },
+  "fieldLabel": {
+    "message": "Etykieta pola"
+  },
+  "textHelpText": {
+    "message": "Użyj pól tekstowych dla danych takich jak pytania bezpieczeństwa"
+  },
+  "hiddenHelpText": {
+    "message": "Użyj ukrytych pól dla danych poufnych, takich jak hasło"
+  },
+  "checkBoxHelpText": {
+    "message": "Użyj pól wyboru, jeśli chcesz automatycznie wypełnić pole wyboru formularza, np. zapamiętaj e-mail"
+  },
+  "linkedHelpText": {
+    "message": "Użyj powiązanego pola, gdy masz problemy z autouzupełnianiem na konkretnej stronie internetowej."
+  },
+  "linkedLabelHelpText": {
+    "message": "Wprowadź atrybut z HTML'a: id, name, aria-label lub placeholder."
+  },
+  "editField": {
+    "message": "Edytuj pole"
+  },
+  "editFieldLabel": {
+    "message": "Edytuj $LABEL$",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      }
+    }
+  },
+  "deleteCustomField": {
+    "message": "Usuń $LABEL$",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      }
+    }
+  },
+  "fieldAdded": {
+    "message": "Dodano $LABEL$",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      }
+    }
+  },
+  "reorderToggleButton": {
+    "message": "Zmień kolejność $LABEL$. Użyj klawiszy że strzałkami aby przenieść element w górę lub w dół.",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      }
+    }
+  },
+  "reorderFieldUp": {
+    "message": "$LABEL$ przeniósł się w górę, pozycja $INDEX$ z $LENGTH$",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      },
+      "index": {
+        "content": "$2",
+        "example": "1"
+      },
+      "length": {
+        "content": "$3",
+        "example": "3"
+      }
+    }
+  },
+  "selectCollectionsToAssign": {
+    "message": "Wybierz kolekcje do przypisania"
+  },
+  "personalItemTransferWarningSingular": {
+    "message": "1 element zostanie trwale przeniesiony do wybranej organizacji. Nie będziesz już posiadać tego elementu."
+  },
+  "personalItemsTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ elementów zostanie trwale przeniesionych do wybranej organizacji. Nie będziesz już posiadać tych elementów.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      }
+    }
+  },
+  "personalItemWithOrgTransferWarningSingular": {
+    "message": "1 przedmiot zostanie trwale przeniesiony do $ORG$. Nie będziesz już posiadać tego przedmiotu.",
+    "placeholders": {
+      "org": {
+        "content": "$1",
+        "example": "Organization name"
+      }
+    }
+  },
+  "personalItemsWithOrgTransferWarningPlural": {
+    "message": "$PERSONAL_ITEMS_COUNT$ elementy zostaną trwale przeniesione do $ORG$. Nie będziesz już posiadać tych elementów.",
+    "placeholders": {
+      "personal_items_count": {
+        "content": "$1",
+        "example": "2"
+      },
+      "org": {
+        "content": "$2",
+        "example": "Organization name"
+      }
+    }
+  },
+  "successfullyAssignedCollections": {
+    "message": "Pomyślnie przypisano kolekcje"
+  },
+  "nothingSelected": {
+    "message": "Nie zaznaczyłeś żadnych elementów."
+  },
+  "movedItemsToOrg": {
+    "message": "Zaznaczone elementy zostały przeniesione do $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemsMovedToOrg": {
+    "message": "Elementy przeniesione do $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "itemMovedToOrg": {
+    "message": "Element przeniesiony do $ORGNAME$",
+    "placeholders": {
+      "orgname": {
+        "content": "$1",
+        "example": "Company Name"
+      }
+    }
+  },
+  "reorderFieldDown": {
+    "message": "$LABEL$ przeniósł się w dół, pozycja $INDEX$ z $LENGTH$",
+    "placeholders": {
+      "label": {
+        "content": "$1",
+        "example": "Custom field"
+      },
+      "index": {
+        "content": "$2",
+        "example": "1"
+      },
+      "length": {
+        "content": "$3",
+        "example": "3"
+      }
+    }
+  },
+  "itemLocation": {
+    "message": "Lokalizacja elementu"
+  },
+  "fileSends": {
+    "message": "File Sends"
+  },
+  "textSends": {
+    "message": "Text Sends"
+  },
+  "bitwardenNewLook": {
+    "message": "Bitwarden ma nowy wygląd!"
+  },
+  "bitwardenNewLookDesc": {
+    "message": "Auto wypełnianie i szukanie na zakładce sejfu jest teraz prostsze i bardziej intuicyjne. Rozejrzyj się tam!"
+  },
+  "accountActions": {
+    "message": "Account actions"
+  },
+  "showNumberOfAutofillSuggestions": {
+    "message": "Show number of login autofill suggestions on extension icon"
+  },
+  "systemDefault": {
+    "message": "System default"
+  },
+  "enterprisePolicyRequirementsApplied": {
+    "message": "Enterprise policy requirements have been applied to this setting"
+  },
+  "additionalContentAvailable": {
+    "message": "Additional content is available"
   }
 }

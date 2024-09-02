@@ -1,4 +1,4 @@
-import { Directive } from "@angular/core";
+import { Directive, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { firstValueFrom, map } from "rxjs";
 
@@ -12,6 +12,7 @@ import { UserVerificationService } from "@bitwarden/common/auth/abstractions/use
 import { VerificationType } from "@bitwarden/common/auth/enums/verification-type";
 import { ForceSetPasswordReason } from "@bitwarden/common/auth/models/domain/force-set-password-reason";
 import { PasswordRequest } from "@bitwarden/common/auth/models/request/password.request";
+import { UpdateTdeOffboardingPasswordRequest } from "@bitwarden/common/auth/models/request/update-tde-offboarding-password.request";
 import { UpdateTempPasswordRequest } from "@bitwarden/common/auth/models/request/update-temp-password.request";
 import { MasterPasswordVerification } from "@bitwarden/common/auth/types/verification";
 import { CryptoService } from "@bitwarden/common/platform/abstractions/crypto.service";
@@ -23,13 +24,13 @@ import { StateService } from "@bitwarden/common/platform/abstractions/state.serv
 import { EncString } from "@bitwarden/common/platform/models/domain/enc-string";
 import { MasterKey, UserKey } from "@bitwarden/common/types/key";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 import { PasswordGenerationServiceAbstraction } from "@bitwarden/generator-legacy";
 
 import { ChangePasswordComponent as BaseChangePasswordComponent } from "./change-password.component";
 
 @Directive()
-export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
+export class UpdateTempPasswordComponent extends BaseChangePasswordComponent implements OnInit {
   hint: string;
   key: string;
   enforcedPolicyOptions: MasterPasswordPolicyOptions;
@@ -63,6 +64,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     kdfConfigService: KdfConfigService,
     accountService: AccountService,
     masterPasswordService: InternalMasterPasswordServiceAbstraction,
+    toastService: ToastService,
   ) {
     super(
       i18nService,
@@ -76,6 +78,7 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
       kdfConfigService,
       masterPasswordService,
       accountService,
+      toastService,
     );
   }
 
@@ -97,9 +100,13 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
   }
 
   get masterPasswordWarningText(): string {
-    return this.reason == ForceSetPasswordReason.WeakMasterPassword
-      ? this.i18nService.t("updateWeakMasterPasswordWarning")
-      : this.i18nService.t("updateMasterPasswordWarning");
+    if (this.reason == ForceSetPasswordReason.WeakMasterPassword) {
+      return this.i18nService.t("weakMasterPasswordWarning");
+    } else if (this.reason == ForceSetPasswordReason.TdeOffboarding) {
+      return this.i18nService.t("tdeDisabledMasterPasswordRequired");
+    } else {
+      return this.i18nService.t("masterPasswordWarning");
+    }
   }
 
   togglePassword(confirmField: boolean) {
@@ -165,14 +172,17 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
         case ForceSetPasswordReason.WeakMasterPassword:
           this.formPromise = this.updatePassword(masterPasswordHash, userKey);
           break;
+        case ForceSetPasswordReason.TdeOffboarding:
+          this.formPromise = this.updateTdeOffboardingPassword(masterPasswordHash, userKey);
+          break;
       }
 
       await this.formPromise;
-      this.platformUtilsService.showToast(
-        "success",
-        null,
-        this.i18nService.t("updatedMasterPassword"),
-      );
+      this.toastService.showToast({
+        variant: "success",
+        title: null,
+        message: this.i18nService.t("updatedMasterPassword"),
+      });
 
       const userId = (await firstValueFrom(this.accountService.activeAccount$))?.id;
       await this.masterPasswordService.setForceSetPasswordReason(
@@ -210,5 +220,17 @@ export class UpdateTempPasswordComponent extends BaseChangePasswordComponent {
     request.key = userKey[1].encryptedString;
 
     return this.apiService.postPassword(request);
+  }
+
+  private async updateTdeOffboardingPassword(
+    masterPasswordHash: string,
+    userKey: [UserKey, EncString],
+  ) {
+    const request = new UpdateTdeOffboardingPasswordRequest();
+    request.key = userKey[1].encryptedString;
+    request.newMasterPasswordHash = masterPasswordHash;
+    request.masterPasswordHint = this.hint;
+
+    return this.apiService.putUpdateTdeOffboardingPassword(request);
   }
 }

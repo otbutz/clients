@@ -17,7 +17,13 @@ import { EnvironmentService } from "@bitwarden/common/platform/abstractions/envi
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
-import { LinkModule, TypographyModule, CheckboxModule, DialogService } from "@bitwarden/components";
+import {
+  LinkModule,
+  TypographyModule,
+  CheckboxModule,
+  DialogService,
+  ToastService,
+} from "@bitwarden/components";
 
 import { TwoFactorAuthAuthenticatorComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-authenticator.component";
 import { TwoFactorAuthEmailComponent } from "../../../../../libs/angular/src/auth/components/two-factor-auth/two-factor-auth-email.component";
@@ -33,6 +39,8 @@ import {
 import { AsyncActionsModule } from "../../../../../libs/components/src/async-actions";
 import { ButtonModule } from "../../../../../libs/components/src/button";
 import { FormFieldModule } from "../../../../../libs/components/src/form-field";
+
+import { TwoFactorAuthDuoComponent } from "./two-factor-auth-duo.component";
 
 @Component({
   standalone: true,
@@ -55,6 +63,7 @@ import { FormFieldModule } from "../../../../../libs/components/src/form-field";
     TwoFactorAuthEmailComponent,
     TwoFactorAuthAuthenticatorComponent,
     TwoFactorAuthYubikeyComponent,
+    TwoFactorAuthDuoComponent,
     TwoFactorAuthWebAuthnComponent,
   ],
   providers: [I18nPipe],
@@ -78,6 +87,7 @@ export class TwoFactorAuthComponent extends BaseTwoFactorAuthComponent {
     accountService: AccountService,
     formBuilder: FormBuilder,
     @Inject(WINDOW) protected win: Window,
+    toastService: ToastService,
   ) {
     super(
       loginStrategyService,
@@ -97,6 +107,7 @@ export class TwoFactorAuthComponent extends BaseTwoFactorAuthComponent {
       accountService,
       formBuilder,
       win,
+      toastService,
     );
     this.onSuccessfulLoginNavigate = this.goAfterLogIn;
   }

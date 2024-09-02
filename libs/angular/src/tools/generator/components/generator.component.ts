@@ -34,7 +34,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
 
   usernameGeneratingPromise: Promise<string>;
   typeOptions: any[];
-  passTypeOptions: any[];
   usernameTypeOptions: any[];
   subaddressOptions: any[];
   catchallOptions: any[];
@@ -47,6 +46,11 @@ export class GeneratorComponent implements OnInit, OnDestroy {
   avoidAmbiguous = false;
   enforcedPasswordPolicyOptions: PasswordGeneratorPolicyOptions;
   usernameWebsite: string = null;
+
+  get passTypeOptions() {
+    return this._passTypeOptions.filter((o) => !o.disabled);
+  }
+  private _passTypeOptions: { name: string; value: GeneratorType; disabled: boolean }[];
 
   private destroy$ = new Subject<void>();
   private isInitialized$ = new BehaviorSubject(false);
@@ -79,9 +83,9 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       { name: i18nService.t("password"), value: "password" },
       { name: i18nService.t("username"), value: "username" },
     ];
-    this.passTypeOptions = [
-      { name: i18nService.t("password"), value: "password" },
-      { name: i18nService.t("passphrase"), value: "passphrase" },
+    this._passTypeOptions = [
+      { name: i18nService.t("password"), value: "password", disabled: false },
+      { name: i18nService.t("passphrase"), value: "passphrase", disabled: false },
     ];
     this.usernameTypeOptions = [
       {
@@ -138,6 +142,14 @@ export class GeneratorComponent implements OnInit, OnDestroy {
     this.passwordOptions.type =
       this.passwordOptions.type === "passphrase" ? "passphrase" : "password";
 
+    const overrideType = this.enforcedPasswordPolicyOptions.overridePasswordType ?? "";
+    const isDisabled = overrideType.length
+      ? (value: string, policyValue: string) => value !== policyValue
+      : (_value: string, _policyValue: string) => false;
+    for (const option of this._passTypeOptions) {
+      option.disabled = isDisabled(option.value, overrideType);
+    }
+
     if (this.usernameOptions.type == null) {
       this.usernameOptions.type = "word";
     }
@@ -151,9 +163,6 @@ export class GeneratorComponent implements OnInit, OnDestroy {
       this.usernameOptions.subaddressType = this.usernameOptions.catchallType = "random";
     } else {
       this.usernameOptions.website = this.usernameWebsite;
-      const websiteOption = { name: this.i18nService.t("websiteName"), value: "website-name" };
-      this.subaddressOptions.push(websiteOption);
-      this.catchallOptions.push(websiteOption);
     }
   }
 
@@ -201,6 +210,12 @@ export class GeneratorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
       ),
     );
+
+    if (this.usernameWebsite !== null) {
+      const websiteOption = { name: this.i18nService.t("websiteName"), value: "website-name" };
+      this.subaddressOptions.push(websiteOption);
+      this.catchallOptions.push(websiteOption);
+    }
   }
 
   ngOnDestroy() {

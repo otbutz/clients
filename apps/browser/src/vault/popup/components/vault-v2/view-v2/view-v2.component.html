@@ -1,15 +1,34 @@
 <popup-page>
-  <popup-header slot="header" [pageTitle]="headerText" showBackButton> </popup-header>
+  <popup-header slot="header" [pageTitle]="headerText" showBackButton>
+    <app-pop-out slot="end" />
+  </popup-header>
 
   <app-cipher-view *ngIf="cipher" [cipher]="cipher"></app-cipher-view>
 
-  <popup-footer slot="footer">
-    <a bitButton type="button" buttonType="primary" (click)="editCipher()">
+  <popup-footer slot="footer" *ngIf="showFooter()">
+    <button
+      *ngIf="!cipher.isDeleted"
+      buttonType="primary"
+      type="button"
+      bitButton
+      (click)="editCipher()"
+    >
       {{ "edit" | i18n }}
-    </a>
+    </button>
+
+    <button
+      *ngIf="cipher.isDeleted && cipher.edit"
+      buttonType="primary"
+      type="button"
+      bitButton
+      [bitAction]="restore"
+    >
+      {{ "restore" | i18n }}
+    </button>
+
     <button
       slot="end"
-      *ngIf="cipher && cipher.edit"
+      *ngIf="cipher.edit"
       [bitAction]="delete"
       type="button"
       buttonType="danger"

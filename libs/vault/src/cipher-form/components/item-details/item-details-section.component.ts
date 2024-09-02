@@ -110,12 +110,15 @@ export class ItemDetailsSectionComponent implements OnInit {
         map(() => this.itemDetailsForm.getRawValue()),
       )
       .subscribe((value) => {
-        this.cipherFormContainer.patchCipher({
-          name: value.name,
-          organizationId: value.organizationId,
-          folderId: value.folderId,
-          collectionIds: value.collectionIds?.map((c) => c.id) || [],
-          favorite: value.favorite,
+        this.cipherFormContainer.patchCipher((cipher) => {
+          Object.assign(cipher, {
+            name: value.name,
+            organizationId: value.organizationId,
+            folderId: value.folderId,
+            collectionIds: value.collectionIds?.map((c) => c.id) || [],
+            favorite: value.favorite,
+          } as CipherView);
+          return cipher;
         });
       });
   }
@@ -162,7 +165,7 @@ export class ItemDetailsSectionComponent implements OnInit {
       await this.initFromExistingCipher();
     } else {
       this.itemDetailsForm.setValue({
-        name: "",
+        name: this.initialValues?.name || "",
         organizationId: this.initialValues?.organizationId || this.defaultOwner,
         folderId: this.initialValues?.folderId || null,
         collectionIds: [],
@@ -187,9 +190,9 @@ export class ItemDetailsSectionComponent implements OnInit {
 
   private async initFromExistingCipher() {
     this.itemDetailsForm.setValue({
-      name: this.originalCipherView.name,
-      organizationId: this.originalCipherView.organizationId,
-      folderId: this.originalCipherView.folderId,
+      name: this.initialValues?.name ?? this.originalCipherView.name,
+      organizationId: this.originalCipherView.organizationId, // We do not allow changing ownership of an existing cipher.
+      folderId: this.initialValues?.folderId ?? this.originalCipherView.folderId,
       collectionIds: [],
       favorite: this.originalCipherView.favorite,
     });
@@ -205,14 +208,16 @@ export class ItemDetailsSectionComponent implements OnInit {
       }
     }
 
-    await this.updateCollectionOptions(this.originalCipherView.collectionIds as CollectionId[]);
+    await this.updateCollectionOptions(
+      this.initialValues?.collectionIds ??
+        (this.originalCipherView.collectionIds as CollectionId[]),
+    );
 
     if (this.partialEdit) {
       this.itemDetailsForm.disable();
       this.itemDetailsForm.controls.favorite.enable();
       this.itemDetailsForm.controls.folderId.enable();
     } else if (this.config.mode === "edit") {
-      //
       this.readOnlyCollections = this.collections
         .filter(
           (c) => c.readOnly && this.originalCipherView.collectionIds.includes(c.id as CollectionId),

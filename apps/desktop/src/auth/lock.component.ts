@@ -1,4 +1,4 @@
-import { Component, NgZone } from "@angular/core";
+import { Component, NgZone, OnDestroy, OnInit } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { firstValueFrom, switchMap } from "rxjs";
 
@@ -25,9 +25,10 @@ import { MessagingService } from "@bitwarden/common/platform/abstractions/messag
 import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { StateService } from "@bitwarden/common/platform/abstractions/state.service";
 import { BiometricStateService } from "@bitwarden/common/platform/biometrics/biometric-state.service";
+import { BiometricsService } from "@bitwarden/common/platform/biometrics/biometric.service";
 import { PasswordStrengthServiceAbstraction } from "@bitwarden/common/tools/password-strength";
 import { SyncService } from "@bitwarden/common/vault/abstractions/sync/sync.service.abstraction";
-import { DialogService } from "@bitwarden/components";
+import { DialogService, ToastService } from "@bitwarden/components";
 
 const BroadcasterSubscriptionId = "LockComponent";
 
@@ -35,11 +36,12 @@ const BroadcasterSubscriptionId = "LockComponent";
   selector: "app-lock",
   templateUrl: "lock.component.html",
 })
-export class LockComponent extends BaseLockComponent {
+export class LockComponent extends BaseLockComponent implements OnInit, OnDestroy {
   private deferFocus: boolean = null;
   protected biometricReady = false;
   private biometricAsked = false;
   private autoPromptBiometric = false;
+  private timerId: any;
 
   constructor(
     masterPasswordService: InternalMasterPasswordServiceAbstraction,
@@ -65,10 +67,12 @@ export class LockComponent extends BaseLockComponent {
     userVerificationService: UserVerificationService,
     pinService: PinServiceAbstraction,
     biometricStateService: BiometricStateService,
+    biometricsService: BiometricsService,
     accountService: AccountService,
     authService: AuthService,
     kdfConfigService: KdfConfigService,
     syncService: SyncService,
+    toastService: ToastService,
   ) {
     super(
       masterPasswordService,
@@ -92,10 +96,12 @@ export class LockComponent extends BaseLockComponent {
       userVerificationService,
       pinService,
       biometricStateService,
+      biometricsService,
       accountService,
       authService,
       kdfConfigService,
       syncService,
+      toastService,
     );
   }
 
@@ -135,11 +141,18 @@ export class LockComponent extends BaseLockComponent {
       });
     });
     this.messagingService.send("getWindowIsFocused");
+
+    // start background listener until destroyed on interval
+    this.timerId = setInterval(async () => {
+      this.supportsBiometric = await this.biometricsService.supportsBiometric();
+      this.biometricReady = await this.canUseBiometric();
+    }, 1000);
   }
 
   ngOnDestroy() {
     super.ngOnDestroy();
     this.broadcasterService.unsubscribe(BroadcasterSubscriptionId);
+    clearInterval(this.timerId);
   }
 
   onWindowHidden() {
@@ -209,6 +222,8 @@ export class LockComponent extends BaseLockComponent {
         return "unlockWithTouchId";
       case DeviceType.WindowsDesktop:
         return "unlockWithWindowsHello";
+      case DeviceType.LinuxDesktop:
+        return "unlockWithPolkit";
       default:
         throw new Error("Unsupported platform");
     }

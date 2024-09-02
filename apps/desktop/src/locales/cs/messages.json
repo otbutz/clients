@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "Nápověda k hlavnímu heslu"
   },
+  "joinOrganization": {
+    "message": "Přidat se k organizaci"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "Dokončete připojení k této organizaci nastavením hlavního hesla."
+  },
   "settings": {
     "message": "Nastavení"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "Váš účet byl vytvořen! Můžete se přihlásit."
   },
+  "newAccountCreated2": {
+    "message": "Váš nový účet byl vytvořen!"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "Byli jste přihlášeni!"
+  },
   "masterPassSent": {
     "message": "Poslali jsme vám e-mail s nápovědou k hlavnímu heslu."
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "Je vyžadován ověřovací kód."
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "Ověření bylo zrušeno nebo trvalo příliš dlouho. Zkuste to znovu."
   },
   "invalidVerificationCode": {
     "message": "Neplatný ověřovací kód"
@@ -788,6 +803,18 @@
   },
   "loginExpired": {
     "message": "Platnost přihlášení vypršela."
+  },
+  "restartRegistration": {
+    "message": "Restartovat registraci"
+  },
+  "expiredLink": {
+    "message": "Platnost odkazu vypršela"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "Restartujte registraci nebo se zkuste přihlásit."
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "Už možná máte účet"
   },
   "logOutConfirmation": {
     "message": "Opravdu se chcete odhlásit?"
@@ -1153,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "Prémiové členství můžete zakoupit na webové stránce bitwarden.com. Chcete tuto stránku nyní otevřít?"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "Premium si můžete zakoupit v nastavení účtu ve webové aplikaci Bitwarden."
+  },
   "premiumCurrentMember": {
     "message": "Jste prémiovým členem!"
   },
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "Další nastavení Windows Hello"
   },
+  "unlockWithPolkit": {
+    "message": "Odemknout pomocí systémového ověření"
+  },
   "windowsHelloConsentMessage": {
     "message": "Ověřte se pro Bitwarden."
+  },
+  "polkitConsentMessage": {
+    "message": "Ověřte se pro odemknutí Bitwardenu."
   },
   "unlockWithTouchId": {
     "message": "Odemknout pomocí Touch ID"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "Požádat o Windows Hello při spuštění aplikace"
+  },
+  "autoPromptPolkit": {
+    "message": "Požádat o systémové ověření při spuštění"
   },
   "autoPromptTouchId": {
     "message": "Požádat o Touch ID při spuštění aplikace"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "Vaše nové hlavní heslo nesplňuje požadavky zásad."
   },
-  "receiveMarketingEmails": {
-    "message": "Získejte e-maily od Bitwardenu pro oznámení, poradenství a výzkumné příležitosti."
+  "receiveMarketingEmailsV2": {
+    "message": "Dostávejte do své e-mailové schránky rady, oznámení a příležitosti k výzkumu od společnosti Bitwarden."
   },
   "unsubscribe": {
     "message": "Odhlásit odběr"
@@ -1782,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "Biometrické prvky v prohlížeči vyžadují, aby byla nastavena biometrie nejprve v aplikaci pro počítač."
+  },
+  "biometricsManualSetupTitle": {
+    "message": "Automatické nastavení není k dispozici"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "Kvůli metodě instalace nelze automaticky povolit podporu biometrických prvků. Chcete otevřít dokumentaci o tom, jak to provést ručně?"
   },
   "personalOwnershipSubmitError": {
     "message": "Z důvodu podnikových zásad nemůžete ukládat položky do svého osobního trezoru. Změňte vlastnictví položky na organizaci a poté si vyberte z dostupných kolekcí."
@@ -1994,6 +2039,9 @@
   "updateWeakMasterPasswordWarning": {
     "message": "Vaše hlavní heslo nesplňuje jednu nebo více zásad Vaší organizace. Pro přístup k trezoru musíte nyní aktualizovat své hlavní heslo. Pokračování Vás odhlásí z Vaší aktuální relace a bude nutné se přihlásit. Aktivní relace na jiných zařízeních mohou zůstat aktivní až po dobu jedné hodiny."
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "Vaše organizace zakázala šifrování pomocí důvěryhodného zařízení. Nastavte hlavní heslo pro přístup k trezoru."
+  },
   "tryAgain": {
     "message": "Zkusit znovu"
   },
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "Časový limit Vašeho trezoru překračuje omezení stanovená Vaší organizací."
+  },
+  "inviteAccepted": {
+    "message": "Pozvánka byla přijata"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "Automatická registrace"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "Chyba při připojování ke službě Duo. Použijte jinou dvoufázovou metodu přihlášení nebo kontaktujte Duo o pomoc."
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "Spusťte DUO a pro dokončení přihlášení postupujte podle kroků."
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "Neplatné heslo souboru, použijte heslo zadané při vytvoření souboru exportu."
   },
-  "importDestination": {
-    "message": "Cíl importu"
+  "destination": {
+    "message": "Cíl"
   },
   "learnAboutImportOptions": {
     "message": "Více o volbách importu"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "Data"
+  },
+  "fileSends": {
+    "message": "Sends se soubory"
+  },
+  "textSends": {
+    "message": "Sends s texty"
+  },
+  "ssoError": {
+    "message": "Pro přihlášení SSO nebyly nalezeny žádné volné porty."
   }
 }

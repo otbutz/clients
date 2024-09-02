@@ -157,7 +157,7 @@
     "message": "公司"
   },
   "ssn": {
-    "message": "社会保险号码"
+    "message": "社会保障号码"
   },
   "passportNumber": {
     "message": "护照号码"
@@ -494,7 +494,7 @@
     "message": "文件夹已删除"
   },
   "loginOrCreateNewAccount": {
-    "message": "登录或者创建一个账户来访问您的安全密码库。"
+    "message": "登录或创建一个新账户以访问您的安全密码库。"
   },
   "createAccount": {
     "message": "创建账户"
@@ -551,6 +551,12 @@
   "masterPassHintLabel": {
     "message": "主密码提示"
   },
+  "joinOrganization": {
+    "message": "加入组织"
+  },
+  "finishJoiningThisOrganizationBySettingAMasterPassword": {
+    "message": "通过设置主密码完成加入此组织。"
+  },
   "settings": {
     "message": "设置"
   },
@@ -597,6 +603,12 @@
   "newAccountCreated": {
     "message": "您的新账户已创建！您现在可以登录了。"
   },
+  "newAccountCreated2": {
+    "message": "您的新账户已成功创建！"
+  },
+  "youHaveBeenLoggedIn": {
+    "message": "您已登录！"
+  },
   "masterPassSent": {
     "message": "我们已经为您发送了包含主密码提示的邮件。"
   },
@@ -626,6 +638,9 @@
   },
   "verificationCodeRequired": {
     "message": "必须填写验证码。"
+  },
+  "webauthnCancelOrTimeout": {
+    "message": "身份验证被取消或耗时过长。请重试。"
   },
   "invalidVerificationCode": {
     "message": "无效的验证码"
@@ -789,6 +804,18 @@
   "loginExpired": {
     "message": "您的登录会话已过期。"
   },
+  "restartRegistration": {
+    "message": "重新开始注册"
+  },
+  "expiredLink": {
+    "message": "失效链接"
+  },
+  "pleaseRestartRegistrationOrTryLoggingIn": {
+    "message": "请重新注册或尝试登录。"
+  },
+  "youMayAlreadyHaveAnAccount": {
+    "message": "您可能已经有一个账户了"
+  },
   "logOutConfirmation": {
     "message": "确定要注销吗？"
   },
@@ -811,7 +838,7 @@
     "message": "账户"
   },
   "loading": {
-    "message": "正在加载..."
+    "message": "加载中…"
   },
   "lockVault": {
     "message": "锁定密码库"
@@ -1153,6 +1180,9 @@
   "premiumPurchaseAlert": {
     "message": "您可以在 bitwarden.com 网页版密码库购买高级会员。现在要访问吗？"
   },
+  "premiumPurchaseAlertV2": {
+    "message": "您可以在 Bitwarden 网页 App 的账户设置中购买高级版。"
+  },
   "premiumCurrentMember": {
     "message": "您目前是高级会员！"
   },
@@ -1160,7 +1190,7 @@
     "message": "感谢您支持 Bitwarden。"
   },
   "premiumPrice": {
-    "message": "只需 $PRICE$ /年！",
+    "message": "全部仅需 $PRICE$ /年！",
     "placeholders": {
       "price": {
         "content": "$1",
@@ -1489,8 +1519,14 @@
   "additionalWindowsHelloSettings": {
     "message": "额外的 Windows Hello 设置"
   },
+  "unlockWithPolkit": {
+    "message": "使用系统身份验证解锁"
+  },
   "windowsHelloConsentMessage": {
     "message": "验证 Bitwarden。"
+  },
+  "polkitConsentMessage": {
+    "message": "验证以解锁 Bitwarden。"
   },
   "unlockWithTouchId": {
     "message": "使用触控 ID 解锁"
@@ -1503,6 +1539,9 @@
   },
   "autoPromptWindowsHello": {
     "message": "应用程序启动时要求使用 Windows Hello"
+  },
+  "autoPromptPolkit": {
+    "message": "启动时请求系统身份验证"
   },
   "autoPromptTouchId": {
     "message": "应用程序启动时要求使用触控 ID"
@@ -1690,8 +1729,8 @@
   "masterPasswordPolicyRequirementsNotMet": {
     "message": "您的新主密码不符合策略要求。"
   },
-  "receiveMarketingEmails": {
-    "message": "接收来自 Bitwarden 的电子邮件，以获取公告、建议和调研。"
+  "receiveMarketingEmailsV2": {
+    "message": "获取来自 Bitwarden 的建议、公告和调研电子邮件。"
   },
   "unsubscribe": {
     "message": "取消订阅"
@@ -1782,6 +1821,12 @@
   },
   "biometricsNotEnabledDesc": {
     "message": "需要先在桌面应用程序的设置中设置生物识别，才能使用浏览器中的生物识别。"
+  },
+  "biometricsManualSetupTitle": {
+    "message": "自动设置不可用"
+  },
+  "biometricsManualSetupDesc": {
+    "message": "由于安装方式的原因，生物识别支持无法自动启用。您想要打开关于如何手动执行此操作的文档吗？"
   },
   "personalOwnershipSubmitError": {
     "message": "由于某个企业策略，您不能将项目保存到您的个人密码库。将所有权选项更改为组织，并从可用的集合中选择。"
@@ -1994,8 +2039,11 @@
   "updateWeakMasterPasswordWarning": {
     "message": "您的主密码不符合某一项或多项组织策略要求。要访问密码库，必须立即更新您的主密码。继续操作将使您退出当前会话，并要求您重新登录。其他设备上的活动会话可能会继续保持活动状态长达一小时。"
   },
+  "tdeDisabledMasterPasswordRequired": {
+    "message": "您的组织禁用了信任设备加密。要访问您的密码库，请设置一个主密码。"
+  },
   "tryAgain": {
-    "message": "再试一次"
+    "message": "请重试"
   },
   "verificationRequiredForActionSetPinToContinue": {
     "message": "此操作需要验证。设置一个 PIN 码以继续。"
@@ -2077,6 +2125,9 @@
   },
   "vaultTimeoutTooLarge": {
     "message": "您的密码库超时时间超出了组织设置的限制。"
+  },
+  "inviteAccepted": {
+    "message": "邀请已接受"
   },
   "resetPasswordPolicyAutoEnroll": {
     "message": "自动注册"
@@ -2411,7 +2462,7 @@
     "message": "指纹短语"
   },
   "needAnotherOption": {
-    "message": "设备登录必须在 Bitwarden 应用程序的设置中启用。需要其他登录选项吗？"
+    "message": "必须在 Bitwarden App 的设置中启用设备登录。需要其他登录选项吗？"
   },
   "viewAllLoginOptions": {
     "message": "查看所有登录选项"
@@ -2497,7 +2548,7 @@
     "message": "已请求登录"
   },
   "creatingAccountOn": {
-    "message": "创建账户于"
+    "message": "正创建账户于"
   },
   "checkYourEmail": {
     "message": "检查您的电子邮箱"
@@ -2778,6 +2829,9 @@
       }
     }
   },
+  "duoHealthCheckResultsInNullAuthUrlError": {
+    "message": "与 Duo 服务连接时出错。使用不同的两步登录方式或联系 Duo 寻求帮助。"
+  },
   "launchDuoAndFollowStepsToFinishLoggingIn": {
     "message": "启动 Duo 然后按照步骤完成登录。"
   },
@@ -2799,8 +2853,8 @@
   "invalidFilePassword": {
     "message": "无效的文件密码，请使用您创建导出文件时输入的密码。"
   },
-  "importDestination": {
-    "message": "导入目的地"
+  "destination": {
+    "message": "目的地"
   },
   "learnAboutImportOptions": {
     "message": "了解您的导入选项"
@@ -2995,5 +3049,17 @@
         "example": "Work"
       }
     }
+  },
+  "data": {
+    "message": "数据"
+  },
+  "fileSends": {
+    "message": "文件 Send"
+  },
+  "textSends": {
+    "message": "文本 Send"
+  },
+  "ssoError": {
+    "message": "找不到用于 SSO 登录的可用端口。"
   }
 }

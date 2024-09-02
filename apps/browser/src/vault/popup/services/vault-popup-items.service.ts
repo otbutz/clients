@@ -5,9 +5,11 @@ import {
   concatMap,
   distinctUntilChanged,
   distinctUntilKeyChanged,
+  filter,
   from,
   map,
   merge,
+  MonoTypeOperatorFunction,
   Observable,
   of,
   shareReplay,
@@ -21,6 +23,7 @@ import {
 import { SearchService } from "@bitwarden/common/abstractions/search.service";
 import { OrganizationService } from "@bitwarden/common/admin-console/abstractions/organization/organization.service.abstraction";
 import { Utils } from "@bitwarden/common/platform/misc/utils";
+import { SyncService } from "@bitwarden/common/platform/sync";
 import { CollectionId, OrganizationId } from "@bitwarden/common/types/guid";
 import { CipherService } from "@bitwarden/common/vault/abstractions/cipher.service";
 import { CollectionService } from "@bitwarden/common/vault/abstractions/collection.service";
@@ -29,6 +32,7 @@ import { CipherType } from "@bitwarden/common/vault/enums";
 import { CipherView } from "@bitwarden/common/vault/models/view/cipher.view";
 
 import { runInsideAngular } from "../../../platform/browser/run-inside-angular.operator";
+import { waitUntil } from "../../util";
 import { PopupCipherView } from "../views/popup-cipher.view";
 
 import { VaultPopupAutofillService } from "./vault-popup-autofill.service";
@@ -72,13 +76,18 @@ export class VaultPopupItemsService {
    * Observable that contains the list of all decrypted ciphers.
    * @private
    */
-  private _cipherList$: Observable<PopupCipherView[]> = merge(
+  private _allDecryptedCiphers$: Observable<CipherView[]> = merge(
     this.cipherService.ciphers$,
     this.cipherService.localData$,
   ).pipe(
     runInsideAngular(inject(NgZone)), // Workaround to ensure cipher$ state provider emissions are run inside Angular
     tap(() => this._ciphersLoading$.next()),
+    waitUntilSync(this.syncService),
     switchMap(() => Utils.asyncToObservable(() => this.cipherService.getAllDecrypted())),
+    shareReplay({ refCount: true, bufferSize: 1 }),
+  );
+
+  private _activeCipherList$: Observable<PopupCipherView[]> = this._allDecryptedCiphers$.pipe(
     switchMap((ciphers) =>
       combineLatest([
         this.organizationService.organizations$,
@@ -100,15 +109,13 @@ export class VaultPopupItemsService {
         }),
       ),
     ),
-    shareReplay({ refCount: true, bufferSize: 1 }),
   );
 
   private _filteredCipherList$: Observable<PopupCipherView[]> = combineLatest([
-    this._cipherList$,
+    this._activeCipherList$,
     this._searchText$,
     this.vaultPopupListFiltersService.filterFunction$,
   ]).pipe(
-    tap(() => this._ciphersLoading$.next()),
     map(([ciphers, searchText, filterFunction]): [CipherView[], string] => [
       filterFunction(ciphers),
       searchText,
@@ -204,7 +211,9 @@ export class VaultPopupItemsService {
   /**
    * Observable that indicates whether the user's vault is empty.
    */
-  emptyVault$: Observable<boolean> = this._cipherList$.pipe(map((ciphers) => !ciphers.length));
+  emptyVault$: Observable<boolean> = this._activeCipherList$.pipe(
+    map((ciphers) => !ciphers.length),
+  );
 
   /**
    * Observable that indicates whether there are no ciphers to show with the current filter.
@@ -228,6 +237,14 @@ export class VaultPopupItemsService {
     }),
   );
 
+  /**
+   * Observable that contains the list of ciphers that have been deleted.
+   */
+  deletedCiphers$: Observable<CipherView[]> = this._allDecryptedCiphers$.pipe(
+    map((ciphers) => ciphers.filter((c) => c.isDeleted)),
+    shareReplay({ refCount: false, bufferSize: 1 }),
+  );
+
   constructor(
     private cipherService: CipherService,
     private vaultSettingsService: VaultSettingsService,
@@ -236,6 +253,7 @@ export class VaultPopupItemsService {
     private searchService: SearchService,
     private collectionService: CollectionService,
     private vaultPopupAutofillService: VaultPopupAutofillService,
+    private syncService: SyncService,
   ) {}
 
   applyFilter(newSearchText: string) {
@@ -266,3 +284,11 @@ export class VaultPopupItemsService {
     return this.cipherService.sortCiphersByLastUsedThenName(a, b);
   }
 }
+
+/**
+ * Operator that waits until the active account has synced at least once before allowing the source to continue emission.
+ * @param syncService
+ */
+const waitUntilSync = <T>(syncService: SyncService): MonoTypeOperatorFunction<T> => {
+  return waitUntil(syncService.activeUserLastSync$().pipe(filter((lastSync) => lastSync != null)));
+};
