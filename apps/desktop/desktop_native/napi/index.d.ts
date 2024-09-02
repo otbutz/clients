@@ -55,7 +55,7 @@ export namespace ipc {
   export interface IpcMessage {
     clientId: number
     kind: IpcMessageType
-    message: string
+    message?: string
   }
   export const enum IpcMessageType {
     Connected = 0,
