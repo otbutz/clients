@@ -368,14 +368,12 @@ function mapToAccessItemViews(
   return (
     collections
       .map<AccessItemView>((c) => {
-        const accessSelection = group?.collections.find((access) => access.id == c.id) ?? undefined;
         return {
           id: c.id,
           type: AccessItemType.Collection,
           labelName: c.name,
           listName: c.name,
           readonly: !c.canEditGroupAccess(organization),
-          readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
         };
       })
       // Remove any collection views that are not already assigned and that we don't have permissions to assign access to
