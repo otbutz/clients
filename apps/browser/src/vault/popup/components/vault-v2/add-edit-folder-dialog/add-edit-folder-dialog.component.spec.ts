@@ -29,7 +29,7 @@ describe("AddEditFolderDialogComponent", () => {
   const save = jest.fn().mockResolvedValue(null);
   const deleteFolder = jest.fn().mockResolvedValue(null);
   const openSimpleDialog = jest.fn().mockResolvedValue(true);
-  const userKey$ = jest.fn().mockReturnValue(new BehaviorSubject("" as UserId));
+  const getUserKeyWithLegacySupport = jest.fn().mockResolvedValue("");
   const error = jest.fn();
   const close = jest.fn();
   const showToast = jest.fn();
@@ -66,7 +66,7 @@ describe("AddEditFolderDialogComponent", () => {
         {
           provide: CryptoService,
           useValue: {
-            userKey$,
+            getUserKeyWithLegacySupport,
           },
         },
         { provide: LogService, useValue: { error } },
