@@ -143,7 +143,7 @@ export class EditCommand {
     folderView = FolderExport.toView(req, folderView);
 
     const activeUserId = await firstValueFrom(this.accountService.activeAccount$);
-    const userKey = await firstValueFrom(this.cryptoService.userKey$(activeUserId.id));
+    const userKey = await this.cryptoService.getUserKeyWithLegacySupport(activeUserId.id);
     const encFolder = await this.folderService.encrypt(folderView, userKey);
     try {
       await this.folderApiService.save(encFolder);

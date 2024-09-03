@@ -113,7 +113,7 @@ export class AddEditFolderDialogComponent implements AfterViewInit, OnInit {
 
     try {
       const activeUserId = await firstValueFrom(this.accountService.activeAccount$);
-      const userKey = await firstValueFrom(this.cryptoService.userKey$(activeUserId.id));
+      const userKey = await this.cryptoService.getUserKeyWithLegacySupport(activeUserId.id);
       const folder = await this.folderService.encrypt(this.folder, userKey);
       await this.folderApiService.save(folder);
 

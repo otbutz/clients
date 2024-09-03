@@ -1,6 +1,7 @@
 import { firstValueFrom, map, Observable, skipWhile, switchMap } from "rxjs";
 import { SemVer } from "semver";
 
+import { AccountService } from "@bitwarden/common/auth/abstractions/account.service";
 import { FeatureFlag } from "@bitwarden/common/enums/feature-flag.enum";
 import { BulkEncryptService } from "@bitwarden/common/platform/abstractions/bulk-encrypt.service";
 
@@ -109,6 +110,7 @@ export class CipherService implements CipherServiceAbstraction {
     private cipherFileUploadService: CipherFileUploadService,
     private configService: ConfigService,
     private stateProvider: StateProvider,
+    private accountService: AccountService,
   ) {
     this.localDataState = this.stateProvider.getActive(LOCAL_DATA_KEY);
     this.encryptedCiphersState = this.stateProvider.getActive(ENCRYPTED_CIPHERS);
@@ -1349,7 +1351,8 @@ export class CipherService implements CipherServiceAbstraction {
     }
 
     const encBuf = await EncArrayBuffer.fromResponse(attachmentResponse);
-    const userKey = await this.cryptoService.getUserKeyWithLegacySupport();
+    const activeUserId = await firstValueFrom(this.accountService.activeAccount$);
+    const userKey = await this.cryptoService.getUserKeyWithLegacySupport(activeUserId.id);
     const decBuf = await this.encryptService.decryptToBytes(encBuf, userKey);
 
     let encKey: UserKey | OrgKey;
