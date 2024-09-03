@@ -43,13 +43,14 @@ export type AccessItemView = SelectItemView & {
 } & (
     | {
         type: AccessItemType.Collection;
+        /**
+         * If this represents member access to a collection via a group - the group name
+         */
         viaGroupName?: string;
         /**
-         * Optional permission that will be rendered for this item if it set to readonly.
-         * This is because there is no AccessItemValue that represents member access to
-         * a collection via a group, so we have to give it the group's permission here.
+         * If this represents member access to a collection via a group - the group's collection permission
          */
-        readonlyPermission?: CollectionPermission;
+        viaGroupPermission?: CollectionPermission;
       }
     | {
         type: AccessItemType.Group;

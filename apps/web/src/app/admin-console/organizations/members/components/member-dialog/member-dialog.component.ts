@@ -602,7 +602,7 @@ function mapCollectionToAccessItemView(
     labelName: collection.name,
     listName: collection.name,
     readonly: group !== undefined || !collection.canEditUserAccess(organization),
-    readonlyPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
+    viaGroupPermission: accessSelection ? convertToPermission(accessSelection) : undefined,
     viaGroupName: group?.name,
   };
 }

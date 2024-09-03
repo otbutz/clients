@@ -325,7 +325,7 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     if (item.type === AccessItemType.Collection && item.viaGroupName != null) {
       // Access is via a group - use the AccessItemView.readonlyPermission
       // because there is no corresponding AccessItemValue
-      return this._permissionLabelId(item.readonlyPermission);
+      return this._permissionLabelId(item.viaGroupPermission);
     }
 
     // Otherwise use the AccessItemValue.permission (all other cases)
