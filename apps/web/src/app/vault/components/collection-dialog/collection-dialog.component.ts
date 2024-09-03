@@ -152,7 +152,7 @@ export class CollectionDialogComponent implements OnInit, OnDestroy {
       collections: this.collectionAdminService.getAll(orgId),
       groups: groups$,
       // Collection(s) needed to map readonlypermission for (potential) access selector disabled state
-      users: this.organizationUserService.getAllUsers(orgId, { includeCollections: true }),
+      users: this.organizationUserService.getAllUsers(orgId),
     })
       .pipe(takeUntil(this.formGroup.controls.selectedOrg.valueChanges), takeUntil(this.destroy$))
       .subscribe(({ organization, collections: allCollections, groups, users }) => {
