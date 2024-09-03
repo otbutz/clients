@@ -145,6 +145,7 @@ describe("Cipher Service", () => {
       cipherFileUploadService,
       configService,
       stateProvider,
+      accountService,
     );
 
     cipherObj = new Cipher(cipherData);
