@@ -22,7 +22,6 @@ import { AccountService } from "@bitwarden/common/auth/abstractions/account.serv
 import { ErrorResponse } from "@bitwarden/common/models/response/error.response";
 import { I18nService } from "@bitwarden/common/platform/abstractions/i18n.service";
 import { LogService } from "@bitwarden/common/platform/abstractions/log.service";
-import { PlatformUtilsService } from "@bitwarden/common/platform/abstractions/platform-utils.service";
 import { UserId } from "@bitwarden/common/types/guid";
 import { DialogService, ToastService } from "@bitwarden/components";
 
@@ -205,7 +204,6 @@ export class GroupAddEditComponent implements OnInit, OnDestroy {
     private organizationUserService: OrganizationUserService,
     private groupService: GroupService,
     private i18nService: I18nService,
-    private platformUtilsService: PlatformUtilsService,
     private logService: LogService,
     private formBuilder: FormBuilder,
     private changeDetectorRef: ChangeDetectorRef,
