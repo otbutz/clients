@@ -314,12 +314,26 @@ export class AccessSelectorComponent implements ControlValueAccessor, OnInit, On
     }
   }
 
-  protected permissionLabelId(perm: CollectionPermission) {
-    return this.permissionList.find((p) => p.perm == perm)?.labelId;
-  }
-
   protected canEditItemPermission(item: AccessItemView) {
     return this.permissionMode == PermissionMode.Edit && !item.readonly;
+  }
+
+  protected readonlyPermissionLabelId(
+    item: AccessItemView,
+    value?: Partial<AccessItemValue>,
+  ): string {
+    if (item.type === AccessItemType.Collection && item.viaGroupName != null) {
+      // Access is via a group - use the AccessItemView.readonlyPermission
+      // because there is no corresponding AccessItemValue
+      return this._permissionLabelId(item.readonlyPermission);
+    }
+
+    // Otherwise use the AccessItemValue.permission (all other cases)
+    return this._permissionLabelId(value?.permission);
+  }
+
+  private _permissionLabelId(perm: CollectionPermission) {
+    return this.permissionList.find((p) => p.perm == perm)?.labelId;
   }
 
   private _itemComparator(a: AccessItemView, b: AccessItemView) {

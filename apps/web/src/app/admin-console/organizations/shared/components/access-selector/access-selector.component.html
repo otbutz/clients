@@ -113,9 +113,9 @@
           <div
             *ngIf="item.readonly || disabled"
             class="tw-max-w-40 tw-overflow-hidden tw-overflow-ellipsis tw-whitespace-nowrap tw-font-bold tw-text-muted"
-            [title]="permissionLabelId(item.readonlyPermission) | i18n"
+            [title]="readonlyPermissionLabelId(item, formGroup.value.items[i]) | i18n"
           >
-            {{ permissionLabelId(item.readonlyPermission) | i18n }}
+            {{ readonlyPermissionLabelId(item, formGroup.value.items[i]) | i18n }}
           </div>
         </ng-template>
       </td>
